@@ -30,7 +30,8 @@ import {
   tylIconKeyboardArrowRight,
   tylIconDirections,
   tylIconStar,
-  tylIconError
+  tylIconError,
+  tylIconMoreVert
 } from '@tylertech/tyler-icons/standard';
 
 const standardIcons = [
@@ -64,7 +65,8 @@ const standardIcons = [
   tylIconKeyboardArrowRight,
   tylIconDirections,
   tylIconStar,
-  tylIconError
+  tylIconError,
+  tylIconMoreVert
 ];
 
 export const defineIcons = () => {

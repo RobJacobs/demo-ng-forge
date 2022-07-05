@@ -13,12 +13,14 @@ export class TableUtils {
     return linkElement;
   }
 
-  public static createIconButton(icon: string, clickHandler: (event: Event) => void, title?: string): HTMLElement {
+  public static createIconButton(icon: string, clickHandler?: (event: Event) => void, title?: string): HTMLElement {
     const iconButtonElement = document.createElement('forge-icon-button');
 
     const buttonElement = document.createElement('button');
     buttonElement.type = 'button';
-    buttonElement.addEventListener('click', clickHandler);
+    if (clickHandler) {
+      buttonElement.addEventListener('click', clickHandler);
+    }
 
     const iconElement = document.createElement('forge-icon');
     iconElement.setAttribute('name', icon);
@@ -39,23 +41,7 @@ export class TableUtils {
     menuElement.options = options;
     menuElement.addEventListener('forge-menu-select', selectHandler);
 
-    const iconButtonElement = document.createElement('forge-icon-button');
-
-    const buttonElement = document.createElement('button');
-    buttonElement.type = 'button';
-
-    if (title) {
-      const tooltipElement = document.createElement('forge-tooltip');
-      tooltipElement.innerText = title;
-      buttonElement.appendChild(tooltipElement);
-    }
-
-    const iconElement = document.createElement('forge-icon');
-    iconElement.setAttribute('name', icon);
-
-    buttonElement.appendChild(iconElement);
-    iconButtonElement.appendChild(buttonElement);
-    menuElement.appendChild(iconButtonElement);
+    menuElement.appendChild(this.createIconButton(icon, undefined, title));
 
     return menuElement;
   }

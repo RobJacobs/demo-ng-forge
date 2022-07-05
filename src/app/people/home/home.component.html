@@ -4,7 +4,7 @@
 
 <div class="body">
   <div class="body__left">
-    <div [ngClass]="{'app--hidden': isBusy}" class="table table--last-column-no-padding">
+    <div [ngClass]="{'app--hidden': isBusy}" class="table">
       <div class="table__header" [ngClass]="{'table__header-action': selectedPeople.length}">
         <ng-container *ngIf="!selectedPeople.length">
           <app-filter-chips [filters]="filterCache.filters" (filter)="onApplyFilter(true)"></app-filter-chips>

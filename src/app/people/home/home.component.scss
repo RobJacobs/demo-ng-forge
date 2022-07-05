@@ -13,6 +13,10 @@
           background-color: $mat-color-indigo-50 !important;
           border-bottom: $forge-theme-border;
         }
+        & > .forge-table-cell:last-child {
+          padding-right: 0px;
+          width: 1px;
+        }
       }
 
       &-cell {
@@ -50,17 +54,6 @@
     }
     &__columns {
       margin-left: 8px;
-    }
-  }
-}
-
-// forge-table-row__expandable-content
-
-.forge-table {
-  &-row {
-    &__expandable-content {
-      background-color: $mat-color-indigo-50;
-      border-bottom: $forge-theme-border;
     }
   }
 }

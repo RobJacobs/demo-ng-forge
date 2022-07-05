@@ -104,7 +104,6 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
         hidden: this.optionalTableColumns.find((c) => c.property === 'occupation')?.hidden
       },
       {
-        width: 96,
         align: CellAlign.Right,
         template: (rowIndex: number, cellElement: HTMLElement, data: any) => {
           cellElement.appendChild(
@@ -113,10 +112,30 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
               this.peopleTable?.nativeElement,
               this.viewContainerRef,
               TableDetailComponent,
-              'Expand table row',
+              'Toggle table detail',
               data
             )
           );
+
+          // cellElement.appendChild(TableUtils.createLinkButton(
+          //   'View more',
+          //   (event: Event) => {
+          //     console.log(event);
+          //   }
+          // ));
+
+          cellElement.appendChild(TableUtils.createMenuButton(
+            'more_vert',
+            (event: Event) => {
+              console.log(event);
+            },
+            [
+              { value: 1, label: 'Option 1' },
+              { value: 2, label: 'Option 2' },
+              { value: 3, label: 'Option 3' }
+            ],
+            'More options'
+          ));
 
           cellElement.appendChild(TableUtils.createIconButton(
             'keyboard_arrow_right',
