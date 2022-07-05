@@ -1,0 +1,43 @@
+<forge-toolbar class="header">
+  <div slot="start">
+    <h2 class="forge-typography--title">Profile</h2>
+    <img *ngIf="imageUrl" [src]="imageUrl" (error)="onImageError($event)" alt="" />
+  </div>
+
+  <div slot="end">
+    <forge-button type="outlined">
+      <button type="button" (click)="onLoadProfile()">Load profile</button>
+    </forge-button>
+  </div>
+</forge-toolbar>
+
+<forge-tab-bar [activeTab]="activeTab">
+  <forge-tab (forge-tab-interacted)="onTabSelected('personal')">
+    Personal
+    <forge-icon *ngIf="isInvalid(personalFormGroup)" slot="trailing" name="error"></forge-icon>
+  </forge-tab>
+  <forge-tab (forge-tab-interacted)="onTabSelected('address')">
+    Address
+    <forge-icon *ngIf="isInvalid(addressFormGroup)" slot="trailing" name="error"></forge-icon>
+  </forge-tab>
+</forge-tab-bar>
+
+<div class="body">
+  <form novalidate autocomplete="off" [formGroup]="cache.formGroup">
+    <router-outlet></router-outlet>
+    <p>
+      {{cache.formGroup.value | json}}
+    </p>
+  </form>
+</div>
+
+<forge-toolbar class="footer" inverted>
+  <div slot="end">
+    <forge-button type="outlined">
+      <button type="button" (click)="onCancel()">Cancel</button>
+    </forge-button>
+    <forge-button type="raised">
+      <button type="button" (click)="onSave()" [disabled]="cache.formGroup.invalid || !cache.formGroup.dirty">Save</button>
+    </forge-button>
+  </div>
+</forge-toolbar>

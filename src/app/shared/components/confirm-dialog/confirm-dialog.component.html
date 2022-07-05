@@ -1,0 +1,21 @@
+<div class="dialog__header">
+  <span class="forge-typography--headline5">{{title}}</span>
+  <forge-icon-button>
+    <button type="button" aria-label="close" (click)="onClose()">
+      <forge-icon name="close"></forge-icon>
+    </button>
+  </forge-icon-button>
+</div>
+
+<div class="dialog__body">
+  {{message}}
+</div>
+
+<div class="dialog__footer">
+  <forge-button type="outlined">
+    <button type="button" (click)="onClose()">Cancel</button>
+  </forge-button>
+  <forge-button type="unelevated">
+    <button appAutoFocus type="button" (click)="onClose(true)">Ok</button>
+  </forge-button>
+</div>

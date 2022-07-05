@@ -1,0 +1,26 @@
+<form [formGroup]="formGroup" novalidate autocomplete="off" class="form-grid">
+  <forge-select formControlName="select01" label="Select01 - single primitive">
+    <forge-option *ngFor="let option of options" [value]="option.value">{{option.label}}</forge-option>
+  </forge-select>
+
+  <forge-select label="Select02 - single object" [options]="objectOptions" formControlName="select02"></forge-select>
+
+  <forge-select label="Select03 - multiple select" [options]="options" multiple formControlName="select03"></forge-select>
+
+  <forge-select label="Select04 - option builder" [options]="objectOptions" formControlName="select04" [optionBuilder]="optionBuilder"></forge-select>
+
+  <forge-select label="Select05 - selected text builder" [options]="options" formControlName="select05" [selectedTextBuilder]="selectedTextBuilder"></forge-select>
+
+  <p class="form-grid--col-span">{{formGroup.value | json}}</p>
+</form>
+
+<forge-divider></forge-divider>
+
+<div class="form-grid">
+  <forge-select label="Select06 - ngModel binding" [options]="options" [(ngModel)]="select06">
+    <span slot="helper-text">selected value: {{select06}}</span>
+  </forge-select>
+  <forge-select label="Select07 - value binding" [options]="options" [value]="select07" (change)="onSelectChange($event)">
+    <span slot="helper-text">selected value: {{select07}}</span>
+  </forge-select>
+</div>

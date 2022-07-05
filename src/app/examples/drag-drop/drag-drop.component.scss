@@ -1,0 +1,53 @@
+@use '@material/elevation/elevation-theme' as mat-elevation-theme;
+@use 'src/global' as *;
+
+:host {
+  display: block;
+  padding: 24px;
+}
+
+.card-container {
+  display: grid;
+  grid-template-columns: 320px 320px;
+  gap: 24px;
+
+  forge-list {
+    --forge-list-padding: 0;
+  }
+}
+
+.title {
+  margin-bottom: 16px;
+}
+
+.drag-item,
+.cdk-drag {
+  @include forge-theme-property(background, surface);
+  @include forge-theme-property(border, $forge-theme-border);
+  cursor: move;
+
+  &-preview {
+    @include mat-elevation-theme.elevation(3);
+    @include forge-theme-property(background, surface);
+    border: solid 2px $mat-color-indigo-500;
+    cursor: move;
+  }
+  &-placeholder {
+    .cdk-drag__content {
+      visibility: hidden;
+    }
+    background-color: $mat-color-indigo-50;
+    border: dashed 1px $mat-color-indigo-500;
+  }
+  &-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+.cdk-drop-list {
+  &-dragging {
+    .cdk-drag:not(.cdk-drag-placeholder) {
+      transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    }
+  }
+}

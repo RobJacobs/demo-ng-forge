@@ -1,0 +1,18 @@
+@use 'src/global' as *;
+
+:host {
+  display: block;
+  margin: 24px;
+  padding: 16px;
+
+  @include app-container-raised();
+}
+
+.form-grid {
+  @include app-form-grid();
+  justify-content: center;
+}
+
+forge-divider {
+  margin: 16px 0;
+}

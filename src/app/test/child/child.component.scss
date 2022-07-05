@@ -1,0 +1,19 @@
+@use 'src/global' as *;
+
+:host {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+  height: 100%;
+}
+
+.header {
+  [slot='start'] {
+    @include forge-flex-container(flex, row, nowrap, center);
+  }
+}
+
+.body {
+  overflow: auto;
+  padding: 24px;
+}

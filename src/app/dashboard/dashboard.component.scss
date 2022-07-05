@@ -1,0 +1,38 @@
+@use 'src/global' as *;
+
+$card-width: 320;
+
+:host {
+  display: grid;
+}
+
+.announcements {
+  @include forge-theme-property(color, on-primary);
+}
+
+.body {
+  justify-content: center;
+  @include forge-flex-container(flex, row, wrap);
+
+  forge-card {
+    margin: 12px;
+    width: #{$card-width}px;
+    &::part(root) {
+      @include forge-flex-container(flex, column, nowrap, center);
+      row-gap: 16px;
+    }
+
+    img {
+      margin: 16px 16px 0px 16px;
+      height: 120px;
+      width: 120px;
+    }
+  }
+}
+
+.footer {
+  min-height: 48px;
+  @include forge-flex-container(flex, row, nowrap, center);
+  padding: 0 16px;
+  justify-content: flex-end;
+}

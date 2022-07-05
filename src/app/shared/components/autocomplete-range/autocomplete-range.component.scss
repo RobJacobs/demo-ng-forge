@@ -1,0 +1,33 @@
+@use 'src/global' as *;
+
+:host {
+  display: block;
+}
+
+.range {
+  outline: none;
+
+  &__input {
+    padding-left: 16px;
+
+    &__header {
+      font-size: 14px;
+    }
+
+    &__body {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto;
+      column-gap: 8px;
+      align-items: center;
+    }
+
+    .forge-typography--caption {
+      @include forge-theme-property(color, danger);
+    }
+  }
+
+  &__options {
+    --forge-list-item-padding: 0 16px 0 4px;
+    --forge-list-item-leading-margin-right: 4px;
+  }
+}

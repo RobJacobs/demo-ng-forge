@@ -1,0 +1,7 @@
+@use 'src/global' as *;
+
+@include app-dialog();
+
+.form-grid {
+  @include app-form-grid();
+}

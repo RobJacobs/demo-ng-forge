@@ -1,0 +1,124 @@
+<forge-toolbar class="header">
+  <div slot="start">
+    <h2 class="forge-typography--title">Search</h2>
+    <ng-container *ngIf="searchCache.activeSearchId">
+      <forge-divider vertical></forge-divider>
+      <span class="forge-typography--subtitle1-secondary">{{searchName}}</span>
+      <span class="forge-typography--subtitle2-secondary">{{searchDescription}}</span>
+    </ng-container>
+  </div>
+  <div slot="end">
+    <forge-button type="outlined">
+      <button type="button" (click)="onSaveSearch()">
+        <span>Save search</span>
+      </button>
+    </forge-button>
+    <forge-button type="outlined">
+      <button type="button" #searchesPopup="forgePopup" [forgePopup]="searchesPopupTemplate" placement="bottom-left" (click)="searchesPopup.open()">
+        <span>Saved searches</span>
+        <forge-icon name="arrow_drop_down"></forge-icon>
+      </button>
+    </forge-button>
+    <forge-button type="outlined">
+      <button type="button" (click)="onClearSearch()">
+        <span>Clear all</span>
+      </button>
+    </forge-button>
+    <forge-button type="unelevated">
+      <button type="button" (click)="onSearch()">
+        <span>Search</span>
+      </button>
+    </forge-button>
+  </div>
+</forge-toolbar>
+
+<ng-template #searchesPopupTemplate>
+  <forge-list class="searches-popup" (forge-list-item-select)="onSearchAction($event, 'search', $event.detail.value)">
+    <forge-list-item>
+      <span>Add new search</span>
+    </forge-list-item>
+    <forge-divider></forge-divider>
+    <forge-list-item *ngFor="let search of searchCache.searches" [value]="search.id">
+      <span>{{search.name}}</span>
+      <div slot="trailing">
+        <forge-icon-button>
+          <button (click)="onSearchAction($event, 'edit', search.id)">
+            <forge-icon name="edit"></forge-icon>
+          </button>
+        </forge-icon-button>
+        <forge-icon-button>
+          <button (click)="onSearchAction($event, 'delete', search.id)">
+            <forge-icon name="delete"></forge-icon>
+          </button>
+        </forge-icon-button>
+      </div>
+    </forge-list-item>
+  </forge-list>
+</ng-template>
+
+<div class="body">
+  <form novalidate autocomplete="off" [formGroup]="formGroup" class="form" (ngSubmit)="onSearch()">
+    <ng-container formGroupName="name">
+      <forge-autocomplete multiple="true" formControlName="value" [filter]="nameFilter" allow-unmatched="true">
+        <forge-text-field>
+          <input type="text" id="app--search--name" />
+          <label for="app--search--name">Name</label>
+          <forge-icon slot="trailing" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
+          <forge-icon-button slot="addon-end" class="operator__addon" [ngClass]="{'operator__addon--selected': formGroup.get('name')?.value.operator}">
+            <button type="button" #nameOperatorPopup="forgePopup" [forgePopup]="operatorPopupTemplate" (click)="onOperatorPopupOpen($event, nameOperatorPopup, 'name')">
+              <forge-icon name="bolt"></forge-icon>
+            </button>
+          </forge-icon-button>
+        </forge-text-field>
+      </forge-autocomplete>
+    </ng-container>
+
+    <ng-container formGroupName="dateOfBirth">
+      <forge-date-picker formControlName="value">
+        <forge-text-field>
+          <input type="text" id="app--search--date-of-birth" />
+          <label for="app--search--date-of-birth">Date</label>
+          <forge-icon-button slot="addon-end" class="operator__addon" [ngClass]="{'operator__addon--selected': formGroup.get('dateOfBirth')?.value.operator}">
+            <button type="button" #dateOfBirthOperatorPopup="forgePopup" [forgePopup]="operatorPopupTemplate" (click)="onOperatorPopupOpen($event, dateOfBirthOperatorPopup, 'dateOfBirth')">
+              <forge-icon name="bolt"></forge-icon>
+            </button>
+          </forge-icon-button>
+        </forge-text-field>
+      </forge-date-picker>
+    </ng-container>
+
+    <ng-container formGroupName="address">
+      <forge-text-field>
+        <input type="text" id="app--search--address" formControlName="value" />
+        <label for="app--search--address" slot="label">Address</label>
+        <ng-container *ngTemplateOutlet="opertatorAddonTemplate, context: { name: 'address' }"></ng-container>
+      </forge-text-field>
+    </ng-container>
+
+    <forge-checkbox>
+      <input type="checkbox" id="app--search--include" formControlName="include" [appIndeterminate]="formGroup.get('include')" />
+      <label for="app--search--include">Include</label>
+    </forge-checkbox>
+
+    <app-autocomplete-range [optionFilter]="facetFilter" formControlName="facet" label="Facet"></app-autocomplete-range>
+  </form>
+
+  <p>{{formGroup.value | json}}</p>
+</div>
+
+<ng-template #opertatorAddonTemplate let-name="name">
+  <forge-icon-button slot="addon-end" class="operator__addon" [ngClass]="{'operator__addon--selected': formGroup.get(name)?.value.operator}">
+    <button type="button" #operatorPopup="forgePopup" [forgePopup]="operatorPopupTemplate" (click)="onOperatorPopupOpen($event, operatorPopup, name)">
+      <forge-icon name="bolt"></forge-icon>
+    </button>
+  </forge-icon-button>
+</ng-template>
+
+<ng-template #operatorPopupTemplate>
+  <forge-list class="operator-popup" (forge-list-item-select)="onOperatorSelected($event.detail.value)">
+    <forge-list-item *ngFor="let option of operatorOptions" [value]="option.value" [selected]="operatorPopupFormGroup.value.operator === option.value">
+      <span>{{option.label}}</span>
+      <forge-icon name="check" slot="trailing" *ngIf="operatorPopupFormGroup.value.operator === option.value"></forge-icon>
+    </forge-list-item>
+  </forge-list>
+</ng-template>

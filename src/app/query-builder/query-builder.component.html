@@ -1,0 +1,95 @@
+<form [formGroup]="formGroup" novalidate autocomplete="off">
+  <div formArrayName="filters">
+    <ng-container *ngFor="let filterGroup of formGroup.get('filters')?.controls; index as filterIndex;">
+      <div class="filter__group">
+        <ng-container *ngTemplateOutlet="filterFormTemplate, context: { formGroup: filterGroup, index: filterIndex }"></ng-container>
+      </div>
+    </ng-container>
+  </div>
+
+  <forge-button class="filter__group__add">
+    <button type="button" (click)="onAddFilter(formGroup, 'condition')">
+      <forge-icon name="add_circle"></forge-icon> Add a new condition
+    </button>
+  </forge-button>
+
+  <p>{{formGroup.value | json}}</p>
+</form>
+
+<ng-template #filterFormTemplate let-formGroup="formGroup" let-index="index">
+  <ng-container *ngIf="index > 0">
+    <ng-container *ngTemplateOutlet="filterHeaderTemplate, context: { formGroup: formGroup }"></ng-container>
+  </ng-container>
+
+  <ng-container [formGroup]="formGroup">
+    <div class="filter__form">
+      <forge-autocomplete formControlName="property" [options]="propertyOptions" [filter]="propertyFilter" (blur)="formGroup.get('property').updateValueAndValidity()">
+        <forge-text-field required [invalid]="isInvalid(formGroup, 'property')">
+          <input type="text" id="{{'app--query-builder--filter-property' + index}}" />
+          <label for="{{'app--query-builder--filter-property' + index}}">Property</label>
+          <forge-icon slot="trailing" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
+          <span *ngIf="isInvalid(formGroup, 'property')" slot="helper-text">A property is required</span>
+        </forge-text-field>
+      </forge-autocomplete>
+
+      <forge-select formControlName="operator" label="Operator" required [invalid]="isInvalid(formGroup, 'operator')" (blur)="formGroup.get('operator').updateValueAndValidity()">
+        <forge-option [value]="operator.value" *ngFor="let operator of operatorOptions">{{operator.label}}</forge-option>
+        <span *ngIf="isInvalid(formGroup, 'operator')" slot="helper-text">An operator is required</span>
+      </forge-select>
+
+      <forge-text-field *ngIf="formGroup.get('operator').value !== 6" required [invalid]="isInvalid(formGroup, 'value')">
+        <input type="text" id="{{'app--query-builder--filter-value-' + index}}" formControlName="value" (blur)="formGroup.get('value').updateValueAndValidity()">
+        <label for="{{'app--query-builder--filter-value-' + index}}" slot="label">Value</label>
+        <span *ngIf="isInvalid(formGroup, 'value')" slot="helper-text">A value is required</span>
+      </forge-text-field>
+
+      <div *ngIf="formGroup.get('operator').value === 6" class="filter__form__range">
+        <forge-text-field required [invalid]="isInvalid(formGroup, 'minValue')">
+          <input type="text" id="{{'app--query-builder--filter-min-' + index}}" formControlName="minValue" (blur)="formGroup.get('minValue').updateValueAndValidity()">
+          <label for="{{'app--query-builder--filter-min-' + index}}" slot="label">Minimum</label>
+          <span *ngIf="isInvalid(formGroup, 'minValue')" slot="helper-text">A minimum value is required</span>
+        </forge-text-field>
+        <forge-text-field required [invalid]="isInvalid(formGroup, 'maxValue')">
+          <input type="text" id="{{'app--query-builder--filter-max-' + index}}" formControlName="maxValue" (blur)="formGroup.get('maxValue').updateValueAndValidity()">
+          <label for="{{'app--query-builder--filter-max-' + index}}" slot="label">Maximum</label>
+          <span *ngIf="isInvalid(formGroup, 'maxValue')" slot="helper-text">
+            {{formGroup.get('maxValue').errors.required ? 'A maximum value is required' : formGroup.get('maxValue').errors.range ? 'Max value must be greater or equal to min value' : ''}}
+          </span>
+        </forge-text-field>
+      </div>
+
+      <div class="filter__form__action">
+        <forge-menu [options]="filterOptions" (forge-menu-select)="onAddFilter(formGroup, $event.detail.value)">
+          <forge-icon-button>
+            <button type="button" aria-label="add filter item">
+              <forge-icon name="add_circle"></forge-icon>
+            </button>
+          </forge-icon-button>
+        </forge-menu>
+        <forge-icon-button>
+          <button type="button" (click)="onDeleteFilter(formGroup)" aria-label="Delete filter">
+            <forge-icon name="delete"></forge-icon>
+          </button>
+        </forge-icon-button>
+      </div>
+    </div>
+
+    <ng-container *ngIf="formGroup.get('filters')?.controls?.length" formArrayName="filters">
+      <ng-container *ngFor="let filter of formGroup.get('filters')?.controls; index as filterIndex">
+        <ng-container *ngTemplateOutlet="filterHeaderTemplate, context: { formGroup: filter }"></ng-container>
+        <div class="filter__group">
+          <ng-container *ngTemplateOutlet="filterFormTemplate, context: { formGroup: filter, index: filterIndex }"></ng-container>
+        </div>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+
+</ng-template>
+
+<ng-template #filterHeaderTemplate let-formGroup="formGroup">
+  <div class="filter__header">
+    <forge-select [formControl]="formGroup.get('condition')" class="filter__header__condition">
+      <forge-option [value]="condition.value" *ngFor="let condition of conditionOptions">{{condition.label}}</forge-option>
+    </forge-select>
+  </div>
+</ng-template>

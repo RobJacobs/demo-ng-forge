@@ -1,0 +1,6 @@
+@forward '@material/theme/color-palette' as mat-color-*;
+@forward '@tylertech/forge/styles/theme' as forge-theme-*;
+@forward '@tylertech/forge/styles/typography' as forge-typography-*;
+@forward '@tylertech/forge/styles/utils/mixins-flex' as forge-flex-*;
+@forward 'src/mixins' as app-*;
+@forward 'src/variables' as app-*;

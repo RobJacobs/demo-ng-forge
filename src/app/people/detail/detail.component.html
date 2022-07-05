@@ -1,0 +1,36 @@
+<forge-toolbar class="header">
+  <div slot="start">
+    <forge-icon-button>
+      <button (click)="onNavigate('back')" aria-label="go back">
+        <forge-icon name="arrow_back"></forge-icon>
+      </button>
+    </forge-icon-button>
+    <h2 class="forge-typography--title">{{person?.firstName + ' ' + person?.lastName}}</h2>
+  </div>
+  <div slot="end">
+    <forge-button type="outlined">
+      <button type="button" (click)="onViewWiki()" [disabled]="!person?.url?.length">View wiki</button>
+    </forge-button>
+  </div>
+</forge-toolbar>
+
+<div class="body">
+  <div class="body__left">
+    <forge-label-value>
+      <span slot="label">Gender</span>
+      <span slot="value">{{person?.gender}}</span>
+    </forge-label-value>
+    <forge-label-value>
+      <span slot="label">Occupation</span>
+      <span slot="value">{{person?.occupation}}</span>
+    </forge-label-value>
+    <forge-label-value>
+      <span slot="label">Quote</span>
+      <span slot="value">{{person?.quote}}</span>
+    </forge-label-value>
+  </div>
+
+  <div class="body__right">
+    <img [src]="imageUrl" (error)="onImageError($event)" alt="" />
+  </div>
+</div>

@@ -1,0 +1,243 @@
+import {
+  AfterViewInit,
+  Component,
+  EmbeddedViewRef,
+  Input,
+  OnDestroy,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef,
+  forwardRef,
+  ElementRef,
+  Output,
+  EventEmitter,
+  HostListener,
+  CUSTOM_ELEMENTS_SCHEMA,
+  NgZone
+} from '@angular/core';
+import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormsModule } from '@angular/forms';
+import { Observable } from 'rxjs';
+
+import {
+  AutocompleteFilterCallback,
+  IOption,
+  IAutocompleteOptionGroup,
+  AutocompleteSelectedTextBuilder,
+  AutocompleteComponent
+} from '@tylertech/forge';
+import { isArray, isString, isDefined } from '@tylertech/forge-core';
+
+import { Utils } from 'src/utils';
+import { ListDropdownHeaderBuilder } from '@tylertech/forge/esm/list-dropdown';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-autocomplete-range',
+  templateUrl: './autocomplete-range.component.html',
+  styleUrls: ['./autocomplete-range.component.scss'],
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => AutocompleteRangeComponent), multi: true }]
+})
+export class AutocompleteRangeComponent implements ControlValueAccessor, AfterViewInit, OnDestroy {
+  @ViewChild('rangeAutocomplete') autocompleteRef?: ElementRef;
+  @ViewChild('rangeTemplate') rangeTemplateRef?: TemplateRef<any>;
+  @ViewChild('filterInput') filterInputRef?: ElementRef;
+
+  @Input()
+  public optionFilter?: (filter: string) => Observable<IOption[]>;
+
+  @Input()
+  public set value(values: Array<IOption> | Array<string | string[] | number>) {
+    this.writeValue(values);
+  }
+  @Output()
+  public valueChange = new EventEmitter<Array<string | string[] | number>>();
+
+  @Input()
+  public label?: string;
+  @Input()
+  public maxlength: number | null = null;
+
+  public rangeOptions: IOption[] = [];
+  public rangeMin?: string;
+  public rangeMax?: string;
+  public rangeMessage?: string;
+  public elementId = Utils.uniqueId();
+
+  private rangeRef?: EmbeddedViewRef<any>;
+  private filter = '';
+
+  constructor(
+    private ngZone: NgZone,
+    private viewContainerRef: ViewContainerRef
+  ) { }
+
+  public onChange = (fn: any) => { };
+  public onTouched = () => { };
+
+  public onFilter: AutocompleteFilterCallback = (filter: string): Promise<IOption[] | IAutocompleteOptionGroup[]> => {
+    this.filter = filter;
+    return new Promise((resolve, reject) => {
+      if (this.optionFilter) {
+        this.optionFilter(this.filter).subscribe(
+          {
+            next: (response) => {
+              const options: IOption[] = [];
+              response.forEach((o) => (isArray(o.value) ? this.rangeOptions.push(o) : options.push(o)));
+              resolve(options);
+            },
+            error: () => reject()
+          }
+        );
+      }
+
+    });
+  };
+
+  public optionHeaderBuilder: ListDropdownHeaderBuilder = (): HTMLElement => {
+    this.ngZone.run(() => {
+      this.rangeMin = undefined;
+      this.rangeMax = undefined;
+      this.rangeMessage = undefined;
+    });
+
+    return this.rangeRef?.rootNodes[0] as HTMLElement
+  };
+
+  public selectedTextBuilder: AutocompleteSelectedTextBuilder = (selectedOptions: IOption[]): string => {
+    if (this.autocompleteRef?.nativeElement.open && this.filter.length) {
+      return this.filter;
+    }
+
+    const optionCount = selectedOptions?.length;
+    const rangeOptionCount = this.rangeOptions?.length;
+
+    if (optionCount > 0 && rangeOptionCount > 0) {
+      return `${optionCount} option(s) selected, ${rangeOptionCount} range(s)`;
+    } else if (optionCount > 0) {
+      return `${optionCount} option(s) selected`;
+    } else if (rangeOptionCount > 0) {
+      return `${rangeOptionCount} range(s)`;
+    }
+
+    return '';
+  };
+
+  writeValue(values: Array<IOption> | Array<string | string[] | number>): void {
+    const options: IOption[] = [];
+    this.rangeOptions.length = 0;
+    if (isArray(values)) {
+      values.forEach((o) => {
+        if (isArray(o) || isArray((o as IOption).value)) {
+          const rangeOption = isDefined((o as IOption).value) ? (o as IOption).value : o;
+          this.rangeOptions.push({ label: `${rangeOption[0]} to ${rangeOption[1]}`, value: rangeOption });
+        } else {
+          options.push(o as IOption);
+        }
+      });
+    }
+    window.requestAnimationFrame(() => {
+      ((this.autocompleteRef as ElementRef).nativeElement as AutocompleteComponent).value = options;
+    });
+  }
+
+  ngAfterViewInit(): void {
+    window.requestAnimationFrame(() => {
+      this.rangeRef = this.viewContainerRef.createEmbeddedView(this.rangeTemplateRef as TemplateRef<any>);
+      (this.rangeRef.rootNodes[0] as HTMLElement).remove();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.rangeRef?.destroy();
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  public onAutocompleteChange(): void {
+    this.emitChangeEvents();
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  @HostListener('focusout', ['$event'])
+  public autocompleteBlur(): void {
+    this.onTouched();
+  }
+
+  public onAddRangeOption(): void {
+    if (!this.rangeMin?.length && !this.rangeMax?.length) {
+      this.rangeMessage = 'A min or max value is required.';
+      return;
+    }
+
+    this.rangeMin = isString(this.rangeMin) ? this.rangeMin?.trim() : this.rangeMin;
+    this.rangeMax = isString(this.rangeMax) ? this.rangeMax?.trim() : this.rangeMax;
+
+    if (this.rangeMin?.length && this.rangeMax?.length) {
+      const comp = Utils.comparator(this.rangeMin, this.rangeMax, 'string');
+      if (comp === 0) {
+        this.rangeMessage = 'Min and Max cannot be the same value.';
+        return;
+      }
+      if (comp === 1) {
+        this.rangeMessage = 'Min value cannot be greater than Max value.';
+        return;
+      }
+    }
+
+    const optionIndex = this.rangeOptions.findIndex((o) => o.value[0] === this.rangeMin && o.value[1] === this.rangeMax);
+    if (optionIndex !== -1) {
+      this.rangeMessage = 'This range is already defined.';
+      return;
+    }
+
+    this.rangeMessage = undefined;
+
+    const label =
+      this.rangeMin?.length && this.rangeMax?.length
+        ? `${this.rangeMin} to ${this.rangeMax}`
+        : this.rangeMin?.length
+          ? `Greater than ${this.rangeMin}`
+          : `Less than ${this.rangeMax}`;
+
+    this.rangeOptions.push({ label, value: [this.rangeMin, this.rangeMax] });
+    this.emitChangeEvents();
+    this.rangeMin = undefined;
+    this.rangeMax = undefined;
+
+    (this.filterInputRef as ElementRef).nativeElement.value = this.selectedTextBuilder(this.autocompleteRef?.nativeElement.value);
+  }
+
+  public onDeleteRangeOption(option: IOption): void {
+    (this.rangeRef?.rootNodes[0] as HTMLElement).focus();
+    const optionIndex = this.rangeOptions.findIndex((o) => o.value === option.value);
+    if (optionIndex !== -1) {
+      this.rangeOptions.splice(optionIndex, 1);
+      (this.filterInputRef as ElementRef).nativeElement.value = this.selectedTextBuilder(this.autocompleteRef?.nativeElement.value);
+      this.emitChangeEvents();
+    }
+  }
+
+  private emitChangeEvents(): void {
+    const options = [];
+    if (isArray(this.rangeOptions) && this.rangeOptions.length) {
+      options.push(...this.rangeOptions.map((o) => o.value));
+    }
+
+    const values = this.autocompleteRef?.nativeElement.value;
+    if (isArray(values) && values.length) {
+      options.push(...values);
+    }
+
+    this.onChange(options);
+    this.valueChange.emit(options);
+  }
+}

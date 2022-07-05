@@ -1,0 +1,14 @@
+@use 'src/global' as *;
+
+:host {
+  display: block;
+  margin: 24px;
+  padding: 16px;
+  @include app-container-raised();
+}
+
+.two-way-binding {
+  forge-text-field {
+    margin-bottom: 16px;
+  }
+}

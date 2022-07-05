@@ -1,1 +1,41 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@tylertech/forge/dist/forge-core';
+@use '@tylertech/forge/dist/forge';
+
+@use 'src/global' as *;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+h1, h2, h3, h4, h5 {
+  margin: 0;
+}
+
+html,
+body,
+app-root {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+router-outlet {
+  display: none;
+}
+
+// forge-icon {
+//   color: var(--forge-theme-icon-color);
+// }
+
+.app {
+  &--hidden {
+    display: none;
+  }
+  &--flex-right {
+    margin-left: auto;
+  }
+}

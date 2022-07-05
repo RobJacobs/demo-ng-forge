@@ -1,0 +1,24 @@
+:host {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+  height: 100%;
+}
+
+:host-context(body.app--layout-sm) {
+  background-color: lightgray;
+}
+
+:host-context(body.app--layout-md) {
+  background-color: lightgreen;
+}
+
+:host-context(body.app--layout-lg) {
+  background-color: lightblue;
+}
+
+
+.body {
+  overflow: auto;
+  padding: 24px;
+}

@@ -1,0 +1,156 @@
+@use '@material/theme/color-palette' as mat-color;
+@use '@material/elevation' as mat-elevation;
+@use '@material/card' as mat-card;
+@use '@tylertech/forge/styles/theme' as forge-theme;
+@use '@tylertech/forge/styles/typography' as forge-typography;
+@use '@tylertech/forge/styles/utils/mixins-flex' as forge-flex;
+@use 'src/variables' as app-var;
+
+@mixin container-raised {
+  @include mat-card.fill-color(surface);
+  @include mat-card.shape-radius(medium);
+  @include mat-elevation.elevation(1);
+}
+
+@mixin container-outlined {
+  @include mat-card.fill-color(surface);
+  @include mat-card.shape-radius(medium);
+  @include forge-theme.property(border, forge-theme.$border);
+}
+
+@mixin table-header-footer {
+  &--last-column-no-padding {
+    ::ng-deep {
+      .forge-table-row {
+        & > .forge-table-cell:last-child {
+          padding-right: 0px;
+        }
+      }
+    }
+  }
+  &__header {
+    margin: 8px 16px 0 16px;
+    min-height: 48px;
+    @include forge-flex.container(flex, row, nowrap, center);
+
+    &-action {
+      border-radius: 4px;
+      padding: 8px;
+      background-color: mat-color.$indigo-50;
+    }
+  }
+  &__body {
+    padding: 0 16px;
+  }
+  &__footer {
+    padding: 0 16px 8px 16px;
+    @include forge-flex.container(flex, row, nowrap, center);
+    forge-paginator {
+      margin-left: auto;
+    }
+  }
+}
+
+@function form-grid-width($columns: 1, $width: app-var.$form-grid-column-width, $gap: app-var.$form-grid-gap) {
+  @return (($columns - 1) * $gap) + ($columns * $width);
+}
+
+@mixin form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, #{app-var.$form-grid-column-width}px);
+  gap: #{app-var.$form-grid-gap}px;
+  // force a 72px min row height for forge input with helper text
+  // grid-auto-rows: minmax(72px, auto);
+
+  &--row-break {
+    grid-column-start: 1;
+  }
+
+  > * {
+    width: #{app-var.$form-grid-column-width}px;
+    overflow: hidden;
+    word-break: break-word;
+  }
+
+  &--col-span {
+    grid-column: 1 / -1;
+    &#{&} {
+      width: auto;
+    }
+  }
+
+  &--col-span2 {
+    grid-column: span 2;
+    &#{&} {
+      width: #{app-var.$form-grid-column-width * 2 + app-var.$form-grid-gap}px;
+    }
+  }
+
+  &--col-span3 {
+    grid-column: span 3;
+    &#{&} {
+      width: #{app-var.$form-grid-column-width * 3 + app-var.$form-grid-gap * 2}px;
+    }
+  }
+
+  [slot='value'] {
+    &:empty {
+      &::before {
+        content: 'n/a';
+        color: var(--mdc-theme-text-secondary-on-background);
+        font-style: italic;
+      }
+    }
+  }
+}
+
+@mixin dialog {
+  :host {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .dialog {
+    &__header {
+      @include forge-flex.container(flex, row, nowrap, center);
+      padding: 8px;
+      padding-left: 24px;
+      @include forge-theme.property(border-bottom, forge-theme.$border);
+      .forge-typography--headline5 {
+        margin-right: 16px;
+      }
+      forge-icon-button {
+        &:first-of-type {
+          margin-left: auto;
+        }
+      }
+    }
+
+    &__body {
+      padding: 16px 24px;
+    }
+
+    &__footer {
+      @include forge-flex.container(flex, row, nowrap, center);
+      justify-content: flex-end;
+      column-gap: 16px;
+      padding: 8px 16px;
+      @include forge-theme.property(border-top, forge-theme.$border);
+    }
+  }
+}
+
+@mixin empty-placeholder {
+  forge-label-value {
+    [slot='value'] {
+      &:empty {
+        &::before {
+          content: 'n/a';
+          color: var(--mdc-theme-text-secondary-on-background);
+          font-style: italic;
+        }
+      }
+    }
+  }
+}

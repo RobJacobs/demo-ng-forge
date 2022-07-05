@@ -1,0 +1,22 @@
+<forge-toolbar class="header">
+  <h2 slot="start" class="forge-typography--title">Icons</h2>
+</forge-toolbar>
+
+<div class="body">
+  <forge-autocomplete [filter]="iconOptionFilter" (forge-autocomplete-change)="onIconSelected($event.detail)">
+    <forge-text-field>
+      <forge-icon slot="leading" [name]="selectedIcon" *ngIf="selectedIcon"></forge-icon>
+      <input id="autocomplete01" type="text" />
+      <label for="autocomplete01">Icon</label>
+      <forge-icon slot="trailing" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
+    </forge-text-field>
+  </forge-autocomplete>
+
+  <div class="all-icons">
+    <div class="icon" *ngFor="let icon of moduleCache.iconOptions">
+      <forge-icon [name]="icon.value"></forge-icon>
+      <div class="forge-typography--caption">{{icon.value}}</div>
+    </div>
+  </div>
+
+</div>

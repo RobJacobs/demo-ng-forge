@@ -1,0 +1,11 @@
+:host {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+  height: 100%;
+}
+
+.body {
+  overflow: auto;
+  padding: 24px;
+}

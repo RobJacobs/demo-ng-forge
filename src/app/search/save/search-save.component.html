@@ -1,0 +1,39 @@
+<div class="dialog__header">
+  <span class="forge-typography--headline5">Save search</span>
+  <forge-icon-button class="forge-flex-item--right">
+    <button type="button" aria-label="close" (click)="onCancel()">
+      <forge-icon name="close"></forge-icon>
+    </button>
+  </forge-icon-button>
+</div>
+
+<div class="dialog__body">
+  <form class="form-grid" novalidate autocomplete="off" [formGroup]="formGroup">
+    <forge-text-field required [invalid]="isInvalid('name')">
+      <input type="text" appAutoFocus id="search-save-name" formControlName="name" (blur)="formGroup.get('name')?.updateValueAndValidity()">
+      <label for="search-save-name" slot="label">Name</label>
+      <span *ngIf="isInvalid('name')" slot="helper-text">A name is required</span>
+    </forge-text-field>
+    <forge-text-field>
+      <input type="text" id="search-save-description" formControlName="description">
+      <label for="search-save-description" slot="label">Description</label>
+    </forge-text-field>
+    <forge-checkbox>
+      <input type="checkbox" id="search-save-default" formControlName="isDefault">
+      <label for="search-save-default">Make this your default search</label>
+    </forge-checkbox>
+    <forge-checkbox>
+      <input type="checkbox" id="search-save-public" formControlName="isPublic">
+      <label for="search-save-public">Make this search public</label>
+    </forge-checkbox>
+  </form>
+</div>
+
+<div class="dialog__footer">
+  <forge-button type="outlined" class="forge-flex-item--right">
+    <button type="button" (click)="onCancel()">Cancel</button>
+  </forge-button>
+  <forge-button type="unelevated">
+    <button type="button" (click)="onSave()" [disabled]="formGroup.invalid">Save</button>
+  </forge-button>
+</div>

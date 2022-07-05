@@ -1,0 +1,14 @@
+@use 'src/global' as *;
+
+:host {
+  display: block;
+}
+
+[slot='body'] {
+  display: grid;
+  @include forge-theme-property(background-color, background);
+}
+
+forge-drawer {
+  --forge-drawer-width: auto;
+}

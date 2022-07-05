@@ -1,0 +1,37 @@
+@use '@tylertech/forge/styles/drawer/drawer/variables' as forge-drawer-variables;
+@use 'src/global' as *;
+
+:host {
+  display: block;
+}
+
+.expander {
+  width: 100%;
+  padding: 8px;
+  button {
+    min-width: 100%;
+    @include forge-flex-container(flex, row, nowrap, center);
+    forge-icon {
+      margin-left: auto;
+    }
+  }
+}
+
+.menu {
+  transition: width forge-drawer-variables.$transition-duration;
+
+  &--mini {
+    --forge-list-item-leading-margin-right: 0;
+    width: forge-drawer-variables.$mini-width;
+  }
+
+  &--dismissible {
+    width: forge-drawer-variables.$width;
+  }
+
+  &__item {
+    &--nested {
+      margin-left: 16px;
+    }
+  }
+}

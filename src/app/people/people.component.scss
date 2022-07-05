@@ -1,0 +1,6 @@
+@use 'src/global' as *;
+
+:host {
+  display: grid;
+  overflow: hidden;
+}

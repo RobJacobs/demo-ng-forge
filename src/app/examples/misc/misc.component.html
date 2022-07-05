@@ -1,0 +1,36 @@
+<forge-toolbar class="header">
+  <h2 slot="start" class="forge-typography--title">Misc examples</h2>
+</forge-toolbar>
+
+<div class="body">
+
+  <app-card border="outlined">
+    <div app-card-header slot="start">
+      <span>Card header</span>
+    </div>
+    <div app-card-header slot="end">
+      <forge-icon-button>
+        <button type="button">
+          <forge-icon name="close"></forge-icon>
+        </button>
+      </forge-icon-button>
+    </div>
+
+    <ng-template #variableTemplate [ngTemplateOutlet]="variableTemplate" [ngTemplateOutletContext]="{ $implicit: { cats: 1, dogs: 2 } }" let-variable>
+      <p>{{variable | json}}</p>
+    </ng-template>
+
+    <div>{{0 | appArrayFind:data:'value':'label'}}</div>
+    <div>{{1 | appArrayFind:data:'value' | json}}</div>
+
+    <div app-card-footer slot="end">
+      <forge-button type="outlined">
+        <button type="button">Cancel</button>
+      </forge-button>
+      <forge-button type="raised">
+        <button type="button">Save</button>
+      </forge-button>
+    </div>
+  </app-card>
+
+</div>

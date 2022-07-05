@@ -1,0 +1,55 @@
+<forge-toolbar class="header">
+  <h2 slot="start" class="forge-typography--title">People</h2>
+</forge-toolbar>
+
+<div class="body">
+  <div class="body__left">
+    <div [ngClass]="{'app--hidden': isBusy}" class="table table--last-column-no-padding">
+      <div class="table__header" [ngClass]="{'table__header-action': selectedPeople.length}">
+        <ng-container *ngIf="!selectedPeople.length">
+          <app-filter-chips [filters]="filterCache.filters" (filter)="onApplyFilter(true)"></app-filter-chips>
+          <forge-button class="app--flex-right" type="outlined">
+            <button type="button" (click)="viewCache.showFilter = !viewCache.showFilter">
+              <forge-icon name="filter_list" *ngIf="!filterCache.filters?.length"></forge-icon>
+              <forge-badge class="table__header__filter-count" *ngIf="filterCache.filters.length" theme="info-primary">{{filterCache.filters?.length}}</forge-badge>
+              <span>Filter</span>
+            </button>
+          </forge-button>
+          <forge-icon-button id="home--column-select" class="table__header__columns">
+            <button type="button" aria-label="Choose table columns">
+              <forge-icon name="view_column"></forge-icon>
+            </button>
+          </forge-icon-button>
+          <forge-select-dropdown target="#home--column-select" multiple [value]="selectedTableColumns" (change)="onTableOptionSelected($event.detail)">
+            <forge-option *ngFor="let column of optionalTableColumns" [value]="column.property">
+              {{column.header}}
+            </forge-option>
+          </forge-select-dropdown>
+        </ng-container>
+
+        <ng-container *ngIf="selectedPeople.length">
+          <span>{{selectedPeople.length}} people selected</span>
+        </ng-container>
+      </div>
+
+      <forge-table #peopleTable class="table__body" [ngClass]="{'app--hidden': !recordCount}" [data]="recordset" [columnConfigurations]="tableColumns" (forge-table-sort)="onTableSort($event.detail)" select="true" select-key="id" (forge-table-select)="onPeopleSelected()" (forge-table-select-all)="onPeopleSelected()"></forge-table>
+
+      <div *ngIf="recordCount" class="table__footer">
+        <forge-paginator class="app--flex-right" [pageIndex]="filterCache.skip / filterCache.take" [pageSize]="filterCache.take" [total]="recordCount" (change)="onTablePaginatorChange($event.detail)"></forge-paginator>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="!isBusy && !recordCount">
+      <img src="https://cdn.forge.tylertech.com/v1/images/spot-hero/general-empty-state-spot-hero.svg" alt="" />
+      <div>No people found.</div>
+    </div>
+
+    <div class="busy-state" *ngIf="isBusy">
+      <forge-skeleton list-item></forge-skeleton>
+      <forge-skeleton list-item></forge-skeleton>
+      <forge-skeleton list-item></forge-skeleton>
+    </div>
+  </div>
+
+  <app-people-home-filter (filter)="onApplyFilter(false)"></app-people-home-filter>
+</div>

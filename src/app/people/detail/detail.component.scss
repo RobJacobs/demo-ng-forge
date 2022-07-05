@@ -1,0 +1,37 @@
+@use 'src/global' as *;
+
+:host {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  overflow: hidden;
+}
+
+.header {
+  overflow: hidden;
+  [slot='start'] {
+    @include forge-flex-container(flex, row, nowrap, center);
+  }
+}
+
+.body {
+  display: grid;
+  grid-template-columns: minmax(auto, 480px) 1fr;
+  align-items: flex-start;
+  column-gap: 48px;
+  overflow: auto;
+  padding: 24px;
+
+  &__left {
+    @include app-container-raised();
+    padding: 16px;
+    forge-label-value {
+      margin-bottom: 16px;
+    }
+  }
+
+  &__right {
+    img {
+      width: 256px;
+    }
+  }
+}

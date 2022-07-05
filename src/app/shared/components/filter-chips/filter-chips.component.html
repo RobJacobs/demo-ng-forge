@@ -1,0 +1,3 @@
+<forge-chip-set type="input" dense="true" (forge-chip-delete)="onFilterDelete($event)">
+  <forge-chip *ngFor="let filter of filters" [value]="filter.property">{{filter.label}}</forge-chip>
+</forge-chip-set>

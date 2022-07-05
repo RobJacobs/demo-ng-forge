@@ -1,0 +1,60 @@
+@use 'src/global' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  &.app-card--raised {
+    @include app-container-raised();
+  }
+  &.app-card--outlined {
+    @include app-container-outlined();
+  }
+}
+
+// :host(.app-card--raised) {
+//   @include app--container-raised();
+// }
+
+// :host(.app-card--outlined) {
+//   @include app--container-outlined();
+// }
+
+.header {
+  ::ng-deep {
+    [slot='end'] {
+      forge-icon-button:last-child {
+        margin-right: -8px;
+      }
+    }
+  }
+  &:empty {
+    display: none;
+  }
+}
+
+.body {
+  padding: 16px;
+  overflow: auto;
+  flex-grow: 1;
+}
+
+.footer {
+  ::ng-deep {
+    [slot='start'] {
+      forge-button + forge-button {
+        margin-right: 16px;
+      }
+    }
+
+    [slot='end'] {
+      forge-button + forge-button {
+        margin-left: 16px;
+      }
+    }
+  }
+
+  &:empty {
+    display: none;
+  }
+}

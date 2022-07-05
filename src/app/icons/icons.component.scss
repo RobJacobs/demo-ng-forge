@@ -1,0 +1,28 @@
+@use 'src/global' as *;
+
+:host {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+  @include forge-theme-property(background-color, surface);
+}
+
+.body {
+  overflow: auto;
+  padding: 24px;
+}
+
+.all-icons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(auto, 160px));
+  --forge-icon-font-size: 48px;
+  .icon {
+    margin: 16px;
+    display: flex;
+    flex-direction: column;
+    forge-icon {
+      margin-bottom: 8px;
+    }
+    word-break: break-all;
+  }
+}

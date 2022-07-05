@@ -1,0 +1,68 @@
+@use 'src/global' as *;
+
+:host {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+}
+
+::ng-deep {
+  .searches-popup {
+    min-width: 280px;
+    *[slot='trailing'] {
+      @include forge-flex-container(flex, row, nowrap, center);
+      margin-right: -16px;
+    }
+  }
+
+  .operator-popup {
+    min-width: 200px;
+    forge-list-item {
+      cursor: pointer;
+    }
+  }
+}
+
+.header {
+  forge-button {
+    margin-left: 16px;
+  }
+  overflow: hidden;
+  white-space: nowrap;
+  [slot='start'] {
+    @include forge-flex-container(flex, row, nowrap, center);
+    forge-divider {
+      margin: 0 16px;
+      height: 32px;
+    }
+    span + span {
+      margin-left: 16px;
+    }
+  }
+}
+
+.body {
+  overflow: auto;
+  // margin: 24px;
+  padding: 24px;
+  .form {
+    @include app-container-raised();
+    padding: 16px;
+    @include app-form-grid();
+  }
+}
+
+.operator {
+  &__addon {
+    // TODO fix with forge-icon-button element density-level attribute
+    button {
+      width: 36px;
+      height: 36px;
+    }
+    border-radius: 50%;
+
+    &--selected {
+      background-color: $mat-color-indigo-100;
+    }
+  }
+}

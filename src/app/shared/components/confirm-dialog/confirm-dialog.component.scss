@@ -1,0 +1,7 @@
+@use 'src/global' as *;
+
+@include app-dialog();
+
+:host {
+  min-width: 320px;
+}

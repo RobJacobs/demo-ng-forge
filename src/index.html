@@ -1,13 +1,128 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
-  <title>DemoNgForge</title>
+  <title>Demo App Ng Forge</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css">
 </head>
-<body>
-  <app-root></app-root>
+
+<body class="forge-typography">
+  <app-root>
+    <style>
+      .app-loading-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .app-loading-container .app-loading-messsage-wrapper {
+        width: 60%;
+        max-width: 400px;
+      }
+
+      .app-loading-messsage-wrapper .app-loading-messsage-text {
+        padding: 0;
+        margin: 16px 0 24px 0;
+        text-align: center;
+        font-family: Roboto, sans-serif;
+        color: rgba(0, 0, 0, 0.54);
+      }
+
+      @media (max-width: 1023px) {
+        .app-loading-messsage-wrapper .app-loading-messsage-text {
+          font-size: 1rem;
+          font-weight: 500;
+          line-height: 1.75rem;
+          letter-spacing: 0.009375em;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .app-loading-messsage-wrapper .app-loading-messsage-text {
+          font-size: 1.25rem;
+          font-weight: 400;
+          line-height: 2rem;
+          letter-spacing: 0.0125em;
+        }
+      }
+
+      .app-loading-messsage-wrapper .app-loading-progress-indicator-wrapper {
+        position: relative;
+        height: 4px;
+        background-color: #D6DDFF;
+        border-radius: 2px;
+        margin: 0.5rem 0 1rem 0;
+        overflow: hidden;
+      }
+
+      .app-loading-progress-indicator-wrapper .app-loading-progress-indicator {
+        background-color: #536DFE;
+      }
+
+      .app-loading-progress-indicator-wrapper .app-loading-progress-indicator:before {
+        content: '';
+        position: absolute;
+        background-color: inherit;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        will-change: left, right;
+        -webkit-animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+        animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+      }
+
+      @-webkit-keyframes indeterminate {
+        0% {
+          left: -35%;
+          right: 100%;
+        }
+
+        60% {
+          left: 100%;
+          right: -90%;
+        }
+
+        100% {
+          left: 100%;
+          right: -90%;
+        }
+      }
+
+      @keyframes indeterminate {
+        0% {
+          left: -35%;
+          right: 100%;
+        }
+
+        60% {
+          left: 100%;
+          right: -90%;
+        }
+
+        100% {
+          left: 100%;
+          right: -90%;
+        }
+      }
+    </style>
+
+    <div class="app-loading-container">
+      <div class="app-loading-messsage-wrapper">
+        <h3 class="app-loading-messsage-text">
+          Welcome! We're building your experience...
+        </h3>
+        <div class="app-loading-progress-indicator-wrapper">
+          <div class="app-loading-progress-indicator"></div>
+        </div>
+      </div>
+    </div>
+  </app-root>
 </body>
+
 </html>
