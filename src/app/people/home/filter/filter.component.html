@@ -10,7 +10,7 @@
 
   <form class="body" [formGroup]="formGroup" novalidate autocomplete="off" (ngSubmit)="onApplyFilter()">
     <forge-text-field>
-      <input type="text" id="home-filter--first-name" formControlName="firstName" appAutoFocus>
+      <input type="text" id="home-filter--first-name" formControlName="firstName">
       <label for="home-filter--first-name" slot="label">First name</label>
     </forge-text-field>
     <forge-text-field>
@@ -30,7 +30,7 @@
     <forge-button type="outlined">
       <button type="button" (click)="onClearFilter()">Clear</button>
     </forge-button>
-    <forge-button type="unelevated">
+    <forge-button type="raised">
       <button type="submit" (click)="onApplyFilter()">Apply</button>
     </forge-button>
   </div>

@@ -1,13 +1,14 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
+import { DeactivateGuard } from '@tylertech/angular-core';
 
 import { AppFormsModule } from 'src/app/shared/app-forms.module';
 import { ProfileComponent } from './profile.component';
 import { ProfileCacheService } from './profile-cache.service';
 import { AddressComponent } from './address/address.component';
 import { PersonalComponent } from './personal/personal.component';
-import { DeactivateGuard } from './deactivate.guard';
+// import { DeactivateGuard } from './deactivate.guard';
 
 const routes: Routes = [
   {

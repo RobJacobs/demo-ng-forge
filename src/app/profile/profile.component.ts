@@ -1,20 +1,23 @@
-import { formatDate } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Utils } from 'src/utils';
+import { Observable } from 'rxjs';
+import { DialogService } from '@tylertech/forge-angular';
+import { ITylDeactivateGuardArg, TylCanDeactivate } from '@tylertech/angular-core';
 
+import { Utils } from 'src/utils';
 import { IProfile } from 'src/app/shared/interfaces/person.interface';
 import { AppDataService } from 'src/app/app-data.service';
 import { AppToastService } from 'src/app/app-toast.service';
 import { ProfileCacheService } from './profile-cache.service';
+import { ConfirmDialogComponent } from '../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent {
+export class ProfileComponent implements TylCanDeactivate {
   private noImageUrl = 'mock-data/no-image.png';
 
   public get personalFormGroup() {
@@ -29,12 +32,35 @@ export class ProfileComponent {
   constructor(
     private router: Router,
     private appDataService: AppDataService,
-    protected appToastService: AppToastService,
+    private dialogService: DialogService,
+    private appToastService: AppToastService,
     public cache: ProfileCacheService
   ) {
     if (this.cache.profile) {
       this.loadForm(this.cache.profile);
     }
+  }
+
+  public canDeactivate(arg: ITylDeactivateGuardArg): boolean | Observable<boolean> {
+    if (!this.cache.formGroup.dirty) {
+      return true;
+    }
+
+    return new Observable<boolean>(s => {
+      const dialogRef = this.dialogService.show(
+        ConfirmDialogComponent,
+        { backdropClose: false, escapeClose: false },
+        { data: { title: 'Unsaved changes', message: 'You have unsaved changes which will be lost, do you want to continue?' } }
+      );
+      const dialogSub = dialogRef.afterClosed.subscribe((result) => {
+        dialogSub.unsubscribe();
+        if (result) {
+          this.cache.formGroup.reset();
+        }
+        console.log(result);
+        s.next(result);
+      });
+    });
   }
 
   public onLoadProfile() {
