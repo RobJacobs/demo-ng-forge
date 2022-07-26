@@ -67,4 +67,8 @@ export class AppDataService {
       o.complete();
     });
   }
+
+  public getLongRequest(): Observable<string> {
+    return this.httpClient.get<string>('http://localhost:5000/long-request');
+  }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IMenuOption, IOption } from '@tylertech/forge';
 import { IBaseListDropdownOption, IListDropdownOption } from '@tylertech/forge/esm/list-dropdown';
+import { Subject } from 'rxjs';
 
 export interface IAppCacheService {
   isBusy: boolean;
@@ -49,5 +50,7 @@ export class AppCacheService implements IAppCacheService {
     ]
   };
   public activeRoute: string[] = [];
+  public cancelHttpRequests$ = new Subject<void>();
+
   constructor() { }
 }

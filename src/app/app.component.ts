@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRouteSnapshot, Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, ActivatedRoute, NavigationEnd, NavigationStart } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 import { AppCacheService } from './app-cache.service';
@@ -31,6 +31,10 @@ export class AppComponent {
       };
       parseRoute(this.route.snapshot);
       this.appCache.activeRoute = routes;
+    });
+
+    this.router.events.pipe(filter(event => event instanceof NavigationStart)).subscribe(() => {
+      this.appCache.cancelHttpRequests$.next();
     });
   }
 

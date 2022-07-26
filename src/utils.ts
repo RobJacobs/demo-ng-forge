@@ -1,8 +1,8 @@
 import { formatDate, formatNumber, Location } from '@angular/common';
+import { HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { isArray, getPropertyValue, isDefined, isString } from '@tylertech/forge-core';
 import { SortDirection } from '@tylertech/forge';
-import { HttpParams } from '@angular/common/http';
 
 export class Utils {
   public static sortData(data: any[], key: string, type: 'string' | 'number' | 'boolean' | 'date', direction: 'ASC' | 'DESC' | SortDirection): any[] {
@@ -178,7 +178,7 @@ export class Utils {
   }
 
   public static uniqueId(): string {
-    return Math.random().toString(36).substr(2);
+    return Math.random().toString(36).substring(2);
   }
 
   public static parseQueryStringParameters(): any {
