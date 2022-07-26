@@ -35,7 +35,7 @@
       <forge-table #peopleTable class="table__body" [ngClass]="{'app--hidden': !recordCount}" [data]="recordset" [columnConfigurations]="tableColumns" (forge-table-sort)="onTableSort($event.detail)" select="true" select-key="id" (forge-table-select)="onPeopleSelected()" (forge-table-select-all)="onPeopleSelected()"></forge-table>
 
       <div *ngIf="recordCount" class="table__footer">
-        <forge-paginator class="app--flex-right" [pageIndex]="filterCache.skip / filterCache.take" [pageSize]="filterCache.take" [total]="recordCount" (change)="onTablePaginatorChange($event.detail)"></forge-paginator>
+        <forge-paginator class="app--flex-right" [pageIndex]="filterCache.skip / filterCache.take" [pageSize]="filterCache.take" [total]="recordCount" (forge-paginator-change)="onTablePaginatorChange($event.detail)"></forge-paginator>
       </div>
     </div>
 
