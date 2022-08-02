@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { DialogConfig, DialogRef } from '@tylertech/forge-angular';
 import { AutoFocusDirective } from 'src/app/shared/directives/auto-focus/auto-focus.directive';
@@ -8,6 +9,7 @@ import { AutoFocusDirective } from 'src/app/shared/directives/auto-focus/auto-fo
   styleUrls: ['./confirm-dialog.component.scss'],
   standalone: true,
   imports: [
+    CommonModule,
     AutoFocusDirective
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
