@@ -31,7 +31,7 @@ export class ParentComponent {
         next: result => console.log(result),
         error: error => console.log(error)
       }),
-      takeUntil(this.appCache.cancelHttpRequests$)
+      takeUntil(this.appCache.cancelHttpRequests)
     );
   }
 

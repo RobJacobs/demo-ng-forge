@@ -34,7 +34,7 @@ export class AppComponent {
     });
 
     this.router.events.pipe(filter(event => event instanceof NavigationStart)).subscribe(() => {
-      this.appCache.cancelHttpRequests$.next();
+      this.appCache.cancelHttpRequests.next();
     });
   }
 

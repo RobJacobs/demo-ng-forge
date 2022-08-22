@@ -46,11 +46,12 @@ export class AppCacheService implements IAppCacheService {
           { label: 'Binding', value: 'examples/binding' },
           { label: 'Misc', value: 'examples/misc' }
         ]
-      }
+      },
+      { label: 'Map View', value: 'map-view', icon: 'map' }
     ]
   };
   public activeRoute: string[] = [];
-  public cancelHttpRequests$ = new Subject<void>();
+  public cancelHttpRequests = new Subject<void>();
 
   constructor() { }
 }
