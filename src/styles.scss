@@ -62,7 +62,7 @@ router-outlet {
 
 .app {
   &--hidden {
-    display: none;
+    display: none !important;
   }
 
   &--flex-right {

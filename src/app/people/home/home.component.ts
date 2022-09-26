@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ElementRef, EmbeddedViewRef, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { isArray } from '@tylertech/forge-core';
 import { CellAlign, TableComponent, TextFieldComponentDelegate } from '@tylertech/forge';
@@ -11,6 +11,7 @@ import { PeopleCacheService } from '../people-cache.service';
 import { FilterComponent } from './filter/filter.component';
 import { TableDetailComponent } from './table-detail/table-detail.component';
 import { finalize } from 'rxjs';
+import { RouterlinkButtonComponent } from 'src/app/shared/components/routerlink-button/routerlink-button.component';
 
 @Component({
   selector: 'app-people-home',
@@ -47,14 +48,17 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
   ) {
     super();
 
-    const storedTableColumns = JSON.parse(localStorage.getItem(this.moduleCache.homeView.storageKey) || '') as { property: string; hidden: boolean; }[];
-    if (isArray(storedTableColumns)) {
-      this.optionalTableColumns.forEach((c) => {
-        const storedColumn = storedTableColumns.find((sc) => sc.property === c.property);
-        if (storedColumn) {
-          c.hidden = storedColumn.hidden;
-        }
-      });
+    let storageColumns = localStorage.getItem(this.moduleCache.homeView.storageKey);
+    if (storageColumns?.length) {
+      const columns = JSON.parse(storageColumns) as { property: string; hidden: boolean; }[];
+      if (isArray(columns)) {
+        this.optionalTableColumns.forEach(c => {
+          const storedColumn = columns.find((sc) => sc.property === c.property);
+          if (storedColumn) {
+            c.hidden = storedColumn.hidden;
+          }
+        });
+      }
     }
 
     this.tableColumns = [
@@ -144,6 +148,14 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
             },
             'View person details'
           ));
+
+          const componentRef = this.viewContainerRef.createComponent(RouterlinkButtonComponent);
+          componentRef.instance.route = '/profile';
+          componentRef.instance.queryParams = { id: data.id };
+          componentRef.instance.icon = 'person';
+          componentRef.instance.tooltip = 'Show profile';
+          const linkButtonNode = (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
+          cellElement.appendChild(linkButtonNode);
 
           return '';
         }

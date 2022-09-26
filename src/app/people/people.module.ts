@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AutocompleteRangeComponent } from 'src/app/shared/components/autocomplete-range/autocomplete-range.component';
 import { FilterChipsComponent } from 'src/app/shared/components/filter-chips/filter-chips.component';
 import { CardComponent } from 'src/app/shared/components/card/card.component';
+import { RouterlinkButtonComponent } from 'src/app/shared/components/routerlink-button/routerlink-button.component';
 import { AppFormsModule } from 'src/app/shared/app-forms.module';
 import { PeopleComponent } from './people.component';
 import { HomeComponent } from './home/home.component';
@@ -40,6 +41,7 @@ const routes: Routes = [
     AutocompleteRangeComponent,
     FilterChipsComponent,
     CardComponent,
+    RouterlinkButtonComponent,
     AppFormsModule
   ],
   exports: [

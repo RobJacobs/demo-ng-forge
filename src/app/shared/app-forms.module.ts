@@ -4,7 +4,6 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ForgeModule } from '@tylertech/forge-angular';
 
 @NgModule({
-  declarations: [],
   imports: [CommonModule],
   exports: [FormsModule, ReactiveFormsModule, ForgeModule],
   providers: []

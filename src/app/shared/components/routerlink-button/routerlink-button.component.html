@@ -1,0 +1,6 @@
+<forge-icon-button>
+  <a [routerLink]="route" [queryParams]="queryParams" class="forge-icon-button">
+    <forge-icon [name]="icon"></forge-icon>
+  </a>
+  <forge-tooltip *ngIf="tooltip?.length">{{tooltip}}</forge-tooltip>
+</forge-icon-button>

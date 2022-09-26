@@ -16,6 +16,9 @@ export class AppComponent {
     public appCache: AppCacheService) {
     this.initRouteWatch();
     this.initLayoutWatch();
+
+    // const param = encodeURIComponent(btoa(JSON.stringify({ property: 'value' })));
+    // const decoded = JSON.parse(atob(decodeURIComponent(param)));
   }
 
   private initRouteWatch(): void {

@@ -12,7 +12,7 @@
       <span slot="helper-text" *ngIf="isInvalid('lastName')">Last name is required</span>
     </forge-text-field>
 
-    <forge-select label="gender" formControlName="gender" [options]="genderOptions"></forge-select>
+    <forge-select label="Gender" formControlName="gender" [options]="genderOptions"></forge-select>
 
     <forge-text-field required [invalid]="isInvalid('email')">
       <input type="text" id="personal-form--email" formControlName="email" />
