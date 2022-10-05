@@ -6,6 +6,12 @@
   "parserOptions": {
     "ecmaVersion": 2020
   },
+  "extends": "eslint:recommended",
+  "rules": {
+    "no-unused-vars": "off",
+    "no-undef": "off",
+    "no-empty": "off"
+  },
   "overrides": [
     {
       "files": [

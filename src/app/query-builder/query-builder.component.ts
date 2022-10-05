@@ -59,10 +59,11 @@ export class QueryBuilderComponent {
       (this.formGroup.get('filters') as FormArray).push(this.buildFilterFormGroup());
     } else {
       switch (type) {
-        case 'condition':
+        case 'condition': {
           const index = (formGroup.parent as FormArray).controls.indexOf(formGroup) + 1;
           (formGroup.parent as FormArray).insert(index, this.buildFilterFormGroup());
           break;
+        }
         case 'group':
           (formGroup.get('filters') as FormArray).push(this.buildFilterFormGroup());
           break;
@@ -103,7 +104,7 @@ export class QueryBuilderComponent {
       }
 
       switch (operator) {
-        case 6:
+        case 6: {
           if (controlName === 'value') {
             return null;
           }
@@ -132,7 +133,7 @@ export class QueryBuilderComponent {
           }
 
           return null;
-
+        }
         default:
           if (controlName === 'minValue' || controlName === 'maxValue') {
             return null;

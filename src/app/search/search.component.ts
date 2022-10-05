@@ -169,14 +169,15 @@ export class SearchComponent implements OnInit {
             this.searchDescription = search?.description;
             this.formGroup.patchValue(search?.filters);
             break;
-          case 'copy':
+          case 'copy': {
             const copySearch = JSON.parse(JSON.stringify(search));
             copySearch.id = undefined;
             copySearch.name = `${copySearch.name} copy`;
             copySearch.isDefault = false;
             this.onSaveSearch(copySearch);
             break;
-          case 'delete':
+          }
+          case 'delete': {
             const searchIndex = this.searchCache.searches.findIndex((s) => s.id === search?.id);
             if (searchIndex !== -1) {
               this.searchCache.searches.splice(searchIndex, 1);
@@ -189,6 +190,7 @@ export class SearchComponent implements OnInit {
               this.searchDescription = '';
             }
             break;
+          }
         }
       }
     }

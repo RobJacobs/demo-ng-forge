@@ -20,7 +20,7 @@ export class IndeterminateDirective implements OnDestroy {
     this.inputElement.indeterminate = !isDefined(this.value);
 
     this.setSubscription();
-  };
+  }
 
   constructor(private element: ElementRef) {
     this.inputElement = this.element.nativeElement as HTMLInputElement;
