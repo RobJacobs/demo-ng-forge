@@ -207,7 +207,7 @@ export class Utils {
             reduced[key] = object[key];
           }
         } else if ((object[key] + '').trim().length) {
-          reduced[key] = object[key];
+          reduced[key] = typeof object[key] === 'string' ? object[key].trim() : object[key];
         }
       }
     });
