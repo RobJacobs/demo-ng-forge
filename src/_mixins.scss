@@ -6,10 +6,10 @@
 @use '@tylertech/forge/styles/utils/mixins-flex' as forge-flex;
 @use 'src/variables' as app-var;
 
-@mixin container-raised {
+@mixin container-raised($elevation: 1) {
   @include mat-card.fill-color(surface);
   @include mat-card.shape-radius(medium);
-  @include mat-elevation.elevation(1);
+  @include mat-elevation.elevation($elevation);
 }
 
 @mixin container-outlined {
@@ -30,12 +30,15 @@
       background-color: mat-color.$indigo-50;
     }
   }
+
   &__body {
     padding: 0 16px;
   }
+
   &__footer {
     padding: 0 16px 8px 16px;
     @include forge-flex.container(flex, row, nowrap, center);
+
     forge-paginator {
       margin-left: auto;
     }
@@ -43,7 +46,7 @@
 }
 
 @function form-grid-width($columns: 1, $width: app-var.$form-grid-column-width, $gap: app-var.$form-grid-gap) {
-  @return (($columns - 1) * $gap) + ($columns * $width);
+  @return (($columns - 1) * $gap)+($columns * $width);
 }
 
 @mixin form-grid {
@@ -57,14 +60,15 @@
     grid-column-start: 1;
   }
 
-  > * {
-    width: #{app-var.$form-grid-column-width}px;
-    overflow: hidden;
-    word-break: break-word;
-  }
+  // > * {
+  //   width: #{app-var.$form-grid-column-width}px;
+  //   overflow: hidden;
+  //   word-break: break-word;
+  // }
 
   &--col-span {
     grid-column: 1 / -1;
+
     &#{&} {
       width: auto;
     }
@@ -72,6 +76,7 @@
 
   &--col-span2 {
     grid-column: span 2;
+
     &#{&} {
       width: #{app-var.$form-grid-column-width * 2 + app-var.$form-grid-gap}px;
     }
@@ -79,6 +84,7 @@
 
   &--col-span3 {
     grid-column: span 3;
+
     &#{&} {
       width: #{app-var.$form-grid-column-width * 3 + app-var.$form-grid-gap * 2}px;
     }
@@ -106,11 +112,13 @@
     &__header {
       @include forge-flex.container(flex, row, nowrap, center);
       padding: 8px;
-      padding-left: 24px;
+      padding-left: 16px;
       @include forge-theme.property(border-bottom, forge-theme.$border);
+
       .forge-typography--headline5 {
         margin-right: 16px;
       }
+
       forge-icon-button {
         &:first-of-type {
           margin-left: auto;
@@ -119,7 +127,7 @@
     }
 
     &__body {
-      padding: 16px 24px;
+      padding: 16px;
     }
 
     &__footer {
