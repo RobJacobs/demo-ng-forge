@@ -170,6 +170,9 @@ export class Utils {
   }
 
   public static formatDate(value: Date, format = 'MM/dd/yyyy'): string {
+    if (!isDefined(value)) {
+      return '';
+    }
     return formatDate(value, format, navigator.language);
   }
 

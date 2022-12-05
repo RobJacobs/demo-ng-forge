@@ -37,6 +37,20 @@
       <textarea type="text" id="personal-form--comment" formControlName="comment" rows="4"></textarea>
       <label for="personal-form--comment">Comment</label>
     </forge-text-field>
+
+    <forge-label-value>
+      <span slot="label">Rank {{formGroup?.value.rank}}</span>
+      <div slot="value" style="margin: 0 -8px;">
+        <forge-slider type="discrete" min="0" max="10" formControlName="rank"></forge-slider>
+      </div>
+    </forge-label-value>
+
+    <div role="radiogroup" aria-label="Choose size option">
+      <forge-radio *ngFor="let option of sizeOptions; index as i">
+        <input type="radio" id="personal-form--size-{{i}}" formControlName="size" value="{{option.value}}" />
+        <label for="personal-form--size-{{i}}">{{option.label}}</label>
+      </forge-radio>
+    </div>
   </div>
 
   <forge-divider></forge-divider>

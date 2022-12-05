@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BaseFormComponent } from 'src/app/shared/form/base-form.component';
 
-import { ProfileCacheService } from '../profile-cache.service';
+import { IAddressFormGroup, ProfileCacheService } from '../profile-cache.service';
 
 @Component({
   selector: 'app-profile-address',
@@ -11,10 +11,11 @@ import { ProfileCacheService } from '../profile-cache.service';
 })
 export class AddressComponent extends BaseFormComponent {
   public get formGroup() {
-    return this.cache.formGroup.get('addressFormGroup') as FormGroup;
+    return this.cache.formGroup.get('addressFormGroup') as FormGroup<IAddressFormGroup>;
   }
 
   constructor(public cache: ProfileCacheService) {
     super();
+
   }
 }

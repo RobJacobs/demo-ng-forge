@@ -127,6 +127,8 @@
     }
 
     &__body {
+      flex-grow: 1;
+      overflow: auto;
       padding: 16px;
     }
 

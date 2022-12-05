@@ -9,7 +9,7 @@ import { Utils } from 'src/utils';
 import { IProfile } from 'src/app/shared/interfaces/person.interface';
 import { AppDataService } from 'src/app/app-data.service';
 import { AppToastService } from 'src/app/app-toast.service';
-import { ProfileCacheService } from './profile-cache.service';
+import { IAddressFormGroup, IPersonalFormGroup, ProfileCacheService } from './profile-cache.service';
 import { ConfirmDialogComponent } from '../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
@@ -21,10 +21,10 @@ export class ProfileComponent implements TylCanDeactivate {
   private noImageUrl = 'mock-data/no-image.png';
 
   public get personalFormGroup() {
-    return this.cache.formGroup.get('personalFormGroup') as FormGroup;
+    return this.cache.formGroup.get('personalFormGroup') as FormGroup<IPersonalFormGroup>;
   }
   public get addressFormGroup() {
-    return this.cache.formGroup.get('addressFormGroup') as FormGroup;
+    return this.cache.formGroup.get('addressFormGroup') as FormGroup<IAddressFormGroup>;
   }
   public activeTab = 0;
   public imageUrl?: string;

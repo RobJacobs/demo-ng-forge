@@ -22,7 +22,7 @@
     "@angular/platform-browser-dynamic": "^14.1.0",
     "@angular/router": "^14.1.0",
     "@tylertech/angular-core": "^2.2.0",
-    "@tylertech/forge": "^2.9.0",
+    "@tylertech/forge": "^2.10.1",
     "@tylertech/forge-angular": "^2.0.3",
     "@tylertech/forge-internal": "2.1.0",
     "@tylertech/tyler-icons": "^1.14.0",

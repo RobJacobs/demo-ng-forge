@@ -7,11 +7,6 @@
     "ecmaVersion": 2020
   },
   "extends": "eslint:recommended",
-  "rules": {
-    "no-unused-vars": "off",
-    "no-undef": "off",
-    "no-empty": "off"
-  },
   "overrides": [
     {
       "files": [
@@ -28,6 +23,13 @@
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "rules": {
+        "no-unused-vars": "off",
+        "no-undef": "off",
+        "no-empty": "off",
+        "quotes": [
+          "error",
+          "single"
+        ],
         "@angular-eslint/directive-selector": [
           "error",
           {
