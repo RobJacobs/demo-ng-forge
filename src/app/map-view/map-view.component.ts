@@ -1,10 +1,10 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import Map from '@arcgis/core/Map';
 import MapView from '@arcgis/core/views/MapView';
-import Graphic from "@arcgis/core/Graphic";
+import Graphic from '@arcgis/core/Graphic';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
-import DefaultUI from "@arcgis/core/views/ui/DefaultUI";
-import Search from "@arcgis/core/widgets/Search";
+import DefaultUI from '@arcgis/core/views/ui/DefaultUI';
+import Search from '@arcgis/core/widgets/Search';
 
 @Component({
   selector: 'app-map-view',
@@ -51,7 +51,7 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
       }
     ];
     const pointSymbol = {
-      type: "simple-marker",
+      type: 'simple-marker',
       color: [226, 119, 40],  // Orange
       outline: {
         color: [255, 255, 255], // White
@@ -73,7 +73,7 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
       ]
     });
     ui.add(new Search({ view: this.mapView }), {
-      position: "top-right",
+      position: 'top-right',
       index: 2
     });
 

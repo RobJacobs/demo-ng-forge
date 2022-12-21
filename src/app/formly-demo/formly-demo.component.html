@@ -1,0 +1,15 @@
+<div class="body">
+  <form class="form" novalidate autocomplete="off" [formGroup]="formGroup">
+    <formly-form *ngIf="formDefinition" [form]="formGroup" [model]="model" [fields]="formDefinition" [options]="formOptions"></formly-form>
+
+    <p *ngIf="formDefinition">
+      {{formGroup.value| json}}
+    </p>
+  </form>
+</div>
+
+<forge-toolbar class="footer" inverted>
+  <span class="forge-typography--caption" slot="start">
+    {{formMessage?.message}}
+  </span>
+</forge-toolbar>

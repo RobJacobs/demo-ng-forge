@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='ASCII'?>
+<Form name="mvvallst01" build="4.00.03" sqlDbName="munis" width="83" height="10">
+  <VBox>
+    <Grid width="83" height="10">
+      <Group text="" posY="0" posX="0" gridWidth="83" gridHeight="6">
+        <Label text="Year" posY="1" posX="1" gridWidth="4"/>
+        <FormField name="formonly.tax_year" colName="tax_year" fieldId="0" sqlTabName="formonly" noEntry="1" tabIndex="1">
+          <Edit width="4" format="####" posY="1" posX="19" gridWidth="4"/>
+        </FormField>
+        <FormField name="formonly.which_value" colName="which_value" fieldId="1" sqlTabName="formonly" notNull="1" required="1" tabIndex="2">
+          <RadioGroup width="31" comment="Value to use on report." posY="2" posX="1" gridWidth="31">
+            <Item name="O" text="Original full value"/>
+            <Item name="C" text="Current full value"/>
+          </RadioGroup>
+        </FormField>
+        <Label name="min_lbl" width="13" text="Minimum value" style="reql" sizePolicy="dynamic" posY="3" posX="1" gridWidth="13"/>
+        <FormField name="formonly.min_val" colName="min_val" fieldId="2" sqlTabName="formonly" tabIndex="3">
+          <Edit width="13" format="#,###,###,##&amp;" style="reqf" comment="Print vehicles with a value choosen above greater than or equal the value entered here." posY="3" posX="19" gridWidth="13"/>
+        </FormField>
+        <Label text="Sort vehicles by" posY="4" posX="1" gridWidth="17"/>
+        <FormField name="formonly.seq_sw" colName="seq_sw" fieldId="3" sqlTabName="formonly" notNull="1" required="1" defaultValue="S" tabIndex="4">
+          <ComboBox width="15" comment="Sort order." posY="4" posX="19" gridWidth="17">
+            <Item name="S" text="Sequence number"/>
+            <Item name="O" text="Owner name"/>
+          </ComboBox>
+        </FormField>
+      </Group>
+      <Group text="" posY="6" posX="0" gridWidth="83" gridHeight="5">
+        <Label text="Records selected" posY="1" posX="1" gridWidth="17"/>
+        <FormField name="formonly.sel_rec" colName="sel_rec" fieldId="4" sqlTabName="formonly" noEntry="1" tabIndex="5">
+          <Edit width="7" format="######&amp;" posY="1" posX="19" gridWidth="7"/>
+        </FormField>
+        <Label text="Records printed" posY="2" posX="1" gridWidth="15"/>
+        <FormField name="formonly.prt_rec" colName="prt_rec" fieldId="5" sqlTabName="formonly" noEntry="1" tabIndex="6">
+          <Edit width="7" format="######&amp;" posY="2" posX="19" gridWidth="7"/>
+        </FormField>
+        <Button name="btn_text_edit" width="6" text="Text" tag="Next_Year" comment="View/maintain employee master text information." posY="21" posX="1" gridWidth="6" tabIndex="41"/>
+      </Group>
+    </Grid>
+  </VBox>
+  <RecordView tabName="formonly">
+    <Link colName="tax_year" fieldIdRef="0"/>
+    <Link colName="which_value" fieldIdRef="1"/>
+    <Link colName="min_val" fieldIdRef="2"/>
+    <Link colName="seq_sw" fieldIdRef="3"/>
+    <Link colName="sel_rec" fieldIdRef="4"/>
+    <Link colName="prt_rec" fieldIdRef="5"/>
+  </RecordView>
+</Form>

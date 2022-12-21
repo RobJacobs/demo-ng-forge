@@ -10,11 +10,11 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    // MapViewComponent
+    MapViewComponent
   ],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes),
+    RouterModule.forChild(routes)
   ],
   exports: [
     RouterModule

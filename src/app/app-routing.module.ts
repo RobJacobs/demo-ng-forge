@@ -13,7 +13,7 @@ const routes: Routes = [
   { path: 'icons', loadChildren: () => import('./icons/icons.module').then(m => m.IconsModule) },
   { path: 'examples', loadChildren: () => import('./examples/examples.module').then((m) => m.ExamplesModule) },
   { path: 'map-view', loadChildren: () => import('./map-view/map-view.module').then((m) => m.MapViewModule) },
-  // { path: 'map-view', component: MapViewComponent },
+  { path: 'formly-demo', loadChildren: () => import('./formly-demo/formly-demo.module').then((m) => m.FormlyDemoModule) },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
 ];
 

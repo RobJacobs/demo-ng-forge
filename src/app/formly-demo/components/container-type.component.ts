@@ -1,0 +1,105 @@
+import { CommonModule } from '@angular/common';
+import { OnInit, ViewChild } from '@angular/core';
+import { ElementRef } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { FieldType, FormlyModule } from '@ngx-formly/core';
+import { FormlyFieldComponent } from './formly-field.component';
+import { FormlyFieldDirective } from './formly-field.directive';
+
+// <formly-field [field]="field"></formly-field>
+
+@Component({
+  selector: 'app-formly-container',
+  template: `
+  <div class="label" *ngIf="props.label">{{props.label}}</div>
+
+  <div #fieldContainer>
+    <ng-container *ngFor="let f of field.fieldGroup">
+      <formly-field #formlyField [field]="f" [formlyFieldDirective]="formlyField"></formly-field>
+    </ng-container>
+  </div>
+  `,
+  // template: `
+  // <div class="label" *ngIf="props.label">{{props.label}}</div>
+
+  // <ng-container *ngFor="let f of field.fieldGroup">
+  //   <app-formly-field [field]="f"></app-formly-field>
+  // </ng-container>
+  // `,
+  styles: [`
+  :host {
+    display: inline-block;
+  }
+
+  ::ng-deep {
+    .form-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .form-vbox {
+      display: flex;
+      flex-direction: column;
+      row-gap: 16px;
+    }
+
+    .form-hbox {
+      display: flex;
+      flex-direction: row;
+      column-gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      row-gap: 16px;
+      border: 1px solid #e6e6e6;
+      border-radius: 4px;
+      padding: 16px;
+    }
+  }
+
+  .label {
+    padding: 8px;
+  }
+`],
+  imports: [
+    CommonModule,
+    FormlyModule,
+    FormlyFieldDirective,
+    FormlyFieldComponent
+  ],
+  standalone: true,
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+})
+export class ContainerTypeComponent extends FieldType implements OnInit {
+  @ViewChild('fieldContainer', { static: true })
+  private fieldContainer: ElementRef;
+
+  constructor(
+    private elementRef: ElementRef
+  ) {
+    super();
+  }
+
+  public ngOnInit() {
+    const fieldContainerElement = this.fieldContainer.nativeElement as HTMLElement;
+    switch (this.field.props?.type) {
+      case 'grid':
+        fieldContainerElement.classList.add('form-grid');
+        if (this.props.attributes['columns']) {
+          fieldContainerElement.style.gridTemplateColumns = `repeat(${this.props.attributes['columns']}, auto)`
+        }
+        break;
+      case 'vbox':
+        fieldContainerElement.classList.add('form-vbox');
+        break;
+      case 'hbox':
+        fieldContainerElement.classList.add('form-hbox');
+        break;
+      case 'group':
+        fieldContainerElement.classList.add('form-group');
+        break;
+    }
+  }
+}

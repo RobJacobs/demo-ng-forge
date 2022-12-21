@@ -1,0 +1,38 @@
+@use 'src/global' as *;
+
+:host {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  overflow: hidden;
+}
+
+::ng-deep {
+  formly {
+
+    &-form,
+    &-group,
+    &-field {
+      display: block;
+    }
+  }
+
+  :root {
+    --forge-theme-border: #{$forge-theme-border};
+  }
+
+}
+
+.body {
+  padding: 24px;
+  overflow: auto;
+}
+
+.form {
+  @include app-container-outlined();
+  padding: 16px;
+
+  min-width: 680px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
