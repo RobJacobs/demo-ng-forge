@@ -149,13 +149,13 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
             'View person details'
           ));
 
-          const componentRef = this.viewContainerRef.createComponent(RouterlinkButtonComponent);
-          componentRef.instance.route = '/profile';
-          componentRef.instance.queryParams = { id: data.id };
-          componentRef.instance.icon = 'person';
-          componentRef.instance.tooltip = 'Show profile';
-          const linkButtonNode = (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
-          cellElement.appendChild(linkButtonNode);
+          // const componentRef = this.viewContainerRef.createComponent(RouterlinkButtonComponent);
+          // componentRef.instance.route = '/profile';
+          // componentRef.instance.queryParams = { id: data.id };
+          // componentRef.instance.icon = 'person';
+          // componentRef.instance.tooltip = 'Show profile';
+          // const linkButtonNode = (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
+          // cellElement.appendChild(linkButtonNode);
 
           return '';
         }

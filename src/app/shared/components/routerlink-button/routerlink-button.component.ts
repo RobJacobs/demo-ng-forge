@@ -15,7 +15,7 @@ export class RouterlinkButtonComponent {
   public route?: string;
 
   @Input()
-  queryParams?: any;
+  public queryParams?: any;
 
   @Input()
   public icon?: string;

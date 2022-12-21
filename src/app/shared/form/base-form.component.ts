@@ -1,5 +1,7 @@
+import { Injectable } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
 
+@Injectable()
 export abstract class BaseFormComponent {
   public abstract formGroup: FormGroup;
 

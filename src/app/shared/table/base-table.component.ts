@@ -1,7 +1,9 @@
+import { Injectable } from '@angular/core';
 import { isDefined } from '@tylertech/forge-core';
 import { IColumnConfiguration, SortDirection } from '@tylertech/forge';
 import { IFilterParameter } from 'src/app/shared/interfaces/filter.interface';
 
+@Injectable()
 export abstract class BaseTableComponent {
   public recordCount = 0;
   public tableColumns: IColumnConfiguration[] = [];
