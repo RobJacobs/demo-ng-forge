@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
 import { ForgeModule } from '@tylertech/forge-angular';
-import { map, of } from 'rxjs';
+import { map, of, Subject, takeUntil } from 'rxjs';
 import { FormlyDemoService } from '../formly-demo.service';
 import { isValid as isValidDate } from 'date-fns';
 
@@ -30,6 +30,10 @@ import { isValid as isValidDate } from 'date-fns';
     :host {
       display: block;
     }
+
+    // forge-text-field {
+    //   --forge-text-field-height: 2rem;
+    // }
   `],
   imports: [
     CommonModule,
@@ -40,7 +44,9 @@ import { isValid as isValidDate } from 'date-fns';
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class DatePickerTypeComponent extends FieldType<FieldTypeConfig> implements OnInit {
+export class DatePickerTypeComponent extends FieldType<FieldTypeConfig> implements OnInit, OnDestroy {
+  private unsubscribe = new Subject<void>();
+
   constructor(
     private moduleService: FormlyDemoService
   ) {
@@ -49,6 +55,9 @@ export class DatePickerTypeComponent extends FieldType<FieldTypeConfig> implemen
 
   public ngOnInit() {
     this.formControl.addAsyncValidators((control: AbstractControl) => {
+      this.unsubscribe.next();
+      this.unsubscribe.complete();
+
       if (control.pristine) {
         return of(null);
       }
@@ -61,10 +70,16 @@ export class DatePickerTypeComponent extends FieldType<FieldTypeConfig> implemen
       }
 
       return this.moduleService.validateField(this.field.key as string, control.value).pipe(
+        takeUntil(this.unsubscribe),
         map(r => {
           return r.invalid ? { server: { message: r.message } } : null;
         })
       );
     });
+  }
+
+  public ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 }

@@ -29,3 +29,8 @@ export interface IFilterParameter {
   skip?: number;
   take?: number;
 }
+
+export interface IFilterResponse<T> {
+  count: number;
+  data: T[];
+}

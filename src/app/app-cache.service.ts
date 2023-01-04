@@ -18,6 +18,8 @@ export interface IAppCacheService {
 })
 export class AppCacheService implements IAppCacheService {
   public isBusy = false;
+  public storageKey = 'assurance-portal--app';
+  public theme: 'dark' | 'light' = 'light';
   public layoutMode: 'sm' | 'md' | 'lg' = 'lg';
   public menu = {
     // 'permanent' | 'dismissible' | 'modal' | 'mini' | 'min-hover' = 'dismissible'

@@ -1,0 +1,29 @@
+<div class="dialog__header">
+  <span class="forge-typography--headline5">{{title}}</span>
+  <forge-icon-button class="forge-flex-item--right">
+    <button type="button" aria-label="close" (click)="onClose()">
+      <forge-icon name="close"></forge-icon>
+    </button>
+  </forge-icon-button>
+</div>
+
+<div class="dialog__body">
+  <forge-table [ngClass]="{'app--hidden': isBusy}" [data]="data" [columnConfigurations]="columnConfigurations" allow-row-click (forge-table-row-click)="onTableRowClick($event.detail)" (forge-table-sort)="onTableSort($event.detail)" filter="true" (forge-table-filter)="onTableFilter($event.detail)"></forge-table>
+
+  <forge-page-state *ngIf="!isBusy && !data?.length">
+    <img src="https://cdn.forge.tylertech.com/v1/images/spot/no-search-results-spot.svg" slot="graphic" alt="No records found" />
+    <div slot="message">No records were found.</div>
+  </forge-page-state>
+
+  <ng-container *ngIf="isBusy">
+    <forge-skeleton list-item></forge-skeleton>
+    <forge-skeleton list-item></forge-skeleton>
+    <forge-skeleton list-item></forge-skeleton>
+    <forge-skeleton list-item></forge-skeleton>
+  </ng-container>
+</div>
+
+<div class="dialog__footer">
+  <forge-paginator [pageIndex]="paginator.pageIndex" [pageSize]="paginator.pageSize" [total]="paginator.total" (forge-paginator-change)="onPaginatorChange($event.detail)" [disabled]="isBusy || !data.length">
+  </forge-paginator>
+</div>

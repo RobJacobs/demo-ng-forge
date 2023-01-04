@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
 import { ForgeModule } from '@tylertech/forge-angular';
-import { finalize, map, of } from 'rxjs';
+import { finalize, map, of, Subject, takeUntil } from 'rxjs';
 import { FormlyDemoService } from '../formly-demo.service';
 
 @Component({
@@ -22,6 +22,15 @@ import { FormlyDemoService } from '../formly-demo.service';
     </span>
   </forge-select>
   `,
+  styles: [`
+  :host {
+    display: block;
+  }
+
+  // forge-select {
+  //   --forge-select-height: 2rem;
+  // }
+`],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -31,7 +40,8 @@ import { FormlyDemoService } from '../formly-demo.service';
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class SelectTypeComponent extends FieldType<FieldTypeConfig> implements OnInit {
+export class SelectTypeComponent extends FieldType<FieldTypeConfig> implements OnInit, OnDestroy {
+  private unsubscribe = new Subject<void>();
 
   constructor(
     private moduleService: FormlyDemoService
@@ -41,17 +51,24 @@ export class SelectTypeComponent extends FieldType<FieldTypeConfig> implements O
 
   public ngOnInit() {
     this.formControl.addAsyncValidators((control: AbstractControl) => {
+      this.unsubscribe.next();
+      this.unsubscribe.complete();
+
       if (control.pristine) {
         return of(null);
       }
 
-      // this.formControl.disable();
       return this.moduleService.validateField(this.field.key as string, control.value).pipe(
-        // finalize(() => this.formControl.enable()),
+        takeUntil(this.unsubscribe),
         map(r => {
           return r.invalid ? { server: { message: r.message } } : null;
         })
       );
     });
+  }
+
+  public ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 }

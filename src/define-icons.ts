@@ -32,8 +32,15 @@ import {
   tylIconStar,
   tylIconError,
   tylIconMoreVert,
-  tylIconArticle
+  tylIconMoreHoriz,
+  tylIconArticle,
+  tylIconWbSunny,
+  tylIconNightlightRound
 } from '@tylertech/tyler-icons/standard';
+
+import {
+  tylIconTylerTalkingTLogo
+} from '@tylertech/tyler-icons/custom';
 
 const standardIcons = [
   tylIconArrowBack,
@@ -68,9 +75,16 @@ const standardIcons = [
   tylIconStar,
   tylIconError,
   tylIconMoreVert,
-  tylIconArticle
+  tylIconMoreHoriz,
+  tylIconArticle,
+  tylIconWbSunny,
+  tylIconNightlightRound
+];
+
+const customIcons = [
+  tylIconTylerTalkingTLogo
 ];
 
 export const defineIcons = () => {
-  IconRegistry.define(standardIcons);
+  IconRegistry.define([...standardIcons, ...customIcons]);
 };

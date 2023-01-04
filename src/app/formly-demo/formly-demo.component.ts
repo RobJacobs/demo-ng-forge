@@ -16,11 +16,11 @@ export class FormlyDemoComponent implements OnInit, OnDestroy {
   public formGroup = new FormGroup({});
   public formDefinition?: FormlyFieldConfig[];
   public formOptions: FormlyFormOptions = {
-    build: (field) => {
-      console.log(field);
-      return {
-      };
-    },
+    // build: (field) => {
+    //   console.log(field);
+    //   return {
+    //   };
+    // },
   };
   public model = {
     firstName: '',
@@ -30,7 +30,17 @@ export class FormlyDemoComponent implements OnInit, OnDestroy {
       street: '',
       city: '',
       state: ''
-    }
+    },
+    children: [
+      {
+        firstName: 'Child1first',
+        lastName: 'Child1last'
+      },
+      {
+        firstName: 'Child2first',
+        lastName: 'Child2last'
+      }
+    ]
   } as any;
   public record: any;
   public formMessage: { id: string; message: string; };
@@ -45,7 +55,8 @@ export class FormlyDemoComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit() {
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
+  public ngOnInit() {
     this.formDefinition = [
       {
         // type: 'container',
@@ -77,7 +88,7 @@ export class FormlyDemoComponent implements OnInit, OnDestroy {
               description: 'Persons last name',
               attributes: {
                 width: 320,
-                column: 2,
+                column: 1,
                 row: 2
               }
             }
@@ -107,6 +118,18 @@ export class FormlyDemoComponent implements OnInit, OnDestroy {
             }
           },
           {
+            key: 'gender',
+            type: 'select',
+            props: {
+              label: 'Gender',
+              options: [
+                { label: 'Male', value: 'M' },
+                { label: 'Female', value: 'F' },
+                { label: 'Other', value: 'O' }
+              ]
+            }
+          },
+          {
             key: 'comment',
             type: 'textarea',
             props: {
@@ -119,13 +142,27 @@ export class FormlyDemoComponent implements OnInit, OnDestroy {
             type: 'radio',
             props: {
               label: 'Size',
-              description: 'What is your t-shirt size?',
+              description: 'What is your size?',
               options: [
                 { label: 'Small', value: 'sm' },
                 { label: 'Medium', value: 'md' },
                 { label: 'Large', value: 'lg' }
               ],
               required: true
+            }
+          },
+          {
+            key: 'officeLocation',
+            type: 'input-help',
+            props: {
+              label: 'Office location',
+              description: 'What is your office location',
+              optionsKey: 'id',
+              options: [
+                { label: 'Address', property: 'address' },
+                { label: 'City', property: 'city' },
+                { label: 'State', property: 'state' }
+              ]
             }
           }
         ]
@@ -140,30 +177,37 @@ export class FormlyDemoComponent implements OnInit, OnDestroy {
       {
         // type: 'container',
         props: {
-          type: 'hbox',
+          type: 'group',
           label: 'Address'
         },
         fieldGroup: [
           {
-            key: 'address.street',
-            type: 'input',
             props: {
-              label: 'Street'
-            }
-          },
-          {
-            key: 'address.city',
-            type: 'input',
-            props: {
-              label: 'City'
-            }
-          },
-          {
-            key: 'address.state',
-            type: 'input',
-            props: {
-              label: 'State'
-            }
+              type: 'hbox'
+            },
+            fieldGroup: [
+              {
+                key: 'address.street',
+                type: 'input',
+                props: {
+                  label: 'Street'
+                }
+              },
+              {
+                key: 'address.city',
+                type: 'input',
+                props: {
+                  label: 'City'
+                }
+              },
+              {
+                key: 'address.state',
+                type: 'input',
+                props: {
+                  label: 'State'
+                }
+              }
+            ]
           }
         ]
       },
@@ -227,6 +271,39 @@ export class FormlyDemoComponent implements OnInit, OnDestroy {
             ]
           }
         ]
+      },
+      {
+        key: 'children',
+        type: 'table',
+        props: {
+          columns: [
+            {
+              label: 'First name',
+              key: 'firstName',
+              defaultValue: null
+            },
+            {
+              label: 'Last name',
+              key: 'lastName',
+              defaultValue: null
+            }
+          ]
+        },
+        fieldArray: {
+          fieldGroup: [
+            {
+              key: 'firstName',
+              type: 'input',
+              props: {
+                required: true
+              }
+            },
+            {
+              key: 'lastName',
+              type: 'input'
+            }
+          ]
+        }
       }
     ];
   }
@@ -236,7 +313,6 @@ export class FormlyDemoComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 }
-
 
     // this.moduleService.getFormDefinition().subscribe(result => {
     //   this.formDefinition = result.map(f => {

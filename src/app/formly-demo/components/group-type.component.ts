@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, HostBinding, OnInit, ViewChild } from '@angular/core';
 import { FieldGroupTypeConfig, FieldType, FormlyModule } from '@ngx-formly/core';
 import { FormlyFieldDirective } from './formly-field.directive';
 
@@ -13,10 +13,6 @@ import { FormlyFieldDirective } from './formly-field.directive';
     </div>
   `,
   styles: [`
-    :host {
-      display: inline-block;
-    }
-
     ::ng-deep {
       .form-grid {
         display: grid;
@@ -46,7 +42,7 @@ import { FormlyFieldDirective } from './formly-field.directive';
     }
 
     .label {
-      padding: 8px;
+      padding-bottom: 8px;
     }
   `],
   imports: [
@@ -60,6 +56,8 @@ import { FormlyFieldDirective } from './formly-field.directive';
 export class GroupTypeComponent extends FieldType<FieldGroupTypeConfig> implements OnInit {
   @ViewChild('fieldContainer', { static: true })
   private fieldContainer: ElementRef;
+  @HostBinding('style.display')
+  private displayStyle = 'block';
 
   constructor(
     private elementRef: ElementRef
@@ -79,15 +77,18 @@ export class GroupTypeComponent extends FieldType<FieldGroupTypeConfig> implemen
         if (this.props.attributes['columns']) {
           fieldContainerElement.style.gridTemplateColumns = `repeat(${this.props.attributes['columns']}, auto)`
         }
+        this.displayStyle = 'inline-block';
         break;
       case 'vbox':
         fieldContainerElement.classList.add('form-vbox');
+        this.displayStyle = 'inline-block';
         break;
       case 'hbox':
         fieldContainerElement.classList.add('form-hbox');
+        this.displayStyle = 'inline-block';
         break;
       case 'group':
-        fieldContainerElement.classList.add('form-group');
+        this.elementRef.nativeElement.classList.add('form-group');
         break;
     }
   }

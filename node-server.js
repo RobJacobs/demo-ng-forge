@@ -22,6 +22,8 @@ const server = http.createServer((request, response, next) => {
   // request.on('close', () => console.log('closed'));
 
   response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader('Access-Control-Allow-Headers', '*');
+  response.setHeader('Access-Control-Allow-Methods', 'GET, POST');
   response.setHeader('Content-Type', 'application/json');
 
   const data = `{ "data": "response from server ${new Date().toISOString()}" }`;
@@ -36,6 +38,36 @@ const server = http.createServer((request, response, next) => {
       response.write(data);
       response.end();
     });
+  }
+
+  if (requestPath === '/validate-get') {
+    sleep(3000).then(() => {
+      response.write(`{ "invalid": true, "message": "Error from server"}`);
+      response.end();
+    });
+  }
+
+  if (requestPath === '/validate-post') {
+    // handle CORS preflight request
+    if (request.headers.accept.includes('application/json')) {
+      let body = '';
+      request.on('data', (value) => {
+        body += value;
+      });
+
+      request.on('end', () => {
+        if (body?.length) {
+          sleep(3000).then(() => {
+            response.write(`{ "invalid": true, "message": "Error from server: ${JSON.parse(body).field}"}`);
+            response.end();
+          })
+        } else {
+          response.end();
+        }
+      });
+    } else {
+      response.end();
+    }
   }
 });
 

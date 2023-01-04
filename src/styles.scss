@@ -22,18 +22,22 @@
 
 @use '@tylertech/forge/styles/theme/theme-dark';
 
-// @media (prefers-color-scheme: dark) {
-//   :root {
-//     @include theme-dark.theme-properties;
-//   }
-// }
-
 *,
 *::before,
 *::after {
   box-sizing: border-box;
   font-family: inherit;
 }
+
+.forge-theme-dark {
+  @include theme-dark.theme-properties;
+}
+
+// @media (prefers-color-scheme: dark) {
+//   :root {
+//     @include theme-dark.theme-properties;
+//   }
+// }
 
 h1,
 h2,
