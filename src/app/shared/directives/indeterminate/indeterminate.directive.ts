@@ -44,7 +44,7 @@ export class IndeterminateDirective implements ControlValueAccessor {
 
   @Input()
   public set appIndeterminate(value: boolean) {
-    this.#indeterminateEnabled = value;
+    this.#indeterminateEnabled = value?.toString() === 'false' ? false : true;
     if (!this.#indeterminateEnabled && (this.elementRef.nativeElement as HTMLInputElement).indeterminate) {
       (this.elementRef.nativeElement as HTMLInputElement).indeterminate = false;
       (this.elementRef.nativeElement as HTMLInputElement).checked = false;
