@@ -1,55 +1,82 @@
-import { Directive, ElementRef, Input, OnDestroy } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Directive, ElementRef, forwardRef, HostListener, Input } from '@angular/core';
+import { StaticProvider } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { isDefined } from '@tylertech/forge-core';
+
+export const INDETERMINATE_VALUE_ACCESSOR: StaticProvider = {
+  provide: NG_VALUE_ACCESSOR,
+  useExisting: forwardRef(() => IndeterminateDirective),
+  multi: true
+};
 
 @Directive({
   selector: '[appIndeterminate]',
-  standalone: true
+  standalone: true,
+  providers: [INDETERMINATE_VALUE_ACCESSOR]
 })
-export class IndeterminateDirective implements OnDestroy {
-  private value?: boolean;
-  private inputElement: HTMLInputElement;
-  private formControl?: FormControl;
-  private changeSubscription?: Subscription;
+export class IndeterminateDirective implements ControlValueAccessor {
+  #value: boolean | null;
+  #indeterminateEnabled = true;
+
+  @HostListener('change')
+  public elementChange() {
+    if (this.#indeterminateEnabled) {
+      if (!isDefined(this.#value)) {
+        this.#value = true;
+      } else if (this.#value) {
+        this.#value = false;
+      } else {
+        this.#value = null;
+      }
+      (this.elementRef.nativeElement as HTMLInputElement).indeterminate = !isDefined(this.#value);
+      (this.elementRef.nativeElement as HTMLInputElement).checked = this.#value ? true : false;
+    } else {
+      this.#value = (this.elementRef.nativeElement as HTMLInputElement).checked;
+    }
+
+    this.change(this.#value);
+    this.onTouched();
+  }
+  @HostListener('blur')
+  public elementBlur() {
+    this.onTouched();
+  }
 
   @Input()
-  public set appIndeterminate(control: FormControl) {
-    this.formControl = control;
-    this.value = control.value;
-    this.inputElement.indeterminate = !isDefined(this.value);
-
-    this.setSubscription();
+  public set appIndeterminate(value: boolean) {
+    this.#indeterminateEnabled = value;
+    if (!this.#indeterminateEnabled && (this.elementRef.nativeElement as HTMLInputElement).indeterminate) {
+      (this.elementRef.nativeElement as HTMLInputElement).indeterminate = false;
+      (this.elementRef.nativeElement as HTMLInputElement).checked = false;
+      this.#value = false;
+      this.change(this.#value);
+    }
   }
 
-  constructor(private element: ElementRef) {
-    this.inputElement = this.element.nativeElement as HTMLInputElement;
-    this.inputElement.indeterminate = true;
-    this.inputElement.addEventListener('change', (event) => {
-      if (!isDefined(this.value)) {
-        this.value = true;
-      } else if (this.value) {
-        this.value = false;
-      } else {
-        this.value = undefined;
+  public onChange = (_: any) => { };
+  public onTouched = () => { };
+
+  constructor(private elementRef: ElementRef) { }
+
+  public writeValue(value: any): void {
+    if (this.#value !== value) {
+      this.#value = value;
+      if (this.#indeterminateEnabled) {
+        (this.elementRef.nativeElement as HTMLInputElement).indeterminate = !isDefined(this.#value);
       }
-      this.inputElement.indeterminate = !isDefined(this.value);
-      this.changeSubscription?.unsubscribe();
-      requestAnimationFrame(() => {
-        this.formControl?.setValue(this.value);
-        this.setSubscription();
-      });
-    });
+      (this.elementRef.nativeElement as HTMLInputElement).checked = this.#value ? true : false;
+    }
   }
 
-  public ngOnDestroy(): void {
-    this.changeSubscription?.unsubscribe();
+  public registerOnChange(fn: (_: boolean) => void): void {
+    this.onChange = fn;
   }
 
-  private setSubscription() {
-    this.changeSubscription = this.formControl?.valueChanges.subscribe(o => {
-      this.inputElement.indeterminate = !isDefined(this.formControl?.value);
-      this.value = this.formControl?.value;
-    });
+  public registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  public change(value: boolean | null): void {
+    this.onChange(value);
   }
 }

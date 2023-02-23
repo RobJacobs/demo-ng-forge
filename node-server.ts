@@ -1,6 +1,6 @@
 // https://nodejs.org/api/http.html
 const http = require('http');
-const url = require("url");
+const url = require('url');
 
 const sleep = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -42,32 +42,28 @@ const server = http.createServer((request, response, next) => {
 
   if (requestPath === '/validate-get') {
     sleep(3000).then(() => {
-      response.write(`{ "invalid": true, "message": "Error from server"}`);
+      response.write('{ "invalid": true, "message": "Error from server"}');
       response.end();
     });
   }
 
   if (requestPath === '/validate-post') {
-    // handle CORS preflight request
-    if (request.headers.accept.includes('application/json')) {
-      let body = '';
-      request.on('data', (value) => {
-        body += value;
-      });
+    let body = '';
+    request.on('data', (value) => {
+      body += value;
+    });
 
-      request.on('end', () => {
-        if (body?.length) {
-          sleep(3000).then(() => {
-            response.write(`{ "invalid": true, "message": "Error from server: ${JSON.parse(body).field}"}`);
-            response.end();
-          })
-        } else {
+    request.on('end', () => {
+      if (body?.length) {
+        const bodyObject = JSON.parse(body);
+        sleep(3000).then(() => {
+          response.write(`{ "invalid": true, "message": "Error from server: ${bodyObject.field}"}`);
           response.end();
-        }
-      });
-    } else {
-      response.end();
-    }
+        })
+      } else {
+        response.end();
+      }
+    });
   }
 });
 
