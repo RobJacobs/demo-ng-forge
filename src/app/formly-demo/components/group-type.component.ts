@@ -13,31 +13,37 @@ import { FormlyFieldDirective } from './formly-field.directive';
     </div>
   `,
   styles: [`
-    ::ng-deep {
-      .form-grid {
-        display: grid;
-        gap: 16px;
-      }
+    :host {
+      display: block;
+      height: fit-content;
 
-      .form-vbox {
-        display: flex;
-        flex-direction: column;
-        row-gap: 16px;
-      }
+      ::ng-deep {
+        .form-grid {
+          display: grid !important;
+          row-gap: 8px !important;
+          // row-gap: 0 !important;
+        }
 
-      .form-hbox {
-        display: flex;
-        flex-direction: row;
-        column-gap: 16px;
-      }
+        .form-vbox {
+          display: flex;
+          flex-direction: column;
+          row-gap: 16px;
+        }
 
-      .form-group {
-        display: flex;
-        flex-direction: column;
-        row-gap: 16px;
-        border: var(--forge-theme-border);
-        border-radius: 4px;
-        padding: 16px;
+        .form-hbox {
+          display: flex;
+          flex-direction: row;
+          column-gap: 16px;
+        }
+
+        .form-group {
+          display: flex;
+          flex-direction: column;
+          row-gap: 16px;
+          border: var(--forge-theme-border);
+          border-radius: 4px;
+          padding: 16px;
+        }
       }
     }
 
@@ -56,8 +62,8 @@ import { FormlyFieldDirective } from './formly-field.directive';
 export class GroupTypeComponent extends FieldType<FieldGroupTypeConfig> implements OnInit {
   @ViewChild('fieldContainer', { static: true })
   private fieldContainer: ElementRef;
-  @HostBinding('style.display')
-  private displayStyle = 'block';
+  // @HostBinding('style.display')
+  // private displayStyle = 'block';
 
   constructor(
     private elementRef: ElementRef
@@ -67,30 +73,42 @@ export class GroupTypeComponent extends FieldType<FieldGroupTypeConfig> implemen
 
   // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   public ngOnInit() {
-    // console.log(this.field.type);
-    // console.log(this.field.props.label);
-
     const fieldContainerElement = this.fieldContainer.nativeElement as HTMLElement;
     switch (this.field.props?.type) {
       case 'grid':
         fieldContainerElement.classList.add('form-grid');
-        if (this.props.attributes['columns']) {
-          fieldContainerElement.style.gridTemplateColumns = `repeat(${this.props.attributes['columns']}, auto)`
+
+        if (this.props.attributes) {
+          if (this.props.attributes['width']) {
+            fieldContainerElement.style.gridTemplateColumns = `repeat(${this.props.attributes['width']}, 8px)`;
+          }
+          // if (this.props.attributes['height']) {
+          //   fieldContainerElement.style.gridTemplateRows = `repeat(${this.props.attributes['height']}, 8px)`;
+          // }
         }
-        this.displayStyle = 'inline-block';
         break;
       case 'vbox':
         fieldContainerElement.classList.add('form-vbox');
-        this.displayStyle = 'inline-block';
         break;
       case 'hbox':
         fieldContainerElement.classList.add('form-hbox');
-        this.displayStyle = 'inline-block';
+        // this.displayStyle = 'inline-block';
         break;
       case 'group':
-        this.elementRef.nativeElement.classList.add('form-group');
+        fieldContainerElement.classList.add('form-group');
+
+        if (this.props.attributes && (this.props.attributes['gridWidth'] || this.props.attributes['gridHeight'])) {
+          fieldContainerElement.classList.add('form-grid');
+          if (this.props.attributes['gridWidth']) {
+            fieldContainerElement.style.gridTemplateColumns = `repeat(${this.props.attributes['gridWidth']}, 8px)`;
+          }
+          // if (this.props.attributes['gridHeight']) {
+          //   fieldContainerElement.style.gridTemplateRows = `repeat(${this.props.attributes['gridHeight']}, 8px)`;
+          // }
+        }
         break;
     }
+
   }
 
 }

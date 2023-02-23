@@ -29,8 +29,16 @@ import { ForgeModule } from '@tylertech/forge-angular';
     }
 
     [role='radiogroup'] {
+      margin-left: -8px;
       display: flex;
       column-gap: 16px;
+      flex-direction: column;
+    }
+
+    forge-radio {
+      &::part(container) {
+        padding: 4px;
+      }
     }
 
     .forge-typography--caption {

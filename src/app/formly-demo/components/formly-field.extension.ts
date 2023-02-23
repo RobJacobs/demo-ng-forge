@@ -8,9 +8,9 @@ export const formlyFieldExtension: FormlyExtension = {
       case 'input':
       case 'select':
       case 'textarea': {
-        field.modelOptions = {
-          updateOn: 'blur'
-        }
+        // field.modelOptions = {
+        //   updateOn: 'blur'
+        // }
       }
     }
   }

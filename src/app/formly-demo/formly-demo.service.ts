@@ -28,7 +28,7 @@ export class FormlyDemoService {
 
   public validateField(field: string, value: any): Observable<{ invalid: boolean; message: string }> {
     const validation = {
-      invalid: true,
+      invalid: false,
       message: `Error from server: ${field}`
     };
 
