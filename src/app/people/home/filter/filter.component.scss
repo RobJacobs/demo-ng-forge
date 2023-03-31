@@ -12,7 +12,7 @@ forge-drawer {
 
 .header {
   @include forge-flex-container(flex, row, nowrap, center);
-  @include forge-theme-property(border-bottom, $forge-theme-border);
+  @include app-border(border-bottom);
 
   &__title {
     margin-left: 16px;
@@ -29,7 +29,7 @@ forge-drawer {
   flex-direction: row;
   justify-content: flex-end;
   padding: 8px 16px;
-  @include forge-theme-property(border-top, $forge-theme-border);
+  @include app-border(border-top);
 
   forge-button {
     margin-left: 8px;

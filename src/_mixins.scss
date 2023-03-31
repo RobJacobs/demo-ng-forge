@@ -20,7 +20,7 @@
 
 @mixin table-header-footer {
   &__header {
-    margin: 8px 16px 0 16px;
+    margin: 0 16px;
     min-height: 48px;
     @include forge-flex.container(flex, row, nowrap, center);
 
@@ -36,8 +36,9 @@
   }
 
   &__footer {
-    padding: 0 16px 8px 16px;
+    padding: 0 16px;
     @include forge-flex.container(flex, row, nowrap, center);
+    @include border(border-top);
 
     forge-paginator {
       margin-left: auto;
@@ -113,7 +114,7 @@
       @include forge-flex.container(flex, row, nowrap, center);
       padding: 8px;
       padding-left: 16px;
-      @include forge-theme.property(border-bottom, forge-theme.$border);
+      @include border(border-bottom);
 
       .forge-typography--headline5 {
         margin-right: 16px;
@@ -137,7 +138,7 @@
       justify-content: flex-end;
       column-gap: 16px;
       padding: 8px 16px;
-      @include forge-theme.property(border-top, forge-theme.$border);
+      @include border(border-top);
     }
   }
 }
@@ -150,6 +151,39 @@
           content: 'n/a';
           color: var(--mdc-theme-text-secondary-on-background);
           font-style: italic;
+        }
+      }
+    }
+  }
+}
+
+@mixin border($border: 'border') {
+  #{$border}: 1px solid var(--mdc-theme-border-color, forge-theme.$border-color);
+}
+
+@mixin icon-button-color {
+  forge-icon-button>button {
+    &[disabled] {
+
+      &,
+      forge-open-icon::part(icon) {
+        color: var(--mdc-theme-text-disabled-on-background) !important;
+      }
+    }
+
+    &:not([disabled], .forge-icon-button--on) {
+
+      &,
+      forge-open-icon::part(icon) {
+        color: var(--mdc-theme-text-secondary-on-background);
+      }
+
+      &:active,
+      &:focus {
+
+        &,
+        forge-open-icon::part(icon) {
+          color: var(--mdc-theme-text-primary-on-background);
         }
       }
     }

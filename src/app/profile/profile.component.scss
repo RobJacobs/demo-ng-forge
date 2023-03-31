@@ -9,9 +9,11 @@
 
 .header {
   --forge-toolbar-border-bottom: none;
+
   [slot='end'],
   [slot='start'] {
     @include forge-flex-container(flex, row, nowrap, center);
+
     img {
       width: 40px;
       height: 40px;
@@ -23,9 +25,11 @@
 
 forge-tab-bar {
   display: inline-flex;
-  border-bottom: $forge-theme-border;
+  @include app-border(border-bottom);
+
   forge-tab {
     min-width: 240px;
+
     forge-icon {
       color: $forge-theme-danger;
     }

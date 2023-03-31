@@ -33,7 +33,7 @@
     </forge-list>
   </forge-expansion-panel>
   <ng-container *ngIf="appCache.menu.type === 'mini'">
-    <forge-menu [options]="option.options" placement="right-top" (forge-menu-select)="menuItemSelected($event.detail.value)">
+    <forge-menu [options]="option.options" placement="right-start" (forge-menu-select)="menuItemSelected($event.detail.value)">
       <forge-list-item class="menu__item" [value]="option.value" [selected]="option.value === appCache.activeRoute.join('/')">
         <forge-icon *ngIf="option.icon" slot="leading" [name]="option.icon"></forge-icon>
       </forge-list-item>

@@ -1,0 +1,35 @@
+@use 'src/global' as *;
+
+:host {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+  @include forge-theme-property(background-color, surface);
+}
+
+::ng-deep {
+  .table {
+    &-cell {
+      &__image {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+      }
+    }
+  }
+}
+
+.header {
+  overflow: hidden;
+}
+
+.body {
+  overflow: auto;
+  display: grid;
+  grid-template-rows: 1fr auto;
+
+  ag-grid-angular {
+    width: 100%;
+    height: 100%;
+  }
+}

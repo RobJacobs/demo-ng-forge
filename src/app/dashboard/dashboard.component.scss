@@ -17,6 +17,7 @@ $card-width: 320;
   forge-card {
     margin: 12px;
     width: #{$card-width}px;
+
     &::part(root) {
       @include forge-flex-container(flex, column, nowrap, center);
       row-gap: 16px;

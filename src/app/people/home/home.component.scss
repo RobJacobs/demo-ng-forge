@@ -10,8 +10,8 @@
     .forge-table {
       &-row {
         &__expandable-content {
-          background-color: $mat-color-indigo-50  !important;
-          border-bottom: $forge-theme-border;
+          background-color: $mat-color-indigo-50 !important;
+          @include app-border(border-bottom);
         }
 
         &>.forge-table-cell:last-child {
@@ -42,6 +42,7 @@
 
   &__left {
     overflow: auto;
+    padding-top: 8px;
   }
 
   app-people-home-filter {
@@ -52,6 +53,10 @@
 .table {
   @include app-table-header-footer();
 
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+
   &__header {
     &__filter-count {
       margin-right: 8px;
@@ -60,6 +65,10 @@
     &__columns {
       margin-left: 8px;
     }
+  }
+
+  &__body {
+    overflow: auto;
   }
 }
 

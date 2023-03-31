@@ -35,7 +35,10 @@ import {
   tylIconMoreHoriz,
   tylIconArticle,
   tylIconWbSunny,
-  tylIconNightlightRound
+  tylIconNightlightRound,
+  tylIconTableRows,
+  tylIconArrowDownward,
+  tylIconArrowUpward
 } from '@tylertech/tyler-icons/standard';
 
 import {
@@ -78,7 +81,10 @@ const standardIcons = [
   tylIconMoreHoriz,
   tylIconArticle,
   tylIconWbSunny,
-  tylIconNightlightRound
+  tylIconNightlightRound,
+  tylIconTableRows,
+  tylIconArrowDownward,
+  tylIconArrowUpward
 ];
 
 const customIcons = [

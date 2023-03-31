@@ -50,7 +50,8 @@ export class AppCacheService implements IAppCacheService {
         ]
       },
       { label: 'Map View', value: 'map-view', icon: 'map' },
-      { label: 'Formly', value: 'formly-demo', icon: 'article' }
+      { label: 'Formly', value: 'formly-demo', icon: 'article' },
+      { label: 'Table', value: 'table-demo', icon: 'table_rows' }
     ]
   };
   public activeRoute: string[] = [];

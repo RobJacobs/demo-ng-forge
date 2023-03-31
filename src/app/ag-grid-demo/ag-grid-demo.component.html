@@ -1,0 +1,23 @@
+<forge-toolbar class="header">
+  <h2 slot="start" class="forge-typography--title">Ag Grid Demo</h2>
+  <div slot="end">
+    <forge-icon-button id="ag-grid-demo--column-select" class="table__header__columns">
+      <button type="button" aria-label="Choose table columns">
+        <forge-icon name="view_column"></forge-icon>
+      </button>
+    </forge-icon-button>
+    <forge-select-dropdown target="#ag-grid-demo--column-select" multiple [value]="selectedTableColumns" (change)="onTableColumnOptionSelected($event.detail)">
+      <forge-option *ngFor="let column of optionalTableColumns" [value]="column.value">
+        {{column.label}}
+      </forge-option>
+    </forge-select-dropdown>
+  </div>
+</forge-toolbar>
+<div class="body">
+  <ag-grid-angular #agGrid class="ag-theme-material" [columnDefs]="columnDefs" [gridOptions]="gridOptions" [defaultColDef]="defaultColDef" [rowData]="recordset" (gridReady)="onGridReady($event)" (sortChanged)="onTableSort($event)" (columnResized)="onTableStateChange($event)" (columnMoved)="onTableStateChange($event)" (columnVisible)="onTableStateChange($event)"></ag-grid-angular>
+
+
+  <forge-toolbar *ngIf="recordCount" inverted="true">
+    <forge-paginator slot="end" [pageIndex]="filterCache.skip / filterCache.take" [pageSize]="filterCache.take" [total]="recordCount" (forge-paginator-change)="onTablePaginatorChange($event.detail)"></forge-paginator>
+  </forge-toolbar>
+</div>
