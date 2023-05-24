@@ -20,7 +20,7 @@ import { RouterlinkButtonComponent } from 'src/app/shared/components/routerlink-
 })
 export class HomeComponent extends BaseTableComponent implements OnInit, OnDestroy {
   @ViewChild('peopleTable', { static: true })
-  private peopleTable?: ElementRef;
+  private peopleTable?: TableComponent;
   @ViewChild(FilterComponent)
   private peopleFilter?: FilterComponent;
 
@@ -113,7 +113,7 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
           cellElement.appendChild(
             TableUtils.createExpanderRow(
               rowIndex,
-              this.peopleTable?.nativeElement,
+              this.peopleTable,
               this.viewContainerRef,
               TableDetailComponent,
               'Toggle table detail',
@@ -173,12 +173,11 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
   }
 
   public onPeopleSelected(clearSelection = false): void {
-    const tableElement = this.peopleTable?.nativeElement as TableComponent;
     if (clearSelection) {
       this.selectedPeople.length = 0;
-      tableElement?.clearSelections();
+      this.peopleTable?.clearSelections();
     } else {
-      this.selectedPeople = tableElement?.getSelectedRows();
+      this.selectedPeople = this.peopleTable?.getSelectedRows();
     }
   }
 

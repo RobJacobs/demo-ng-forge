@@ -1,4 +1,4 @@
-import { InjectionToken } from "@angular/core";
+import { InjectionToken } from '@angular/core';
 
 export const PETS_CONFIG_SERVICE = new InjectionToken<IPetsConfig>('PetsConfigService');
 
