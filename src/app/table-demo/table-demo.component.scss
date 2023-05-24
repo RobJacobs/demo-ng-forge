@@ -9,12 +9,16 @@
 
   ::ng-deep {
     .forge-table {
+      $table-row-height: 48px;
+
       min-width: 100%;
       width: max-content;
       position: relative;
 
       &-head {
         &__row {
+          height: $table-row-height;
+
           &--resizing {
             & .forge-table-head__cell:not(.forge-table-head__cell--resizing) {
               .forge-table-head__cell-actions {
@@ -28,6 +32,9 @@
           padding-left: 12px;
           padding-right: 12px;
           border-right: 1px solid transparent;
+          width: calc(var(--table-column-width, 200) * 1px);
+          // https://github.com/angular/components/issues/14833
+          top: calc(var(--table-header-offset, 0) * $table-row-height * -1);
 
           &:first-child {
             padding-left: 24px !important;
@@ -107,6 +114,10 @@
       }
 
       &-body {
+        &__row {
+          height: $table-row-height;
+        }
+
         &__cell {
           padding-left: 12px;
           padding-right: 12px;
@@ -151,8 +162,12 @@
   overflow: hidden;
   height: 100%;
 
-  &__table {
-    overflow: auto;
+  // &__table {
+  //   overflow: auto;
+  // }
+
+  cdk-virtual-scroll-viewport {
+    height: 100%;
   }
 }
 

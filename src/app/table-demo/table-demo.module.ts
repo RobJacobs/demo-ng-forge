@@ -4,9 +4,10 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { TableDemoComponent } from './table-demo.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ForgeModule } from '@tylertech/forge-angular';
 import { AutoFocusDirective } from '../shared/directives/auto-focus/auto-focus.directive';
-import { ArrayFilterPipe } from '../shared/pipes/array-find/array-filter.pipe';
+import { CallbackPipe } from '../shared/pipes/callback.pipe';
 
 const routes: Routes = [
   { path: '**', component: TableDemoComponent }
@@ -20,9 +21,10 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     DragDropModule,
+    ScrollingModule,
     ForgeModule,
     AutoFocusDirective,
-    ArrayFilterPipe
+    CallbackPipe
   ],
   exports: [
     RouterModule

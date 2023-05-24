@@ -1,0 +1,51 @@
+<forge-toolbar class="header">
+  <div slot="start">
+    <h2 class="forge-typography--title">Storage</h2>
+  </div>
+
+  <div slot="end">
+    <span>Total: {{storageSpace.total}}</span>
+    <span>Used: {{storageSpace.used}}</span>
+    <span>Local: {{storageSpace.localStorage}}</span>
+  </div>
+</forge-toolbar>
+
+<div class="body">
+  <div class="card">
+    <div class="card__actions">
+      <forge-button type="outlined">
+        <button type="button" (click)="onLoadLocal()">Load local</button>
+      </forge-button>
+      <forge-button type="outlined">
+        <button type="button" (click)="onSaveLocal()">Save local</button>
+      </forge-button>
+      <forge-button type="outlined">
+        <button type="button" (click)="onDeleteLocal()">Delete local</button>
+      </forge-button>
+    </div>
+    <forge-label-value>
+      <span slot="label">localStorage</span>
+      <span slot="value">{{localStorageData | json}}</span>
+    </forge-label-value>
+  </div>
+
+  <div class="card">
+    <div class="card__actions">
+      <forge-button type="outlined">
+        <button type="button" (click)="onLoadDb()">Load db</button>
+      </forge-button>
+      <forge-button type="outlined">
+        <button type="button" (click)="onSaveDb()">Save db</button>
+      </forge-button>
+      <forge-button type="outlined">
+        <button type="button" (click)="onDeleteDb()">Delete db</button>
+      </forge-button>
+    </div>
+
+    <forge-label-value>
+      <span slot="label">indexedDB</span>
+      <span slot="value">{{indexedDbData | json}}</span>
+    </forge-label-value>
+  </div>
+
+</div>

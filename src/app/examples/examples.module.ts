@@ -5,7 +5,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { AppFormsModule } from 'src/app/shared/app-forms.module';
 import { CardComponent } from 'src/app/shared/components/card/card.component';
-import { ArrayFindPipe } from 'src/app/shared/pipes/array-find/array-find.pipe';
+import { ArrayFindPipe } from 'src/app/shared/pipes/array-find.pipe';
 import { ExamplesComponent } from './examples.component';
 import { AutocompleteComponent } from './autocomplete/autocomplete.component';
 import { DragDropComponent } from './drag-drop/drag-drop.component';

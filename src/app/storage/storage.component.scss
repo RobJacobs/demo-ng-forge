@@ -1,0 +1,29 @@
+@use 'src/global' as *;
+
+:host {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+}
+
+.header {
+  [slot='end'] {
+    display: flex;
+    column-gap: 16px;
+  }
+}
+
+.body {
+  overflow: auto;
+}
+
+.card {
+  @include app-container-raised();
+  padding: 16px;
+  margin: 16px;
+
+  &__actions {
+    display: flex;
+    column-gap: 8px;
+  }
+}

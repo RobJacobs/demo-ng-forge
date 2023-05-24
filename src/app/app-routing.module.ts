@@ -15,6 +15,7 @@ const routes: Routes = [
   { path: 'map-view', loadChildren: () => import('./map-view/map-view.module').then((m) => m.MapViewModule) },
   { path: 'formly-demo', loadChildren: () => import('./formly-demo/formly-demo.module').then((m) => m.FormlyDemoModule) },
   { path: 'table-demo', loadChildren: () => import('./table-demo/table-demo.module').then((m) => m.TableDemoModule) },
+  { path: 'storage', loadChildren: () => import('./storage/storage.module').then((m) => m.StorageModule) },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
 ];
 

@@ -4,35 +4,38 @@
 
 <div class="body">
   <div class="body__table">
-    <table #table class="forge-table forge-table--fixed">
-      <thead>
-        <tr class="forge-table-row forge-table-head__row" cdkDropList (cdkDropListDropped)="onColumnHeaderDragDrop($event)" cdkDropListOrientation="horizontal">
-          <th *ngFor="let col of tableColumns | appArrayFilter:isColumnVisible; index as i" scope="col" class="forge-table-cell forge-table-head__cell forge-table-head__cell--sortable" cdkDrag cdkDragLockAxis="x" [cdkDragPreviewContainer]="parent" (click)="columnHeaderPopup.close(); onTableSort(col)" #columnHeaderPopup="forgePopup" [forgePopup]="columnHeaderPopupTemplate" (contextmenu)="onColumnHeaderRightClick($event)" placement="right-end" tabindex="-1">
-            <div class="forge-table-head__cell-container">
-              <span class="forge-table-head__cell-text">{{col.header}}</span>
-              <forge-icon *ngIf="col.sortDirection?.length" [name]="col.sortDirection === 'DESC' ? 'arrow_downward' : col.sortDirection === 'ASC' ? 'arrow_upward' : ''" class="forge-table-head__cell-sort-icon" aria-hidden="true"></forge-icon>
-            </div>
-            <div class="forge-table-head__cell-actions">
-              <div class="forge-table-head__cell-dragger" cdkDragHandle></div>
-              <div class="forge-table-head__cell-resizer" (mousedown)="onColumnHeaderResize($event, i, col)"></div>
-            </div>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let record of recordset" class="forge-table-row forge-table-body__row">
-          <td *ngFor="let col of tableColumns | appArrayFilter:isColumnVisible" class="forge-table-cell forge-table-body__cell" [style.width.px]="col.width">
-            <div class="forge-table-cell__container">
-              {{record[col.property]}}
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <cdk-virtual-scroll-viewport itemSize="48">
+      <table #table class="forge-table forge-table--fixed">
+        <thead [style.--table-header-offset]="tableHeaderOffset" [style.--table-header-translate-y]="(tableHeaderOffset * -48) + 'px'">
+          <tr class="forge-table-row forge-table-head__row" cdkDropList (cdkDropListDropped)="onColumnHeaderDragDrop($event)" cdkDropListOrientation="horizontal">
+            <th *ngFor="let col of tableColumns | appCallback:visibleColumns; index as i" scope="col" class="forge-table-cell forge-table-head__cell forge-table-head__cell--sortable" cdkDrag cdkDragLockAxis="x" [cdkDragPreviewContainer]="parent" (cdkDragStarted)="onColumnHeaderDragStart()" (click)="columnHeaderPopup.close(); onTableSort(col)" #columnHeaderPopup="forgePopup" [forgePopup]="columnHeaderPopupTemplate" (contextmenu)="onColumnHeaderRightClick($event)" placement="right-end" tabindex="-1" [style.--table-column-width]="col.width">
+              <div class="forge-table-head__cell-container">
+                <span class="forge-table-head__cell-text">{{col.header}}</span>
+                <forge-icon *ngIf="col.sortDirection?.length" [name]="col.sortDirection === 'DESC' ? 'arrow_downward' : col.sortDirection === 'ASC' ? 'arrow_upward' : ''" class="forge-table-head__cell-sort-icon" aria-hidden="true"></forge-icon>
+              </div>
+              <div class="forge-table-head__cell-actions">
+                <div class="forge-table-head__cell-dragger" cdkDragHandle></div>
+                <div class="forge-table-head__cell-resizer" (mousedown)="onColumnHeaderResize($event, i, col)"></div>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *cdkVirtualFor="let record of recordset$; trackBy: recordsetTrackBy" class="forge-table-row forge-table-body__row">
+            <td *ngFor="let col of tableColumns | appCallback:visibleColumns" class="forge-table-cell forge-table-body__cell">
+              <div class="forge-table-cell__container">
+                {{record[col.property]}}
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </cdk-virtual-scroll-viewport>
   </div>
 
   <forge-toolbar inverted="true">
-    <forge-paginator slot="end" [pageIndex]="filterCache.skip / filterCache.take" [pageSize]="filterCache.take" [total]="recordCount" (forge-paginator-change)="onTablePaginatorChange($event.detail)"></forge-paginator>
+    <span slot="end" class="forge-typography--caption">Records: {{recordCount}}</span>
+    <!-- <forge-paginator slot="end" [pageIndex]="filterCache.skip / filterCache.take" [pageSize]="filterCache.take" [total]="recordCount" (forge-paginator-change)="onTablePaginatorChange($event.detail)"></forge-paginator> -->
   </forge-toolbar>
 </div>
 
@@ -40,7 +43,7 @@
   <forge-list class="column-popup" (forge-list-item-select)="onColumnPopupItemSelected($event.detail.value)">
     <forge-list-item *ngFor="let column of tableColumns" [value]="column">
       <forge-checkbox slot="leading">
-        <input type="checkbox" checked aria-label="Show/hide table column" [checked]="!column.hidden" (change)="column.hidden = !column.hidden" />
+        <input type="checkbox" checked aria-label="Show/hide table column" [checked]="!column.hidden" />
       </forge-checkbox>
       <span>{{column.header}}</span>
     </forge-list-item>

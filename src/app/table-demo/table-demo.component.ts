@@ -1,22 +1,26 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { finalize, Subscription, fromEvent, tap, Subject, takeUntil, merge } from 'rxjs';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { finalize, fromEvent, tap, Subject, takeUntil, merge, delay, BehaviorSubject } from 'rxjs';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { IColumnConfiguration, SortDirection } from '@tylertech/forge';
+import { isDefined } from '@tylertech/forge-core';
 import { PopupDirective } from '@tylertech/forge-angular';
 
 import { IPerson } from 'src/app/shared/interfaces/person.interface';
 import { AppDataService } from 'src/app/app-data.service';
-import { CdkDragDrop, CdkDragSortEvent, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-table-demo',
   templateUrl: './table-demo.component.html',
   styleUrls: ['./table-demo.component.scss']
 })
-export class TableDemoComponent implements OnInit, OnDestroy {
+export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('table', { static: true })
   private tableElementRef: ElementRef;
   @ViewChild('columnHeaderPopup', { read: PopupDirective })
   private columnHeaderPopupDirective: PopupDirective;
+  @ViewChild(CdkVirtualScrollViewport)
+  public virtualScrollViewport: CdkVirtualScrollViewport;
   private tableColumnResize$ = new Subject<void>();
   private isColumnResizing = false;
 
@@ -31,6 +35,7 @@ export class TableDemoComponent implements OnInit, OnDestroy {
     take: 25
   }
   public recordset: IPerson[] = [];
+  public recordset$ = new BehaviorSubject<IPerson[]>([]);
   public recordCount = 0;
   public tableColumns: IColumnConfiguration[] = [
     { header: 'First', property: 'firstName', width: 400 },
@@ -38,13 +43,40 @@ export class TableDemoComponent implements OnInit, OnDestroy {
     { header: 'Gender', property: 'gender' },
     { header: 'Occupation', property: 'occupation' }
   ];
+  public tableHeaderOffset = 0;
+
+  public visibleColumns = (columns: IColumnConfiguration[]) => {
+    return columns.filter(c => c.hidden !== true);
+  }
 
   constructor(
-    private appDataService: AppDataService,
+    private appDataService: AppDataService
   ) { }
 
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   public ngOnInit() {
     this.getRecords();
+  }
+
+  public ngAfterViewInit() {
+    this.virtualScrollViewport.renderedRangeStream.subscribe(o => {
+      this.tableHeaderOffset = o.start;
+      if (!this.isBusy && o.start > 0 && o.end + 67 > this.recordCount) {
+        this.isBusy = true;
+        this.appDataService
+          .getPeople({
+            sort: this.filterCache.sort
+          }).pipe(
+            delay(1000),
+            finalize(() => this.isBusy = false)
+          )
+          .subscribe((result) => {
+            this.recordset = [...this.recordset, ...result.data];
+            this.recordCount = this.recordset.length;
+            this.recordset$.next(this.recordset);
+          });
+      }
+    });
   }
 
   public ngOnDestroy() {
@@ -52,13 +84,13 @@ export class TableDemoComponent implements OnInit, OnDestroy {
     this.tableColumnResize$.complete();
   }
 
+  public onColumnHeaderDragStart() {
+    this.virtualScrollViewport.scrollToOffset(0);
+  }
+
   public onColumnHeaderDragDrop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.tableColumns, event.previousIndex, event.currentIndex);
     this.tableColumns = [...this.tableColumns];
-  }
-
-  public isColumnVisible(column: IColumnConfiguration) {
-    return column.hidden ? false : true;
   }
 
   public onColumnHeaderResize(event: MouseEvent, columnIndex: number, column: IColumnConfiguration) {
@@ -66,10 +98,10 @@ export class TableDemoComponent implements OnInit, OnDestroy {
     event.preventDefault();
     this.tableColumnResize$.next();
 
-    let columnHeaderElement = (this.tableElementRef.nativeElement as HTMLTableElement).querySelectorAll('thead tr th')[columnIndex];
+    let columnHeaderElement = (this.tableElementRef.nativeElement as HTMLTableElement).querySelectorAll('thead tr th')[columnIndex] as HTMLTableCellElement;
     let columnElements = (this.tableElementRef.nativeElement as HTMLTableElement).querySelectorAll(`tbody tr td:nth-child(${columnIndex + 1})`);
 
-    let positionX: number;
+    let positionX = event.clientX;
     if (columnHeaderElement) {
       this.isColumnResizing = true;
       this.tableElementRef.nativeElement.querySelector('.forge-table-head__row')?.classList.add('forge-table-head__row--resizing');
@@ -80,7 +112,7 @@ export class TableDemoComponent implements OnInit, OnDestroy {
         .pipe(
           takeUntil(this.tableColumnResize$),
           tap((event: MouseEvent) => {
-            column.width = columnHeaderElement.clientWidth + (event.clientX - positionX);
+            column.width = columnHeaderElement.offsetWidth + (event.clientX - positionX);
             positionX = event.clientX;
           })
         ).subscribe();
@@ -136,7 +168,7 @@ export class TableDemoComponent implements OnInit, OnDestroy {
         if (tableColumn) {
           // prevent hiding all columns
           if (this.tableColumns.filter(c => !c.hidden).length) {
-            tableColumn.hidden = !!tableColumn.hidden;
+            tableColumn.hidden = isDefined(tableColumn.hidden) ? !tableColumn.hidden : true;
             tableColumn.sortDirection = undefined;
             this.tableColumns = [...this.tableColumns];
           }
@@ -160,6 +192,7 @@ export class TableDemoComponent implements OnInit, OnDestroy {
 
       this.filterCache.sort = column.sortDirection ? { property: column.property, direction: column.sortDirection } : undefined;
       this.filterCache.skip = 0;
+      this.virtualScrollViewport.scrollToOffset(0);
       this.getRecords();
     }
   }
@@ -170,20 +203,22 @@ export class TableDemoComponent implements OnInit, OnDestroy {
     this.getRecords();
   }
 
+  public recordsetTrackBy(index: number, person: IPerson) {
+    return index;
+  }
+
   private getRecords() {
     this.isBusy = true;
     this.appDataService
       .getPeople({
-        sort: this.filterCache.sort,
-        filters: this.filterCache.filters,
-        skip: this.filterCache.skip,
-        take: this.filterCache.take
+        sort: this.filterCache.sort
       }).pipe(
         finalize(() => this.isBusy = false)
       )
       .subscribe((result) => {
         this.recordset = result.data;
         this.recordCount = result.count;
+        this.recordset$.next(this.recordset);
       });
   }
 }

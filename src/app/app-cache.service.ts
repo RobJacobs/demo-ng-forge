@@ -18,7 +18,7 @@ export interface IAppCacheService {
 })
 export class AppCacheService implements IAppCacheService {
   public isBusy = false;
-  public storageKey = 'assurance-portal--app';
+  public storageKey = 'demo-ng-forge--app';
   public theme: 'dark' | 'light' = 'light';
   public layoutMode: 'sm' | 'md' | 'lg' = 'lg';
   public menu = {
@@ -51,7 +51,8 @@ export class AppCacheService implements IAppCacheService {
       },
       { label: 'Map View', value: 'map-view', icon: 'map' },
       { label: 'Formly', value: 'formly-demo', icon: 'article' },
-      { label: 'Table', value: 'table-demo', icon: 'table_rows' }
+      { label: 'Table', value: 'table-demo', icon: 'table_rows' },
+      { label: 'Storage', value: 'storage', icon: 'storage' }
     ]
   };
   public activeRoute: string[] = [];
