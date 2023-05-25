@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AppFormsModule } from 'src/app/shared/app-forms.module';
+import { FormControlInvalidPipe } from 'src/app/shared/pipes/form-control-invalid.pipe';
 import { QueryBuilderComponent } from './query-builder.component';
 
 const routes: Routes = [
@@ -16,7 +17,8 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-    AppFormsModule
+    AppFormsModule,
+    FormControlInvalidPipe
   ],
   exports: [
     RouterModule

@@ -4,11 +4,11 @@ import { RouterModule, Routes } from '@angular/router';
 import { DeactivateGuard } from '@tylertech/angular-core';
 
 import { AppFormsModule } from 'src/app/shared/app-forms.module';
+import { FormControlInvalidPipe } from 'src/app/shared/pipes/form-control-invalid.pipe';
 import { ProfileComponent } from './profile.component';
 import { ProfileCacheService } from './profile-cache.service';
 import { AddressComponent } from './address/address.component';
 import { PersonalComponent } from './personal/personal.component';
-// import { DeactivateGuard } from './deactivate.guard';
 
 const routes: Routes = [
   {
@@ -32,7 +32,8 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-    AppFormsModule
+    AppFormsModule,
+    FormControlInvalidPipe
   ],
   exports: [
     RouterModule

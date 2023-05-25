@@ -1,9 +1,8 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { IOption, SliderComponent } from '@tylertech/forge';
-import { AppDataService } from 'src/app/app-data.service';
-import { BaseFormComponent } from 'src/app/shared/form/base-form.component';
+import { IOption } from '@tylertech/forge';
 
+import { AppDataService } from 'src/app/app-data.service';
 import { IPersonalFormGroup, ProfileCacheService } from '../profile-cache.service';
 
 @Component({
@@ -11,7 +10,7 @@ import { IPersonalFormGroup, ProfileCacheService } from '../profile-cache.servic
   templateUrl: './personal.component.html',
   styleUrls: ['./personal.component.scss']
 })
-export class PersonalComponent extends BaseFormComponent {
+export class PersonalComponent {
   public get formGroup() {
     return this.cache.formGroup.get('personalFormGroup') as FormGroup<IPersonalFormGroup>;
   }
@@ -36,7 +35,6 @@ export class PersonalComponent extends BaseFormComponent {
     public cache: ProfileCacheService,
     private appDataService: AppDataService
   ) {
-    super();
     this.appDataService.getPeople().subscribe((result) => {
       this.friendOptions = result.data.map((p) => ({ label: `${p.firstName} ${p.lastName}`, value: p.id }));
     });
@@ -44,7 +42,6 @@ export class PersonalComponent extends BaseFormComponent {
 
   public onAddFriend() {
     this.friendsFormArray.push(new FormControl(null, { validators: [Validators.required] }));
-    this.formGroup.disable();
   }
 
   public onDeleteFriend(index: number) {

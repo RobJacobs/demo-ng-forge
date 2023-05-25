@@ -14,11 +14,11 @@
 <forge-tab-bar [activeTab]="activeTab">
   <forge-tab (forge-tab-interacted)="onTabSelected('personal')">
     Personal
-    <forge-icon *ngIf="isInvalid(personalFormGroup)" slot="trailing" name="error"></forge-icon>
+    <forge-icon *ngIf="[personalFormGroup.invalid, personalFormGroup.touched] | appFormControlInvalid" slot="trailing" name="error"></forge-icon>
   </forge-tab>
   <forge-tab (forge-tab-interacted)="onTabSelected('address')">
     Address
-    <forge-icon *ngIf="isInvalid(addressFormGroup)" slot="trailing" name="error"></forge-icon>
+    <forge-icon *ngIf="[addressFormGroup.invalid, addressFormGroup.touched] | appFormControlInvalid" slot="trailing" name="error"></forge-icon>
   </forge-tab>
 </forge-tab-bar>
 

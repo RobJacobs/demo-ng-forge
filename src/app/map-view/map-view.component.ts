@@ -3,7 +3,7 @@ import Map from '@arcgis/core/Map';
 import MapView from '@arcgis/core/views/MapView';
 import Graphic from '@arcgis/core/Graphic';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
-import DefaultUI from '@arcgis/core/views/ui/DefaultUI';
+import DefaultUI2D from '@arcgis/core/views/ui/2d/DefaultUI2D';
 import Search from '@arcgis/core/widgets/Search';
 
 @Component({
@@ -18,11 +18,13 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
   private mapPoints = [
     {
       address: '1 Tyler Drive Yarmouth ME 04086',
+      type: 'point',
       longitude: -70.1887779,
       latitude: 43.7819812
     },
     {
       address: '370 US Route 1 Falmouth ME 04105',
+      type: 'point',
       longitude: -70.222409,
       latitude: 43.739053
     }
@@ -36,20 +38,6 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
       basemap: 'satellite'
     });
 
-    const points = [
-      {
-        // address: '1 Tyler Drive Yarmouth ME 04086',
-        type: 'point',
-        longitude: -70.1887779,
-        latitude: 43.7819812
-      },
-      {
-        // address: '370 US Route 1 Falmouth ME 04105',
-        type: 'point',
-        longitude: -70.222409,
-        latitude: 43.739053
-      }
-    ];
     const pointSymbol = {
       type: 'simple-marker',
       color: [226, 119, 40],  // Orange
@@ -59,13 +47,13 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
       }
     };
     const graphicsLayer = new GraphicsLayer();
-    graphicsLayer.addMany(points.map(p => (new Graphic({
+    graphicsLayer.addMany(this.mapPoints.map(p => (new Graphic({
       geometry: p as any,
       symbol: pointSymbol
     }))))
     map.add(graphicsLayer);
 
-    const ui = new DefaultUI({
+    const ui = new DefaultUI2D({
       components: [
         'attribution',
         'compass',
@@ -83,14 +71,13 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
       ui
     });
 
-    this.mapView?.goTo({
-      target: [points[0].longitude, points[0].latitude],
-      zoom: 15
-    });
-
     this.mapView.when(
       () => {
         console.log('map initialized');
+        this.mapView?.goTo({
+          target: [this.mapPoints[0].longitude, this.mapPoints[0].latitude],
+          zoom: 12
+        });
       },
       (error: any) => {
         console.log(error);

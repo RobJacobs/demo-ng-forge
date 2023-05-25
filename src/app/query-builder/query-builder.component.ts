@@ -49,11 +49,6 @@ export class QueryBuilderComponent {
 
   public propertyFilter = (value: string) => Utils.filterData(this.propertyOptions, [{ key: 'label', value }]);
 
-  public isInvalid(formGroup: FormGroup, name: string) {
-    const formControl = formGroup.get(name);
-    return formControl?.invalid && formControl?.touched;
-  }
-
   public onAddFilter(formGroup: FormGroup, type: 'condition' | 'group') {
     if (formGroup === this.formGroup) {
       (this.formGroup.get('filters') as FormArray).push(this.buildFilterFormGroup());

@@ -1,18 +1,18 @@
 import { ControlValueAccessor } from '@angular/forms';
 
 export abstract class BaseValueAccessorComponent implements ControlValueAccessor {
-  private pValue: any;
+  #value: any;
   get value(): any {
-    return this.pValue;
+    return this.#value;
   }
   set value(value: any) {
-    this.pValue = value;
+    this.#value = value;
   }
 
-  constructor() {}
+  constructor() { }
 
-  public onChange = (fn: any) => {};
-  public onTouched = () => {};
+  public onChange = (fn: any) => { };
+  public onTouched = () => { };
 
   public registerOnChange(fn: any): void {
     this.onChange = fn;

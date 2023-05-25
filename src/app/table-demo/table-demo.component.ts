@@ -38,6 +38,7 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
   public recordset$ = new BehaviorSubject<IPerson[]>([]);
   public recordCount = 0;
   public tableColumns: IColumnConfiguration[] = [
+    { header: 'Id', property: 'id' },
     { header: 'First', property: 'firstName', width: 400 },
     { header: 'Last', property: 'lastName' },
     { header: 'Gender', property: 'gender' },
@@ -47,6 +48,10 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public visibleColumns = (columns: IColumnConfiguration[]) => {
     return columns.filter(c => c.hidden !== true);
+  }
+
+  public recordsetTrackBy = (index: number, person: IPerson) => {
+    return person.id;
   }
 
   constructor(
@@ -67,11 +72,15 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
           .getPeople({
             sort: this.filterCache.sort
           }).pipe(
-            delay(1000),
+            // delay(1000),
             finalize(() => this.isBusy = false)
           )
           .subscribe((result) => {
-            this.recordset = [...this.recordset, ...result.data];
+            const startId = this.recordset.length + 1;
+            this.recordset = [...this.recordset, ...result.data.map((p, i) => {
+              p.id = startId + p.id;
+              return p;
+            })];
             this.recordCount = this.recordset.length;
             this.recordset$.next(this.recordset);
           });
@@ -201,10 +210,6 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
     this.filterCache.skip = detail.pageIndex * detail.pageSize;
     this.filterCache.take = detail.pageSize;
     this.getRecords();
-  }
-
-  public recordsetTrackBy(index: number, person: IPerson) {
-    return index;
   }
 
   private getRecords() {

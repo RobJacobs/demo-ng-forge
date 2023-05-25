@@ -57,7 +57,6 @@ export class ProfileComponent implements TylCanDeactivate {
         if (result) {
           this.cache.formGroup.reset();
         }
-        console.log(result);
         s.next(result);
       });
     });
@@ -72,6 +71,15 @@ export class ProfileComponent implements TylCanDeactivate {
   }
 
   public onTabSelected(route: string) {
+    switch (this.activeTab) {
+      case 0:
+        this.personalFormGroup.markAsTouched();
+        break;
+      case 1:
+        this.addressFormGroup.markAsTouched();
+        break;
+    }
+
     switch (route) {
       case 'personal':
         this.activeTab = 0;
@@ -105,10 +113,6 @@ export class ProfileComponent implements TylCanDeactivate {
       targetElement.src = this.noImageUrl;
       targetElement.onerror = null;
     }
-  }
-
-  public isInvalid(formGroup: FormGroup): boolean {
-    return formGroup.invalid && formGroup.touched;
   }
 
   private loadForm(profile: IProfile) {

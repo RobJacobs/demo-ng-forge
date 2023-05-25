@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AppFormsModule } from 'src/app/shared/app-forms.module';
+import { FormControlInvalidPipe } from 'src/app/shared/pipes/form-control-invalid.pipe';
 import { AutocompleteRangeComponent } from 'src/app/shared/components/autocomplete-range/autocomplete-range.component';
 import { IndeterminateDirective } from 'src/app/shared/directives/indeterminate/indeterminate.directive';
 import { AutoFocusDirective } from 'src/app/shared/directives/auto-focus/auto-focus.directive';
@@ -22,6 +23,7 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     AppFormsModule,
+    FormControlInvalidPipe,
     AutocompleteRangeComponent,
     IndeterminateDirective,
     AutoFocusDirective

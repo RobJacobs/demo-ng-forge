@@ -31,11 +31,6 @@ export class SearchSaveComponent {
     this.formGroup.patchValue(this.record);
   }
 
-  public isInvalid(name: string) {
-    const formControl = this.formGroup.get(name);
-    return formControl?.invalid && formControl?.touched ? true : false;
-  }
-
   public onSave() {
     this.dialogRef.close(this.parseFormGroup());
   }
