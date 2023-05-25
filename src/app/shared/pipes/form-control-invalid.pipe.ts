@@ -6,7 +6,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class FormControlInvalidPipe implements PipeTransform {
   transform(value: boolean[], ...args: any[]) {
-    console.log(value);
     return value.some(v => v === false) ? false : true;
   }
 }
