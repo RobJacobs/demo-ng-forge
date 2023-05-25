@@ -1,0 +1,605 @@
+[
+  {
+    "id": 1,
+    "firstName": "Jeffrey 'Comic Book Guy'",
+    "lastName": "Albertson",
+    "gender": "male",
+    "occupation": "self employed - The Android's Dungeon & Baseball Card Shop",
+    "quote": "Worst (insert noun) ever!",
+    "url": "https://simpsons.fandom.com/wiki/Comic_Book_Guy"
+  },
+  {
+    "id": 2,
+    "firstName": "Jasper",
+    "lastName": "Beardsley",
+    "gender": "male",
+    "occupation": "retired",
+    "quote": "That's a paddlin.",
+    "url": "https://simpsons.fandom.com/wiki/Jasper_Beardsley"
+  },
+  {
+    "id": 3,
+    "firstName": "Patty",
+    "lastName": "Bouvier",
+    "gender": "female",
+    "occupation": "DMV clerk",
+    "quote": "Some days at the DMV, we don't let the line move at all. We call those weekdays.",
+    "url": "https://simpsons.fandom.com/wiki/Patty_Bouvier"
+  },
+  {
+    "id": 4,
+    "firstName": "Selma",
+    "lastName": "Bouvier",
+    "gender": "female",
+    "occupation": "DMV clerk",
+    "quote": "How's my blubber in-law?",
+    "url": "https://simpsons.fandom.com/wiki/Selma_Bouvier"
+  },
+  {
+    "id": 5,
+    "firstName": "Kent",
+    "lastName": "Brockman",
+    "gender": "male",
+    "occupation": "tv anchorman",
+    "quote": "Now, at the risk of being unpopular, this reporter places the blame for all of this SQUARELY on YOU, the viewers.",
+    "url": "https://simpsons.fandom.com/wiki/Kent_Brockman"
+  },
+  {
+    "id": 6,
+    "firstName": "Charles Montgomery",
+    "lastName": "Burns",
+    "gender": "male",
+    "occupation": "self employed - Springfield Nuclear Power Plant",
+    "quote": "Excellent!",
+    "url": "https://simpsons.fandom.com/wiki/Charles_Montgomery_Burns"
+  },
+  {
+    "id": 7,
+    "firstName": "Carl",
+    "lastName": "Carlson",
+    "gender": "male",
+    "occupation": "safety supervisor",
+    "quote": "See, statements like that are why people think we're gay.",
+    "url": "https://simpsons.fandom.com/wiki/Carl_Carlson"
+  },
+  {
+    "id": 8,
+    "firstName": "Gary",
+    "lastName": "Chalmers",
+    "gender": "male",
+    "occupation": "superintendent",
+    "quote": "SKINNERRRRRR!",
+    "url": "https://simpsons.fandom.com/wiki/Gary_Chalmers"
+  },
+  {
+    "id": 9,
+    "firstName": "Shauna",
+    "lastName": "Chalmers",
+    "gender": "female",
+    "occupation": "manager - Smart Tykes",
+    "quote": "Either the duck suffers or the kid does, or none of you's getting nothing from Shauna.",
+    "url": "https://simpsons.fandom.com/wiki/Shauna_Chalmers"
+  },
+  {
+    "id": 10,
+    "firstName": "Marion Anthony 'Fat Tony'",
+    "lastName": "D'Amico",
+    "gender": "male",
+    "occupation": "waste management",
+    "quote": "How could you, Nicky? I would have given you everything. In the strip club of my heart, you held the key to the champagne room.",
+    "url": "https://simpsons.fandom.com/wiki/Fat_Tony"
+  },
+  {
+    "id": 11,
+    "firstName": "Stuart 'Disco Stu'",
+    "lastName": "Discothèque",
+    "gender": "male",
+    "occupation": "self employed - Stu's Disco",
+    "quote": "Disco Shrew can still boogaloo.",
+    "url": "https://simpsons.fandom.com/wiki/Disco_Stu"
+  },
+  {
+    "id": 12,
+    "firstName": "Maude",
+    "lastName": "Flanders",
+    "gender": "female",
+    "occupation": "housewife",
+    "quote": "I don't judge Homer or Marge. That's for vengeful God to do.",
+    "url": "https://simpsons.fandom.com/wiki/Maude_Flanders"
+  },
+  {
+    "id": 13,
+    "firstName": "Ned",
+    "lastName": "Flanders",
+    "gender": "male",
+    "occupation": "self employed - The Leftorium",
+    "quote": "Hi-diddly-ho!",
+    "url": "https://simpsons.fandom.com/wiki/Ned_Flanders"
+  },
+  {
+    "id": 14,
+    "firstName": "Rod",
+    "lastName": "Flanders",
+    "gender": "male",
+    "occupation": "student",
+    "quote": "Yay!!",
+    "url": "https://simpsons.fandom.com/wiki/Rod_Flanders"
+  },
+  {
+    "id": 15,
+    "firstName": "Todd",
+    "lastName": "Flanders",
+    "gender": "male",
+    "occupation": "student",
+    "quote": "I don't want any damn vegetables.",
+    "url": "https://simpsons.fandom.com/wiki/Todd_Flanders"
+  },
+  {
+    "id": 16,
+    "firstName": "Jonathon",
+    "lastName": "Frink",
+    "gender": "male",
+    "occupation": "professor",
+    "quote": "Oops, I forgot to carry the one.",
+    "url": "https://simpsons.fandom.com/wiki/Jonathan_Frink"
+  },
+  {
+    "id": 17,
+    "firstName": "Barney",
+    "lastName": "Gumble",
+    "gender": "male",
+    "occupation": "unemployed",
+    "quote": "BURRRRRRPPPP!",
+    "url": "https://simpsons.fandom.com/wiki/Barney_Gumble"
+  },
+  {
+    "id": 18,
+    "firstName": "Bernice",
+    "lastName": "Hibbert",
+    "gender": "female",
+    "occupation": "housewife",
+    "quote": "Ooh, Marge.",
+    "url": "https://simpsons.fandom.com/wiki/Bernice_Hibbert"
+  },
+  {
+    "id": 19,
+    "firstName": "Julius",
+    "lastName": "Hibbert",
+    "gender": "male",
+    "occupation": "doctor",
+    "quote": "A-heh-heh-heh.",
+    "url": "https://simpsons.fandom.com/wiki/Julius_Hibbert"
+  },
+  {
+    "id": 20,
+    "firstName": "Corky 'Jimbo'",
+    "lastName": "Jones",
+    "gender": "male",
+    "occupation": "student",
+    "quote": "Bite me.",
+    "url": "https://simpsons.fandom.com/wiki/Jimbo_Jones"
+  },
+  {
+    "id": 21,
+    "firstName": "Edna",
+    "lastName": "Krabappel",
+    "gender": "female",
+    "occupation": "teacher",
+    "quote": "Ha!",
+    "url": "https://simpsons.fandom.com/wiki/Edna_Krabappel"
+  },
+  {
+    "id": 22,
+    "firstName": "Herschel 'Krusty the Clown'",
+    "lastName": "Krustofsky",
+    "gender": "male",
+    "occupation": "tv personality",
+    "qoute": "Hey hey, kids!",
+    "url": "https://simpsons.fandom.com/wiki/Krusty_the_Clown"
+  },
+  {
+    "id": 23,
+    "firstName": "Hyman",
+    "lastName": "Krustofsky",
+    "gender": "male",
+    "occupation": "rabbi",
+    "qoute": "I HAVE NO SON!",
+    "url": "https://simpsons.fandom.com/wiki/Rabbi_Hyman_Krustofsky"
+  },
+  {
+    "id": 24,
+    "firstName": "Lenny",
+    "lastName": "Leonard",
+    "gender": "male",
+    "occupation": "technical supervisor",
+    "quote": "Ow, my eye!",
+    "url": "https://simpsons.fandom.com/wiki/Lenny_Leonard"
+  },
+  {
+    "id": 25,
+    "firstName": "Helen",
+    "lastName": "Lovejoy",
+    "gender": "female",
+    "occupation": "housewife",
+    "quote": "Won't somebody please think of the children?",
+    "url": "https://simpsons.fandom.com/wiki/Helen_Lovejoy"
+  },
+  {
+    "id": 26,
+    "firstName": "Timothy",
+    "lastName": "Lovejoy",
+    "gender": "male",
+    "occupation": "reverend",
+    "quote": "Wait a minute, this sounds like rock and or roll!",
+    "url": "https://simpsons.fandom.com/wiki/Timothy_Lovejoy,_Jr."
+  },
+  {
+    "id": 27,
+    "firstName": "Willie 'Groundskeeper'",
+    "lastName": "MacDougal",
+    "gender": "male",
+    "occupation": "janitor",
+    "qoute": "Guess there's some stones in your leaf bag, after all.",
+    "url": "https://simpsons.fandom.com/wiki/Groundskeeper_Willie"
+  },
+  {
+    "id": 28,
+    "firstName": "Sherri",
+    "lastName": "Mackleberry",
+    "gender": "female",
+    "occupation": "student",
+    "quote": "Isn't it amazing the same day you got a pool is the same day we realized we liked you?",
+    "url": "https://simpsons.fandom.com/wiki/Sherri_Mackleberry"
+  },
+  {
+    "id": 29,
+    "firstName": "Terri",
+    "lastName": "Mackleberry",
+    "gender": "female",
+    "occupation": "student",
+    "quote": "The timing worked out great. Don't you think?",
+    "url": "https://simpsons.fandom.com/wiki/Terri_Mackleberry"
+  },
+  {
+    "id": 30,
+    "firstName": "Otto",
+    "lastName": "Mann",
+    "gender": "male",
+    "occupation": "school bus driver",
+    "quote": "Far out man!",
+    "url": "https://simpsons.fandom.com/wiki/Otto_Mann"
+  },
+  {
+    "id": 31,
+    "firstName": "Troy",
+    "lastName": "McClure",
+    "gender": "male",
+    "occupation": "actor",
+    "quote": "Hi! I'm Troy McClure! You may remember me from such [films, TV shows, dates] as..",
+    "url": "https://simpsons.fandom.com/wiki/Troy_McClure"
+  },
+  {
+    "id": 32,
+    "firstName": "Hans",
+    "lastName": "Moleman",
+    "gender": "male",
+    "occupation": "superhero - King of the Mole People",
+    "quote": "My name is Hans. Drinking has ruined my life. I'm 31 years old.",
+    "url": "https://simpsons.fandom.com/wiki/Hans_Moleman"
+  },
+  {
+    "id": 33,
+    "firstName": "Eddie",
+    "lastName": "Muntz",
+    "gender": "male",
+    "occupation": "circus attraction",
+    "quote": "I'm going out for cigarettes.",
+    "url": "https://simpsons.fandom.com/wiki/Eddie_Muntz"
+  },
+  {
+    "id": 34,
+    "firstName": "Mrs.",
+    "lastName": "Muntz",
+    "gender": "female",
+    "occupation": "pole dancer",
+    "quote": "",
+    "url": "https://simpsons.fandom.com/wiki/Mrs._Muntz"
+  },
+  {
+    "id": 35,
+    "firstName": "Nelson",
+    "lastName": "Muntz",
+    "gender": "male",
+    "occupation": "student",
+    "quote": "Haw Haw!",
+    "url": "https://simpsons.fandom.com/wiki/Nelson_Muntz"
+  },
+  {
+    "id": 36,
+    "firstName": "Eddie",
+    "lastName": "N/A",
+    "gender": "male",
+    "occupation": "police officer",
+    "quote": "",
+    "url": "https://simpsons.fandom.com/wiki/Eddie"
+  },
+  {
+    "id": 37,
+    "firstName": "Lou",
+    "lastName": "N/A",
+    "gender": "male",
+    "occupation": "police sergeant",
+    "quote": "Uh... Chief?",
+    "url": "https://simpsons.fandom.com/wiki/Lou"
+  },
+  {
+    "id": 38,
+    "firstName": "Apu",
+    "lastName": "Nahasapeemapetilon",
+    "gender": "male",
+    "occupation": "self employed - Kwik-E-Mart",
+    "quote": "Thank you! Come again.",
+    "url": "https://simpsons.fandom.com/wiki/Apu_Nahasapeemapetilon"
+  },
+  {
+    "id": 39,
+    "firstName": "Manjula",
+    "lastName": "Nahasapeemapetilon",
+    "gender": "female",
+    "occupation": "housewife",
+    "quote": "",
+    "url": "https://simpsons.fandom.com/wiki/Manjula_Nahasapeemapetilon"
+  },
+  {
+    "id": 40,
+    "firstName": "Martin",
+    "lastName": "Prince",
+    "gender": "male",
+    "occupation": "student",
+    "quote": "Pick me, teacher, I'm ever so smart!",
+    "url": "https://simpsons.fandom.com/wiki/Martin_Prince"
+  },
+  {
+    "id": 41,
+    "firstName": "Joe",
+    "lastName": "Quimby",
+    "gender": "male",
+    "occupation": "mayor",
+    "quote": "Vote Quimby!",
+    "url": "https://simpsons.fandom.com/wiki/Joe_Quimby"
+  },
+  {
+    "id": 42,
+    "firstName": "Martha",
+    "lastName": "Quimby",
+    "gender": "female",
+    "occupation": "housewife",
+    "quote": "Joseph!",
+    "url": "https://simpsons.fandom.com/wiki/Martha_Quimby"
+  },
+  {
+    "id": 43,
+    "firstName": "Abraham",
+    "lastName": "Simpson",
+    "gender": "male",
+    "occupation": "retired",
+    "quote": "Ahh!",
+    "url": "https://simpsons.fandom.com/wiki/Abraham_Simpson_II"
+  },
+  {
+    "id": 44,
+    "firstName": "Bart",
+    "lastName": "Simpson",
+    "gender": "male",
+    "occupation": "student",
+    "quote": "Ay Caramba!",
+    "url": "https://simpsons.fandom.com/wiki/Bart_Simpson"
+  },
+  {
+    "id": 45,
+    "firstName": "Homer",
+    "lastName": "Simpson",
+    "gender": "male",
+    "occupation": "safety inspector",
+    "quote": "D'oh!",
+    "url": "https://simpsons.fandom.com/wiki/Homer_Simpson"
+  },
+  {
+    "id": 46,
+    "firstName": "Lisa",
+    "lastName": "Simpson",
+    "gender": "female",
+    "occupation": "student",
+    "quote": "If anyone wants me, I'll be in my room.",
+    "url": "https://simpsons.fandom.com/wiki/Lisa_Simpson"
+  },
+  {
+    "id": 47,
+    "firstName": "Maggie",
+    "lastName": "Simpson",
+    "gender": "female",
+    "occupation": "baby",
+    "quote": "suck suck",
+    "url": "https://simpsons.fandom.com/wiki/Maggie_Simpson"
+  },
+  {
+    "id": 48,
+    "firstName": "Marge",
+    "lastName": "Simpson",
+    "gender": "female",
+    "occupation": "housewife",
+    "quote": "Hrmmm...",
+    "url": "https://simpsons.fandom.com/wiki/Marge_Simpson"
+  },
+  {
+    "id": 49,
+    "firstName": "Agnes",
+    "lastName": "Skinner",
+    "gender": "female",
+    "occupation": "retired",
+    "quote": "Seymour!",
+    "url": "https://simpsons.fandom.com/wiki/Agnes_Skinner"
+  },
+  {
+    "id": 50,
+    "firstName": "Seymour",
+    "lastName": "Skinner",
+    "gender": "male",
+    "occupation": "principal",
+    "qoute": "Young man, I'm going to be on you like a numerator on a denominator.",
+    "url": "https://simpsons.fandom.com/wiki/Seymour_Skinner"
+  },
+  {
+    "id": 51,
+    "firstName": "Waylon",
+    "lastName": "Smithers",
+    "gender": "male",
+    "occupation": "executive assistant",
+    "quote": "Yes, sir?",
+    "url": "https://simpsons.fandom.com/wiki/Waylon_Smithers,_Jr."
+  },
+  {
+    "id": 52,
+    "firstName": "Brandine",
+    "lastName": "Spuckler",
+    "gender": "female",
+    "occupation": "farmer",
+    "quote": "Dang Cletus!",
+    "url": "https://simpsons.fandom.com/wiki/Brandine_Spuckler"
+  },
+  {
+    "id": 53,
+    "firstName": "Cletus",
+    "lastName": "Spuckler",
+    "gender": "male",
+    "occupation": "farmer",
+    "quote": "Hey Brandine, I done busted ma stankbone.",
+    "url": "https://simpsons.fandom.com/wiki/Cletus_Spuckler"
+  },
+  {
+    "id": 54,
+    "firstName": "Dolphin 'Dolf'",
+    "lastName": "Starbeam",
+    "gender": "male",
+    "occupation": "student",
+    "quote": "",
+    "url": "https://simpsons.fandom.com/wiki/Dolph_Starbeam"
+  },
+  {
+    "id": 55,
+    "firstName": "Moe",
+    "lastName": "Szyslak",
+    "gender": "male",
+    "occupation": "self employed - Moe's Tavern",
+    "quote": "How ya doing?",
+    "url": "https://simpsons.fandom.com/wiki/Moe_Szyslak"
+  },
+  {
+    "id": 56,
+    "firstName": "Drederick",
+    "lastName": "Tatum",
+    "gender": "male",
+    "occupation": "boxer",
+    "qoute": "I think he's a good man. I like him. I got nothing against him, but I'm definitely gonna make orphans of his children.",
+    "url": "https://simpsons.fandom.com/wiki/Drederick_Tatum"
+  },
+  {
+    "id": 57,
+    "firstName": "Robert 'Sideshow Bob'",
+    "lastName": "Terwilliger",
+    "gender": "male",
+    "occupation": "criminal mastermind",
+    "quote": "Hello, Bart.",
+    "url": "https://simpsons.fandom.com/wiki/Robert_Terwilliger"
+  },
+  {
+    "id": 58,
+    "firstName": "Chester 'Snake'",
+    "lastName": "Turley",
+    "gender": "male",
+    "occupation": "criminal",
+    "quote": "Guilty of being innocent!",
+    "url": "https://simpsons.fandom.com/wiki/Snake_Jailbird"
+  },
+  {
+    "id": 59,
+    "firstName": "Melvin 'Sideshow'",
+    "lastName": "Van Horne",
+    "gender": "male",
+    "occupation": "tv personality",
+    "quote": "They say any publicity is good publicity.",
+    "url": "https://simpsons.fandom.com/wiki/Melvin_Van_Horne"
+  },
+  {
+    "id": 60,
+    "firstName": "Kirk",
+    "lastName": "Van Houten",
+    "gender": "male",
+    "occupation": "unemployed",
+    "quote": "I got a court order bringing him back. The judge said I was the most pathetic person he'd ever seen in court. Pity custody, boo-yeah!",
+    "url": "https://simpsons.fandom.com/wiki/Kirk_Van_Houten"
+  },
+  {
+    "id": 61,
+    "firstName": "Luann",
+    "lastName": "Van Houten",
+    "gender": "female",
+    "occupation": "housewife",
+    "quote": "From now on, forget everything you thought you knew about Luann Van Houten.",
+    "url": "https://simpsons.fandom.com/wiki/Luann_Van_Houten"
+  },
+  {
+    "id": 62,
+    "firstName": "Milhouse",
+    "lastName": "Van Houten",
+    "gender": "male",
+    "occupation": "student",
+    "quote": "The House always wins.",
+    "url": "https://simpsons.fandom.com/wiki/Milhouse_Van_Houten"
+  },
+  {
+    "id": 63,
+    "firstName": "Clancy",
+    "lastName": "Wiggum",
+    "gender": "male",
+    "occupation": "chief of police",
+    "quote": "If anything goes wrong, just dial 911. Unless it's an emergency.",
+    "url": "https://simpsons.fandom.com/wiki/Clancy_Wiggum"
+  },
+  {
+    "id": 64,
+    "firstName": "Ralph",
+    "lastName": "Wiggum",
+    "gender": "male",
+    "occupation": "student",
+    "quote": "My cat's breath smells like cat food.",
+    "url": "https://simpsons.fandom.com/wiki/Ralph_Wiggum"
+  },
+  {
+    "id": 65,
+    "firstName": "Sarah",
+    "lastName": "Wiggum",
+    "gender": "female",
+    "occupation": "housewife",
+    "quote": "Clancy!",
+    "url": "https://simpsons.fandom.com/wiki/Sarah_Wiggum"
+  },
+  {
+    "id": 66,
+    "firstName": "Rainier",
+    "lastName": "Wolfcastle",
+    "gender": "male",
+    "occupation": "actor",
+    "quote": "",
+    "url": "https://simpsons.fandom.com/wiki/Rainier_Wolfcastle"
+  },
+  {
+    "id": 67,
+    "firstName": "Kearney",
+    "lastName": "Zzyzwicz",
+    "gender": "male",
+    "occupation": "student",
+    "quote": "First person to blink is a dead man.",
+    "url": "https://simpsons.fandom.com/wiki/Kearney_Zzyzwicz"
+  }
+]

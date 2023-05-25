@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
-    "server": "node node-server.ts"
+    "server": "node node-server.ts",
+    "publish": "ng build --configuration production --output-path docs --base-href /demo-ng-forge/"
   },
   "private": true,
   "dependencies": {
