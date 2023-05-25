@@ -1,4 +1,4 @@
-import { Component, ElementRef, EmbeddedViewRef, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ElementRef, EmbeddedViewRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { isArray } from '@tylertech/forge-core';
 import { CellAlign, TableComponent, TextFieldComponentDelegate } from '@tylertech/forge';
@@ -44,7 +44,8 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
     private router: Router,
     private appDataService: AppDataService,
     public moduleCache: PeopleCacheService,
-    private viewContainerRef: ViewContainerRef
+    private viewContainerRef: ViewContainerRef,
+    private ngZone: NgZone
   ) {
     super();
 
@@ -144,7 +145,9 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
           cellElement.appendChild(TableUtils.createIconButton(
             'keyboard_arrow_right',
             (event: Event) => {
-              this.router.navigate([`people/detail/${data.id}`]);
+              this.ngZone.run(() => {
+                this.router.navigate([`people/detail/${data.id}`]);
+              });
             },
             'View person details'
           ));
