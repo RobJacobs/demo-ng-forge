@@ -16,6 +16,7 @@ const routes: Routes = [
   { path: 'formly-demo', loadChildren: () => import('./formly-demo/formly-demo.module').then((m) => m.FormlyDemoModule) },
   { path: 'table-demo', loadChildren: () => import('./table-demo/table-demo.module').then((m) => m.TableDemoModule) },
   { path: 'storage', loadChildren: () => import('./storage/storage.module').then((m) => m.StorageModule) },
+  { path: 'imask', loadChildren: () => import('./imask/imask.module').then((m) => m.ImaskModule) },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
 ];
 

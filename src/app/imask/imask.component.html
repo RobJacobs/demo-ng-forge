@@ -1,0 +1,35 @@
+<forge-toolbar class="header">
+  <h2 slot="start" class="forge-typography--title">IMask</h2>
+</forge-toolbar>
+
+<div class="body">
+  <form novalidate autocomplete="off" [formGroup]="formGroup">
+    <forge-text-field>
+      <input #input id="imask-form--input" type="text" [imask]="mask" [unmask]="unmask" #imaskRef="imask" formControlName="input" />
+      <label for="imask-form--input" slot="label">Input</label>
+    </forge-text-field>
+    <div style="width: 600px;">
+      <div>
+        <b>string mask</b>: (0) any digit, (a) any letter, (*) any char
+      </div>
+      <div>
+        <b>number mask</b>: (#) required digit, (&) optional digit, (-) sign, (.) decimal, (,) separator
+      </div>
+    </div>
+    <forge-text-field>
+      <input #input id="imask-form--format" type="text" formControlName="format" />
+      <label for="imask-form--format" slot="label">Format</label>
+    </forge-text-field>
+    <div style="display: flex; column-gap: 8px; align-items: center;">
+      <forge-select style="flex-grow: 1;" formControlName="maskType" label="Mask type">
+        <forge-option *ngFor="let option of maskOptions" [value]="option.value">{{option.label}}</forge-option>
+      </forge-select>
+      <forge-button type="outlined">
+        <button type="button" (click)="onApply()">
+          Apply
+        </button>
+      </forge-button>
+    </div>
+  </form>
+  <p>{{formGroup.value | json}}</p>
+</div>

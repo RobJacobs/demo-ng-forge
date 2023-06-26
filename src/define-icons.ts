@@ -39,7 +39,8 @@ import {
   tylIconTableRows,
   tylIconArrowDownward,
   tylIconArrowUpward,
-  tylIconStorage
+  tylIconStorage,
+  tylIconMasks
 } from '@tylertech/tyler-icons/standard';
 
 import {
@@ -86,7 +87,8 @@ const standardIcons = [
   tylIconTableRows,
   tylIconArrowDownward,
   tylIconArrowUpward,
-  tylIconStorage
+  tylIconStorage,
+  tylIconMasks
 ];
 
 const customIcons = [
