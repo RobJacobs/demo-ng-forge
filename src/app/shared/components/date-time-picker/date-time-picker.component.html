@@ -1,0 +1,13 @@
+<ng-container [formGroup]="formGroup">
+  <forge-date-picker formControlName="date">
+    <forge-text-field>
+      <input type="text" placeholder="mm/dd/yyyy" />
+    </forge-text-field>
+  </forge-date-picker>
+  <forge-time-picker formControlName="time">
+    <forge-text-field>
+      <input type="text" placeholder="hh:mm AM" />
+    </forge-text-field>
+  </forge-time-picker>
+</ng-container>
+<p>{{formGroup.value | json}}</p>

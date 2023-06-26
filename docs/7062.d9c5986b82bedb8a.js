@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkdemo_ng_forge=self.webpackChunkdemo_ng_forge||[]).push([[7062],{57062:(l,o,e)=>{e.d(o,{g:()=>a});var t=e(71670),s=e(32995);function a(n,r){return _.apply(this,arguments)}function _(){return(_=(0,t.Z)(function*(n,r){try{return yield createImageBitmap(n)}catch(u){throw new s.Z("request:server",`Unable to load ${r}`,{url:r,error:u})}})).apply(this,arguments)}}}]);
-//# sourceMappingURL=7062.d9c5986b82bedb8a.js.map

@@ -1,0 +1,60 @@
+@use 'src/global' as *;
+
+:host {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  // forge-text-field::part(container) {
+  //   border-color: var(--mdc-theme-primary);
+  // }
+
+  &[invalid] {
+    forge-text-field::part(container) {
+      &:before {
+        border-color: var(--mdc-theme-error);
+        border-width: 2px;
+      }
+    }
+  }
+
+  &:has(input:focus):not([invalid]) {
+    forge-text-field::part(container) {
+      &:before {
+        border-color: var(--mdc-theme-primary);
+        border-width: 2px;
+      }
+    }
+  }
+
+  &:has(input:hover):not(:has(input:focus)):not([invalid]) {
+    forge-text-field::part(container) {
+      &:before {
+        border-color: var(--mdc-theme-text-primary-on-background);
+      }
+    }
+  }
+}
+
+forge-date-picker {
+  forge-text-field {
+    &::part(container) {
+      &:before {
+        border-right: none;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+    }
+  }
+}
+
+forge-time-picker {
+  forge-text-field {
+    &::part(container) {
+      &:before {
+        border-left: none;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    }
+  }
+}
