@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkdemo_ng_forge=self.webpackChunkdemo_ng_forge||[]).push([[6791],{37:(c,e,n)=>{n.r(e),n.d(e,{CalciteAction:()=>o,defineCustomElement:()=>u});var t=n(20694);const o=t.A,u=t.d},38722:(c,e,n)=>{n.d(e,{g:()=>o});const o=()=>function t(u){return u.map(d=>{let _="";for(let s=0;s<d;s++)_+=(65536*(1+Math.random())|0).toString(16).substring(1);return _}).join("-")}([2,1,1,1,3])}}]);
-//# sourceMappingURL=6791.ef3b4098fa1662ec.js.map

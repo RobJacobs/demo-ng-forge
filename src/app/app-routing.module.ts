@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-// import { MapViewComponent } from './map-view/map-view.component';
 
 const routes: Routes = [
   { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule) },
@@ -12,7 +11,6 @@ const routes: Routes = [
   { path: 'query-builder', loadChildren: () => import('./query-builder/query-builder.module').then((m) => m.QueryBuilderModule) },
   { path: 'icons', loadChildren: () => import('./icons/icons.module').then(m => m.IconsModule) },
   { path: 'examples', loadChildren: () => import('./examples/examples.module').then((m) => m.ExamplesModule) },
-  { path: 'map-view', loadChildren: () => import('./map-view/map-view.module').then((m) => m.MapViewModule) },
   { path: 'formly-demo', loadChildren: () => import('./formly-demo/formly-demo.module').then((m) => m.FormlyDemoModule) },
   { path: 'table-demo', loadChildren: () => import('./table-demo/table-demo.module').then((m) => m.TableDemoModule) },
   { path: 'storage', loadChildren: () => import('./storage/storage.module').then((m) => m.StorageModule) },

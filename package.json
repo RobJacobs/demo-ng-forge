@@ -22,7 +22,6 @@
     "@angular/platform-browser": "^16.0.2",
     "@angular/platform-browser-dynamic": "^16.0.2",
     "@angular/router": "^16.0.2",
-    "@arcgis/core": "^4.27.1",
     "@ngx-formly/core": "^6.1.8",
     "@tylertech/angular-core": "^3.0.1",
     "@tylertech/forge": "^2.16.3",

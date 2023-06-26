@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkdemo_ng_forge=self.webpackChunkdemo_ng_forge||[]).push([[941],{941:(P,n,e)=>{e.r(n),e.d(n,{PetsWrapperModule:()=>d});var l=e(6575),r=e(5387),t=e(1699);const s=[{path:"",loadChildren:()=>Promise.resolve().then(e.bind(e,3655)).then(o=>o.PetsModule)}];let d=(()=>{class o{}return o.\u0275fac=function(u){return new(u||o)},o.\u0275mod=t.oAB({type:o}),o.\u0275inj=t.cJS({imports:[l.ez,r.Bz.forChild(s),r.Bz]}),o})()}}]);
+//# sourceMappingURL=941.d506747c65025ec5.js.map
