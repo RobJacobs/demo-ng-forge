@@ -7,6 +7,7 @@
     <forge-text-field>
       <input #input id="imask-form--input" type="text" [imask]="mask" [unmask]="unmask" #imaskRef="imask" formControlName="input" />
       <label for="imask-form--input" slot="label">Input</label>
+      <span slot="helper-text">{{helpText}}</span>
     </forge-text-field>
     <div style="width: 600px;">
       <div>

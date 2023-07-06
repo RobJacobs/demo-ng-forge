@@ -4,6 +4,7 @@ import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { IMaskDirective } from 'angular-imask';
 import * as IMask from 'imask';
 import { IOption } from '@tylertech/forge';
+import { parse as dateParse, format as dateFormat, isValid as dateIsValid } from 'date-fns';
 
 import { NullableNumberMask } from './nullable-number-mask';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -22,29 +23,34 @@ export class ImaskComponent implements AfterViewInit {
     input: new FormControl<string | null>(null),
     maskType: new FormControl<string>('string')
   });
-  public unmask: 'typed' | boolean = true;
+  public unmask: 'typed' | boolean = false;
   public mask?: IMask.FactoryArg;
   public maskOptions: IOption[] = [
     { value: 'string', label: 'String' },
     { value: 'number', label: 'Number' },
     { value: 'number-search', label: 'Number search' },
     { value: 'date', label: 'Date' },
-    { value: 'date-search', label: 'Date search' }
+    { value: 'date-search', label: 'Date search' },
+    { value: 'datetime', label: 'Date time' }
   ];
+  public helpText = '';
 
   constructor() {
-    this.unmask = false;
     this.mask = this.buildStringMask(this.formGroup.value.format);
   }
 
   public ngAfterViewInit() {
-    console.log(this.imaskRef);
+    console.log(this.imaskRef); this.helpText = '';
   }
 
   public onApply() {
+    this.imaskRef.destroyMask();
     this.formGroup.get('input').setValue(null);
 
     requestAnimationFrame(() => {
+      this.helpText = '';
+      this.unmask = false;
+
       switch (this.formGroup.value.maskType) {
         case 'string':
           this.mask = this.buildStringMask(this.formGroup.value.format);
@@ -60,6 +66,9 @@ export class ImaskComponent implements AfterViewInit {
           break;
         case 'date-search':
           this.mask = this.buildDateSearchMask();
+          break;
+        case 'datetime':
+          this.mask = this.buildDateTimeMask();
           break;
       }
     });
@@ -85,6 +94,8 @@ export class ImaskComponent implements AfterViewInit {
   }
 
   private buildNumberMask(format?: string): IMask.MaskedNumber {
+    this.unmask = 'typed';
+
     if (!format?.length) {
       return new NullableNumberMask({
         mask: Number,
@@ -114,46 +125,121 @@ export class ImaskComponent implements AfterViewInit {
   }
 
   private buildDateMask(): IMask.MaskedDate {
+    this.unmask = 'typed';
+    this.helpText = 'MM/dd/yyyy';
+
     return new IMask.MaskedDate({
       mask: Date,
-      pattern: 'm/`d/`Y',
+      pattern: 'MM/`dd/`yyyy',
       placeholderChar: ' ',
       blocks: {
-        m: {
+        MM: {
           mask: IMask.MaskedRange,
           from: 1,
           to: 12,
           maxLength: 2
-        } as any,
-        d: {
+        } as IMask.FactoryArg,
+        dd: {
           mask: IMask.MaskedRange,
           from: 1,
           to: 31,
           maxLength: 2
-        } as any,
-        Y: {
+        } as IMask.FactoryArg,
+        yyyy: {
           mask: IMask.MaskedRange,
           from: 1900,
           to: 9999,
           maxLength: 4
-        } as any
+        } as IMask.FactoryArg
       },
       autofix: false,
       lazy: false,
       overwrite: false,
-      format: function (date) {
-        const day = ('0' + date.getDate()).slice(-2);
-        const month = ('0' + (date.getMonth() + 1)).slice(-2);
-        const year = date.getFullYear();
-        const value = [month, day, year].join('/');
-        return value;
+      format: (value: Date): string => {
+        return dateIsValid(value) ? dateFormat(value, 'MM/dd/yyyy') : '';
       },
-      parse: function (str) {
-        const mdy = str.split('/');
-        const date = new Date(parseInt(mdy[2], 10), parseInt(mdy[0], 10) - 1, parseInt(mdy[1]));
-        return date;
-      },
+      parse: (value: string): Date => {
+        return dateParse(value, 'MM/dd/yyyy', new Date());
+        // const dateParts = value.split(' ')[0].split('/').map(v => parseInt(v, 10));
+        // return new Date(
+        //   dateParts[2],
+        //   dateParts[0] - 1,
+        //   dateParts[1]
+        // );
+      }
     });
+  }
+
+  private buildDateTimeMask(): IMask.MaskedDate {
+    this.unmask = 'typed';
+    this.helpText = 'MM/dd/yyyy hh:mm:ss aa';
+
+    return new IMask.MaskedDate({
+      mask: Date,
+      pattern: 'MM/`dd/`yyyy `hh:`mm:`ss `aa',
+      placeholderChar: ' ',
+      blocks: {
+        MM: {
+          mask: IMask.MaskedRange,
+          from: 1,
+          to: 12,
+          maxLength: 2
+        } as IMask.FactoryArg,
+        dd: {
+          mask: IMask.MaskedRange,
+          from: 1,
+          to: 31,
+          maxLength: 2
+        } as IMask.FactoryArg,
+        yyyy: {
+          mask: IMask.MaskedRange,
+          from: 1900,
+          to: 9999,
+          maxLength: 4
+        } as IMask.FactoryArg,
+        hh: {
+          mask: IMask.MaskedRange,
+          from: 1,
+          to: 12,
+          maxLength: 2
+        } as IMask.FactoryArg,
+        mm: {
+          mask: IMask.MaskedRange,
+          from: 0,
+          to: 59,
+          maxLength: 2
+        } as IMask.FactoryArg,
+        ss: {
+          mask: IMask.MaskedRange,
+          from: 0,
+          to: 59,
+          maxLength: 2
+        } as IMask.FactoryArg,
+        aa: {
+          mask: IMask.MaskedEnum,
+          enum: ['am', 'pm']
+        } as IMask.FactoryArg
+      },
+      autofix: false,
+      lazy: false,
+      overwrite: false,
+      format: (value: Date): string => {
+        return dateIsValid(value) ? dateFormat(value, 'MM/dd/yyyy hh:mm:ss aaa') : '';
+      },
+      parse: (value: string): Date => {
+        return dateParse(value, 'MM/dd/yyyy hh:mm:ss aaa', new Date());
+        // const dateParts = value.split(' ')[0].split('/').map(v => parseInt(v, 10));
+        // const timeParts = value.split(' ')[1].split(':').map(v => parseInt(v, 10));
+        // return new Date(
+        //   dateParts[2],
+        //   dateParts[0] - 1,
+        //   dateParts[1],
+        //   timeParts[0],
+        //   timeParts[1],
+        //   timeParts[2]
+        // );
+      }
+    })
   }
 
   private buildDateSearchMask(): IMask.MaskedRegExp {
