@@ -367,8 +367,6 @@ THE SOFTWARE.
 @ngx-formly/core
 MIT
 
-@tylertech/angular-core
-
 @tylertech/forge
 Apache-2.0
                                  Apache License
