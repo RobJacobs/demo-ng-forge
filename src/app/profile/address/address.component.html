@@ -1,33 +1,33 @@
 <div [formGroup]="formGroup" class="form-grid">
-  <forge-text-field required [invalid]="[formGroup.get('name').invalid, formGroup.get('name').touched] | appFormControlInvalid" class="form-grid--row-break">
+  <forge-text-field required [appFormControlInvalid]="formGroup.get('name')" class="form-grid--row-break">
     <input type="text" id="address-form--name" formControlName="name" />
     <label for="address-form--name" slot="label">Name</label>
-    <span slot="helper-text" *ngIf="[formGroup.get('name').invalid, formGroup.get('name').touched] | appFormControlInvalid">Name is required</span>
+    <span slot="helper-text" class="app-form-control-invalid">Name is required</span>
   </forge-text-field>
 
-  <forge-text-field required [invalid]="[formGroup.get('street').invalid, formGroup.get('street').touched] | appFormControlInvalid" class="form-grid--row-break">
+  <forge-text-field required [appFormControlInvalid]="formGroup.get('street')" class="form-grid--row-break">
     <input type="text" id="address-form--street" formControlName="street" />
     <label for="address-form--street" slot="label">Street</label>
-    <span slot="helper-text" *ngIf="[formGroup.get('street').invalid, formGroup.get('street').touched] | appFormControlInvalid">Street is required</span>
+    <span slot="helper-text" class="app-form-control-invalid">Street is required</span>
   </forge-text-field>
 
-  <forge-text-field required [invalid]="[formGroup.get('city').invalid, formGroup.get('city').touched] | appFormControlInvalid">
+  <forge-text-field required [appFormControlInvalid]="formGroup.get('city')">
     <input type="text" id="address-form--city" formControlName="city" />
     <label for="address-form--city" slot="label">City</label>
-    <span slot="helper-text" *ngIf="[formGroup.get('city').invalid, formGroup.get('city').touched] | appFormControlInvalid">City is required</span>
+    <span slot="helper-text" class="app-form-control-invalid">City is required</span>
   </forge-text-field>
 
   <div class="form-grid__state-zip">
-    <forge-text-field required [invalid]="[formGroup.get('state').invalid, formGroup.get('state').touched] | appFormControlInvalid">
+    <forge-text-field required [appFormControlInvalid]="formGroup.get('state')">
       <input type="text" id="address-form--state" formControlName="state" />
       <label for="address-form--state" slot="label">State</label>
-      <span slot="helper-text" *ngIf="[formGroup.get('state').invalid, formGroup.get('state').touched] | appFormControlInvalid">State is required</span>
+      <span slot="helper-text" class="app-form-control-invalid">State is required</span>
     </forge-text-field>
 
-    <forge-text-field required [invalid]="[formGroup.get('zip').invalid, formGroup.get('zip').touched] | appFormControlInvalid">
+    <forge-text-field required [appFormControlInvalid]="formGroup.get('zip')">
       <input type="text" id="address-form--zip" formControlName="zip" />
       <label for="address-form--zip" slot="label">Zip code</label>
-      <span slot="helper-text" *ngIf="[formGroup.get('zip').invalid, formGroup.get('zip').touched] | appFormControlInvalid">Zip code is required</span>
+      <span slot="helper-text" class="app-form-control-invalid">Zip code is required</span>
     </forge-text-field>
   </div>
 </div>

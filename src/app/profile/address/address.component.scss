@@ -18,3 +18,5 @@
     column-gap: 16px;
   }
 }
+
+@include app-form-control-invalid();

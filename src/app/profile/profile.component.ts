@@ -3,7 +3,6 @@ import { FormArray, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { DialogService } from '@tylertech/forge-angular';
-import { ITylDeactivateGuardArg, TylCanDeactivate } from '@tylertech/angular-core';
 
 import { Utils } from 'src/utils';
 import { IProfile } from 'src/app/shared/interfaces/person.interface';
@@ -17,7 +16,7 @@ import { ConfirmDialogComponent } from '../shared/components/confirm-dialog/conf
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements TylCanDeactivate {
+export class ProfileComponent {
   private noImageUrl = 'mock-data/no-image.png';
 
   public get personalFormGroup() {
@@ -41,7 +40,7 @@ export class ProfileComponent implements TylCanDeactivate {
     }
   }
 
-  public canDeactivate(arg: ITylDeactivateGuardArg): boolean | Observable<boolean> {
+  public canDeactivate(): boolean | Observable<boolean> {
     if (!this.cache.formGroup.dirty) {
       return true;
     }
@@ -103,6 +102,7 @@ export class ProfileComponent implements TylCanDeactivate {
 
   public onCancel() {
     this.cache.formGroup.reset();
+    this.cache.formGroup.markAsPristine();
     this.imageUrl = undefined;
     this.cache.profile = undefined;
   }
@@ -115,6 +115,10 @@ export class ProfileComponent implements TylCanDeactivate {
     }
   }
 
+  public isInvalid(values: boolean[]) {
+    return values.every(v => v === true);
+  }
+
   private loadForm(profile: IProfile) {
     this.imageUrl = `mock-data/${Utils.formatNumber(this.cache.profile?.id as number, '2.0-0')}-small.png`;
 
@@ -122,17 +126,6 @@ export class ProfileComponent implements TylCanDeactivate {
 
     this.personalFormGroup.patchValue(profile);
     this.addressFormGroup.patchValue(profile.address as any);
-
-    // this.personalFormGroup.patchValue({
-    //   firstName: profile.firstName,
-    //   lastName: profile.lastName,
-    //   gender: profile.gender,
-    //   email: profile.email,
-    //   phone: profile.phone,
-    //   dateOfBirth: Utils.formatDate(profile.dateOfBirth as Date)
-    // });
-
-    // this.addressFormGroup.patchValue(profile.address as any);
   }
 
   private parseForm(id?: number): IProfile {

@@ -1,9 +1,8 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AbstractControl, Form, FormControl, FormGroup } from '@angular/forms';
-import { isDefined } from '@tylertech/forge-core';
 import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
 import { FormlyDemoService } from './formly-demo.service';
-import { Subject, Subscription, takeUntil } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { formlyDemoConstants } from './formly-demo.constants';
 
 @Component({
@@ -11,8 +10,7 @@ import { formlyDemoConstants } from './formly-demo.constants';
   templateUrl: './formly-demo.component.html',
   styleUrls: ['./formly-demo.component.scss']
 })
-export class FormlyDemoComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+export class FormlyDemoComponent implements OnInit {
   private form: Form;
 
   public formGroup = new FormGroup({});
@@ -39,7 +37,7 @@ export class FormlyDemoComponent implements OnInit, OnDestroy {
     private moduleService: FormlyDemoService
   ) {
     this.moduleService.formMessage.pipe(
-      takeUntil(this.unsubscribe)
+      takeUntilDestroyed()
     ).subscribe(result => {
       this.formMessage = result;
     });
@@ -49,11 +47,6 @@ export class FormlyDemoComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.formDefinition = formlyDemoConstants.formDefinitionBasic;
     this.changeDetectorRef.detectChanges();
-  }
-
-  public ngOnDestroy() {
-    this.unsubscribe.next();
-    this.unsubscribe.complete();
   }
 
   private getFormErrors(control: AbstractControl) {

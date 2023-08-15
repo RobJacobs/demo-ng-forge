@@ -18,11 +18,13 @@ $form-column-gap: 16;
       width: #{calc($form-cell-width / 2)}px;
       background-color: $mat-color-grey-200;
       border-radius: 4px;
+
       &::part(container) {
         &::before {
           border: none;
         }
       }
+
       &::part(text) {
         padding: 0 16px;
       }
@@ -34,12 +36,14 @@ $form-column-gap: 16;
     grid-gap: 0 #{$form-column-gap}px;
     grid-template-columns: #{$form-cell-width + 24}px #{$form-cell-width - 24}px minmax(#{$form-cell-width * 2 + $form-column-gap}px, 1fr) 96px;
     align-items: start;
+
     &__range {
       display: grid;
       grid-gap: 0 #{$form-column-gap}px;
       grid-template-columns: minmax(#{$form-cell-width}px, 1fr) minmax(#{$form-cell-width}px, 1fr);
       align-items: start;
     }
+
     &__action {
       @include forge-flex-container(flex, row, nowrap, center);
     }
@@ -48,13 +52,16 @@ $form-column-gap: 16;
   &__group {
     @include app-container-outlined();
     padding: 16px;
+
     & .filter__group {
       border: 1px dashed $mat-color-grey-500;
       margin: 8px 0;
       padding: 8px 16px;
     }
+
     border-left: 4px solid $forge-theme-primary;
     margin: 16px 0;
+
     &:first-of-type {
       margin-top: 0;
     }
@@ -64,6 +71,7 @@ $form-column-gap: 16;
       @include mat-card.shape-radius(medium);
       background-color: $mat-color-grey-100;
       width: 100%;
+
       button {
         width: 100%;
         justify-content: flex-start;
@@ -73,3 +81,5 @@ $form-column-gap: 16;
     }
   }
 }
+
+@include app-form-control-invalid();

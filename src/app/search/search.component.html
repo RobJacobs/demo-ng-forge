@@ -103,7 +103,7 @@
     <app-autocomplete-range [optionFilter]="facetFilter" formControlName="facet" label="Facet"></app-autocomplete-range>
   </form>
 
-  <p>{{formGroup.value | json}}</p>
+  <p>{{formGroup.getRawValue() | json}}</p>
 </div>
 
 <ng-template #opertatorAddonTemplate let-name="name">

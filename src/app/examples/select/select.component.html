@@ -11,7 +11,7 @@
 
   <forge-select label="Select05 - selected text builder" [options]="options" formControlName="select05" [selectedTextBuilder]="selectedTextBuilder"></forge-select>
 
-  <p class="form-grid--col-span">{{formGroup.value | json}}</p>
+  <p class="form-grid--col-span">{{formGroup.getRawValue() | json}}</p>
 </form>
 
 <forge-divider></forge-divider>

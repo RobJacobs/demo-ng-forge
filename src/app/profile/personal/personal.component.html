@@ -1,29 +1,30 @@
 <ng-container [formGroup]="formGroup">
   <div class="form-grid">
-    <forge-text-field required [invalid]="[formGroup.get('firstName').invalid, formGroup.get('firstName').touched] | appFormControlInvalid">
-      <input type="text" id="personal-form--first-name" formControlName="firstName" />
+    <!-- <forge-text-field required [appFormControlInvalid]="formGroup.get('firstName')"> -->
+    <forge-text-field required [appFormControlInvalid]="formGroup.get('firstName')">
+      <input type="text" id="personal-form--first-name" formControlName="firstName" [appInputCasing]="'upper'" />
       <label for="personal-form--first-name" slot="label">First Name</label>
-      <span slot="helper-text" *ngIf="[formGroup.get('firstName').invalid, formGroup.get('firstName').touched] | appFormControlInvalid">First name is required</span>
+      <span slot="helper-text" class="app-form-control-invalid">First name is required {{formGroup.get('firstName').invalid}} {{formGroup.get('firstName').touched}}</span>
     </forge-text-field>
 
-    <forge-text-field required [invalid]="[formGroup.get('lastName').invalid, formGroup.get('lastName').touched] | appFormControlInvalid">
+    <forge-text-field required [appFormControlInvalid]="formGroup.get('lastName')">
       <input type="text" id="personal-form--first-name" formControlName="lastName" />
       <label for="personal-form--last-name" slot="label">Last Name</label>
-      <span slot="helper-text" *ngIf="[formGroup.get('lastName').invalid, formGroup.get('lastName').touched] | appFormControlInvalid">Last name is required</span>
+      <span slot="helper-text" class="app-form-control-invalid">Last name is required</span>
     </forge-text-field>
 
     <forge-select label="Gender" formControlName="gender" [options]="genderOptions"></forge-select>
 
-    <forge-text-field required [invalid]="[formGroup.get('email').invalid, formGroup.get('email').touched] | appFormControlInvalid">
+    <forge-text-field required [appFormControlInvalid]="formGroup.get('email')">
       <input type="text" id="personal-form--email" formControlName="email" />
       <label for="personal-form--email" slot="label">Email</label>
-      <span slot="helper-text" *ngIf="[formGroup.get('email').invalid, formGroup.get('email').touched] | appFormControlInvalid">Email is required</span>
+      <span slot="helper-text" class="app-form-control-invalid">Email is required</span>
     </forge-text-field>
 
-    <forge-text-field required [invalid]="[formGroup.get('phone').invalid, formGroup.get('phone').touched] | appFormControlInvalid">
+    <forge-text-field required [appFormControlInvalid]="formGroup.get('phone')">
       <input type="text" id="personal-form--phone" formControlName="phone" />
       <label for="personal-form--phone" slot="label">Phone</label>
-      <span slot="helper-text" *ngIf="[formGroup.get('phone').invalid, formGroup.get('phone').touched] | appFormControlInvalid">Phone number is required</span>
+      <span slot="helper-text" class="app-form-control-invalid">Phone number is required</span>
     </forge-text-field>
 
     <forge-date-picker>
@@ -61,8 +62,8 @@
   <div class="friends">
     <ng-container formArrayName="friends">
       <div class="friend" *ngFor="let friend of formGroup.get('friends')?.controls; index as i">
-        <forge-select [options]="friendOptions" [formControlName]="i" label="Friend" [invalid]="[friend.invalid, friend.touched] | appFormControlInvalid">
-          <span slot="helper-text" *ngIf="[friend.invalid, friend.touched] | appFormControlInvalid">A friend is required</span>
+        <forge-select [options]="friendOptions" [formControlName]="i" label="Friend" [appFormControlInvalid]="formGroup.get('friends')?.controls[i]">
+          <span slot="helper-text" class="app-form-control-invalid">A friend is required</span>
         </forge-select>
         <forge-icon-button>
           <button type="button" aria-label="delete" (click)="onDeleteFriend(i)">

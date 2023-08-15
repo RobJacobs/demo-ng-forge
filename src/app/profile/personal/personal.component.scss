@@ -6,6 +6,7 @@
 
 .form-grid {
   @include app-form-grid();
+
   &__comment {
     textarea {
       resize: none;
@@ -21,11 +22,15 @@ forge-divider {
   .friend {
     @include forge-flex-container(flex, row, nowrap, flex-start);
     padding-bottom: 16px;
+
     forge-select {
       min-width: 320px;
     }
+
     forge-icon-button {
       margin-top: 4px;
     }
   }
 }
+
+@include app-form-control-invalid();

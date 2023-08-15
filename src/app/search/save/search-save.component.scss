@@ -5,3 +5,5 @@
 .form-grid {
   @include app-form-grid();
 }
+
+@include app-form-control-invalid();

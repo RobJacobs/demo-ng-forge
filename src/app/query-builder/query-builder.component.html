@@ -13,7 +13,7 @@
     </button>
   </forge-button>
 
-  <p>{{formGroup.value | json}}</p>
+  <p>{{formGroup.getRawValue() | json}}</p>
 </form>
 
 <ng-template #filterFormTemplate let-formGroup="formGroup" let-index="index">
@@ -23,36 +23,36 @@
 
   <ng-container [formGroup]="formGroup">
     <div class="filter__form">
-      <forge-autocomplete formControlName="property" [options]="propertyOptions" [filter]="propertyFilter" (blur)="formGroup.get('property').updateValueAndValidity()">
-        <forge-text-field required [invalid]="[formGroup.get('property').invalid, formGroup.get('property').touched] | appFormControlInvalid">
+      <forge-autocomplete formControlName="property" [options]="propertyOptions" [filter]="propertyFilter">
+        <forge-text-field required [appFormControlInvalid]="formGroup.get('property')">
           <input type="text" id="{{'app--query-builder--filter-property' + index}}" />
           <label for="{{'app--query-builder--filter-property' + index}}">Property</label>
           <forge-icon slot="trailing" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
-          <span *ngIf="[formGroup.get('property').invalid, formGroup.get('property').touched] | appFormControlInvalid" slot="helper-text">A property is required</span>
+          <span slot="helper-text" class="app-form-control-invalid">A property is required</span>
         </forge-text-field>
       </forge-autocomplete>
 
-      <forge-select formControlName="operator" label="Operator" required [invalid]="[formGroup.get('operator').invalid, formGroup.get('operator').touched] | appFormControlInvalid" (blur)="formGroup.get('operator').updateValueAndValidity()">
+      <forge-select formControlName="operator" label="Operator" required [appFormControlInvalid]="formGroup.get('operator')">
         <forge-option [value]="operator.value" *ngFor="let operator of operatorOptions">{{operator.label}}</forge-option>
-        <span *ngIf="[formGroup.get('operator').invalid, formGroup.get('operator').touched] | appFormControlInvalid" slot="helper-text">An operator is required</span>
+        <span slot="helper-text" class="app-form-control-invalid">An operator is required</span>
       </forge-select>
 
-      <forge-text-field *ngIf="formGroup.get('operator').value !== 6" required [invalid]="[formGroup.get('value').invalid, formGroup.get('value').touched] | appFormControlInvalid">
-        <input type="text" id="{{'app--query-builder--filter-value-' + index}}" formControlName="value" (blur)="formGroup.get('value').updateValueAndValidity()">
+      <forge-text-field *ngIf="formGroup.get('operator').value !== 6" required [appFormControlInvalid]="formGroup.get('value')">
+        <input type="text" id="{{'app--query-builder--filter-value-' + index}}" formControlName="value">
         <label for="{{'app--query-builder--filter-value-' + index}}" slot="label">Value</label>
-        <span *ngIf="[formGroup.get('value').invalid, formGroup.get('value').touched] | appFormControlInvalid" slot="helper-text">A value is required</span>
+        <span slot="helper-text" class="app-form-control-invalid">A value is required</span>
       </forge-text-field>
 
       <div *ngIf="formGroup.get('operator').value === 6" class="filter__form__range">
-        <forge-text-field required [invalid]="[formGroup.get('minValue').invalid, formGroup.get('minValue').touched] | appFormControlInvalid">
-          <input type="text" id="{{'app--query-builder--filter-min-' + index}}" formControlName="minValue" (blur)="formGroup.get('minValue').updateValueAndValidity()">
+        <forge-text-field required [appFormControlInvalid]="formGroup.get('minValue')">
+          <input type="text" id="{{'app--query-builder--filter-min-' + index}}" formControlName="minValue">
           <label for="{{'app--query-builder--filter-min-' + index}}" slot="label">Minimum</label>
-          <span *ngIf="[formGroup.get('minValue').invalid, formGroup.get('minValue').touched] | appFormControlInvalid" slot="helper-text">A minimum value is required</span>
+          <span slot="helper-text" class="app-form-control-invalid">A minimum value is required</span>
         </forge-text-field>
-        <forge-text-field required [invalid]="[formGroup.get('maxValue').invalid, formGroup.get('maxValue').touched] | appFormControlInvalid">
-          <input type="text" id="{{'app--query-builder--filter-max-' + index}}" formControlName="maxValue" (blur)="formGroup.get('maxValue').updateValueAndValidity()">
+        <forge-text-field required [appFormControlInvalid]="formGroup.get('maxValue')">
+          <input type="text" id="{{'app--query-builder--filter-max-' + index}}" formControlName="maxValue">
           <label for="{{'app--query-builder--filter-max-' + index}}" slot="label">Maximum</label>
-          <span *ngIf="[formGroup.get('maxValue').invalid, formGroup.get('maxValue').touched] | appFormControlInvalid" slot="helper-text">
+          <span slot="helper-text" class="app-form-control-invalid">
             {{formGroup.get('maxValue').errors.required ? 'A maximum value is required' : formGroup.get('maxValue').errors.range ? 'Max value must be greater or equal to min value' : ''}}
           </span>
         </forge-text-field>

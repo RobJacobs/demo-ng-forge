@@ -15,7 +15,7 @@
 @mixin container-outlined {
   @include mat-card.fill-color(surface);
   @include mat-card.shape-radius(medium);
-  @include forge-theme.property(border, forge-theme.$border);
+  @include border();
 }
 
 @mixin table-header-footer {
@@ -185,6 +185,20 @@
         forge-open-icon::part(icon) {
           color: var(--mdc-theme-text-primary-on-background);
         }
+      }
+    }
+  }
+}
+
+@mixin form-control-invalid() {
+  .app-form-control-invalid {
+    display: none;
+
+    &[invalid] {
+      display: block;
+
+      .app-form-control-invalid {
+        display: block;
       }
     }
   }

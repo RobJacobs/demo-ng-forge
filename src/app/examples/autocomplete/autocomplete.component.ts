@@ -72,4 +72,13 @@ export class AutocompleteComponent {
     this.autocomplete07 = event.detail;
   }
 
+  public onDisable() {
+    const control = this.formGroup.get('autocomplete01');
+    if (control.disabled) {
+      control.enable();
+    } else {
+      control.disable();
+    }
+  }
+
 }

@@ -1,10 +1,11 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { DeactivateGuard } from '@tylertech/angular-core';
 
 import { AppFormsModule } from 'src/app/shared/app-forms.module';
-import { FormControlInvalidPipe } from 'src/app/shared/pipes/form-control-invalid.pipe';
+import { FormControlInvalidDirective } from 'src/app/shared/directives/form-control-invalid/form-control-invalid.directive';
+import { InputCasingDirective } from 'src/app/shared/directives/input-casing/input-casing.directive';
+import { CallbackPipe } from 'src/app/shared/pipes/callback.pipe';
 import { ProfileComponent } from './profile.component';
 import { ProfileCacheService } from './profile-cache.service';
 import { AddressComponent } from './address/address.component';
@@ -14,7 +15,7 @@ const routes: Routes = [
   {
     path: '',
     component: ProfileComponent,
-    canDeactivate: [DeactivateGuard],
+    canDeactivate: [(component: ProfileComponent) => component.canDeactivate()],
     children: [
       { path: 'address', component: AddressComponent },
       { path: 'personal', component: PersonalComponent },
@@ -33,14 +34,15 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     AppFormsModule,
-    FormControlInvalidPipe
+    FormControlInvalidDirective,
+    CallbackPipe,
+    InputCasingDirective
   ],
   exports: [
     RouterModule
   ],
   providers: [
-    ProfileCacheService,
-    DeactivateGuard
+    ProfileCacheService
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

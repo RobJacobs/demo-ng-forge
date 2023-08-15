@@ -9,10 +9,10 @@
 
 <div class="dialog__body">
   <form class="form-grid" novalidate autocomplete="off" [formGroup]="formGroup">
-    <forge-text-field required [invalid]="[formGroup.get('name').invalid, formGroup.get('name').touched] | appFormControlInvalid">
-      <input type="text" appAutoFocus id="search-save-name" formControlName="name" (blur)="formGroup.get('name')?.updateValueAndValidity()">
+    <forge-text-field required [appFormControlInvalid]="formGroup.get('name')">
+      <input type="text" appAutoFocus id="search-save-name" formControlName="name">
       <label for="search-save-name" slot="label">Name</label>
-      <span *ngIf="[formGroup.get('name').invalid, formGroup.get('name').touched] | appFormControlInvalid" slot="helper-text">A name is required</span>
+      <span slot="helper-text" class="app-form-control-invalid">A name is required</span>
     </forge-text-field>
     <forge-text-field>
       <input type="text" id="search-save-description" formControlName="description">
