@@ -1,0 +1,52 @@
+@use '@material/theme/color-palette' as mat-color;
+
+@mixin chart-styles() {
+  .app-chart__donut-meter {
+    >.app-chart__text {
+      text-anchor: middle;
+
+      .app-chart__text-value {
+        font-size: 2em;
+      }
+
+      .app-chart__text-label {
+        fill: mat-color.$grey-500;
+      }
+    }
+  }
+
+  .app-chart__legend-text-label {
+    font-size: 10px;
+    fill: mat-color.$grey-500;
+  }
+
+  .app-chart__xaxis,
+  .app-chart__yaxis {
+    font-family: Roboto, sans-serif;
+    font-size: 10px;
+
+    .domain {
+      stroke: mat-color.$grey-300;
+    }
+
+    .tick {
+      line {
+        stroke: mat-color.$grey-300;
+      }
+    }
+  }
+
+  .app-chart__xaxis--align-boundry-ticks {
+    .tick:first-of-type {
+      &>text {
+        text-anchor: start;
+      }
+    }
+
+    .tick:last-of-type {
+      &>text {
+        text-anchor: end;
+      }
+    }
+  }
+}

@@ -1,0 +1,34 @@
+<forge-toolbar class="header">
+  <div slot="start">
+    <h2 class="forge-typography--title">Charts</h2>
+    <forge-select label="Chart type" [(ngModel)]="chartType">
+      <forge-option value="bar">bar</forge-option>
+      <forge-option value="bubble">bubble</forge-option>
+      <forge-option value="donut">donut</forge-option>
+      <forge-option value="donut-meter">donut meter</forge-option>
+      <forge-option value="line">line</forge-option>
+      <forge-option value="pie">pie</forge-option>
+      <forge-option value="treemap">treemap</forge-option>
+      <forge-option value="tree">tree</forge-option>
+    </forge-select>
+    <forge-button type="outlined">
+      <button type="button" (click)="onAction('update')" [disabled]="chartType === 'tree'">Update</button>
+    </forge-button>
+    <forge-button type="outlined">
+      <button type="button" (click)="onAction('add')" [disabled]="chartType === 'tree'">Add</button>
+    </forge-button>
+    <forge-button type="outlined">
+      <button type="button" (click)="onAction('delete')" [disabled]="chartType === 'tree'">Delete</button>
+    </forge-button>
+  </div>
+</forge-toolbar>
+
+<forge-tab-bar [activeTab]="activeTab">
+  <forge-tab (forge-tab-interacted)="onTabSelected(0)">D3</forge-tab>
+  <forge-tab (forge-tab-interacted)="onTabSelected(1)">Google</forge-tab>
+</forge-tab-bar>
+
+<div class="body">
+  <app-charts-d3-chart *ngIf="activeTab === 0" [chartType]="chartType"></app-charts-d3-chart>
+  <app-charts-google-chart *ngIf="activeTab === 1"></app-charts-google-chart>
+</div>

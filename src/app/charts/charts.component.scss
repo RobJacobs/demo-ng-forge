@@ -1,0 +1,36 @@
+@use 'src/global' as *;
+
+:host {
+  overflow: hidden;
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  @include forge-theme-property(background-color, surface);
+}
+
+.header {
+  [slot='start'] {
+    display: flex;
+    align-items: center;
+    column-gap: 16px;
+
+    forge-select {
+      width: 320px;
+    }
+  }
+}
+
+forge-tab-bar {
+  display: inline-flex;
+  width: 100%;
+  @include app-border(border-bottom);
+
+  forge-tab {
+    min-width: 240px;
+  }
+}
+
+.body {
+  overflow: hidden;
+  height: 100%;
+}

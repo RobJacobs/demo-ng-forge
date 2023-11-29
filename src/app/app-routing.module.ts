@@ -15,6 +15,7 @@ const routes: Routes = [
   { path: 'table-demo', loadChildren: () => import('./table-demo/table-demo.module').then((m) => m.TableDemoModule) },
   { path: 'storage', loadChildren: () => import('./storage/storage.module').then((m) => m.StorageModule) },
   { path: 'imask', loadChildren: () => import('./imask/imask.module').then((m) => m.ImaskModule) },
+  { path: 'charts', loadChildren: () => import('./charts/charts.module').then((m) => m.ChartsModule) },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
 ];
 

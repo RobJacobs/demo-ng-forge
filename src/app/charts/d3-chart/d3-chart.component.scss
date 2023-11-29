@@ -1,0 +1,43 @@
+@use 'src/global' as *;
+
+@use './lib/styles.scss' as charting;
+
+:host {
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: 16px;
+  @include forge-theme-property(background-color, surface);
+
+  ::ng-deep {
+    @include charting.chart-styles();
+  }
+}
+
+.chart-container {
+  padding: 16px;
+  position: relative;
+  max-height: 100%;
+  min-height: 0;
+  max-width: 100%;
+}
+
+.legend-container {
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-width: 280px;
+  max-height: 100%;
+}
+
+::ng-deep {
+  .chart-legend {
+    [slot='leading'] {
+      width: 16px;
+      height: 16px;
+      background-color: var(--item-color);
+    }
+  }
+}
