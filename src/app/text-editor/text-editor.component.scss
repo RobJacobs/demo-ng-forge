@@ -1,0 +1,63 @@
+@use 'src/global' as *;
+@use '@material/card' as mat-card;
+
+::ng-deep {
+  @import 'quill/dist/quill.snow';
+
+  quill-editor {
+    width: 100%;
+    @include app-border();
+    @include mat-card.shape-radius(medium);
+
+    &[disabled] {
+      .ql-toolbar {
+        display: none;
+      }
+    }
+
+    .ql-toolbar {
+      border-left: none !important;
+      border-top: none !important;
+      border-right: none !important;
+      border-bottom: 1px solid var(--forge-theme-border-color) !important;
+
+      .ql-formats {
+
+        .ql-picker-label {
+          color: var(--mdc-theme-text-primary-on-background);
+        }
+
+        .ql-stroke {
+          stroke: var(--mdc-theme-text-primary-on-background);
+        }
+      }
+    }
+
+    .ql-container {
+      border: none !important;
+      font-size: 14px;
+
+      &.ql-disabled {
+        .ql-editor {
+          background-color: var(--forge-theme-form-field-disabled-on-background);
+        }
+      }
+    }
+
+    .ql-editor {
+      max-height: 5em;
+    }
+  }
+}
+
+:host {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+  height: 100%;
+}
+
+.body {
+  overflow: auto;
+  padding: 24px;
+}

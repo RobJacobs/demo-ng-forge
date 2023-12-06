@@ -42,7 +42,8 @@ import {
   tylIconStorage,
   tylIconMasks,
   tylIconInsertInvitation,
-  tylIconBarChart
+  tylIconBarChart,
+  tylIconAutoStories
 } from '@tylertech/tyler-icons/standard';
 
 import {
@@ -92,7 +93,8 @@ const standardIcons = [
   tylIconStorage,
   tylIconMasks,
   tylIconInsertInvitation,
-  tylIconBarChart
+  tylIconBarChart,
+  tylIconAutoStories
 ];
 
 const customIcons = [

@@ -16,6 +16,7 @@ const routes: Routes = [
   { path: 'storage', loadChildren: () => import('./storage/storage.module').then((m) => m.StorageModule) },
   { path: 'imask', loadChildren: () => import('./imask/imask.module').then((m) => m.ImaskModule) },
   { path: 'charts', loadChildren: () => import('./charts/charts.module').then((m) => m.ChartsModule) },
+  { path: 'text-edit', loadChildren: () => import('./text-editor/text-editor.module').then((m) => m.TextEditorModule) },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
 ];
 

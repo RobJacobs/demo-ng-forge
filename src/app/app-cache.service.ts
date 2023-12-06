@@ -53,7 +53,8 @@ export class AppCacheService implements IAppCacheService {
       { label: 'Table', value: 'table-demo', icon: 'table_rows' },
       { label: 'Storage', value: 'storage', icon: 'storage' },
       { label: 'IMask', value: 'imask', icon: 'masks' },
-      { label: 'Charts', value: 'charts', icon: 'bar_chart' }
+      { label: 'Charts', value: 'charts', icon: 'bar_chart' },
+      { label: 'Text Edit', value: 'text-edit', icon: 'auto_stories' }
     ]
   };
   public activeRoute: string[] = [];
