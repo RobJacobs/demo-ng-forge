@@ -14,7 +14,7 @@
       </button>
     </forge-button>
     <forge-button type="outlined">
-      <button type="button" #searchesPopup="forgePopup" [forgePopup]="searchesPopupTemplate" placement="bottom-start" (click)="searchesPopup.open()">
+      <button type="button" #searchesPopup="forgePopup" [forgePopup]="searchesPopupTemplate" [forgePopupPlacement]="'bottom-start'" (click)="searchesPopup.open()">
         <span>Saved searches</span>
         <forge-icon name="arrow_drop_down"></forge-icon>
       </button>
