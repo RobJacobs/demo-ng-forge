@@ -1,25 +1,27 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
+import { PdfViewerModule as NgPdfViewerModule } from 'ng2-pdf-viewer';
 
 import { AppFormsModule } from 'src/app/shared/app-forms.module';
-import { TextEditorComponent } from './text-editor.component';
-import { QuillModule } from 'ngx-quill';
+import { CallbackPipe } from 'src/app/shared/pipes/callback.pipe';
+import { PdfViewerDemoComponent } from './pdf-viewer-demo.component';
 
 const routes: Routes = [
-  { path: '**', component: TextEditorComponent }
+  { path: '**', component: PdfViewerDemoComponent }
 ];
 
 @NgModule({
   declarations: [
-    TextEditorComponent
+    PdfViewerDemoComponent
   ],
   imports: [
     CommonModule,
+    NgPdfViewerModule,
     RouterModule.forChild(routes),
     AppFormsModule,
-    QuillModule.forRoot()
+    CallbackPipe
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class TextEditorModule { }
+export class PdfViewerDemoModule { }

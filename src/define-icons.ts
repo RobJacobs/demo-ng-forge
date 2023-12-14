@@ -43,7 +43,12 @@ import {
   tylIconMasks,
   tylIconInsertInvitation,
   tylIconBarChart,
-  tylIconAutoStories
+  tylIconAutoStories,
+  tylIconPictureAsPdf,
+  tylIconApps,
+  tylIconZoomIn,
+  tylIconZoomOut,
+  tylIconFitScreen
 } from '@tylertech/tyler-icons/standard';
 
 import {
@@ -94,7 +99,12 @@ const standardIcons = [
   tylIconMasks,
   tylIconInsertInvitation,
   tylIconBarChart,
-  tylIconAutoStories
+  tylIconAutoStories,
+  tylIconPictureAsPdf,
+  tylIconApps,
+  tylIconZoomIn,
+  tylIconZoomOut,
+  tylIconFitScreen
 ];
 
 const customIcons = [

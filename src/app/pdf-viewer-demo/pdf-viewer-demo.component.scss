@@ -1,0 +1,136 @@
+@use 'src/global' as *;
+
+:host {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+  height: 100%;
+}
+
+::ng-deep {
+  .pdf-viewer {
+    &__thumbnail {
+      outline: none;
+      padding: 0;
+      border: none;
+      width: fit-content;
+      background-color: transparent;
+
+      canvas {
+        @include app-border();
+        cursor: pointer;
+      }
+    }
+
+    &__search-popup {
+      width: 320px;
+      padding: 16px;
+
+      &__features {
+        display: flex;
+        align-items: center;
+        column-gap: 16px;
+      }
+    }
+  }
+}
+
+.header {
+  [slot='end'] {
+    display: flex;
+    column-gap: 16px;
+  }
+}
+
+.pdf-viewer {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+  height: 100%;
+
+  &__header {
+    grid-row: 1;
+    font-size: .85em;
+
+    &::part(root) {
+      padding: 4px 8px;
+      height: 40px;
+      min-height: 40px;
+    }
+
+    [slot='center'],
+    [slot='end'] {
+      display: flex;
+      align-items: center;
+
+      forge-divider {
+        margin: 0 8px;
+        height: 24px;
+      }
+    }
+  }
+
+  &__paginator {
+    display: flex;
+    align-items: center;
+
+    input {
+      border: none;
+      @include app-border(border-bottom);
+      color: var(--mdc-theme-text-primary-on-background);
+      background-color: transparent;
+      outline: none;
+      width: 3em;
+      margin: 2px 8px 0 8px;
+      text-align: right;
+      font-size: inherit;
+      font-family: inherit;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type=number] {
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+  }
+
+  &__body {
+    grid-row: 2;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    overflow: hidden;
+    height: 100%;
+  }
+
+  &__left-toolbar {
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+    padding: 16px;
+    overflow: auto;
+    width: fit-content;
+    grid-column: 1;
+  }
+
+  &__viewer {
+    height: 100%;
+    grid-column: 2;
+  }
+
+  &__loading-indicator {
+    grid-column: 2;
+    align-self: flex-start;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 16px;
+    padding: 24px;
+
+    --forge-circular-progress-size: 48px;
+  }
+}

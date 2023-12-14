@@ -17,6 +17,7 @@ const routes: Routes = [
   { path: 'imask', loadChildren: () => import('./imask/imask.module').then((m) => m.ImaskModule) },
   { path: 'charts', loadChildren: () => import('./charts/charts.module').then((m) => m.ChartsModule) },
   { path: 'text-edit', loadChildren: () => import('./text-editor/text-editor.module').then((m) => m.TextEditorModule) },
+  { path: 'pdf-viewer', loadChildren: () => import('./pdf-viewer-demo/pdf-viewer-demo.module').then((m) => m.PdfViewerDemoModule) },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
 ];
 
