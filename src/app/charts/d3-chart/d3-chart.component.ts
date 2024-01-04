@@ -68,6 +68,7 @@ export class D3ChartComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy() {
     this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 
   public onAction(action: 'add' | 'update' | 'delete') {
@@ -158,7 +159,7 @@ export class D3ChartComponent implements OnInit, OnDestroy {
     const date = Date.now();
     for (let i = 0; i < length; i++) {
       // data.push({id: i + startId, value: randomNumber(1, 100), label: 'Item ' + (i + startId), category: randomDate()});
-      data.push({ id: i + startId, value: this.randomNumber(0, 1000), label: 'Item ' + (i + startId), category: this.randomNumber(0, 100) });
+      data.push({ id: i + startId, value: this.randomNumber(0, 1000), label: `Item ${i + startId}`, category: this.randomNumber(0, 100) });
       // const category = date - this.randomNumber(1, 1000000000000);
       // data.push({ id: i + startId, value: this.randomNumber(0, 10000), label: 'Item ' + (i + startId), category: category });
       // data.push({id: i + startId, value: randomNumber(1, 2000), label: 'Item ' + (i + startId), category: categories[randomNumber(0, 9)]});
@@ -169,11 +170,11 @@ export class D3ChartComponent implements OnInit, OnDestroy {
   }
 
   private drawChart() {
-    this.legendData = this.chartData.map((d, i) => ({ id: d.id, label: d.label, value: d.value, color: this.chartPalette[i % this.chartPalette.length] }));
+    this.legendData = this.chartData?.map((d, i) => ({ id: d.id, label: d.label, value: d.value, color: this.chartPalette[i % this.chartPalette.length] }));
 
     const chartConfig = {
       container: this.chartContainer.nativeElement.querySelector('svg'),
-      data: this.chartData.map((d, i) => ({ ...d, color: this.chartPalette[i % this.chartPalette.length] })),
+      data: this.chartData?.map((d, i) => ({ ...d, color: this.chartPalette[i % this.chartPalette.length] })),
       palette: this.chartPalette,
       // selectedCallback: this.selectedCallback,
       // hoverCallback: this.hoverCallback

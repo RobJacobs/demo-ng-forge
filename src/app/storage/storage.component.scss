@@ -7,6 +7,8 @@
 }
 
 .header {
+  overflow: hidden;
+
   [slot='end'] {
     display: flex;
     column-gap: 16px;

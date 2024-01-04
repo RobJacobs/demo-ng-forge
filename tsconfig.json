@@ -27,7 +27,8 @@
       "dom"
     ],
     "types": [
-      "node"
+      "node",
+      "google.visualization"
     ],
     "useDefineForClassFields": false
   },

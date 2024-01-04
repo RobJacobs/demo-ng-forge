@@ -12,7 +12,7 @@
       <forge-option value="tree">tree</forge-option>
     </forge-select>
     <forge-button type="outlined">
-      <button type="button" (click)="onAction('update')" [disabled]="chartType === 'tree'">Update</button>
+      <button type="button" (click)="onAction('update')" [disabled]="activeTab === 0 && chartType === 'tree'">Update</button>
     </forge-button>
     <forge-button type="outlined">
       <button type="button" (click)="onAction('add')" [disabled]="chartType === 'tree'">Add</button>
@@ -30,5 +30,5 @@
 
 <div class="body">
   <app-charts-d3-chart *ngIf="activeTab === 0" [chartType]="chartType"></app-charts-d3-chart>
-  <app-charts-google-chart *ngIf="activeTab === 1"></app-charts-google-chart>
+  <app-charts-google-chart *ngIf="activeTab === 1" [chartType]="chartType"></app-charts-google-chart>
 </div>

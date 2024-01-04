@@ -14,11 +14,13 @@ export class ChartsComponent {
   private googleChart: GoogleChartComponent;
 
   public chartType: 'bar' | 'bubble' | 'donut' | 'donut-meter' | 'line' | 'pie' | 'treempa' | 'tree' = 'bar';
-  public activeTab = 0;
+  public activeTab = 1;
 
   public onAction(action: 'add' | 'update' | 'delete') {
     if (this.activeTab === 0) {
       this.d3Chart.onAction(action);
+    } else if (this.activeTab === 1) {
+      this.googleChart.onAction(action);
     }
   }
 

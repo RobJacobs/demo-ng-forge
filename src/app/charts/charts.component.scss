@@ -9,6 +9,8 @@
 }
 
 .header {
+  overflow: hidden;
+
   [slot='start'] {
     display: flex;
     align-items: center;

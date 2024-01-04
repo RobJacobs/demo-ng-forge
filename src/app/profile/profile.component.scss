@@ -8,6 +8,7 @@
 }
 
 .header {
+  overflow: hidden;
   --forge-toolbar-border-bottom: none;
 
   [slot='end'],

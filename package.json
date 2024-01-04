@@ -51,6 +51,7 @@
     "@angular/cli": "^16.0.2",
     "@angular/compiler-cli": "^16.0.2",
     "@types/d3": "^7.4.2",
+    "@types/google.visualization": "0.0.73",
     "@types/node": "^16.0.0",
     "@types/jasmine": "~4.0.0",
     "@types/quill": "^1.0.0",

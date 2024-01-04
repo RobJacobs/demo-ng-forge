@@ -11,6 +11,7 @@ forge-drawer {
 }
 
 .header {
+  overflow: hidden;
   @include forge-flex-container(flex, row, nowrap, center);
   @include app-border(border-bottom);
 
