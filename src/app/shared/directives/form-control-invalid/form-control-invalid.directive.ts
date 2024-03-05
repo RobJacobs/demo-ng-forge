@@ -2,7 +2,7 @@
 import { DestroyRef, Directive, ElementRef, Input, OnInit, Renderer2, inject } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { combineLatest, delay, distinctUntilChanged, fromEvent, map, startWith, takeUntil } from 'rxjs';
+import { combineLatest, delay, distinctUntilChanged, fromEvent, map, startWith } from 'rxjs';
 
 @Directive({
   selector: '[appFormControlInvalid]',

@@ -8,6 +8,7 @@
     width: 100%;
     @include app-border();
     @include mat-card.shape-radius(medium);
+    @include forge-theme-property(background-color, background);
 
     &[disabled] {
       .ql-toolbar {

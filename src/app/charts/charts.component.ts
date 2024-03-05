@@ -14,7 +14,7 @@ export class ChartsComponent {
   private googleChart: GoogleChartComponent;
 
   public chartType: 'bar' | 'bubble' | 'donut' | 'donut-meter' | 'line' | 'pie' | 'treempa' | 'tree' = 'bar';
-  public activeTab = 1;
+  public activeTab = 0;
 
   public onAction(action: 'add' | 'update' | 'delete') {
     if (this.activeTab === 0) {
