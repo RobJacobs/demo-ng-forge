@@ -3,7 +3,7 @@ import Dexie, { Table } from 'dexie';
 import { IPerson } from 'src/app/shared/interfaces/person.interface';
 
 export class IndexedDBStorage extends Dexie {
-  public people: Table<IPerson>;
+  public people?: Table<IPerson>;
 
   constructor() {
     super('demo-ng-forge');

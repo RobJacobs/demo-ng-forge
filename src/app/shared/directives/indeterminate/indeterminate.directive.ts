@@ -1,4 +1,4 @@
-import { Directive, ElementRef, forwardRef, HostListener, Input } from '@angular/core';
+import { Directive, ElementRef, forwardRef, HostListener, inject, Input } from '@angular/core';
 import { StaticProvider } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { isDefined } from '@tylertech/forge-core';
@@ -15,7 +15,9 @@ export const INDETERMINATE_VALUE_ACCESSOR: StaticProvider = {
   providers: [INDETERMINATE_VALUE_ACCESSOR]
 })
 export class IndeterminateDirective implements ControlValueAccessor {
-  #value: boolean | null;
+  private elementRef = inject(ElementRef);
+
+  #value?: boolean | null;
   #indeterminateEnabled = true;
 
   @HostListener('change')
@@ -55,8 +57,6 @@ export class IndeterminateDirective implements ControlValueAccessor {
 
   public onChange = (_: any) => { };
   public onTouched = () => { };
-
-  constructor(private elementRef: ElementRef) { }
 
   public writeValue(value: any): void {
     if (this.#value !== value) {

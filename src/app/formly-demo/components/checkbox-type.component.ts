@@ -1,24 +1,29 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
-import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
-import { ForgeModule } from '@tylertech/forge-angular';
 import { map, of, Subject, takeUntil } from 'rxjs';
+import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
+import { ForgeCheckboxModule } from '@tylertech/forge-angular';
+
 import { FormlyDemoService } from '../formly-demo.service';
 
 @Component({
   selector: 'app-formly-checkbox',
   template: `
-  <forge-checkbox>
-    <input
-      [id]="id"
-      type="checkbox"
-      [readonly]="props.readonly"
-      [formControl]="formControl"
-      [formlyAttributes]="field" />
-    <label [attr.for]="id" *ngIf="props.label" slot="label">{{props.label}}</label>
-    <span slot="helper-text" *ngIf="props.description">{{props.description}}</span>
-  </forge-checkbox>
+    <forge-checkbox>
+      <input
+        [id]="id"
+        type="checkbox"
+        [readonly]="props.readonly"
+        [formControl]="formControl"
+        [formlyAttributes]="field" />
+      @if (props.label) {
+        <label [attr.for]="id" slot="label">{{props.label}}</label>
+      }
+      @if (props.description) {
+        <span slot="helper-text">{{props.description}}</span>
+      }
+    </forge-checkbox>
   `,
   styles: [`
     :host {
@@ -29,21 +34,15 @@ import { FormlyDemoService } from '../formly-demo.service';
     CommonModule,
     ReactiveFormsModule,
     FormlyModule,
-    ForgeModule
+    ForgeCheckboxModule
   ],
-  standalone: true,
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  standalone: true
 })
 export class CheckboxTypeComponent extends FieldType<FieldTypeConfig> implements OnInit, OnDestroy {
+  private moduleService = inject(FormlyDemoService);
+
   private unsubscribe = new Subject<void>();
 
-  constructor(
-    private moduleService: FormlyDemoService
-  ) {
-    super();
-  }
-
-  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   public ngOnInit() {
     this.formControl.addAsyncValidators((control: AbstractControl) => {
       this.unsubscribe.next();

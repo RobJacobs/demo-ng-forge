@@ -1,17 +1,10 @@
-import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
 
-import { AppModule } from './app/app.module';
-import { defineComponents } from './define-components';
+import { appConfig } from './app/app.config';
+import { AppComponent } from './app/app.component';
 import { defineIcons } from './define-icons';
-import { environment } from './environments/environment';
 
-defineComponents();
 defineIcons();
 
-if (environment.production) {
-  enableProdMode();
-}
-
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.error(err));
+bootstrapApplication(AppComponent, appConfig)
+  .catch((err) => console.error(err));

@@ -1,27 +1,35 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, HostBinding } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
-import { ForgeModule } from '@tylertech/forge-angular';
+import { ForgeRadioModule } from '@tylertech/forge-angular';
 
 @Component({
   selector: 'app-formly-radio',
   template: `
-  <label *ngIf="props.label">{{props.label}}</label>
-  <div role="radiogroup">
-    <forge-radio *ngFor="let option of props.options; let i = index">
-      <input
-        type="radio"
-        [id]="id + '-' + i"
-        [value]="option.value"
-        [formControl]="formControl"
-        [formlyAttributes]="field" />
-      <label [for]="id + '-' + i" *ngIf="option.label">{{option.label}}</label>
-    </forge-radio>
-  </div>
-  <div class="forge-typography--caption" *ngIf="showError">
-    <formly-validation-message [field]="field"></formly-validation-message>
-  </div>
+    @if (props.label) {
+      <label [attr.for]="id" slot="label">{{props.label}}</label>
+    }
+    <div role="radiogroup">
+      @for (option of $any(props.options); track i; let i = $index) {
+        <forge-radio>
+          <input
+            type="radio"
+            [id]="id + '-' + i"
+            [value]="option.value"
+            [formControl]="formControl"
+            [formlyAttributes]="field" />
+          @if (option.label) {
+            <label [for]="id + '-' + i">{{option.label}}</label>
+          }
+        </forge-radio>
+      }
+    </div>
+    @if (showError) {
+      <div class="forge-typography--caption">
+        <formly-validation-message [field]="field"></formly-validation-message>
+      </div>
+    }
   `,
   styles: [`
     :host {
@@ -49,7 +57,7 @@ import { ForgeModule } from '@tylertech/forge-angular';
     CommonModule,
     ReactiveFormsModule,
     FormlyModule,
-    ForgeModule
+    ForgeRadioModule
   ],
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

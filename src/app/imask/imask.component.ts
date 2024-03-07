@@ -1,22 +1,34 @@
 // https://github.com/uNmAnNeR/imaskjs/issues/876
 
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { IMaskDirective } from 'angular-imask';
 import * as IMask from 'imask';
 import { IOption } from '@tylertech/forge';
+import { ForgeButtonModule, ForgeOptionModule, ForgeSelectModule, ForgeTextFieldModule, ForgeToolbarModule } from '@tylertech/forge-angular';
 import { parse as dateParse, format as dateFormat, isValid as dateIsValid } from 'date-fns';
 
 import { NullableNumberMask } from './nullable-number-mask';
-import { FormControl, FormGroup } from '@angular/forms';
-
 @Component({
   selector: 'app-imask',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    IMaskDirective,
+    ForgeButtonModule,
+    ForgeOptionModule,
+    ForgeSelectModule,
+    ForgeTextFieldModule,
+    ForgeToolbarModule
+  ],
   templateUrl: './imask.component.html',
   styleUrls: ['./imask.component.scss']
 })
 export class ImaskComponent implements AfterViewInit {
   @ViewChild('imaskRef')
-  public imaskRef: IMaskDirective<any>;
+  public imaskRef?: IMaskDirective<any>;
 
   public formGroup = new FormGroup({
     format: new FormControl<string | null>('000-aa-****'),
@@ -36,16 +48,16 @@ export class ImaskComponent implements AfterViewInit {
   public helpText = '';
 
   constructor() {
-    this.mask = this.buildStringMask(this.formGroup.value.format);
+    this.mask = this.buildStringMask(this.formGroup.value.format as string);
   }
 
   public ngAfterViewInit() {
-    console.log(this.imaskRef); this.helpText = '';
+    console.log(this.imaskRef);
   }
 
   public onApply() {
-    this.imaskRef.destroyMask();
-    this.formGroup.get('input').setValue(null);
+    this.imaskRef?.destroyMask();
+    this.formGroup.controls.input.setValue(null);
 
     requestAnimationFrame(() => {
       this.helpText = '';
@@ -53,10 +65,10 @@ export class ImaskComponent implements AfterViewInit {
 
       switch (this.formGroup.value.maskType) {
         case 'string':
-          this.mask = this.buildStringMask(this.formGroup.value.format);
+          this.mask = this.buildStringMask(this.formGroup.value.format as string);
           break;
         case 'number':
-          this.mask = this.buildNumberMask(this.formGroup.value.format);
+          this.mask = this.buildNumberMask(this.formGroup.value.format as string);
           break;
         case 'number-search':
           this.mask = this.buildNumberSearchMask();
@@ -101,7 +113,7 @@ export class ImaskComponent implements AfterViewInit {
         mask: Number,
         scale: 0,
         signed: true
-      })
+      }) as IMask.MaskedNumber
     }
 
     const max = parseFloat(format.replace(/[#&-]/g, '9').replace(/,/g, ''));
@@ -115,7 +127,7 @@ export class ImaskComponent implements AfterViewInit {
       signed: format!.includes('-') ? true : false,
       max: isFinite(max) ? max : undefined,
       min: isFinite(min) ? min : undefined
-    });
+    }) as IMask.MaskedNumber;
   }
 
   private buildNumberSearchMask(): IMask.MaskedRegExp {
@@ -155,17 +167,11 @@ export class ImaskComponent implements AfterViewInit {
       autofix: false,
       lazy: false,
       overwrite: false,
-      format: (value: Date): string => {
+      format: (value: any): string => {
         return dateIsValid(value) ? dateFormat(value, 'MM/dd/yyyy') : '';
       },
       parse: (value: string): Date => {
         return dateParse(value, 'MM/dd/yyyy', new Date());
-        // const dateParts = value.split(' ')[0].split('/').map(v => parseInt(v, 10));
-        // return new Date(
-        //   dateParts[2],
-        //   dateParts[0] - 1,
-        //   dateParts[1]
-        // );
       }
     });
   }
@@ -223,21 +229,11 @@ export class ImaskComponent implements AfterViewInit {
       autofix: false,
       lazy: false,
       overwrite: false,
-      format: (value: Date): string => {
+      format: (value: any): string => {
         return dateIsValid(value) ? dateFormat(value, 'MM/dd/yyyy hh:mm:ss aaa') : '';
       },
       parse: (value: string): Date => {
         return dateParse(value, 'MM/dd/yyyy hh:mm:ss aaa', new Date());
-        // const dateParts = value.split(' ')[0].split('/').map(v => parseInt(v, 10));
-        // const timeParts = value.split(' ')[1].split(':').map(v => parseInt(v, 10));
-        // return new Date(
-        //   dateParts[2],
-        //   dateParts[0] - 1,
-        //   dateParts[1],
-        //   timeParts[0],
-        //   timeParts[1],
-        //   timeParts[2]
-        // );
       }
     })
   }

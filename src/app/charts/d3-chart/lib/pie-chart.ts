@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { select, format, timeFormat, arc, pie } from 'd3';
 import { isDefined } from '@tylertech/forge-core';
 import { ChartUtils, IChartConfig } from './chart-utils';
@@ -37,7 +38,7 @@ export class PieChartService {
 
       let rootNode = container.select(`g.${constants.classes.CHART_ROOT}`);
       if (!rootNode.node()) {
-        rootNode = container.append('g').classed(constants.classes.CHART_ROOT, true);
+        rootNode = container.append('g').classed(constants.classes.CHART_ROOT, true) as any;
         rootNode.append('g').classed(`${constants.classes.CHART_PREFIX}__${config.type}`, true);
       }
 
@@ -87,14 +88,14 @@ export class PieChartService {
         })
         .attr('id', (d: any) => `${CHART_CONSTANTS.classes.CHART_PREFIX}__node-${d.data.id}`)
         .transition()
-        .call(ChartUtils.transitionsComplete, () => {
+        .call(ChartUtils.transitionsComplete as any, () => {
           switch (config.type) {
             case 'donut-meter':
               if (!config.hideLabel) {
                 let meterTextNode = chartNode.select('.' + constants.classes.CHART_TEXT);
                 if (!meterTextNode.node()) {
                   meterTextNode = chartNode.append('text')
-                    .classed(constants.classes.CHART_TEXT, true);
+                    .classed(constants.classes.CHART_TEXT, true) as any;
                   meterTextNode.append('tspan')
                     .classed(constants.classes.CHART_TEXT_VALUE, true);
                   meterTextNode.append('tspan')
@@ -109,7 +110,7 @@ export class PieChartService {
                   centerValue = config.centerValue;
                 } else {
                   if (valueFormat) {
-                    centerValue = valueFormat(config.data[0].value as number);
+                    centerValue = valueFormat(config.data[0].value as any);
                   } else {
                     centerValue = config.data[0].value.toString();
                   }

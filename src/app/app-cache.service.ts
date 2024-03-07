@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { IMenuOption, IOption } from '@tylertech/forge';
-import { IBaseListDropdownOption, IListDropdownOption } from '@tylertech/forge/esm/list-dropdown';
 import { Subject } from 'rxjs';
 
 export interface IAppCacheService {
@@ -22,7 +20,6 @@ export class AppCacheService implements IAppCacheService {
   public theme: 'dark' | 'light' = 'light';
   public layoutMode: 'sm' | 'md' | 'lg' = 'lg';
   public menu = {
-    // 'permanent' | 'dismissible' | 'modal' | 'mini' | 'min-hover' = 'dismissible'
     type: 'dismissible' as 'dismissible' | 'mini',
     options: [
       { label: 'Dashboard', value: 'dashboard', icon: 'home' },
@@ -51,6 +48,7 @@ export class AppCacheService implements IAppCacheService {
       },
       { label: 'Formly', value: 'formly-demo', icon: 'article' },
       { label: 'Table', value: 'table-demo', icon: 'table_rows' },
+      // { label: 'AG Grid', value: 'ag-grid-demo', icon: 'table_rows' },
       { label: 'Storage', value: 'storage', icon: 'storage' },
       { label: 'IMask', value: 'imask', icon: 'masks' },
       { label: 'Charts', value: 'charts', icon: 'bar_chart' },
@@ -60,6 +58,4 @@ export class AppCacheService implements IAppCacheService {
   };
   public activeRoute: string[] = [];
   public cancelHttpRequests = new Subject<void>();
-
-  constructor() { }
 }

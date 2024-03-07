@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, inject } from '@angular/core';
 import { FieldWrapper } from '@ngx-formly/core';
 
 @Component({
   selector: 'app-formly-wrapper-container',
   template: `
-    <div class="label" *ngIf="props.label">{{props.label}}</div>
-
+    @if (props.label) {
+      <div class="label">{{props.label}}</div>
+    }
     <ng-container #fieldComponent></ng-container>
   `,
   styles: [`
@@ -53,15 +54,10 @@ import { FieldWrapper } from '@ngx-formly/core';
   imports: [
     CommonModule
   ],
-  standalone: true,
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  standalone: true
 })
 export class ContainerWrapperComponent extends FieldWrapper implements OnInit {
-  constructor(
-    private elementRef: ElementRef
-  ) {
-    super();
-  }
+  private elementRef = inject(ElementRef);
 
   public ngOnInit() {
     const formlyGroup = this.elementRef.nativeElement.querySelector('formly-group') as HTMLElement;

@@ -1,10 +1,15 @@
-import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { Subject, debounceTime, takeUntil } from 'rxjs';
+import { Component, DestroyRef, ElementRef, ViewChild, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { debounceTime } from 'rxjs';
+import { PdfViewerModule as NgPdfViewerModule } from 'ng2-pdf-viewer';
 import { PDFDocumentProxy, PDFProgressData, PDFSource, ZoomScale, PdfViewerComponent } from 'ng2-pdf-viewer';
 import { removeAllChildren, debounce } from '@tylertech/forge-core';
-import { PopupDirective } from '@tylertech/forge-angular';
+import { ForgeBannerModule, ForgeButtonModule, ForgeCheckboxModule, ForgeCircularProgressModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIconModule, ForgePopupModule, ForgeTextFieldModule, ForgeToolbarModule, ForgeTooltipModule, PopupDirective } from '@tylertech/forge-angular';
+
+import { CallbackPipe } from 'src/app/shared/pipes/callback.pipe';
 import { pdfString } from './pdf-string';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 // https://github.com/VadimDez/ng2-pdf-viewer
 // https://github.com/mozilla/pdf.js/tree/master/web
@@ -13,19 +18,39 @@ import { pdfString } from './pdf-string';
 
 @Component({
   selector: 'app-pdf-viewer',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgPdfViewerModule,
+    ForgeBannerModule,
+    ForgeButtonModule,
+    ForgeCheckboxModule,
+    ForgeCircularProgressModule,
+    ForgeDividerModule,
+    ForgeIconButtonModule,
+    ForgeIconModule,
+    ForgePopupModule,
+    ForgeTextFieldModule,
+    ForgeToolbarModule,
+    ForgeTooltipModule,
+    CallbackPipe
+  ],
   templateUrl: './pdf-viewer-demo.component.html',
   styleUrls: ['./pdf-viewer-demo.component.scss']
 })
-export class PdfViewerDemoComponent implements OnDestroy {
-  private unsubscribe$ = new Subject<void>();
+export class PdfViewerDemoComponent {
+  private destroyRef = inject(DestroyRef);
+
   @ViewChild('pdfViewer')
-  private pdfViewerComponent: PdfViewerComponent;
+  private pdfViewerComponent?: PdfViewerComponent;
   @ViewChild('pdfViewerLeftToolbar')
-  private pdfViewerLeftToolbarRef: ElementRef<HTMLElement>;
+  private pdfViewerLeftToolbarRef?: ElementRef<HTMLElement>;
   @ViewChild('searchPopup')
-  private searchPopupDirective: PopupDirective;
+  private searchPopupDirective?: PopupDirective;
   @ViewChild('searchInput')
-  private searchInputElementRef: ElementRef<HTMLInputElement>;
+  private searchInputElementRef?: ElementRef<HTMLInputElement>;
 
   public pdfSrc: string | Uint8Array | PDFSource = './assets/pdf-test.pdf';
   public error?: { message: string; name?: string; };
@@ -40,9 +65,9 @@ export class PdfViewerDemoComponent implements OnDestroy {
   public navButtonDisabled = (page: number, navButton: 'prev' | 'next') => {
     switch (navButton) {
       case 'prev':
-        return this.pdf?.numPages > 1 && page > 1 ? false : true;
+        return this.pdf?.numPages || 0 > 1 && page > 1 ? false : true;
       case 'next':
-        return this.pdf?.numPages > 1 && page < this.pdf?.numPages ? false : true;
+        return this.pdf?.numPages || 0 > 1 && page < (this.pdf?.numPages || 0) ? false : true;
     }
   }
   public searchFormGroup = new FormGroup({
@@ -52,29 +77,24 @@ export class PdfViewerDemoComponent implements OnDestroy {
   });
 
   public constructor() {
-    this.searchFormGroup.get('query').valueChanges.pipe(
+    this.searchFormGroup.controls.query.valueChanges.pipe(
       debounceTime(300),
-      takeUntil(this.unsubscribe$)
+      takeUntilDestroyed(this.destroyRef)
     ).subscribe(o => {
       this.searchDocument('');
     });
 
-    this.searchFormGroup.get('hightlightAll').valueChanges.pipe(
-      takeUntil(this.unsubscribe$)
+    this.searchFormGroup.controls.hightlightAll.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef)
     ).subscribe(() => {
       this.searchDocument('highlightallchange');
     });
 
-    this.searchFormGroup.get('caseSensitive').valueChanges.pipe(
-      takeUntil(this.unsubscribe$)
+    this.searchFormGroup.controls.caseSensitive.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef)
     ).subscribe(() => {
       this.searchDocument('casesensitivitychange');
     });
-  }
-
-  public ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
   }
 
   public onLoadData() {
@@ -85,7 +105,7 @@ export class PdfViewerDemoComponent implements OnDestroy {
 
   public afterLoadComplete(pdf: PDFDocumentProxy) {
     this.pdf = pdf;
-    this.pdfViewerComponent.eventBus.on('updatefindmatchescount', debounce((event: { matchesCount: { current: number, total: number }, source: any }) => {
+    this.pdfViewerComponent?.eventBus.on('updatefindmatchescount', debounce((event: { matchesCount: { current: number, total: number }, source: any }) => {
       this.searchMatches = event.matchesCount.total;
     }, 100));
     requestAnimationFrame(() => {
@@ -99,7 +119,7 @@ export class PdfViewerDemoComponent implements OnDestroy {
 
   public onProgress(progressData: PDFProgressData) {
     this.isLoaded = progressData.loaded >= progressData.total;
-    this.error = null;
+    this.error = undefined;
   }
 
   public onPageChange(value: number | 'prev' | 'next') {
@@ -110,7 +130,7 @@ export class PdfViewerDemoComponent implements OnDestroy {
         }
         break;
       case 'next':
-        if (this.page < this.pdf?.numPages) {
+        if (this.page < (this.pdf?.numPages || 0)) {
           this.page++;
         }
         break;
@@ -133,19 +153,19 @@ export class PdfViewerDemoComponent implements OnDestroy {
       case 'fit':
         this.zoomScale = this.zoomScale === 'page-fit' ? 'page-width' : 'page-fit';
         if (this.zoomScale === 'page-fit') {
-          this.pdfViewerComponent.pdfViewer.currentScaleValue = 'page-fit';
+          this.pdfViewerComponent!.pdfViewer.currentScaleValue = 'page-fit';
         } else {
-          this.pdfViewerComponent.pdfViewer.currentScaleValue = this.zoom.toString();
+          this.pdfViewerComponent!.pdfViewer.currentScaleValue = this.zoom.toString();
         }
         break;
     }
   }
 
   public onShowSearchPopup() {
-    this.searchPopupDirective.open();
+    this.searchPopupDirective?.open();
     requestAnimationFrame(() => {
-      this.searchInputElementRef.nativeElement.focus();
-      this.searchInputElementRef.nativeElement.select();
+      this.searchInputElementRef?.nativeElement.focus();
+      this.searchInputElementRef?.nativeElement.select();
     });
   }
 
@@ -166,7 +186,7 @@ export class PdfViewerDemoComponent implements OnDestroy {
           canvasElement.width = pageViewport.width;
           canvasElement.height = pageViewport.height;
           page.render({
-            canvasContext: canvasElement.getContext('2d'),
+            canvasContext: canvasElement.getContext('2d') as any,
             viewport: pageViewport
           });
 
@@ -175,20 +195,20 @@ export class PdfViewerDemoComponent implements OnDestroy {
           buttonElement.addEventListener('click', () => this.onPageChange(index));
           buttonElement.appendChild(canvasElement);
 
-          this.pdfViewerLeftToolbarRef.nativeElement.appendChild(buttonElement);
+          this.pdfViewerLeftToolbarRef?.nativeElement.appendChild(buttonElement);
         });
       }
     }
   }
 
   private searchDocument(type: string, findPrevious = false) {
-    const query = this.searchFormGroup.get('query').value || '';
-    this.pdfViewerComponent.eventBus.dispatch('find', {
-      source: this.pdfViewerComponent.pdfViewer,
+    const query = this.searchFormGroup.controls.query.value || '';
+    this.pdfViewerComponent!.eventBus.dispatch('find', {
+      source: this.pdfViewerComponent?.pdfViewer,
       type,
       query,
-      highlightAll: this.searchFormGroup.get('hightlightAll').value ? true : false,
-      caseSensitive: this.searchFormGroup.get('caseSensitive').value ? true : false,
+      highlightAll: this.searchFormGroup.controls.hightlightAll.value ? true : false,
+      caseSensitive: this.searchFormGroup.controls.caseSensitive.value ? true : false,
       findPrevious
     });
 

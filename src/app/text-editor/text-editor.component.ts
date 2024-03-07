@@ -1,17 +1,29 @@
-import { Component, ElementRef } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { QuillModules } from 'ngx-quill';
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, inject } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ForgeButtonModule, ForgeToolbarModule } from '@tylertech/forge-angular';
 import { Quill } from 'quill';
+import { QuillModule, QuillModules } from 'ngx-quill';
 
 // https://quilljs.com/docs/
 // https://github.com/KillerCodeMonkey/ngx-quill
 
 @Component({
   selector: 'app-text-editor',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    QuillModule,
+    ForgeButtonModule,
+    ForgeToolbarModule
+  ],
   templateUrl: './text-editor.component.html',
   styleUrls: ['./text-editor.component.scss']
 })
 export class TextEditorComponent {
+  public elementRef = inject(ElementRef);
+
   public textEditorFormControl = new FormControl();
   public quillModules: QuillModules = {
     toolbar: {
@@ -33,12 +45,6 @@ export class TextEditorComponent {
       // }
     }
   };
-
-  constructor(
-    public elementRef: ElementRef
-  ) {
-
-  }
 
   public onEditorCreated(quill: Quill) {
     console.log(quill);

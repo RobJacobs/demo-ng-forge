@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { select, format, timeFormat, axisBottom, scaleLinear, axisLeft, line } from 'd3';
 import { interpolatePath } from 'd3-interpolate-path';
 import { isArray } from '@tylertech/forge-core';
@@ -73,7 +74,7 @@ export class LineChartService {
       }
 
       if (config.categoryDateFormat) {
-        xAxis.tickFormat(timeFormat(config.categoryDateFormat));
+        xAxis.tickFormat(timeFormat(config.categoryDateFormat) as any);
       }
 
       const yScale = ChartUtils.yScale([minValue, maxValue], size.height - chartMargin.top - chartMargin.bottom);
@@ -102,7 +103,7 @@ export class LineChartService {
       }
 
       if (config.valueDateFormat) {
-        yAxis.tickFormat(timeFormat(config.valueDateFormat));
+        yAxis.tickFormat(timeFormat(config.valueDateFormat) as any);
       }
 
       const chart = line()
@@ -114,7 +115,7 @@ export class LineChartService {
 
       let rootNode = container.select(`g.${constants.classes.CHART_ROOT}`);
       if (!rootNode.node()) {
-        rootNode = container.append('g').classed(constants.classes.CHART_ROOT, true);
+        rootNode = container.append('g').classed(constants.classes.CHART_ROOT, true) as any;
         rootNode.append('g').classed(constants.classes.CHART_XAXIS, true);
         if (isArray(config.categoryTickValues)) {
           rootNode.select(`g.${constants.classes.CHART_XAXIS}`).classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__xaxis--align-boundry-ticks`, true);
@@ -132,7 +133,7 @@ export class LineChartService {
       chartNode.attr('transform', `translate(${chartMargin.left + linePadding}, ${chartMargin.top})`);
 
       config.data.forEach((l, index) => {
-        const nodes = chartNode.selectAll(`path.path-${l.id}`).data([l] as any, (d: ILineChartData) => d.id as any);
+        const nodes = chartNode.selectAll(`path.path-${l.id}`).data([l] as any, (d: any) => d.id as any);
 
         nodes.exit().remove();
 
@@ -155,8 +156,8 @@ export class LineChartService {
             }
           })
           .attrTween('d', (d, i, element) => {
-            const current = (element[0] as SVGPathElement).getAttribute('d');
-            const next = chart((d as any).data);
+            const current = (element[0] as SVGPathElement).getAttribute('d') as string;
+            const next = chart((d as any).data) as string;
             return interpolatePath(current, next);
           });
       });

@@ -2,7 +2,7 @@
   <div>
     <forge-autocomplete [filter]="singleSelectPrimitiveFilter" formControlName="autocomplete01">
       <forge-text-field>
-        <input id="autocomplete01" type="text" [disabled]="formGroup.get('autocomplete01').disabled" />
+        <input id="autocomplete01" type="text" [disabled]="formGroup.controls.autocomplete01.disabled" />
         <label for="autocomplete01">Autocomplete01 - single primitive</label>
         <forge-icon slot="trailing" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
       </forge-text-field>
@@ -11,7 +11,6 @@
       <button type="button" (click)="onDisable()">Disable</button>
     </forge-button>
   </div>
-
 
   <forge-autocomplete [filter]="singleSelectObjectFilter" formControlName="autocomplete02">
     <forge-text-field>

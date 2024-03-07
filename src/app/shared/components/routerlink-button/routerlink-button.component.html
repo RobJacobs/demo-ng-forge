@@ -1,6 +1,8 @@
 <forge-icon-button>
-  <a [routerLink]="route" [queryParams]="queryParams" class="forge-icon-button">
+  <a [routerLink]="route" [queryParams]="queryParams" class="forge-icon-button" [ngClass]="{'routerlink--disabled': disabled}">
     <forge-icon [name]="icon"></forge-icon>
   </a>
-  <forge-tooltip *ngIf="tooltip?.length">{{tooltip}}</forge-tooltip>
+  @if (tooltip?.length) {
+  <forge-tooltip>{{tooltip}}</forge-tooltip>
+  }
 </forge-icon-button>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { select, format, timeFormat, axisBottom, scaleLinear, axisLeft, scaleBand } from 'd3';
 import { isArray, isDefined } from '@tylertech/forge-core';
 import { ChartUtils, IChartData, IChartConfig } from './chart-utils';
@@ -65,12 +66,12 @@ export class BarChartService {
       }
 
       if (config.valueDateFormat) {
-        yAxis.tickFormat(timeFormat(config.valueDateFormat));
+        yAxis.tickFormat(timeFormat(config.valueDateFormat) as any);
       }
 
       let rootNode = container.select(`g.${constants.classes.CHART_ROOT}`);
       if (!rootNode.node()) {
-        rootNode = container.append('g').classed(constants.classes.CHART_ROOT, true);
+        rootNode = container.append('g').classed(constants.classes.CHART_ROOT, true) as any;
         rootNode.append('g').classed(constants.classes.CHART_YAXIS, true);
         rootNode.append('g').classed(constants.classes.CHART_XAXIS, true);
         rootNode.append('g').classed(`${constants.classes.CHART_PREFIX}__chart`, true).classed(`${constants.classes.CHART_PREFIX}__bar`, true);
@@ -90,12 +91,12 @@ export class BarChartService {
       const chartNode = rootNode.select(`g.${constants.classes.CHART_PREFIX}__bar`);
       chartNode.attr('transform', `translate(${chartMargin.left}, -${chartMargin.bottom - chartMargin.top})`);
 
-      const nodes = chartNode.selectAll('rect').data(config.data, (d: IChartData) => d.id);
+      const nodes = chartNode.selectAll('rect').data(config.data, (d: any) => d.id);
 
       nodes.exit()
         .transition()
         .duration(constants.numbers.TRANSITION_DURATION)
-        .attr('y', (d: IChartData) => size.height - chartMargin.top)
+        .attr('y', (d: any) => size.height - chartMargin.top)
         .attr('height', 0);
       nodes.exit().transition().delay(constants.numbers.TRANSITION_DURATION).remove();
 

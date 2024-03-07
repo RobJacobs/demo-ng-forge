@@ -7,16 +7,16 @@ export class NullableNumberMask extends IMask.MaskedNumber {
     super(options);
   }
 
-  public override append(str: string, flags?: IMask.AppendFlags, tail?: string | String | IMask.TailDetails): IMask.ChangeDetails {
+  public override append(str: string, flags?: IMask.AppendFlags, tail?: string | string | IMask.TailDetails): IMask.ChangeDetails {
     return super.append(isDefined(str) ? str.toString() : '', flags, tail);
   }
 
-  // @ts-ignore
+  // @ts-expect-error override
   public override get typedValue() {
     return this.unmaskedValue !== '' ? super.typedValue : null;
   }
 
-  // @ts-ignore
+  // @ts-expect-error override
   public override set typedValue(value) {
     super.typedValue = value ?? '' as any;
   }

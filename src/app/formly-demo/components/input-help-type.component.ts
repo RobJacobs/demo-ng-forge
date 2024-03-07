@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, OnDestroy, OnInit } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
 import { TextFieldComponentDelegate } from '@tylertech/forge';
-import { DialogService, ForgeModule } from '@tylertech/forge-angular';
+import { DialogService, ForgeIconButtonModule, ForgeIconModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
 import { finalize, map, of, Subject, takeUntil } from 'rxjs';
 import { IFilterParameter } from 'src/app/shared/interfaces/filter.interface';
 import { FormlyDemoService } from '../formly-demo.service';
@@ -11,26 +11,30 @@ import { FieldHelpDialogComponent } from './field-help-dialog/field-help-dialog.
 @Component({
   selector: 'app-formly-input-help',
   template: `
-  <forge-text-field [required]="props.required" [invalid]="showError">
-    <input
-      #input
-      [id]="id"
-      type="text"
-      [placeholder]="props.placeholder"
-      [readonly]="props.readonly"
-      [formControl]="formControl"
-      [formlyAttributes]="field" />
-    <label [attr.for]="id" *ngIf="props.label" slot="label">{{props.label}}</label>
-    <forge-icon-button slot="addon-end" dense>
-      <button type="button" aria-label="Browse options" [disabled]="formControl.disabled"
-        (click)="onShowDialog()">
-        <forge-icon name="more_horiz"></forge-icon>
-      </button>
-    </forge-icon-button>
-    <span slot="helper-text" *ngIf="showError">
-      <formly-validation-message [field]="field"></formly-validation-message>
-    </span>
-  </forge-text-field>
+    <forge-text-field [required]="props.required" [invalid]="showError">
+      <input
+        #input
+        [id]="id"
+        type="text"
+        [placeholder]="props.placeholder"
+        [readonly]="props.readonly"
+        [formControl]="formControl"
+        [formlyAttributes]="field" />
+      @if (props.label) {
+        <label [attr.for]="id" slot="label">{{props.label}}</label>
+      }
+      <forge-icon-button slot="addon-end" dense>
+        <button type="button" aria-label="Browse options" [disabled]="formControl.disabled"
+          (click)="onShowDialog()">
+          <forge-icon name="more_horiz"></forge-icon>
+        </button>
+      </forge-icon-button>
+      @if (showError) {
+        <span slot="helper-text">
+          <formly-validation-message [field]="field"></formly-validation-message>
+        </span>
+      }
+    </forge-text-field>
   `,
   styles: [`
     :host {
@@ -45,20 +49,18 @@ import { FieldHelpDialogComponent } from './field-help-dialog/field-help-dialog.
     CommonModule,
     ReactiveFormsModule,
     FormlyModule,
-    ForgeModule
+    ForgeIconButtonModule,
+    ForgeIconModule,
+    ForgeTextFieldModule
   ],
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class InputHelpTypeComponent extends FieldType<FieldTypeConfig> implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private dialogService = inject(DialogService);
+  private moduleService = inject(FormlyDemoService);
 
-  constructor(
-    private dialogService: DialogService,
-    private moduleService: FormlyDemoService
-  ) {
-    super();
-  }
+  private unsubscribe = new Subject<void>();
 
   public ngOnInit() {
     this.formControl.addAsyncValidators((control: AbstractControl) => {

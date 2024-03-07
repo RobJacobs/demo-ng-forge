@@ -1,11 +1,11 @@
 <forge-toolbar class="header">
   <div slot="start">
     <h2 class="forge-typography--title">Search</h2>
-    <ng-container *ngIf="searchCache.activeSearchId">
-      <forge-divider vertical></forge-divider>
-      <span class="forge-typography--subtitle1-secondary">{{searchName}}</span>
-      <span class="forge-typography--subtitle2-secondary">{{searchDescription}}</span>
-    </ng-container>
+    @if (searchCache.activeSearchId) {
+    <forge-divider vertical></forge-divider>
+    <span class="forge-typography--subtitle1-secondary">{{searchName}}</span>
+    <span class="forge-typography--subtitle2-secondary">{{searchDescription}}</span>
+    }
   </div>
   <div slot="end">
     <forge-button type="outlined">
@@ -38,21 +38,23 @@
       <span>Add new search</span>
     </forge-list-item>
     <forge-divider></forge-divider>
-    <forge-list-item *ngFor="let search of searchCache.searches" [value]="search.id">
+    @for (search of searchCache.searches; track search.id) {
+    <forge-list-item [value]="search.id">
       <span>{{search.name}}</span>
       <div slot="trailing">
         <forge-icon-button>
-          <button (click)="onSearchAction($event, 'edit', search.id)">
+          <button (click)="onSearchAction($any($event), 'edit', search.id)">
             <forge-icon name="edit"></forge-icon>
           </button>
         </forge-icon-button>
         <forge-icon-button>
-          <button (click)="onSearchAction($event, 'delete', search.id)">
+          <button (click)="onSearchAction($any($event), 'delete', search.id)">
             <forge-icon name="delete"></forge-icon>
           </button>
         </forge-icon-button>
       </div>
     </forge-list-item>
+    }
   </forge-list>
 </ng-template>
 
@@ -64,7 +66,7 @@
           <input type="text" id="app--search--name" />
           <label for="app--search--name">Name</label>
           <forge-icon slot="trailing" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
-          <forge-icon-button slot="addon-end" class="operator__addon" [ngClass]="{'operator__addon--selected': formGroup.get('name')?.value.operator}">
+          <forge-icon-button slot="addon-end" class="operator__addon" [ngClass]="{'operator__addon--selected': formGroup.controls.name.value.operator}">
             <button type="button" #nameOperatorPopup="forgePopup" [forgePopup]="operatorPopupTemplate" (click)="onOperatorPopupOpen($event, nameOperatorPopup, 'name')">
               <forge-icon name="bolt"></forge-icon>
             </button>
@@ -78,7 +80,7 @@
         <forge-text-field>
           <input type="text" id="app--search--date-of-birth" />
           <label for="app--search--date-of-birth">Date</label>
-          <forge-icon-button slot="addon-end" class="operator__addon" [ngClass]="{'operator__addon--selected': formGroup.get('dateOfBirth')?.value.operator}">
+          <forge-icon-button slot="addon-end" class="operator__addon" [ngClass]="{'operator__addon--selected': formGroup.controls.dateOfBirth.value.operator}">
             <button type="button" #dateOfBirthOperatorPopup="forgePopup" [forgePopup]="operatorPopupTemplate" (click)="onOperatorPopupOpen($event, dateOfBirthOperatorPopup, 'dateOfBirth')">
               <forge-icon name="bolt"></forge-icon>
             </button>
@@ -96,7 +98,7 @@
     </ng-container>
 
     <forge-checkbox>
-      <input type="checkbox" id="app--search--include" formControlName="include" appIndeterminate />
+      <input type="checkbox" id="app--search--include" formControlName="include" [appIndeterminate]="true" />
       <label for="app--search--include">Include</label>
     </forge-checkbox>
 
@@ -116,9 +118,13 @@
 
 <ng-template #operatorPopupTemplate>
   <forge-list class="operator-popup" (forge-list-item-select)="onOperatorSelected($event.detail.value)">
-    <forge-list-item *ngFor="let option of operatorOptions" [value]="option.value" [selected]="operatorPopupFormGroup.value.operator === option.value">
+    @for (option of operatorOptions; track i; let i = $index) {
+    <forge-list-item [value]="option.value" [selected]="operatorPopupFormGroup?.value.operator === option.value">
       <span>{{option.label}}</span>
-      <forge-icon name="check" slot="trailing" *ngIf="operatorPopupFormGroup.value.operator === option.value"></forge-icon>
+      @if (operatorPopupFormGroup?.value.operator === option.value) {
+      <forge-icon name="check" slot="trailing"></forge-icon>
+      }
     </forge-list-item>
+    }
   </forge-list>
 </ng-template>

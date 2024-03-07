@@ -1,26 +1,28 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, OnDestroy, OnInit } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
-import { ForgeModule } from '@tylertech/forge-angular';
+import { ForgeSelectModule } from '@tylertech/forge-angular';
 import { finalize, map, of, Subject, takeUntil } from 'rxjs';
 import { FormlyDemoService } from '../formly-demo.service';
 
 @Component({
   selector: 'app-formly-select',
   template: `
-  <forge-select
-    [id]="id"
-    [options]="props.options"
-    [label]="props.label"
-    [placeholder]="props.placeholder"
-    [invalid]="showError"
-    [formControl]="formControl"
-    [formlyAttributes]="field">
-    <span slot="helper-text" *ngIf="showError">
-      <formly-validation-message [field]="field"></formly-validation-message>
-    </span>
-  </forge-select>
+    <forge-select
+      [id]="id"
+      [options]="$any(props.options)"
+      [label]="$any(props.label)"
+      [placeholder]="$any(props.placeholder)"
+      [invalid]="showError"
+      [formControl]="formControl"
+      [formlyAttributes]="field">
+      @if (showError) {
+        <span slot="helper-text">
+          <formly-validation-message [field]="field"></formly-validation-message>
+        </span>
+      }
+    </forge-select>
   `,
   styles: [`
   :host {
@@ -35,19 +37,15 @@ import { FormlyDemoService } from '../formly-demo.service';
     CommonModule,
     ReactiveFormsModule,
     FormlyModule,
-    ForgeModule
+    ForgeSelectModule
   ],
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class SelectTypeComponent extends FieldType<FieldTypeConfig> implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private moduleService = inject(FormlyDemoService);
 
-  constructor(
-    private moduleService: FormlyDemoService
-  ) {
-    super();
-  }
+  private unsubscribe = new Subject<void>();
 
   public ngOnInit() {
     this.formControl.addAsyncValidators((control: AbstractControl) => {

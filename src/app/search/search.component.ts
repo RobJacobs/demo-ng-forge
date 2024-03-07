@@ -1,22 +1,47 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Component, ViewChild, OnInit, inject } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { isDefined } from '@tylertech/forge-core';
 import { AutocompleteFilterCallback, IOption } from '@tylertech/forge';
-import { PopupDirective, DialogService, ToastService } from '@tylertech/forge-angular';
+import { PopupDirective, DialogService, ToastService, ForgeToolbarModule, ForgeDividerModule, ForgeButtonModule, ForgeIconModule, ForgeListModule, ForgeListItemModule, ForgeIconButtonModule, ForgeAutocompleteModule, ForgeTextFieldModule, ForgeDatePickerModule, ForgeCheckboxModule, ForgePopupModule } from '@tylertech/forge-angular';
 import { Observable, lastValueFrom, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-// TODO import service
 import { AppDataService } from 'src/app/app-data.service';
 import { ISearch } from 'src/app/shared/interfaces/search.interface';
 import { SearchSaveComponent } from './save/search-save.component';
+import { CommonModule } from '@angular/common';
+import { AutocompleteRangeComponent } from 'src/app/shared/components/autocomplete-range/autocomplete-range.component';
+import { IndeterminateDirective } from 'src/app/shared/directives/indeterminate/indeterminate.directive';
 
 @Component({
   selector: 'app-search',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ForgeAutocompleteModule,
+    ForgeButtonModule,
+    ForgeCheckboxModule,
+    ForgeDatePickerModule,
+    ForgeDividerModule,
+    ForgeIconButtonModule,
+    ForgeIconModule,
+    ForgeListItemModule,
+    ForgeListModule,
+    ForgePopupModule,
+    ForgeTextFieldModule,
+    ForgeToolbarModule,
+    AutocompleteRangeComponent,
+    IndeterminateDirective
+  ],
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit {
+  private dialogService = inject(DialogService);
+  private toastService = inject(ToastService);
+  private dataService = inject(AppDataService);
+
   @ViewChild('searchesPopup', { static: false })
   private searchesPopup?: PopupDirective;
   private storageKey = 'search-searches';
@@ -49,16 +74,16 @@ export class SearchComponent implements OnInit {
   public facetOptions: { label: string; value: number }[] = [];
   public operatorOptions = [
     { value: null, label: 'None' },
-    // { value: 0, label: 'Equal' },
+    { value: 0, label: 'Equal' },
     { value: 1, label: 'Not equal' },
     { value: 2, label: 'Greater than' },
     { value: 3, label: 'Less than' },
-    // { value: 4, label: 'Greater than equal to' },
-    // { value: 5, label: 'Less than equal to' },
-    // { value: 6, label: 'Range' },
+    { value: 4, label: 'Greater than equal to' },
+    { value: 5, label: 'Less than equal to' },
+    { value: 6, label: 'Range' },
     { value: 7, label: 'Contains' },
     { value: 8, label: 'Not contains' },
-    // { value: 9, label: 'Empty' }
+    { value: 9, label: 'Empty' }
   ];
   public operatorPopupFormGroup?: FormGroup;
   public nameFilter: AutocompleteFilterCallback = (filter: string) => lastValueFrom(this.dataService.getPeople().pipe(
@@ -71,21 +96,19 @@ export class SearchComponent implements OnInit {
     return of(this.facetOptions);
   }
 
-  constructor(private dialogService: DialogService, private toastService: ToastService, private dataService: AppDataService) {
+  ngOnInit() {
     this.dataService.getSearches(this.storageKey).subscribe((result) => {
       this.searchCache.searches = result || [];
+
+      const activeSearch = this.searchCache.searches.find((s) => s.id === this.searchCache.activeSearchId);
+      if (isDefined(activeSearch)) {
+        this.searchName = activeSearch?.name;
+        this.searchDescription = activeSearch?.description;
+        this.formGroup.patchValue(activeSearch?.filters);
+      }
     });
     for (let index = 0; index < 20; index++) {
       this.facetOptions.push({ value: index, label: `Facet Option ${index}` });
-    }
-  }
-
-  ngOnInit() {
-    const activeSearch = this.searchCache.searches.find((s) => s.id === this.searchCache.activeSearchId);
-    if (isDefined(activeSearch)) {
-      this.searchName = activeSearch?.name;
-      this.searchDescription = activeSearch?.description;
-      this.formGroup.patchValue(activeSearch?.filters);
     }
   }
 
@@ -140,7 +163,7 @@ export class SearchComponent implements OnInit {
   }
 
   public onClearSearch() {
-    this.formGroup.get('include')?.setValue(null);
+    this.formGroup.controls.include.setValue(null);
     this.formGroup.reset();
   }
 

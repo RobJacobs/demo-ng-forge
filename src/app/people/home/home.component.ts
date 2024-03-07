@@ -1,24 +1,51 @@
-import { Component, ElementRef, EmbeddedViewRef, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { finalize } from 'rxjs';
 import { isArray } from '@tylertech/forge-core';
 import { CellAlign, TableComponent, TextFieldComponentDelegate } from '@tylertech/forge';
-import { TableUtils } from 'src/app/shared/table/utils';
+import { ForgeBadgeModule, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, ForgeOptionModule, ForgePaginatorModule, ForgeSelectDropdownModule, ForgeSkeletonModule, ForgeTableModule, ForgeToolbarModule } from '@tylertech/forge-angular';
+
 import { Utils } from 'src/utils';
+import { TableUtils } from 'src/app/shared/table/utils';
 import { AppDataService } from 'src/app/app-data.service';
 import { IPerson } from 'src/app/shared/interfaces/person.interface';
 import { BaseTableComponent } from 'src/app/shared/table/base-table.component';
+import { RouterlinkButtonComponent } from 'src/app/shared/components/routerlink-button/routerlink-button.component';
+import { FilterChipsComponent } from 'src/app/shared/components/filter-chips/filter-chips.component';
 import { PeopleCacheService } from '../people-cache.service';
 import { FilterComponent } from './filter/filter.component';
 import { TableDetailComponent } from './table-detail/table-detail.component';
-import { finalize } from 'rxjs';
-import { RouterlinkButtonComponent } from 'src/app/shared/components/routerlink-button/routerlink-button.component';
 
 @Component({
   selector: 'app-people-home',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ForgeBadgeModule,
+    ForgeButtonModule,
+    ForgeIconButtonModule,
+    ForgeIconModule,
+    ForgeOptionModule,
+    ForgePaginatorModule,
+    ForgeSelectDropdownModule,
+    ForgeSkeletonModule,
+    ForgeTableModule,
+    ForgeToolbarModule,
+    RouterlinkButtonComponent,
+    FilterChipsComponent,
+    FilterComponent
+  ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent extends BaseTableComponent implements OnInit, OnDestroy {
+  private router = inject(Router);
+  private appDataService = inject(AppDataService);
+  public cache = inject(PeopleCacheService);
+  private viewContainerRef = inject(ViewContainerRef);
+  private ngZone = inject(NgZone);
+
   @ViewChild('peopleTable', { static: true })
   private peopleTable?: TableComponent;
   @ViewChild(FilterComponent)
@@ -26,8 +53,8 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
 
   public isBusy = false;
   public recordset: Array<IPerson> = [];
-  public filterCache = this.moduleCache.homeView.filter;
-  public viewCache = this.moduleCache.homeView;
+  public filterCache = this.cache.homeView.filter;
+  public viewCache = this.cache.homeView;
   public optionalTableColumns = [
     { property: 'image', header: 'Image', hidden: false },
     { property: 'firstName', header: 'First', hidden: false },
@@ -40,16 +67,10 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
     return this.optionalTableColumns.filter(c => !c.hidden).map(c => c.property);
   }
 
-  constructor(
-    private router: Router,
-    private appDataService: AppDataService,
-    public moduleCache: PeopleCacheService,
-    private viewContainerRef: ViewContainerRef,
-    private ngZone: NgZone
-  ) {
+  constructor() {
     super();
 
-    let storageColumns = localStorage.getItem(this.moduleCache.homeView.storageKey);
+    const storageColumns = localStorage.getItem(this.cache.homeView.storageKey);
     if (storageColumns?.length) {
       const columns = JSON.parse(storageColumns) as { property: string; hidden: boolean; }[];
       if (isArray(columns)) {
@@ -111,54 +132,47 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
       {
         align: CellAlign.Right,
         template: (rowIndex: number, cellElement: HTMLElement, data: any) => {
-          cellElement.appendChild(
-            TableUtils.createExpanderRow(
-              rowIndex,
-              this.peopleTable,
-              this.viewContainerRef,
-              TableDetailComponent,
-              'Toggle table detail',
-              data
-            )
-          );
+          this.ngZone.run(() => {
+            cellElement.appendChild(
+              TableUtils.createExpanderRow(
+                rowIndex,
+                this.peopleTable as TableComponent,
+                this.viewContainerRef,
+                TableDetailComponent,
+                'Toggle table detail',
+                data
+              )
+            );
 
-          // cellElement.appendChild(TableUtils.createLinkButton(
-          //   'View more',
-          //   (event: Event) => {
-          //     console.log(event);
-          //   }
-          // ));
+            cellElement.appendChild(TableUtils.createMenuButton(
+              'more_vert',
+              (event: Event) => {
+                console.log(event);
+              },
+              [
+                { value: 1, label: 'Option 1' },
+                { value: 2, label: 'Option 2' },
+                { value: 3, label: 'Option 3' }
+              ],
+              'More options'
+            ));
 
-          cellElement.appendChild(TableUtils.createMenuButton(
-            'more_vert',
-            (event: Event) => {
-              console.log(event);
-            },
-            [
-              { value: 1, label: 'Option 1' },
-              { value: 2, label: 'Option 2' },
-              { value: 3, label: 'Option 3' }
-            ],
-            'More options'
-          ));
-
-          cellElement.appendChild(TableUtils.createIconButton(
-            'keyboard_arrow_right',
-            (event: Event) => {
-              this.ngZone.run(() => {
+            cellElement.appendChild(TableUtils.createIconButton(
+              'keyboard_arrow_right',
+              (event: Event) => {
                 this.router.navigate([`people/detail/${data.id}`]);
-              });
-            },
-            'View person details'
-          ));
+              },
+              'View person details'
+            ));
 
-          // const componentRef = this.viewContainerRef.createComponent(RouterlinkButtonComponent);
-          // componentRef.instance.route = '/profile';
-          // componentRef.instance.queryParams = { id: data.id };
-          // componentRef.instance.icon = 'person';
-          // componentRef.instance.tooltip = 'Show profile';
-          // const linkButtonNode = (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
-          // cellElement.appendChild(linkButtonNode);
+            // const componentRef = this.viewContainerRef.createComponent(RouterlinkButtonComponent);
+            // componentRef.instance.route = '/profile';
+            // componentRef.instance.queryParams = { id: data.id };
+            // componentRef.instance.icon = 'person';
+            // componentRef.instance.tooltip = 'Show profile';
+            // const linkButtonNode = (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
+            // cellElement.appendChild(linkButtonNode);
+          });
 
           return '';
         }
@@ -180,7 +194,7 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
       this.selectedPeople.length = 0;
       this.peopleTable?.clearSelections();
     } else {
-      this.selectedPeople = this.peopleTable?.getSelectedRows();
+      this.selectedPeople = this.peopleTable?.getSelectedRows() as IPerson[];
     }
   }
 
@@ -202,7 +216,7 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
       return c;
     });
     localStorage.setItem(
-      this.moduleCache.homeView.storageKey,
+      this.cache.homeView.storageKey,
       JSON.stringify(this.optionalTableColumns.map((c) => ({ property: c.property, hidden: c.hidden })))
     );
   }

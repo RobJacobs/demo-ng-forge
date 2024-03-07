@@ -1,30 +1,34 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, OnDestroy, OnInit } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
-import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
-import { ForgeModule } from '@tylertech/forge-angular';
 import { map, of, Subject, takeUntil } from 'rxjs';
-import { FormlyDemoService } from '../formly-demo.service';
+import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
+import { ForgeDatePickerModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
 import { isValid as isValidDate } from 'date-fns';
 
+import { FormlyDemoService } from '../formly-demo.service';
 @Component({
   selector: 'app-formly-date-picker',
   template: `
-  <forge-date-picker [max]="props.max" [min]="props.min">
-    <forge-text-field [required]="props.required" [invalid]="showError">
-      <input
-        [id]="id"
-        type="text"
-        [placeholder]="props.placeholder"
-        [readonly]="props.readonly"
-        [formControl]="formControl"
-        [formlyAttributes]="field" />
-      <label [attr.for]="id" *ngIf="props.label" slot="label">{{props.label}}</label>
-      <span slot="helper-text" *ngIf="showError">
-        <formly-validation-message [field]="field"></formly-validation-message>
-      </span>
-    </forge-text-field>
-  </forge-date-picker>
+    <forge-date-picker [max]="$any(props.max)" [min]="$any(props.min)">
+      <forge-text-field [required]="props.required" [invalid]="showError">
+        <input
+          [id]="id"
+          type="text"
+          [placeholder]="props.placeholder"
+          [readonly]="props.readonly"
+          [formControl]="formControl"
+          [formlyAttributes]="field" />
+        @if (props.label) {
+          <label [attr.for]="id" slot="label">{{props.label}}</label>
+        }
+        @if (showError) {
+          <span slot="helper-text">
+            <formly-validation-message [field]="field"></formly-validation-message>
+          </span>
+        }
+      </forge-text-field>
+    </forge-date-picker>
   `,
   styles: [`
     :host {
@@ -39,19 +43,16 @@ import { isValid as isValidDate } from 'date-fns';
     CommonModule,
     ReactiveFormsModule,
     FormlyModule,
-    ForgeModule
+    ForgeDatePickerModule,
+    ForgeTextFieldModule
   ],
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class DatePickerTypeComponent extends FieldType<FieldTypeConfig> implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private moduleService = inject(FormlyDemoService);
 
-  constructor(
-    private moduleService: FormlyDemoService
-  ) {
-    super();
-  }
+  private unsubscribe = new Subject<void>();
 
   public ngOnInit() {
     this.formControl.addAsyncValidators((control: AbstractControl) => {

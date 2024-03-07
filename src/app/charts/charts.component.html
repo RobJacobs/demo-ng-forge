@@ -29,6 +29,9 @@
 </forge-tab-bar>
 
 <div class="body">
-  <app-charts-d3-chart *ngIf="activeTab === 0" [chartType]="chartType"></app-charts-d3-chart>
-  <app-charts-google-chart *ngIf="activeTab === 1" [chartType]="chartType"></app-charts-google-chart>
+  @if (activeTab === 0) {
+  <app-charts-d3-chart [chartType]="chartType"></app-charts-d3-chart>
+  } @else if (activeTab === 1) {
+  <app-charts-google-chart [chartType]="chartType"></app-charts-google-chart>
+  }
 </div>

@@ -1,6 +1,7 @@
-import { Input } from '@angular/core';
+import { Input, inject } from '@angular/core';
 import { Directive, ElementRef, OnInit } from '@angular/core';
 import { FormlyField, FormlyFieldConfig } from '@ngx-formly/core';
+
 import { FormlyDemoService } from '../formly-demo.service';
 
 @Directive({
@@ -9,26 +10,21 @@ import { FormlyDemoService } from '../formly-demo.service';
   standalone: true
 })
 export class FormlyFieldDirective implements OnInit {
+  private elementRef = inject(ElementRef);
+  private moduleService = inject(FormlyDemoService);
+
   @Input()
-  field: FormlyFieldConfig
+  field?: FormlyFieldConfig
   @Input()
-  formlyFieldDirective: FormlyField;
+  formlyFieldDirective?: FormlyField;
 
-  constructor(
-    private elementRef: ElementRef,
-    private moduleService: FormlyDemoService
-  ) {
-
-  }
-
-  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   public ngOnInit() {
     // console.log(this.field);
     // console.log(this.formlyFieldDirective);
     // console.log(this.elementRef.nativeElement);
     const element = this.elementRef.nativeElement as HTMLElement;
 
-    if (this.field.props?.attributes) {
+    if (this.field?.props?.attributes) {
       if (this.field.props.attributes && this.field.props.attributes['width']) {
         element.style.width = `${this.field.props.attributes['width']}px`;
       }
@@ -42,17 +38,17 @@ export class FormlyFieldDirective implements OnInit {
       }
     }
 
-    if (this.field.props.description?.length) {
+    if (this.field?.props?.description?.length) {
       element.addEventListener('focusin', () => {
-        this.moduleService.formMessage.next({ id: this.field.id, message: this.field.props.description });
+        this.moduleService.formMessage.next({ id: this.field?.id as string, message: this.field?.props?.description as string });
       });
       element.addEventListener('focusout', () => {
-        this.moduleService.formMessage.next({ id: this.field.id, message: '' });
+        this.moduleService.formMessage.next({ id: this.field?.id as string, message: '' });
       });
     }
 
-    if (this.field.props.required) {
-      this.field.validation.messages = {
+    if (this.field?.props?.required) {
+      this.field.validation!.messages = {
         required: `A ${this.field.props.label || 'value'} is required`
       };
     }

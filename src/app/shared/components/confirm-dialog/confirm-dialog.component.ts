@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { isDefined } from '@tylertech/forge-core';
-import { DialogConfig, DialogRef } from '@tylertech/forge-angular';
+import { DialogConfig, DialogRef, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule } from '@tylertech/forge-angular';
+
 import { AutoFocusDirective } from 'src/app/shared/directives/auto-focus/auto-focus.directive';
 
 @Component({
@@ -11,19 +12,24 @@ import { AutoFocusDirective } from 'src/app/shared/directives/auto-focus/auto-fo
   standalone: true,
   imports: [
     CommonModule,
+    ForgeButtonModule,
+    ForgeIconButtonModule,
+    ForgeIconModule,
     AutoFocusDirective
-  ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  ]
 })
 export class ConfirmDialogComponent {
+  public dialogConfig = inject(DialogConfig);
+  private dialogRef = inject(DialogRef);
+
   public title: string;
   public message: string;
   public showFooter?: boolean;
 
-  constructor(public dialogConfig: DialogConfig, private dialogRef: DialogRef) {
-    this.title = dialogConfig.data.title;
-    this.message = dialogConfig.data.message;
-    this.showFooter = isDefined(dialogConfig.data.showFooter) ? dialogConfig.data.showFooter : true;
+  constructor() {
+    this.title = this.dialogConfig.data.title;
+    this.message = this.dialogConfig.data.message;
+    this.showFooter = isDefined(this.dialogConfig.data.showFooter) ? this.dialogConfig.data.showFooter : true;
   }
 
   public onClose(response = false): void {

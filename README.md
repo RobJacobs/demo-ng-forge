@@ -8,7 +8,6 @@ using [Tyler Forge](https://forge.tylerdev.io/main/?path=/story/forge--page) des
 ## Getting started
 
 - install packages: `npm install`
-- build the pets project: `ng build pets`
 - run the app: `ng serve`
 - view in browser: [localhost:4200](http://localhost:4200)
 

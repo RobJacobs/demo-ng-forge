@@ -1,40 +1,54 @@
-import { Component } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterOutlet } from '@angular/router';
 import { Observable } from 'rxjs';
-import { DialogService } from '@tylertech/forge-angular';
+import { DialogService, ForgeButtonModule, ForgeIconModule, ForgeTabBarModule, ForgeTabModule, ForgeToolbarModule } from '@tylertech/forge-angular';
 
 import { Utils } from 'src/utils';
-import { IProfile } from 'src/app/shared/interfaces/person.interface';
 import { AppDataService } from 'src/app/app-data.service';
 import { AppToastService } from 'src/app/app-toast.service';
-import { IAddressFormGroup, IPersonalFormGroup, ProfileCacheService } from './profile-cache.service';
-import { ConfirmDialogComponent } from '../shared/components/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
+import { CallbackPipe } from 'src/app/shared/pipes/callback.pipe';
+import { IProfile } from 'src/app/shared/interfaces/person.interface';
+import { ProfileCacheService } from './profile-cache.service';
 
 @Component({
   selector: 'app-profile',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    ReactiveFormsModule,
+    ForgeButtonModule,
+    ForgeIconModule,
+    ForgeTabBarModule,
+    ForgeTabModule,
+    ForgeToolbarModule,
+    CallbackPipe
+  ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent {
+  private router = inject(Router);
+  private appDataService = inject(AppDataService);
+  private dialogService = inject(DialogService);
+  private appToastService = inject(AppToastService);
+  public cache = inject(ProfileCacheService);
+
   private noImageUrl = 'mock-data/no-image.png';
 
   public get personalFormGroup() {
-    return this.cache.formGroup.get('personalFormGroup') as FormGroup<IPersonalFormGroup>;
+    return this.cache.formGroup.controls.personalFormGroup;
   }
   public get addressFormGroup() {
-    return this.cache.formGroup.get('addressFormGroup') as FormGroup<IAddressFormGroup>;
+    return this.cache.formGroup.controls.addressFormGroup;
   }
   public activeTab = 0;
   public imageUrl?: string;
 
-  constructor(
-    private router: Router,
-    private appDataService: AppDataService,
-    private dialogService: DialogService,
-    private appToastService: AppToastService,
-    public cache: ProfileCacheService
-  ) {
+  constructor() {
     if (this.cache.profile) {
       this.loadForm(this.cache.profile);
     }
@@ -122,7 +136,7 @@ export class ProfileComponent {
   private loadForm(profile: IProfile) {
     this.imageUrl = `mock-data/${Utils.formatNumber(this.cache.profile?.id as number, '2.0-0')}-small.png`;
 
-    (this.personalFormGroup.get('friends') as FormArray)?.clear();
+    this.personalFormGroup.controls.friends?.clear();
 
     this.personalFormGroup.patchValue(profile);
     this.addressFormGroup.patchValue(profile.address as any);

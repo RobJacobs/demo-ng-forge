@@ -7,4 +7,6 @@
     </button>
   </forge-icon-button>
 </forge-app-bar>
-<forge-linear-progress *ngIf="appCache.isBusy" determinate="false"></forge-linear-progress>
+@if (appCache.isBusy) {
+<forge-linear-progress determinate="false"></forge-linear-progress>
+}

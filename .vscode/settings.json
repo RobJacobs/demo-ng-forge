@@ -1,16 +1,16 @@
 {
   "search.exclude": {
     "**/dist": true,
-    "**/docs": true,
-    "**/node_modules": true
+    "**/node_modules": true,
+    "**/build": true,
+    "**/.angular": true,
+    "**/docs": true
   },
   "editor.formatOnSave": true,
-  "editor.tabSize": 2,
+  "editor.formatOnType": true,
   "editor.detectIndentation": false,
-  "eslint.format.enable": true,
-  "eslint.lintTask.enable": true,
   "[typescript]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features",
+    "editor.defaultFormatter": "vscode.typescript-language-features"
   },
   "[html]": {
     "editor.defaultFormatter": "vscode.html-language-features"
@@ -18,11 +18,5 @@
   "html.format.wrapLineLength": 0,
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features"
-  },
-  "files.trimTrailingWhitespace": true,
-  "prettier.singleQuote": true,
-  "prettier.tabWidth": 2,
-  "prettier.printWidth": 160,
-  "prettier.trailingComma": "none",
-  "angular.enable-strict-mode-prompt": false
+  }
 }

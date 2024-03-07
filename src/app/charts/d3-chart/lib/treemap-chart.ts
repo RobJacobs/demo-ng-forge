@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { select, hierarchy, format, timeFormat, treemap } from 'd3';
 import { ChartUtils, IChartConfig } from './chart-utils';
 import { CHART_CONSTANTS, CHART_CONSTANTS as constants } from './chart-constants';
@@ -18,11 +19,11 @@ export class TreemapChartService {
       const size = ChartUtils.chartSize(config.container);
       const chartData = hierarchy({ children: config.data }).sum((d: any) => d.value).sort((a: any, b: any) => b.value - a.value);
       const chart = treemap().size([size.width, size.height]);
-      chart(chartData);
+      chart(chartData as any);
 
       let rootNode = container.select(`g.${constants.classes.CHART_ROOT}`);
       if (!rootNode.node()) {
-        rootNode = container.append('g').classed(constants.classes.CHART_ROOT, true);
+        rootNode = container.append('g').classed(constants.classes.CHART_ROOT, true) as any;
         rootNode.append('g').classed(`${constants.classes.CHART_PREFIX}__treemap`, true);
       }
 
@@ -85,7 +86,7 @@ export class TreemapChartService {
         .style('stroke', '#fff')
         .attr('id', (d: any) => `${CHART_CONSTANTS.classes.CHART_PREFIX}__node-${d.data.id}`)
         .transition()
-        .call(ChartUtils.transitionsComplete, () => {
+        .call(ChartUtils.transitionsComplete as any, () => {
           mergeNodes.select('clipPath > rect')
             .attr('x', (d: any) => nodePadding / 2)
             .attr('y', (d: any) => nodePadding / 2)

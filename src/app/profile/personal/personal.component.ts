@@ -1,21 +1,45 @@
-import { Component } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IOption } from '@tylertech/forge';
+import { ForgeButtonModule, ForgeDatePickerModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIconModule, ForgeLabelValueModule, ForgeRadioModule, ForgeSelectModule, ForgeSliderModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
 
 import { AppDataService } from 'src/app/app-data.service';
-import { IPersonalFormGroup, ProfileCacheService } from '../profile-cache.service';
+import { FormControlInvalidDirective } from 'src/app/shared/directives/form-control-invalid/form-control-invalid.directive';
+import { InputCasingDirective } from 'src/app/shared/directives/input-casing/input-casing.directive';
+import { ProfileCacheService } from '../profile-cache.service';
 
 @Component({
   selector: 'app-profile-personal',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ForgeButtonModule,
+    ForgeDatePickerModule,
+    ForgeDividerModule,
+    ForgeIconButtonModule,
+    ForgeIconModule,
+    ForgeLabelValueModule,
+    ForgeRadioModule,
+    ForgeSelectModule,
+    ForgeSliderModule,
+    ForgeTextFieldModule,
+    FormControlInvalidDirective,
+    InputCasingDirective
+  ],
   templateUrl: './personal.component.html',
   styleUrls: ['./personal.component.scss']
 })
 export class PersonalComponent {
+  public cache = inject(ProfileCacheService);
+  private appDataService = inject(AppDataService);
+
   public get formGroup() {
-    return this.cache.formGroup.get('personalFormGroup') as FormGroup<IPersonalFormGroup>;
+    return this.cache.formGroup.controls.personalFormGroup;
   }
   public get friendsFormArray() {
-    return this.formGroup.get('friends') as FormArray;
+    return this.formGroup.controls.friends;
   }
 
   public genderOptions: IOption[] = [
@@ -31,10 +55,7 @@ export class PersonalComponent {
     { label: 'Large', value: 'lg' }
   ];
 
-  constructor(
-    public cache: ProfileCacheService,
-    private appDataService: AppDataService
-  ) {
+  constructor() {
     this.appDataService.getPeople().subscribe((result) => {
       this.friendOptions = result.data.map((p) => ({ label: `${p.firstName} ${p.lastName}`, value: p.id }));
     });

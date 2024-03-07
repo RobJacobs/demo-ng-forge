@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import {
   Component,
   forwardRef,
-  CUSTOM_ELEMENTS_SCHEMA,
   ViewChild,
   Input,
   HostListener,
@@ -15,7 +14,7 @@ import * as IMask from 'imask';
 import { IMaskDirective } from 'angular-imask';
 import { CalendarComponent, mergeDateWithTime } from '@tylertech/forge';
 import { isDefined } from '@tylertech/forge-core';
-import { ForgePopupModule, ForgeTextFieldModule, ForgeTimePickerModule, PopupDirective } from '@tylertech/forge-angular';
+import { ForgeCalendarModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIconModule, ForgePopupModule, ForgeTextFieldModule, ForgeTimePickerModule, PopupDirective } from '@tylertech/forge-angular';
 
 import { Utils } from 'src/utils';
 
@@ -28,16 +27,19 @@ import { Utils } from 'src/utils';
     CommonModule,
     ReactiveFormsModule,
     IMaskDirective,
+    ForgeCalendarModule,
+    ForgeDividerModule,
+    ForgeIconButtonModule,
+    ForgeIconModule,
     ForgePopupModule,
     ForgeTextFieldModule,
     ForgeTimePickerModule
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DateTimeComponent), multi: true }]
 })
 export class DateTimeComponent implements OnInit {
   @ViewChild('calendarPopup')
-  private calendarPopup: PopupDirective;
+  private calendarPopup?: PopupDirective;
   private timeFormat = 'hh:mm aa';
 
   @HostListener('focusout', ['$event'])
@@ -91,9 +93,9 @@ export class DateTimeComponent implements OnInit {
     this.time.valueChanges.pipe(
       takeUntilDestroyed()
     ).subscribe(value => {
-      const date = dateParse(this.mask.value.substring(0, 10), 'MM/dd/yyyy', new Date());
+      const date = dateParse(this.mask!.value.substring(0, 10), 'MM/dd/yyyy', new Date());
       if (isDefined(value) && dateIsValid(date)) {
-        this.dateTime.setValue(mergeDateWithTime(date, value, this.timePrecision === 's'));
+        this.dateTime.setValue(mergeDateWithTime(date, value as string, this.timePrecision === 's'));
       }
     });
   }
@@ -111,24 +113,24 @@ export class DateTimeComponent implements OnInit {
       popup.open();
 
       setTimeout(() => {
-        const timePickerInput = popup.popupElement.querySelector('forge-time-picker input') as HTMLInputElement;
+        const timePickerInput = popup.popupElement!.querySelector('forge-time-picker input') as HTMLInputElement;
         timePickerInput?.focus();
         timePickerInput?.select();
       }, 100);
 
-      const forgeCalendar = popup.popupElement.querySelector('forge-calendar') as CalendarComponent;
+      const forgeCalendar = popup.popupElement!.querySelector('forge-calendar') as CalendarComponent;
       if (dateIsValid(this.dateTime.value)) {
-        forgeCalendar.goToDate(this.dateTime.value);
+        forgeCalendar.goToDate(this.dateTime.value as Date);
         forgeCalendar.value = this.dateTime.value;
-        this.setTimeValue(this.dateTime.value);
+        this.setTimeValue(this.dateTime.value as Date);
       } else {
-        const date = dateParse(this.mask.value.substring(0, 10), 'MM/dd/yyyy', new Date());
+        const date = dateParse(this.mask!.value.substring(0, 10), 'MM/dd/yyyy', new Date());
         if (dateIsValid(date)) {
           forgeCalendar.goToDate(date);
           forgeCalendar.value = date;
         }
 
-        this.setTimeValue(dateParse(this.mask.value.substring(11), this.timeFormat, new Date()));
+        this.setTimeValue(dateParse(this.mask!.value.substring(11), this.timeFormat, new Date()));
       }
     }
   }
@@ -136,13 +138,13 @@ export class DateTimeComponent implements OnInit {
   public onDateSelected(event: CustomEvent) {
     let selectedDate = event.detail.date as Date;
     if (isDefined(this.time.value)) {
-      selectedDate = mergeDateWithTime(selectedDate, this.time.value, this.timePrecision === 's');
+      selectedDate = mergeDateWithTime(selectedDate, this.time.value as string, this.timePrecision === 's');
     }
     this.dateTime.setValue(selectedDate);
   }
 
   public writeValue(value?: Date) {
-    this.dateTime.setValue(value);
+    this.dateTime.setValue(value as Date);
     this.setTimeValue(value);
   }
 
@@ -157,7 +159,7 @@ export class DateTimeComponent implements OnInit {
   public onKeyDown(event: KeyboardEvent) {
     if (event.key === 'Tab' && (event.target as HTMLElement).id === `time-${this.id}`) {
       event.preventDefault();
-      ((this.calendarPopup.popupElement.querySelector('forge-calendar') as HTMLElement)?.shadowRoot.querySelector('#previous-button') as HTMLElement)?.focus();
+      ((this.calendarPopup!.popupElement!.querySelector('forge-calendar') as HTMLElement).shadowRoot!.querySelector('#previous-button') as HTMLElement)?.focus();
     }
   }
 
@@ -211,7 +213,7 @@ export class DateTimeComponent implements OnInit {
       autofix: false,
       lazy: false,
       overwrite: false,
-      format: (value: Date): string => {
+      format: (value: any): string => {
         return dateIsValid(value) ? dateFormat(value, `MM/dd/yyyy ${this.timeFormat}`).toUpperCase() : '';
       },
       parse: (value: string): Date => {
@@ -227,9 +229,9 @@ export class DateTimeComponent implements OnInit {
     let timeValue = [0, 0, 0];
     if (dateIsValid(value)) {
       if (this.timePrecision === 's') {
-        timeValue = [value.getHours(), value.getMinutes(), value.getSeconds()];
+        timeValue = [value!.getHours(), value!.getMinutes(), value!.getSeconds()];
       } else {
-        timeValue = [value.getHours(), value.getMinutes(), 0];
+        timeValue = [value!.getHours(), value!.getMinutes(), 0];
       }
     }
     this.time.setValue(timeValue.map(v => v.toString().padStart(2, '0')).join(':'));

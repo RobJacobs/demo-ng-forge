@@ -6,7 +6,7 @@
 </forge-toolbar>
 
 <div class="body">
-  <quill-editor [formControl]="textEditorFormControl" sanitize="true" placeholder="" [modules]="quillModules" [bounds]="elementRef.nativeElement" #quillEditor (keydown)="$event.stopPropagation()" (onEditorCreated)="onEditorCreated($event)"></quill-editor>
+  <quill-editor [formControl]="textEditorFormControl" [sanitize]="true" placeholder="" [modules]="quillModules" [bounds]="elementRef.nativeElement" #quillEditor (keydown)="$event.stopPropagation()" (onEditorCreated)="onEditorCreated($event)"></quill-editor>
 
   <p>{{textEditorFormControl.value}}</p>
 </div>

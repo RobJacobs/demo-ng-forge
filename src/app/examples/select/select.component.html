@@ -1,6 +1,8 @@
 <form [formGroup]="formGroup" novalidate autocomplete="off" class="form-grid">
   <forge-select formControlName="select01" label="Select01 - single primitive">
-    <forge-option *ngFor="let option of options" [value]="option.value">{{option.label}}</forge-option>
+    @for (option of options; track i; let i = $index) {
+    <forge-option [value]="option.value">{{option.label}}</forge-option>
+    }
   </forge-select>
 
   <forge-select label="Select02 - single object" [options]="objectOptions" formControlName="select02"></forge-select>

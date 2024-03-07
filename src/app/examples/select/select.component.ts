@@ -1,20 +1,33 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IOption, SelectOptionBuilder, SelectSelectedTextBuilder } from '@tylertech/forge';
+import { ForgeDividerModule, ForgeOptionModule, ForgeSelectModule } from '@tylertech/forge-angular';
+
 import { ExamplesService } from '../examples.service';
 
 @Component({
   selector: 'app-examples-select',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ForgeDividerModule,
+    ForgeOptionModule,
+    ForgeSelectModule
+  ],
   templateUrl: './select.component.html',
   styleUrls: ['./select.component.scss']
 })
 export class SelectComponent {
+  public moduleService = inject(ExamplesService);
+
   public options = this.moduleService.mockData.slice(0, 20).map(d => ({ value: d.id, label: d.description }));
   public objectOptions = this.moduleService.mockData.slice(0, 20).map(d => ({ value: d, label: d.description }));
   public formGroup = new FormGroup({
     select01: new FormControl(1),
     select02: new FormControl(this.objectOptions[2].value),
-    // select02: new FormControl({ id: 2, code: '002', description: 'Item 002' }),
     select03: new FormControl([3, 4, 5]),
     select04: new FormControl(),
     select05: new FormControl()
@@ -39,10 +52,6 @@ export class SelectComponent {
   public selectedTextBuilder: SelectSelectedTextBuilder = (options: IOption[]): string => {
     return options[0] ? `${options[0].value} - ${options[0]?.label}` : '';
   };
-
-  constructor(
-    public moduleService: ExamplesService
-  ) { }
 
   public onSelectChange(event: CustomEvent) {
     this.select07 = event.detail;

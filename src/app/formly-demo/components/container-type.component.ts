@@ -3,29 +3,23 @@ import { OnInit, ViewChild } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FieldType, FormlyModule } from '@ngx-formly/core';
+
 import { FormlyFieldComponent } from './formly-field.component';
 import { FormlyFieldDirective } from './formly-field.directive';
-
-// <formly-field [field]="field"></formly-field>
 
 @Component({
   selector: 'app-formly-container',
   template: `
-  <div class="label" *ngIf="props.label">{{props.label}}</div>
+    @if (props.label) {
+      <div class="label">{{props.label}}</div>
+    }
 
-  <div #fieldContainer>
-    <ng-container *ngFor="let f of field.fieldGroup">
-      <formly-field #formlyField [field]="f" [formlyFieldDirective]="formlyField"></formly-field>
-    </ng-container>
-  </div>
+    <div #fieldContainer>
+      @for (f of field.fieldGroup; track i; let i = $index) {
+        <formly-field #formlyField [field]="f" [formlyFieldDirective]="formlyField"></formly-field>
+      }
+    </div>
   `,
-  // template: `
-  // <div class="label" *ngIf="props.label">{{props.label}}</div>
-
-  // <ng-container *ngFor="let f of field.fieldGroup">
-  //   <app-formly-field [field]="f"></app-formly-field>
-  // </ng-container>
-  // `,
   styles: [`
   :host {
     display: inline-block;
@@ -74,21 +68,15 @@ import { FormlyFieldDirective } from './formly-field.directive';
 })
 export class ContainerTypeComponent extends FieldType implements OnInit {
   @ViewChild('fieldContainer', { static: true })
-  private fieldContainer: ElementRef;
-
-  constructor(
-    private elementRef: ElementRef
-  ) {
-    super();
-  }
+  private fieldContainer?: ElementRef;
 
   public ngOnInit() {
-    const fieldContainerElement = this.fieldContainer.nativeElement as HTMLElement;
+    const fieldContainerElement = this.fieldContainer?.nativeElement as HTMLElement;
     switch (this.field.props?.type) {
       case 'grid':
         fieldContainerElement.classList.add('form-grid');
-        if (this.props.attributes['columns']) {
-          fieldContainerElement.style.gridTemplateColumns = `repeat(${this.props.attributes['columns']}, auto)`
+        if (this.props.attributes!['columns']) {
+          fieldContainerElement.style.gridTemplateColumns = `repeat(${this.props.attributes!['columns']}, auto)`
         }
         break;
       case 'vbox':

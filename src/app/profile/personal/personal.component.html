@@ -1,13 +1,12 @@
 <ng-container [formGroup]="formGroup">
   <div class="form-grid">
-    <!-- <forge-text-field required [appFormControlInvalid]="formGroup.get('firstName')"> -->
-    <forge-text-field required [appFormControlInvalid]="formGroup.get('firstName')">
+    <forge-text-field required [appFormControlInvalid]="formGroup.controls.firstName">
       <input type="text" id="personal-form--first-name" formControlName="firstName" [appInputCasing]="'upper'" />
       <label for="personal-form--first-name" slot="label">First Name</label>
-      <span slot="helper-text" class="app-form-control-invalid">First name is required {{formGroup.get('firstName').invalid}} {{formGroup.get('firstName').touched}}</span>
+      <span slot="helper-text" class="app-form-control-invalid">First name is required {{formGroup.controls.firstName.invalid}} {{formGroup.controls.firstName.touched}}</span>
     </forge-text-field>
 
-    <forge-text-field required [appFormControlInvalid]="formGroup.get('lastName')">
+    <forge-text-field required [appFormControlInvalid]="formGroup.controls.lastName">
       <input type="text" id="personal-form--first-name" formControlName="lastName" />
       <label for="personal-form--last-name" slot="label">Last Name</label>
       <span slot="helper-text" class="app-form-control-invalid">Last name is required</span>
@@ -15,13 +14,13 @@
 
     <forge-select label="Gender" formControlName="gender" [options]="genderOptions"></forge-select>
 
-    <forge-text-field required [appFormControlInvalid]="formGroup.get('email')">
+    <forge-text-field required [appFormControlInvalid]="formGroup.controls.email">
       <input type="text" id="personal-form--email" formControlName="email" />
       <label for="personal-form--email" slot="label">Email</label>
       <span slot="helper-text" class="app-form-control-invalid">Email is required</span>
     </forge-text-field>
 
-    <forge-text-field required [appFormControlInvalid]="formGroup.get('phone')">
+    <forge-text-field required [appFormControlInvalid]="formGroup.controls.phone">
       <input type="text" id="personal-form--phone" formControlName="phone" />
       <label for="personal-form--phone" slot="label">Phone</label>
       <span slot="helper-text" class="app-form-control-invalid">Phone number is required</span>
@@ -40,7 +39,7 @@
     </forge-text-field>
 
     <forge-label-value>
-      <span slot="label">Rank {{formGroup?.value.rank}}</span>
+      <span slot="label">Rank {{formGroup.value.rank}}</span>
       <div slot="value">
         <forge-slider type="discrete" min="0" max="10" formControlName="rank"></forge-slider>
       </div>
@@ -49,10 +48,12 @@
     <forge-label-value>
       <span slot="label">Size</span>
       <div slot="value" role="radiogroup" aria-label="Choose size option">
-        <forge-radio *ngFor="let option of sizeOptions; index as i">
+        @for (option of sizeOptions; track i; let i = $index) {
+        <forge-radio>
           <input type="radio" id="personal-form--size-{{i}}" formControlName="size" value="{{option.value}}" />
           <label for="personal-form--size-{{i}}">{{option.label}}</label>
         </forge-radio>
+        }
       </div>
     </forge-label-value>
   </div>
@@ -61,8 +62,9 @@
 
   <div class="friends">
     <ng-container formArrayName="friends">
-      <div class="friend" *ngFor="let friend of formGroup.get('friends')?.controls; index as i">
-        <forge-select [options]="friendOptions" [formControlName]="i" label="Friend" [appFormControlInvalid]="formGroup.get('friends')?.controls[i]">
+      @for (friend of formGroup.controls.friends.controls; track i; let i = $index) {
+      <div class="friend">
+        <forge-select [options]="friendOptions" [formControlName]="i" label="Friend" [appFormControlInvalid]="formGroup.controls.friends.controls[i]">
           <span slot="helper-text" class="app-form-control-invalid">A friend is required</span>
         </forge-select>
         <forge-icon-button>
@@ -71,6 +73,7 @@
           </button>
         </forge-icon-button>
       </div>
+      }
       <forge-button type="raised">
         <button type="button" (click)="onAddFriend()">Add friend</button>
       </forge-button>

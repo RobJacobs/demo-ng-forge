@@ -1,7 +1,14 @@
 <forge-scaffold>
   <app-header slot="header"></app-header>
 
-  <forge-drawer app-menu slot="body-left" [type]="appCache.menu.type"></forge-drawer>
+  <forge-drawer slot="body-left">
+    <app-menu></app-menu>
+    <forge-button slot="footer" class="expander">
+      <button type="button" aria-label="expand menu" (click)="expand()">
+        <forge-icon [name]="appCache.menu.type === 'mini' ? 'chevron_right' : 'chevron_left'"></forge-icon>
+      </button>
+    </forge-button>
+  </forge-drawer>
   <div class="app-content" slot="body">
     <router-outlet></router-outlet>
   </div>

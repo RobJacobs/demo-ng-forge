@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, delay } from 'rxjs/operators';
@@ -12,7 +12,7 @@ import { Utils } from 'src/utils';
   providedIn: 'root'
 })
 export class AppDataService {
-  constructor(private httpClient: HttpClient) { }
+  private httpClient = inject(HttpClient);
 
   public getProfile(): Observable<IProfile> {
     return this.httpClient.get<IProfile>('mock-data/profile.json');

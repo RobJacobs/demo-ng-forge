@@ -9,27 +9,33 @@ import { FormlyFieldDirective } from './formly-field.directive';
     <table class="forge-table" #table>
       <thead>
         <tr class="forge-table-row forge-table-head__row">
-          <th *ngFor="let th of props['columns']" scope="col" class="forge-table-cell forge-table-head__cell">
-            <div class="forge-table-head__cell-container">
-              <span class="forge-table-head__cell-text">{{th.label}}</span>
-            </div>
-          </th>
+          @for (th of $any(props).columns; track i; let i = $index) {
+            <th scope="col" class="forge-table-cell forge-table-head__cell">
+              <div class="forge-table-head__cell-container">
+                <span class="forge-table-head__cell-text">{{th.label}}</span>
+              </div>
+            </th>
+          }
           <th class="forge-table-cell forge-table-head__cell forge-table-cell__button"></th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let fg of field.fieldGroup; index as i" class="forge-table-row forge-table-body__row">
-          <td *ngFor="let f of fg.fieldGroup" class="forge-table-cell forge-table-body__cell">
-            <formly-field [field]="f" #formlyField [formlyFieldDirective]="formlyField"></formly-field>
-          </td>
-          <td class="forge-table-cell forge-table-body__cell forge-table-cell__button">
-            <forge-icon-button>
-              <button type="button" (click)="onRemove(i)">
-                <forge-icon name="delete"></forge-icon>
-              </button>
-            </forge-icon-button>
-          </td>
-        </tr>
+        @for (fg of field.fieldGroup; track i; let i = $index) {
+          <tr class="forge-table-row forge-table-body__row">
+            @for (f of fg.fieldGroup; track ii; let ii = $index) {
+              <td class="forge-table-cell forge-table-body__cell">
+                <formly-field [field]="f" #formlyField [formlyFieldDirective]="formlyField"></formly-field>
+              </td>
+            }
+            <td class="forge-table-cell forge-table-body__cell forge-table-cell__button">
+              <forge-icon-button>
+                <button type="button" (click)="onRemove(i)">
+                  <forge-icon name="delete"></forge-icon>
+                </button>
+              </forge-icon-button>
+            </td>
+          </tr>
+        }
       </tbody>
       <tfoot>
         <tr>
@@ -87,15 +93,15 @@ import { FormlyFieldDirective } from './formly-field.directive';
 })
 export class TableTypeComponent extends FieldArrayType {
   @ViewChild('table')
-  private tableElement: ElementRef;
+  private tableElement?: ElementRef;
 
   public onAdd() {
-    const model = this.props['columns'].filter(c => c.key?.length).map(c => [c.key, c.defaultValue]);
+    const model = this.props['columns'].filter((c: any) => c.key?.length).map((c: any) => [c.key, c.defaultValue]);
 
     this.add(this.formControl.length, Object.fromEntries(model));
 
     requestAnimationFrame(() => {
-      const tr = Array.from(this.tableElement.nativeElement.querySelectorAll('tbody > tr')).reverse()[0] as HTMLTableRowElement;
+      const tr = Array.from(this.tableElement?.nativeElement.querySelectorAll('tbody > tr')).reverse()[0] as HTMLTableRowElement;
       if (tr) {
         const focusElement = tr.querySelector(`[id*="${model[0][0]}"]`) as HTMLElement;
         if (focusElement) {

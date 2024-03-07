@@ -1,11 +1,11 @@
-import { AfterViewInit, Directive, ElementRef } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, inject } from '@angular/core';
 
 @Directive({
   selector: '[appAutoFocus]',
   standalone: true
 })
 export class AutoFocusDirective implements AfterViewInit {
-  constructor(private element: ElementRef) { }
+  private element = inject(ElementRef);
 
   public ngAfterViewInit() {
     window.requestAnimationFrame(() => {

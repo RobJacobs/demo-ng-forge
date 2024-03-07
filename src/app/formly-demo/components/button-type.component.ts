@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component } from '@angular/core';
 import { FieldType, FieldTypeConfig } from '@ngx-formly/core';
+import { ForgeButtonModule } from '@tylertech/forge-angular';
 
 @Component({
   selector: 'app-formly-button',
@@ -12,10 +13,10 @@ import { FieldType, FieldTypeConfig } from '@ngx-formly/core';
     </forge-button>
   `,
   imports: [
-    CommonModule
+    CommonModule,
+    ForgeButtonModule
   ],
-  standalone: true,
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  standalone: true
 })
 export class ButtonTypeComponent extends FieldType<FieldTypeConfig> {
 

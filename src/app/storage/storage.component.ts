@@ -1,18 +1,28 @@
-import { Component, OnDestroy } from '@angular/core';
-import { Subject, from, takeUntil, Observable, finalize } from 'rxjs';
-import { liveQuery, Observable as DexieObservable } from 'dexie';
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Subject } from 'rxjs';
+import { Observable as DexieObservable } from 'dexie';
+import { ForgeButtonModule, ForgeLabelValueModule, ForgeToolbarModule } from '@tylertech/forge-angular';
 
-import { AppDataService } from '../app-data.service';
+import { Utils } from 'src/utils';
+import { AppDataService } from 'src/app/app-data.service';
 import { IPerson } from 'src/app/shared/interfaces/person.interface';
 import { storageDb } from './indexed-db-storage';
-import { Utils } from 'src/utils';
-
 @Component({
   selector: 'app-storage',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ForgeButtonModule,
+    ForgeLabelValueModule,
+    ForgeToolbarModule
+  ],
   templateUrl: './storage.component.html',
   styleUrls: ['./storage.component.scss']
 })
 export class StorageComponent {
+  private appDataService = inject(AppDataService);
+
   private readonly storageKey = 'app--storage-key';
 
   public storageSpace = {
@@ -21,15 +31,13 @@ export class StorageComponent {
     localStorage: '?'
   }
 
-  public localStorageData: IPerson[] = [];
+  public localStorageData?: IPerson[] = [];
 
   // https://dexie.org/docs/liveQuery()
   // public indexedDbData$ = from(liveQuery(() => storageDb.people.toArray()));
-  public indexedDbData: IPerson[];
+  public indexedDbData?: IPerson[];
 
-  constructor(
-    private appDataService: AppDataService
-  ) {
+  constructor() {
     this.calcStorageSpace();
     this.onLoadLocal();
     this.onLoadDb();
@@ -59,7 +67,7 @@ export class StorageComponent {
   }
 
   public onDeleteDb() {
-    storageDb.people.clear().finally(() => {
+    storageDb.people?.clear().finally(() => {
       this.onLoadDb();
       this.calcStorageSpace();
     });
@@ -67,8 +75,8 @@ export class StorageComponent {
 
   public onSaveDb() {
     this.appDataService.getPeople().subscribe(result => {
-      storageDb.people.bulkAdd([...result.data.map(p => {
-        delete p.id;
+      storageDb.people?.bulkAdd([...result.data.map(p => {
+        delete (p as any).id;
         return p;
       })]).finally(() => {
         this.onLoadDb();
@@ -78,7 +86,7 @@ export class StorageComponent {
   }
 
   public onLoadDb() {
-    storageDb.people.toArray()
+    storageDb.people?.toArray()
       .then(result => this.indexedDbData = result)
       .catch(error => console.log(error));
 

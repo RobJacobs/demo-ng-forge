@@ -1,11 +1,29 @@
 import { Component } from '@angular/core';
-import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { isDefined } from '@tylertech/forge-core';
+import { ForgeAutocompleteModule, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, ForgeMenuModule, ForgeOptionModule, ForgeSelectModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
+
 import { Utils } from 'src/utils';
 import { IFilter } from 'src/app/shared/interfaces/filter.interface';
+import { FormControlInvalidDirective } from 'src/app/shared/directives/form-control-invalid/form-control-invalid.directive';
 
 @Component({
   selector: 'app-query-builder',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ForgeAutocompleteModule,
+    ForgeButtonModule,
+    ForgeIconButtonModule,
+    ForgeIconModule,
+    ForgeMenuModule,
+    ForgeOptionModule,
+    ForgeSelectModule,
+    ForgeTextFieldModule,
+    FormControlInvalidDirective
+  ],
   templateUrl: './query-builder.component.html',
   styleUrls: ['./query-builder.component.scss']
 })
@@ -45,13 +63,11 @@ export class QueryBuilderComponent {
     { value: 'group', label: 'Add group' }
   ];
 
-  constructor() { }
-
   public propertyFilter = (value: string) => Utils.filterData(this.propertyOptions, [{ key: 'label', value }]);
 
   public onAddFilter(formGroup: FormGroup, type: 'condition' | 'group') {
     if (formGroup === this.formGroup) {
-      (this.formGroup.get('filters') as FormArray).push(this.buildFilterFormGroup());
+      this.formGroup.controls.filters.push(this.buildFilterFormGroup());
     } else {
       switch (type) {
         case 'condition': {

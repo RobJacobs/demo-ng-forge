@@ -11,7 +11,8 @@
   {{message}}
 </div>
 
-<div *ngIf="showFooter" class="dialog__footer">
+@if (showFooter) {
+<div class="dialog__footer">
   <forge-button type="outlined">
     <button type="button" (click)="onClose()">Cancel</button>
   </forge-button>
@@ -19,3 +20,4 @@
     <button appAutoFocus type="button" (click)="onClose(true)">Ok</button>
   </forge-button>
 </div>
+}

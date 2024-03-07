@@ -24,10 +24,13 @@
           </button>
         </forge-icon-button>
       </div>
-      <div *ngIf="rangeMessage" class="forge-typography--caption">{{rangeMessage}}</div>
+      @if (rangeMessage) {
+      <div class="forge-typography--caption">{{rangeMessage}}</div>
+      }
     </div>
     <forge-list class="range__options">
-      <forge-list-item *ngFor="let option of rangeOptions">
+      @for (option of rangeOptions; track i; let i = $index) {
+      <forge-list-item>
         <forge-icon-button slot="leading">
           <button type="button" aria-label="delete search range" (click)="onDeleteRangeOption(option)">
             <forge-icon name="delete"></forge-icon>
@@ -35,6 +38,7 @@
         </forge-icon-button>
         {{option.label}}
       </forge-list-item>
+      }
     </forge-list>
     <forge-divider></forge-divider>
   </div>

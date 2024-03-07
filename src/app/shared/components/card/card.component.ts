@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, HostBinding, Input } from '@angular/core';
+import { Component, HostBinding, Input } from '@angular/core';
+import { ForgeToolbarModule } from '@tylertech/forge-angular';
 
 @Component({
   selector: 'app-card',
@@ -7,9 +8,9 @@ import { Component, CUSTOM_ELEMENTS_SCHEMA, HostBinding, Input } from '@angular/
   styleUrls: ['./card.component.scss'],
   standalone: true,
   imports: [
-    CommonModule
-  ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    CommonModule,
+    ForgeToolbarModule
+  ]
 })
 export class CardComponent {
   @HostBinding('class.app-card--raised')
@@ -19,7 +20,4 @@ export class CardComponent {
 
   @Input()
   public border: 'raised' | 'outlined' = 'raised';
-
-  constructor() {
-  }
 }

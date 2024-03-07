@@ -1,5 +1,6 @@
 <div #chartContainer class="chart-container"></div>
-<div *ngIf="showLegend" class="legend-container">
+@if (showLegend) {
+<div class="legend-container">
   <forge-list class="chart-legend">
     <forge-list-item *ngFor="let item of legendData">
       <div slot="leading" [style.--item-color]="item.color"></div>
@@ -8,3 +9,4 @@
     </forge-list-item>
   </forge-list>
 </div>
+}

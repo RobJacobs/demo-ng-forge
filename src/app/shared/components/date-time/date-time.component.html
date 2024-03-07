@@ -1,6 +1,8 @@
 <forge-text-field>
   <input type="text" [attr.id]="id" [formControl]="dateTime" [imask]="mask" [unmask]="'typed'" />
-  <label *ngIf="label?.length" [attr.for]="id" slot="label">{{label}}</label>
+  @if (label?.length) {
+  <label [attr.for]="id" slot="label">{{label}}</label>
+  }
   <forge-icon-button slot="trailing">
     <button tabindex="-1" type="button" #calendarPopup="forgePopup" [forgePopup]="calendarPopupTemplate" [forgePopupPlacement]="'bottom-end'" (click)="onOpenPopup(calendarPopup)">
       <forge-icon name="insert_invitation"></forge-icon>

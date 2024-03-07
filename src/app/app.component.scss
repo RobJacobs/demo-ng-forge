@@ -11,4 +11,18 @@
 
 forge-drawer {
   --forge-drawer-width: auto;
+
+  .expander {
+    width: 100%;
+    padding: 8px;
+
+    button {
+      min-width: 100%;
+      @include forge-flex-container(flex, row, nowrap, center);
+
+      forge-icon {
+        margin-left: auto;
+      }
+    }
+  }
 }

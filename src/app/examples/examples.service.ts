@@ -8,9 +8,7 @@ export interface IRecord {
   description: string;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ExamplesService {
   public mockData: IRecord[] = [];
 

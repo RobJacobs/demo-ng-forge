@@ -1,7 +1,9 @@
 <forge-toolbar class="header">
   <div slot="start">
     <h2 class="forge-typography--title">Profile</h2>
-    <img *ngIf="imageUrl" [src]="imageUrl" (error)="onImageError($event)" alt="" />
+    @if (imageUrl) {
+    <img [src]="imageUrl" (error)="onImageError($event)" alt="" />
+    }
   </div>
 
   <div slot="end">
@@ -14,11 +16,15 @@
 <forge-tab-bar [activeTab]="activeTab">
   <forge-tab (forge-tab-interacted)="onTabSelected('personal')">
     Personal
-    <forge-icon *ngIf="[personalFormGroup.invalid, personalFormGroup.touched] | appCallback:isInvalid" slot="trailing" name="error"></forge-icon>
+    @if ([personalFormGroup.invalid, personalFormGroup.touched] | appCallback:isInvalid) {
+    <forge-icon slot="trailing" name="error"></forge-icon>
+    }
   </forge-tab>
   <forge-tab (forge-tab-interacted)="onTabSelected('address')">
     Address
-    <forge-icon *ngIf="[addressFormGroup.invalid, addressFormGroup.touched] | appCallback:isInvalid" slot="trailing" name="error"></forge-icon>
+    @if ([addressFormGroup.invalid, addressFormGroup.touched] | appCallback:isInvalid) {
+    <forge-icon slot="trailing" name="error"></forge-icon>
+    }
   </forge-tab>
 </forge-tab-bar>
 

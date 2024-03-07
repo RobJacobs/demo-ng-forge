@@ -9,7 +9,7 @@
 
 <div class="dialog__body">
   <form class="form-grid" novalidate autocomplete="off" [formGroup]="formGroup">
-    <forge-text-field required [appFormControlInvalid]="formGroup.get('name')">
+    <forge-text-field required [appFormControlInvalid]="formGroup.controls.name">
       <input type="text" appAutoFocus id="search-save-name" formControlName="name">
       <label for="search-save-name" slot="label">Name</label>
       <span slot="helper-text" class="app-form-control-invalid">A name is required</span>

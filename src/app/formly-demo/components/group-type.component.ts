@@ -1,14 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, HostBinding, OnInit, ViewChild } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, HostBinding, inject, OnInit, ViewChild } from '@angular/core';
 import { FieldGroupTypeConfig, FieldType, FormlyModule } from '@ngx-formly/core';
 import { FormlyFieldDirective } from './formly-field.directive';
 
 @Component({
   selector: 'app-formly-group',
   template: `
-    <div class="label" *ngIf="props.label?.length && field.parent?.type !== 'tab'">{{props.label}}</div>
+    @if (props.label?.length && field.parent?.type !== 'tab') {
+      <div class="label">{{props.label}}</div>
+    }
     <div #fieldContainer>
-      <formly-field *ngFor="let f of field.fieldGroup" [field]="f" #formlyField [formlyFieldDirective]="formlyField"></formly-field>
+      @for (f of field.fieldGroup; track i; let i = $index) {
+        <formly-field [field]="f" #formlyField [formlyFieldDirective]="formlyField"></formly-field>
+      }
       <ng-content></ng-content>
     </div>
   `,
@@ -60,20 +64,15 @@ import { FormlyFieldDirective } from './formly-field.directive';
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class GroupTypeComponent extends FieldType<FieldGroupTypeConfig> implements OnInit {
+  private elementRef = inject(ElementRef);
+
   @ViewChild('fieldContainer', { static: true })
-  private fieldContainer: ElementRef;
+  private fieldContainer?: ElementRef;
   // @HostBinding('style.display')
   // private displayStyle = 'block';
 
-  constructor(
-    private elementRef: ElementRef
-  ) {
-    super();
-  }
-
-  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   public ngOnInit() {
-    const fieldContainerElement = this.fieldContainer.nativeElement as HTMLElement;
+    const fieldContainerElement = this.fieldContainer?.nativeElement as HTMLElement;
     switch (this.field.props?.type) {
       case 'grid':
         fieldContainerElement.classList.add('form-grid');

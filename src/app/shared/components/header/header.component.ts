@@ -1,15 +1,25 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { ForgeAppBarModule, ForgeIconButtonModule, ForgeIconModule, ForgeLinearProgressModule, ForgeTooltipModule } from '@tylertech/forge-angular';
 
 import { AppCacheService } from 'src/app/app-cache.service';
 
 @Component({
   selector: 'app-header',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ForgeAppBarModule,
+    ForgeIconModule,
+    ForgeIconButtonModule,
+    ForgeLinearProgressModule,
+    ForgeTooltipModule
+  ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-
-  constructor(public appCache: AppCacheService) { }
+  public appCache = inject(AppCacheService);
 
   public onThemeChange() {
     if (this.appCache.theme === 'light') {

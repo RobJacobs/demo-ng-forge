@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { select, hierarchy, tree, line, Selection, BaseType, HierarchyNode, HierarchyPointNode, zoom } from 'd3';
 import { interpolatePath } from 'd3-interpolate-path';
 import { isArray, isDefined, scrollParent } from '@tylertech/forge-core';
-import { ChartUtils, IChartData } from './chart-utils';
+import { ChartUtils } from './chart-utils';
 import { CHART_CONSTANTS as constants } from './chart-constants';
 
 export interface ITreeChartData {
@@ -77,10 +78,10 @@ export class TreeChartService {
       const chartData = hierarchy(config.data);
 
       const chartLayout = tree().nodeSize([config.node.size.width + 24, config.node.size.height + config.node.margin]).separation((a, b) => a.parent === b.parent ? 1 : 1.25);
-      const chart = chartLayout(chartData);
+      const chart = chartLayout(chartData as any);
       let xMin = 0;
       let xMax = 0;
-      chart.descendants().filter(d => d.depth > 0).forEach((d: HierarchyPointNode<ITreeChartData>) => {
+      chart.descendants().filter(d => d.depth > 0).forEach((d: HierarchyPointNode<any>) => {
         if (!isDefined(d.data.nodeId)) {
           const depths = this.getParentDepths(d);
           const ids: string[] = [];
@@ -105,7 +106,7 @@ export class TreeChartService {
 
       let rootNode = container.select(`g.${constants.classes.CHART_ROOT}`);
       if (!rootNode.node()) {
-        rootNode = container.append('g').classed(constants.classes.CHART_ROOT, true);
+        rootNode = container.append('g').classed(constants.classes.CHART_ROOT, true) as any;
         rootNode.append('g').classed(`${constants.classes.CHART_PREFIX}__tree`, true);
       }
 
@@ -130,7 +131,7 @@ export class TreeChartService {
         };
         container.style('cursor', 'grab');
 
-        container.call(zoom()
+        container.call((zoom()
           .scaleExtent([config.zoomScale.min, config.zoomScale.max])
           .on('zoom', event => {
             if (event.sourceEvent.type === 'mousemove') {
@@ -156,7 +157,7 @@ export class TreeChartService {
                 y: event.sourceEvent.clientY
               };
             }
-          })
+          })) as any
         );
       }
 
@@ -278,8 +279,8 @@ export class TreeChartService {
         .transition()
         .duration(constants.numbers.TRANSITION_DURATION)
         .attrTween('d', (d: any, i, element) => {
-          const current = (element[i] as SVGPathElement).getAttribute('d');
-          const next = nodePath({ x: Math.round(d.parent.x), y: Math.round(d.parent.y + config.node.size.height) }, { x: Math.round(d.parent.x), y: Math.round(d.parent.y + config.node.size.height) });
+          const current = (element[i] as SVGPathElement).getAttribute('d') as string;
+          const next = nodePath({ x: Math.round(d.parent.x), y: Math.round(d.parent.y + config.node.size.height) }, { x: Math.round(d.parent.x), y: Math.round(d.parent.y + config.node.size.height) }) as string;
           return interpolatePath(current, next);
         })
         .remove();
@@ -300,8 +301,8 @@ export class TreeChartService {
         })
         .duration(constants.numbers.TRANSITION_DURATION)
         .attrTween('d', (d: any, i, element) => {
-          const current = (element[i] as SVGPathElement).getAttribute('d');
-          const next = nodePath({ x: Math.round(d.parent.x), y: Math.round(d.parent.y + config.node.size.height) }, { x: Math.round(d.x), y: Math.round(d.y) });
+          const current = (element[i] as SVGPathElement).getAttribute('d') as string;
+          const next = nodePath({ x: Math.round(d.parent.x), y: Math.round(d.parent.y + config.node.size.height) }, { x: Math.round(d.x), y: Math.round(d.y) }) as string;
           return interpolatePath(current, next);
         });
 

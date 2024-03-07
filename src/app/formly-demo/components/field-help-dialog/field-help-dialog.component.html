@@ -8,19 +8,23 @@
 </div>
 
 <div class="dialog__body">
-  <forge-table [ngClass]="{'app--hidden': isBusy}" [data]="data" [columnConfigurations]="columnConfigurations" allow-row-click (forge-table-row-click)="onTableRowClick($event.detail)" (forge-table-sort)="onTableSort($event.detail)" filter="true" (forge-table-filter)="onTableFilter($event.detail)"></forge-table>
+  <forge-table [ngClass]="{'app--hidden': isBusy}" [data]="data" [columnConfigurations]="columnConfigurations" allow-row-click (forge-table-row-click)="onTableRowClick($event.detail)" (forge-table-sort)="onTableSort($any($event).detail)" filter="true" (forge-table-filter)="onTableFilter($event.detail)"></forge-table>
 
-  <forge-page-state *ngIf="!isBusy && !data?.length">
+  @if (!isBusy && !data.length) {
+  <forge-page-state>
     <img src="https://cdn.forge.tylertech.com/v1/images/spot/no-search-results-spot.svg" slot="graphic" alt="No records found" />
     <div slot="message">No records were found.</div>
   </forge-page-state>
+  }
 
-  <ng-container *ngIf="isBusy">
+  @if (isBusy) {
+  <ng-container>
     <forge-skeleton list-item></forge-skeleton>
     <forge-skeleton list-item></forge-skeleton>
     <forge-skeleton list-item></forge-skeleton>
     <forge-skeleton list-item></forge-skeleton>
   </ng-container>
+  }
 </div>
 
 <div class="dialog__footer">

@@ -1,23 +1,39 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Component, OnInit, Output, EventEmitter, inject } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { IOption } from '@tylertech/forge';
+import { ForgeButtonModule, ForgeDividerModule, ForgeDrawerModule, ForgeIconButtonModule, ForgeIconModule, ForgeSelectModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
 
 import { Utils } from 'src/utils';
 import { AppCacheService } from 'src/app/app-cache.service';
+import { AutocompleteRangeComponent } from 'src/app/shared/components/autocomplete-range/autocomplete-range.component';
 import { PeopleCacheService } from '../../people-cache.service';
 
 @Component({
   selector: 'app-people-home-filter',
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    ForgeButtonModule,
+    ForgeDividerModule,
+    ForgeDrawerModule,
+    ForgeIconButtonModule,
+    ForgeIconModule,
+    ForgeSelectModule,
+    ForgeTextFieldModule,
+    AutocompleteRangeComponent
+  ],
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.scss']
 })
 export class FilterComponent implements OnInit {
+  public appCache = inject(AppCacheService);
+  public cache = inject(PeopleCacheService);
 
   @Output()
   public filter = new EventEmitter();
 
-  public viewCache = this.moduleCache.homeView;
+  public viewCache = this.cache.homeView;
   public formGroup = new FormGroup({
     firstName: new FormControl(),
     lastName: new FormControl(),
@@ -39,19 +55,17 @@ export class FilterComponent implements OnInit {
     return of(options);
   }
 
-  constructor(public appCache: AppCacheService, public moduleCache: PeopleCacheService) { }
-
   public ngOnInit() {
-    this.loadForm(this.moduleCache.homeView.filter.filters);
+    this.loadForm(this.cache.homeView.filter.filters);
   }
 
   public onClearFilter() {
     this.formGroup.reset();
-    this.moduleCache.homeView.filter.filters = [];
+    this.cache.homeView.filter.filters = [];
   }
 
   public onApplyFilter() {
-    this.moduleCache.homeView.filter.filters = Object.entries(Utils.reduceObject(this.formGroup.value)).map(e => ({ property: e[0], value: e[1], label: this.propertyLabel(e[0]) })) || [];
+    this.cache.homeView.filter.filters = Object.entries(Utils.reduceObject(this.formGroup.value)).map(e => ({ property: e[0], value: e[1], label: this.propertyLabel(e[0]) })) || [];
     this.filter.emit();
   }
 

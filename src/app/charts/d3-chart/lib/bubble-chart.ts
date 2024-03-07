@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { select, format, timeFormat, hierarchy, pack } from 'd3';
-import { ChartUtils, IChartConfig, IChartData } from './chart-utils';
+import { ChartUtils, IChartConfig } from './chart-utils';
 import { CHART_CONSTANTS, CHART_CONSTANTS as constants } from './chart-constants';
 
 export class BubbleChartService {
@@ -17,11 +18,11 @@ export class BubbleChartService {
       const size = ChartUtils.chartSize(config.container);
       const chartData = hierarchy({ children: config.data }).sum((d: any) => d.value).sort((a: any, b: any) => b.value - a.value);
       const chart = pack().size([Math.min(...[size.width, size.height]), Math.min(...[size.width, size.height])]);
-      chart(chartData);
+      chart(chartData as any);
 
       let rootNode = container.select(`g.${constants.classes.CHART_ROOT}`);
       if (!rootNode.node()) {
-        rootNode = container.append('g').classed(constants.classes.CHART_ROOT, true);
+        rootNode = container.append('g').classed(constants.classes.CHART_ROOT, true) as any;
         rootNode.append('g').classed(`${constants.classes.CHART_PREFIX}__chart`, true).classed(`${constants.classes.CHART_PREFIX}__bubble`, true);
       }
 
@@ -82,7 +83,7 @@ export class BubbleChartService {
         })
         .attr('id', (d: any) => `${CHART_CONSTANTS.classes.CHART_PREFIX}__node-${d.data.id}`)
         .transition()
-        .call(ChartUtils.transitionsComplete, () => {
+        .call(ChartUtils.transitionsComplete as any, () => {
           mergeNodes.select('clipPath > circle')
             .attr('r', (d: any) => d.r > nodePadding / 2 ? d.r - nodePadding / 2 : 0);
           mergeNodes.select('text').style('display', null);

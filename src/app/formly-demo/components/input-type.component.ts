@@ -1,28 +1,33 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
-import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
-import { ForgeModule } from '@tylertech/forge-angular';
 import { finalize, map, of, Subject, takeUntil } from 'rxjs';
+import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
+import { ForgeTextFieldModule } from '@tylertech/forge-angular';
+
 import { FormlyDemoService } from '../formly-demo.service';
 
 @Component({
   selector: 'app-formly-input',
   template: `
-  <forge-text-field [required]="props.required" [invalid]="showError">
-    <input
-      #input
-      [id]="id"
-      [type]="inputType"
-      [placeholder]="props.placeholder"
-      [readonly]="props.readonly"
-      [formControl]="formControl"
-      [formlyAttributes]="field" />
-    <label [attr.for]="id" *ngIf="props.label" slot="label">{{props.label}}</label>
-    <span slot="helper-text" *ngIf="showError">
-      <formly-validation-message [field]="field"></formly-validation-message>
-    </span>
-  </forge-text-field>
+    <forge-text-field [required]="props.required" [invalid]="showError">
+      <input
+        #input
+        [id]="id"
+        [type]="inputType"
+        [placeholder]="props.placeholder"
+        [readonly]="props.readonly"
+        [formControl]="formControl"
+        [formlyAttributes]="field" />
+      @if (props.label) {
+        <label [attr.for]="id" slot="label">{{props.label}}</label>
+      }
+      @if (showError) {
+        <span slot="helper-text">
+          <formly-validation-message [field]="field"></formly-validation-message>
+        </span>
+      }
+    </forge-text-field>
   `,
   styles: [`
     :host {
@@ -43,7 +48,7 @@ import { FormlyDemoService } from '../formly-demo.service';
     CommonModule,
     ReactiveFormsModule,
     FormlyModule,
-    ForgeModule
+    ForgeTextFieldModule
   ],
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -51,7 +56,7 @@ import { FormlyDemoService } from '../formly-demo.service';
 export class InputTypeComponent extends FieldType<FieldTypeConfig> implements OnInit, OnDestroy {
   private unsubscribe = new Subject<void>();
   @ViewChild('input', { static: true })
-  private inputElement: ElementRef;
+  private inputElement?: ElementRef;
 
   public inputType = 'text';
 

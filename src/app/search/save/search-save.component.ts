@@ -1,13 +1,32 @@
-import { Component } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { DialogConfig, DialogRef } from '@tylertech/forge-angular';
+import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { DialogConfig, DialogRef, ForgeButtonModule, ForgeCheckboxModule, ForgeIconButtonModule, ForgeIconModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
+
+import { AutoFocusDirective } from 'src/app/shared/directives/auto-focus/auto-focus.directive';
+import { FormControlInvalidDirective } from 'src/app/shared/directives/form-control-invalid/form-control-invalid.directive';
 
 @Component({
   selector: 'app-search-save',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ForgeButtonModule,
+    ForgeCheckboxModule,
+    ForgeIconButtonModule,
+    ForgeIconModule,
+    ForgeTextFieldModule,
+    AutoFocusDirective,
+    FormControlInvalidDirective
+  ],
   templateUrl: './search-save.component.html',
   styleUrls: ['./search-save.component.scss']
 })
 export class SearchSaveComponent {
+  public dialogConfig = inject(DialogConfig);
+  private dialogRef = inject(DialogRef);
+
   public record: {
     id: number;
     name: string;
@@ -23,11 +42,8 @@ export class SearchSaveComponent {
     isPublic: new FormControl()
   });
 
-  constructor(
-    public dialogConfig: DialogConfig,
-    private dialogRef: DialogRef
-  ) {
-    this.record = dialogConfig.data;
+  constructor() {
+    this.record = this.dialogConfig.data;
     this.formGroup.patchValue(this.record);
   }
 

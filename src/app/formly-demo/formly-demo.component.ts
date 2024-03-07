@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { AbstractControl, Form, FormControl, FormGroup } from '@angular/forms';
 import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
 import { FormlyDemoService } from './formly-demo.service';
@@ -11,7 +11,10 @@ import { formlyDemoConstants } from './formly-demo.constants';
   styleUrls: ['./formly-demo.component.scss']
 })
 export class FormlyDemoComponent implements OnInit {
-  private form: Form;
+  private changeDetectorRef = inject(ChangeDetectorRef);
+  private moduleService = inject(FormlyDemoService);
+
+  private form?: Form;
 
   public formGroup = new FormGroup({});
   public formDefinition?: FormlyFieldConfig[];
@@ -28,14 +31,11 @@ export class FormlyDemoComponent implements OnInit {
   public model = {
     name: '',
     age: 10
-  } as any;
+  };
   public record: any;
-  public formMessage: { id: string; message: string; };
+  public formMessage?: { id: string; message: string; };
 
-  constructor(
-    private changeDetectorRef: ChangeDetectorRef,
-    private moduleService: FormlyDemoService
-  ) {
+  constructor() {
     this.moduleService.formMessage.pipe(
       takeUntilDestroyed()
     ).subscribe(result => {
@@ -43,9 +43,8 @@ export class FormlyDemoComponent implements OnInit {
     });
   }
 
-  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   public ngOnInit() {
-    this.formDefinition = formlyDemoConstants.formDefinitionBasic;
+    this.formDefinition = formlyDemoConstants.formDefinitionAll as any;
     this.changeDetectorRef.detectChanges();
   }
 
@@ -55,9 +54,9 @@ export class FormlyDemoComponent implements OnInit {
     }
 
     if (control instanceof FormGroup) {
-      const formErrors = control.errors ? { groupError: control } : {};
+      const formErrors = control.errors ? { groupError: control } : {} as any;
       Object.keys(control.controls).forEach(key => {
-        const error = this.getFormErrors(control.get(key));
+        const error = this.getFormErrors(control.get(key) as AbstractControl);
         if (error) {
           formErrors[key] = error;
         }

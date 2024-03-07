@@ -10,7 +10,8 @@
 </forge-toolbar>
 
 <div class="pdf-viewer">
-  <forge-toolbar *ngIf="pdf" class="pdf-viewer__header">
+  @if (pdf) {
+  <forge-toolbar class="pdf-viewer__header">
     <ng-container>
       <forge-icon-button slot="start" dense>
         <button type="button" aria-label="Toggle sidebar" (click)="showLeftToolbar = !showLeftToolbar">
@@ -27,8 +28,8 @@
         </forge-icon-button>
         <div class="pdf-viewer__paginator">
           <span>Page</span>
-          <input type="number" [(ngModel)]="page" [disabled]="pdf?.numPages === 1" />
-          <span>of {{pdf?.numPages}}</span>
+          <input type="number" [(ngModel)]="page" [disabled]="pdf.numPages === 1" />
+          <span>of {{pdf.numPages}}</span>
         </div>
         <forge-icon-button dense>
           <button type="button" aria-label="Next page" (click)="onPageChange('next')" [disabled]="page | appCallback:navButtonDisabled:'next'">
@@ -67,17 +68,25 @@
       </div>
     </ng-container>
   </forge-toolbar>
+  }
 
-  <forge-banner *ngIf="error" theme="danger">
-    <div>An error occurred: {{error?.message}}</div>
+  @if (error) {
+  <forge-banner theme="danger">
+    <div>An error occurred: {{error.message}}</div>
   </forge-banner>
+  }
 
   <div class="pdf-viewer__body">
-    <div *ngIf="!isLoaded && !error" class="pdf-viewer__loading-indicator">
+    @if (!isLoaded && !error) {
+    <div class="pdf-viewer__loading-indicator">
       <forge-circular-progress></forge-circular-progress>
       <span class="forge-typography--subtitle1">Loading document...</span>
     </div>
-    <div *ngIf="isLoaded && !error" #pdfViewerLeftToolbar class="pdf-viewer__left-toolbar" [ngClass]="{'app--hidden': !showLeftToolbar}"></div>
+    }
+
+    @if (isLoaded && !error) {
+    <div #pdfViewerLeftToolbar class="pdf-viewer__left-toolbar" [ngClass]="{'app--hidden': !showLeftToolbar}"></div>
+    }
     <pdf-viewer #pdfViewer class="pdf-viewer__viewer" [src]="pdfSrc" [(page)]="page" [zoom]="zoom" [zoom-scale]="'page-width'" (error)="onError($event)" (on-progress)="onProgress($event)" (after-load-complete)="afterLoadComplete($event)"></pdf-viewer>
   </div>
 </div>
@@ -100,7 +109,9 @@
           <forge-tooltip>Naxt instance</forge-tooltip>
         </button>
       </forge-icon-button>
-      <span *ngIf="searchMatches !== -1" class="forge-typography--caption">{{searchMatches}} matches found</span>
+      @if (searchMatches !== -1) {
+      <span class="forge-typography--caption">{{searchMatches}} matches found</span>
+      }
     </div>
     <div class="pdf-viewer__search-popup__features">
       <forge-checkbox>

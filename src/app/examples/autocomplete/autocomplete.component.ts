@@ -1,17 +1,32 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { lastValueFrom } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AutocompleteFilterCallback, AutocompleteOptionBuilder, AutocompleteSelectedTextBuilder, IOption } from '@tylertech/forge';
+import { ForgeAutocompleteModule, ForgeButtonModule, ForgeDividerModule, ForgeIconModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
 
 import { ExamplesService, IRecord } from '../examples.service';
 
 @Component({
   selector: 'app-examples-autocomplete',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ForgeAutocompleteModule,
+    ForgeButtonModule,
+    ForgeDividerModule,
+    ForgeIconModule,
+    ForgeTextFieldModule
+  ],
   templateUrl: './autocomplete.component.html',
   styleUrls: ['./autocomplete.component.scss']
 })
 export class AutocompleteComponent {
+  public moduleService = inject(ExamplesService);
+
   public formGroup = new FormGroup({
     autocomplete01: new FormControl(1),
     autocomplete02: new FormControl({ value: { id: 2, code: '002', description: 'Item 002' }, label: 'Item 002' }),
@@ -64,20 +79,16 @@ export class AutocompleteComponent {
     }
   };
 
-  constructor(
-    public moduleService: ExamplesService
-  ) { }
-
   public onAutocompleteChange(event: CustomEvent) {
     this.autocomplete07 = event.detail;
   }
 
   public onDisable() {
-    const control = this.formGroup.get('autocomplete01');
-    if (control.disabled) {
-      control.enable();
+    const control = this.formGroup.controls.autocomplete01;
+    if (control?.disabled) {
+      control?.enable();
     } else {
-      control.disable();
+      control?.disable();
     }
   }
 

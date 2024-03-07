@@ -1,13 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ForgeChipModule, ForgeChipSetModule } from '@tylertech/forge-angular';
 
 @Component({
   selector: 'app-filter-chips',
   templateUrl: './filter-chips.component.html',
   styleUrls: ['./filter-chips.component.scss'],
   standalone: true,
-  imports: [CommonModule],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  imports: [
+    CommonModule,
+    ForgeChipModule,
+    ForgeChipSetModule
+  ],
 })
 export class FilterChipsComponent {
   @Input()
@@ -15,8 +19,6 @@ export class FilterChipsComponent {
 
   @Output()
   public filter = new EventEmitter();
-
-  constructor() { }
 
   public onFilterDelete(event: CustomEvent) {
     const filterIndex = this.filters.findIndex((f) => f.property === event.detail.value);

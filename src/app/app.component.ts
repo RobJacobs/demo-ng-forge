@@ -1,24 +1,46 @@
-import { Component } from '@angular/core';
-import { ActivatedRouteSnapshot, Router, ActivatedRoute, NavigationEnd, NavigationStart } from '@angular/router';
+import { Component, ElementRef, inject } from '@angular/core';
+import { ActivatedRouteSnapshot, Router, ActivatedRoute, NavigationEnd, NavigationStart, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 import { AppCacheService } from './app-cache.service';
+import { ForgeButtonModule, ForgeDrawerModule, ForgeIconModule, ForgeScaffoldModule } from '@tylertech/forge-angular';
+import { HeaderComponent } from './shared/components/header/header.component';
+import { MenuComponent } from './shared/components/menu/menu.component';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
+  imports: [
+    RouterOutlet,
+    ForgeScaffoldModule,
+    ForgeDrawerModule,
+    ForgeButtonModule,
+    ForgeIconModule,
+    HeaderComponent,
+    MenuComponent
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    public appCache: AppCacheService) {
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private elementRef = inject(ElementRef);
+  public appCache = inject(AppCacheService);
+
+  constructor() {
     this.initRouteWatch();
     this.initLayoutWatch();
 
     // const param = encodeURIComponent(btoa(JSON.stringify({ property: 'value' })));
     // const decoded = JSON.parse(atob(decodeURIComponent(param)));
+  }
+
+  public expand() {
+    this.appCache.menu.type = this.appCache.menu.type === 'dismissible' ? 'mini' : 'dismissible';
+    if (this.appCache.menu.type === 'mini') {
+      (this.elementRef.nativeElement as HTMLElement).querySelectorAll('forge-expansion-panel').forEach(element => element.open = false);
+    }
   }
 
   private initRouteWatch(): void {

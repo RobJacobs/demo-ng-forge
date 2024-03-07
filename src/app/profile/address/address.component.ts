@@ -1,18 +1,27 @@
-import { Component } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ForgeTextFieldModule } from '@tylertech/forge-angular';
 
-import { IAddressFormGroup, ProfileCacheService } from '../profile-cache.service';
+import { FormControlInvalidDirective } from 'src/app/shared/directives/form-control-invalid/form-control-invalid.directive';
+import { ProfileCacheService } from '../profile-cache.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-profile-address',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ForgeTextFieldModule,
+    FormControlInvalidDirective
+  ],
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.scss']
 })
 export class AddressComponent {
-  public get formGroup() {
-    return this.cache.formGroup.get('addressFormGroup') as FormGroup<IAddressFormGroup>;
-  }
+  public cache = inject(ProfileCacheService);
 
-  constructor(public cache: ProfileCacheService) {
+  public get formGroup() {
+    return this.cache.formGroup.controls.addressFormGroup;
   }
 }

@@ -1,10 +1,12 @@
 <div class="body">
   <form class="form" novalidate autocomplete="off" [formGroup]="formGroup">
-    <formly-form *ngIf="formDefinition" [form]="formGroup" [model]="model" [fields]="formDefinition" [options]="formOptions"></formly-form>
+    @if (formDefinition) {
+    <formly-form [form]="formGroup" [model]="model" [fields]="formDefinition" [options]="formOptions"></formly-form>
 
-    <p *ngIf="formDefinition">
+    <p>
       {{formGroup.value| json}}
     </p>
+    }
   </form>
 </div>
 

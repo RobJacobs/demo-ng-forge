@@ -1,26 +1,46 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { finalize, fromEvent, tap, Subject, takeUntil, merge, delay, BehaviorSubject } from 'rxjs';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { finalize, fromEvent, tap, Subject, takeUntil, merge, BehaviorSubject } from 'rxjs';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
 import { IColumnConfiguration, SortDirection } from '@tylertech/forge';
 import { isDefined } from '@tylertech/forge-core';
-import { PopupDirective } from '@tylertech/forge-angular';
+import { ForgeCheckboxModule, ForgeDividerModule, ForgeIconModule, ForgeListItemModule, ForgeListModule, ForgePopupModule, ForgeToolbarModule, PopupDirective } from '@tylertech/forge-angular';
 
 import { IPerson } from 'src/app/shared/interfaces/person.interface';
 import { AppDataService } from 'src/app/app-data.service';
+import { AutoFocusDirective } from 'src/app/shared/directives/auto-focus/auto-focus.directive';
+import { CallbackPipe } from 'src/app/shared/pipes/callback.pipe';
 
 @Component({
   selector: 'app-table-demo',
+  standalone: true,
+  imports: [
+    CommonModule,
+    DragDropModule,
+    ScrollingModule,
+    ForgeCheckboxModule,
+    ForgeDividerModule,
+    ForgeIconModule,
+    ForgeListItemModule,
+    ForgeListModule,
+    ForgePopupModule,
+    ForgeToolbarModule,
+    AutoFocusDirective,
+    CallbackPipe
+  ],
   templateUrl: './table-demo.component.html',
   styleUrls: ['./table-demo.component.scss']
 })
 export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
+  private appDataService = inject(AppDataService);
+
   @ViewChild('table', { static: true })
-  private tableElementRef: ElementRef;
+  private tableElementRef?: ElementRef;
   @ViewChild('columnHeaderPopup', { read: PopupDirective })
-  private columnHeaderPopupDirective: PopupDirective;
+  private columnHeaderPopupDirective?: PopupDirective;
   @ViewChild(CdkVirtualScrollViewport)
-  public virtualScrollViewport: CdkVirtualScrollViewport;
+  public virtualScrollViewport?: CdkVirtualScrollViewport;
   private tableColumnResize$ = new Subject<void>();
   private isColumnResizing = false;
 
@@ -54,17 +74,12 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
     return person.id;
   }
 
-  constructor(
-    private appDataService: AppDataService
-  ) { }
-
-  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   public ngOnInit() {
     this.getRecords();
   }
 
   public ngAfterViewInit() {
-    this.virtualScrollViewport.renderedRangeStream.subscribe(o => {
+    this.virtualScrollViewport?.renderedRangeStream.subscribe(o => {
       this.tableHeaderOffset = o.start;
       if (!this.isBusy && o.start > 0 && o.end + 67 > this.recordCount) {
         this.isBusy = true;
@@ -72,7 +87,6 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
           .getPeople({
             sort: this.filterCache.sort
           }).pipe(
-            // delay(1000),
             finalize(() => this.isBusy = false)
           )
           .subscribe((result) => {
@@ -94,7 +108,7 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public onColumnHeaderDragStart() {
-    this.virtualScrollViewport.scrollToOffset(0);
+    this.virtualScrollViewport?.scrollToOffset(0);
   }
 
   public onColumnHeaderDragDrop(event: CdkDragDrop<string[]>) {
@@ -107,26 +121,26 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
     event.preventDefault();
     this.tableColumnResize$.next();
 
-    let columnHeaderElement = (this.tableElementRef.nativeElement as HTMLTableElement).querySelectorAll('thead tr th')[columnIndex] as HTMLTableCellElement;
-    let columnElements = (this.tableElementRef.nativeElement as HTMLTableElement).querySelectorAll(`tbody tr td:nth-child(${columnIndex + 1})`);
+    let columnHeaderElement = (this.tableElementRef?.nativeElement as HTMLTableElement).querySelectorAll('thead tr th')[columnIndex] as HTMLTableCellElement;
+    let columnElements = (this.tableElementRef?.nativeElement as HTMLTableElement).querySelectorAll(`tbody tr td:nth-child(${columnIndex + 1})`);
 
     let positionX = event.clientX;
     if (columnHeaderElement) {
       this.isColumnResizing = true;
-      this.tableElementRef.nativeElement.querySelector('.forge-table-head__row')?.classList.add('forge-table-head__row--resizing');
+      this.tableElementRef?.nativeElement.querySelector('.forge-table-head__row')?.classList.add('forge-table-head__row--resizing');
       columnHeaderElement.classList.add('forge-table-head__cell--resizing');
       columnElements.forEach(c => c.classList.add('forge-table-body__cell--resizing'));
 
-      fromEvent(document.body, 'mousemove')
+      fromEvent<MouseEvent>(document.body, 'mousemove')
         .pipe(
           takeUntil(this.tableColumnResize$),
-          tap((event: MouseEvent) => {
+          tap((event) => {
             column.width = columnHeaderElement.offsetWidth + (event.clientX - positionX);
             positionX = event.clientX;
           })
         ).subscribe();
 
-      const theadElement = this.tableElementRef.nativeElement.querySelector('thead');
+      const theadElement = this.tableElementRef?.nativeElement.querySelector('thead');
       merge(
         fromEvent(theadElement, 'mouseup'),
         fromEvent(theadElement, 'mouseleave')
@@ -135,14 +149,14 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
           finalize(() =>
             requestAnimationFrame(() => {
               this.isColumnResizing = false;
-              columnHeaderElement = undefined;
-              columnElements = undefined;
+              (columnHeaderElement as any) = undefined;
+              (columnElements as any) = undefined;
             })
           ),
           takeUntil(this.tableColumnResize$),
-          tap((event: MouseEvent) => {
+          tap((event) => {
             this.tableColumnResize$.next();
-            this.tableElementRef.nativeElement.querySelector('.forge-table-head__row')?.classList.remove('forge-table-head__row--resizing');
+            this.tableElementRef?.nativeElement.querySelector('.forge-table-head__row')?.classList.remove('forge-table-head__row--resizing');
             columnHeaderElement.classList.remove('forge-table-head__cell--resizing');
             columnElements.forEach(c => c.classList.remove('forge-table-body__cell--resizing'));
           })
@@ -152,10 +166,10 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public onColumnHeaderRightClick(event: PointerEvent) {
     event.preventDefault();
-    if (this.columnHeaderPopupDirective.popupElement) {
+    if (this.columnHeaderPopupDirective?.popupElement) {
       this.columnHeaderPopupDirective.close();
     } else {
-      this.columnHeaderPopupDirective.open();
+      this.columnHeaderPopupDirective?.open();
     }
   }
 
@@ -165,8 +179,8 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
         this.tableColumns.forEach(c => c.width = undefined);
         break;
       case 'freeze-column': {
-        let columnHeaderElement = (this.tableElementRef.nativeElement as HTMLTableElement).querySelectorAll('thead tr th')[0];
-        let columnElements = (this.tableElementRef.nativeElement as HTMLTableElement).querySelectorAll(`tbody tr td:nth-child(${1})`);
+        const columnHeaderElement = (this.tableElementRef?.nativeElement as HTMLTableElement).querySelectorAll('thead tr th')[0];
+        const columnElements = (this.tableElementRef?.nativeElement as HTMLTableElement).querySelectorAll(`tbody tr td:nth-child(${1})`);
         columnHeaderElement.classList.add('forge-table-head__cell--frozen');
         columnElements.forEach(c => c.classList.add('forge-table-body__cell--frozen'));
         break;
@@ -185,7 +199,7 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       }
     }
-    this.columnHeaderPopupDirective.close();
+    this.columnHeaderPopupDirective?.close();
   }
 
   public onTableSort(column: IColumnConfiguration) {
@@ -199,9 +213,9 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
         column.sortDirection = SortDirection.Ascending;
       }
 
-      this.filterCache.sort = column.sortDirection ? { property: column.property, direction: column.sortDirection } : undefined;
+      (this.filterCache as any).sort = column.sortDirection ? { property: column.property, direction: column.sortDirection } : undefined;
       this.filterCache.skip = 0;
-      this.virtualScrollViewport.scrollToOffset(0);
+      this.virtualScrollViewport?.scrollToOffset(0);
       this.getRecords();
     }
   }

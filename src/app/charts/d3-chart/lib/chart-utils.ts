@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { scaleLinear, ScaleLinear, ScaleTime, scaleTime, extent, interpolate, Arc, Transition } from 'd3';
 import { isDefined } from '@tylertech/forge-core';
 

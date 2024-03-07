@@ -23,7 +23,9 @@
     </forge-text-field>
     <div style="display: flex; column-gap: 8px; align-items: center;">
       <forge-select style="flex-grow: 1;" formControlName="maskType" label="Mask type">
-        <forge-option *ngFor="let option of maskOptions" [value]="option.value">{{option.label}}</forge-option>
+        @for (option of maskOptions; track i; let i = $index) {
+        <forge-option [value]="option.value">{{option.label}}</forge-option>
+        }
       </forge-select>
       <forge-button type="outlined">
         <button type="button" (click)="onApply()">

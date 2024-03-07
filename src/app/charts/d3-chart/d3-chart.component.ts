@@ -1,5 +1,9 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Subject, debounceTime, fromEvent, skip, takeUntil } from 'rxjs';
+import { Component, DestroyRef, ElementRef, Input, OnInit, ViewChild, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { debounceTime, fromEvent } from 'rxjs';
+import { ForgeListItemModule, ForgeListModule } from '@tylertech/forge-angular';
+
 import {
   BarChartService,
   BubbleChartService,
@@ -19,23 +23,31 @@ import {
 
 interface IChartItem {
   id: number;
-  value: any;
+  value: unknown;
   label: string;
-  category: any;
+  category: unknown;
 }
 
 @Component({
   selector: 'app-charts-d3-chart',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ForgeListItemModule,
+    ForgeListModule
+  ],
   templateUrl: './d3-chart.component.html',
   styleUrls: ['./d3-chart.component.scss']
 })
-export class D3ChartComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
-  @ViewChild('chartContainer', { static: true })
-  private chartContainer: ElementRef;
-  private chartPalette = Object.keys(ChartUtils.chartPalette).map(function (key) { return ChartUtils.chartPalette[key]; });
+export class D3ChartComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
 
-  #chartType: 'bar' | 'bubble' | 'donut' | 'donut-meter' | 'line' | 'pie' | 'treemap' | 'tree';
+  @ViewChild('chartContainer', { static: true })
+  private chartContainer?: ElementRef;
+  // @ts-expect-error ignore
+  private chartPalette = Object.keys(ChartUtils.chartPalette).map(key => ChartUtils.chartPalette[key]);
+
+  #chartType: 'bar' | 'bubble' | 'donut' | 'donut-meter' | 'line' | 'pie' | 'treemap' | 'tree' = 'bar';
   @Input()
   public set chartType(value: 'bar' | 'bubble' | 'donut' | 'donut-meter' | 'line' | 'pie' | 'treemap' | 'tree') {
     this.#chartType = value;
@@ -53,22 +65,17 @@ export class D3ChartComponent implements OnInit, OnDestroy {
   public get chartType(): 'bar' | 'bubble' | 'donut' | 'donut-meter' | 'line' | 'pie' | 'treemap' | 'tree' {
     return this.#chartType;
   }
-  public chartData: IChartItem[];
-  public lineChartData: IChartItem[][];
-  public treeChartData: ITreeChartData;
-  public legendData: { id: number; value: any; label: string; color: string; }[];
+  public chartData?: IChartItem[];
+  public lineChartData?: IChartItem[][];
+  public treeChartData?: ITreeChartData;
+  public legendData?: { id: number; value: unknown; label: string; color: string; }[];
   public showLegend = false;
 
   public ngOnInit() {
     fromEvent(window, 'resize').pipe(
-      takeUntil(this.unsubscribe),
+      takeUntilDestroyed(this.destroyRef),
       debounceTime(100)
     ).subscribe(() => this.drawChart());
-  }
-
-  public ngOnDestroy() {
-    this.unsubscribe.next();
-    this.unsubscribe.complete();
   }
 
   public onAction(action: 'add' | 'update' | 'delete') {
@@ -77,9 +84,9 @@ export class D3ChartComponent implements OnInit, OnDestroy {
   }
 
   private initializeChartContainer() {
-    (this.chartContainer.nativeElement as HTMLElement).querySelector('svg')?.remove();
+    (this.chartContainer?.nativeElement as HTMLElement).querySelector('svg')?.remove();
     const chartElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    (this.chartContainer.nativeElement as HTMLElement).appendChild(chartElement);
+    (this.chartContainer?.nativeElement as HTMLElement).appendChild(chartElement);
   }
 
   private setChartData(action: 'create' | 'update' | 'add' | 'delete') {
@@ -88,7 +95,6 @@ export class D3ChartComponent implements OnInit, OnDestroy {
     }
 
     switch (action) {
-      // case 'update':
       case 'create': {
         if (this.chartType === 'line') {
           this.lineChartData = [this.getData(10)];
@@ -106,15 +112,15 @@ export class D3ChartComponent implements OnInit, OnDestroy {
       }
       case 'update': {
         if (this.chartType === 'line') {
-          this.lineChartData.forEach((d, i) => {
+          this.lineChartData?.forEach((d, i) => {
             this.getData(d.length).forEach((dd, i) => {
               d[i].value = dd.value;
               // d[i].category = dd.category;
             });
           });
         } else {
-          this.getData(this.chartData.length).forEach((d, i) => {
-            this.chartData[i].value = d.value;
+          this.getData(this.chartData!.length).forEach((d, i) => {
+            this.chartData![i].value = d.value;
             // this.chartData[i].category = d.category;
           });
         }
@@ -122,7 +128,7 @@ export class D3ChartComponent implements OnInit, OnDestroy {
       }
       case 'add': {
         if (this.chartType === 'line') {
-          this.lineChartData.push(this.getData(10));
+          this.lineChartData?.push(this.getData(10));
           // this.lineChartData.forEach((d, i) => {
           //   let maxId = Math.max(...d.map(dd => dd.id)) || 0;
           //   maxId++;
@@ -130,19 +136,18 @@ export class D3ChartComponent implements OnInit, OnDestroy {
           //   d[i] = d.concat(this.getData(10, maxId));
           // });
         } else {
-          let maxId = Math.max(...this.chartData.map(d => d.id)) || 0;
+          let maxId = Math.max(...this.chartData!.map(d => d.id)) || 0;
           maxId++;
-          this.chartData = this.chartData.concat(this.getData(10, maxId));
+          this.chartData = this.chartData?.concat(this.getData(10, maxId));
         }
         break;
       }
       case 'delete': {
         if (this.chartType === 'line') {
-          this.lineChartData.pop();
-          // console.log(this.lineChartData);
+          this.lineChartData?.pop();
         } else {
-          if (this.chartData.length > 10) {
-            this.chartData = this.chartData.slice(0, this.chartData.length - 10);
+          if (this.chartData!.length > 10) {
+            this.chartData = this.chartData?.slice(0, this.chartData.length - 10);
           }
         }
         break;
@@ -150,12 +155,12 @@ export class D3ChartComponent implements OnInit, OnDestroy {
     }
 
     if (this.chartType === 'bubble' || this.chartType === 'donut' || this.chartType === 'pie' || this.chartType === 'treemap') {
-      this.chartData = this.chartData.sort((a, b) => { return a.category - b.category; });
+      this.chartData = this.chartData?.sort((a, b) => { return (a.category as number) - (b.category as number); });
     }
   }
 
   private getData(length: number, startId = 0): IChartItem[] {
-    let data: IChartItem[] = [];
+    const data: IChartItem[] = [];
     const date = Date.now();
     for (let i = 0; i < length; i++) {
       // data.push({id: i + startId, value: randomNumber(1, 100), label: 'Item ' + (i + startId), category: randomDate()});
@@ -166,14 +171,14 @@ export class D3ChartComponent implements OnInit, OnDestroy {
       // data.push({id: i + startId, value: i * 100, label: 'Item ' + (i + startId), category: randomNumber(0, 100)});
     }
 
-    return data.sort((a, b) => { return a.category - b.category; });
+    return data.sort((a, b) => { return (a.category as number) - (b.category as number); });
   }
 
   private drawChart() {
     this.legendData = this.chartData?.map((d, i) => ({ id: d.id, label: d.label, value: d.value, color: this.chartPalette[i % this.chartPalette.length] }));
 
     const chartConfig = {
-      container: this.chartContainer.nativeElement.querySelector('svg'),
+      container: this.chartContainer?.nativeElement.querySelector('svg'),
       data: this.chartData?.map((d, i) => ({ ...d, color: this.chartPalette[i % this.chartPalette.length] })),
       palette: this.chartPalette,
       // selectedCallback: this.selectedCallback,
@@ -223,20 +228,20 @@ export class D3ChartComponent implements OnInit, OnDestroy {
         break;
       }
       case 'line': {
-        const lineChartData: ILineChartData[] = this.lineChartData.map((d, i) => {
+        const lineChartData = this.lineChartData?.map((d, i) => {
           return {
             id: i,
             label: `Item ${i}`,
             data: d,
             color: this.chartPalette[i % this.chartPalette.length]
-          }
+          } as ILineChartData
         });
         const lineConfig = {
           container: chartConfig.container,
           data: lineChartData
         } as ILineChartConfig;
         LineChartService.buildLineChart(lineConfig);
-        this.legendData = lineChartData.map((d, i) => ({ id: d.id, color: d.color, value: null, label: d.data[0].label }));
+        this.legendData = lineChartData?.map((d, i) => ({ id: d.id, color: d.color, value: null, label: d.data[0].label })) as any[];
         break;
       }
       case 'pie': {
@@ -291,12 +296,12 @@ export class D3ChartComponent implements OnInit, OnDestroy {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  private selectedCallback(data, node) {
+  private selectedCallback(data: unknown, node: unknown) {
     console.log(data);
     console.log(node);
   }
 
-  private hoverCallback(isHovered, data, node) {
+  private hoverCallback(isHovered: boolean, data: unknown, node: unknown) {
     console.log(data);
     console.log(node);
   }

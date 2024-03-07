@@ -12,12 +12,12 @@ import {
   Output,
   EventEmitter,
   HostListener,
-  CUSTOM_ELEMENTS_SCHEMA,
-  NgZone
+  NgZone,
+  inject
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
-
 import {
   AutocompleteFilterCallback,
   IOption,
@@ -26,21 +26,36 @@ import {
   AutocompleteComponent
 } from '@tylertech/forge';
 import { isArray, isString, isDefined } from '@tylertech/forge-core';
+import { ForgeAutocompleteModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIconModule, ForgeListItemModule, ForgeListModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
+import { ListDropdownHeaderBuilder } from '@tylertech/forge/esm/list-dropdown';
 
 import { Utils } from 'src/utils';
-import { ListDropdownHeaderBuilder } from '@tylertech/forge/esm/list-dropdown';
-import { CommonModule } from '@angular/common';
-
 @Component({
   selector: 'app-autocomplete-range',
   templateUrl: './autocomplete-range.component.html',
   styleUrls: ['./autocomplete-range.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ForgeAutocompleteModule,
+    ForgeDividerModule,
+    ForgeIconButtonModule,
+    ForgeIconModule,
+    ForgeListItemModule,
+    ForgeListModule,
+    ForgeTextFieldModule
+  ],
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => AutocompleteRangeComponent), multi: true }]
 })
 export class AutocompleteRangeComponent implements ControlValueAccessor, AfterViewInit, OnDestroy {
+  private ngZone = inject(NgZone);
+  private viewContainerRef = inject(ViewContainerRef);
+
+  @HostListener('focusout', ['$event'])
+  public autocompleteBlur() {
+    this.onTouched();
+  }
   @ViewChild('rangeAutocomplete') autocompleteRef?: ElementRef;
   @ViewChild('rangeTemplate') rangeTemplateRef?: TemplateRef<any>;
   @ViewChild('filterInput') filterInputRef?: ElementRef;
@@ -68,11 +83,6 @@ export class AutocompleteRangeComponent implements ControlValueAccessor, AfterVi
 
   private rangeRef?: EmbeddedViewRef<any>;
   private filter = '';
-
-  constructor(
-    private ngZone: NgZone,
-    private viewContainerRef: ViewContainerRef
-  ) { }
 
   public onChange = (fn: any) => { };
   public onTouched = () => { };
@@ -164,12 +174,6 @@ export class AutocompleteRangeComponent implements ControlValueAccessor, AfterVi
 
   public onAutocompleteChange(): void {
     this.emitChangeEvents();
-  }
-
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  @HostListener('focusout', ['$event'])
-  public autocompleteBlur(): void {
-    this.onTouched();
   }
 
   public onAddRangeOption(): void {

@@ -3,21 +3,24 @@
     <div class="title">List 1</div>
 
     <forge-list cdkDropList #item01List="cdkDropList" [cdkDropListData]="items01" [cdkDropListConnectedTo]="[item02List]" (cdkDropListDropped)="onDrop($event)">
-      <forge-list-item *ngFor="let item of items01" cdkDrag>
+      @for (item of items01; track i; let i = $index) {
+      <forge-list-item cdkDrag>
         <span class="cdk-drag__content">{{ item }}</span>
       </forge-list-item>
+      }
       <forge-list-item class="cdk-drag-placeholder" *cdkDragPlaceholder></forge-list-item>
     </forge-list>
-
   </div>
 
   <div class="card">
     <div class="title">List 2</div>
 
     <forge-list cdkDropList #item02List="cdkDropList" [cdkDropListData]="items02" [cdkDropListConnectedTo]="[item01List]" (cdkDropListDropped)="onDrop($event)">
-      <forge-list-item *ngFor="let item of items02" cdkDrag>
+      @for (item of items02; track i; let i = $index) {
+      <forge-list-item cdkDrag>
         <span class="cdk-drag__content">{{ item }}</span>
       </forge-list-item>
+      }
       <forge-list-item class="cdk-drag-placeholder" *cdkDragPlaceholder></forge-list-item>
     </forge-list>
 

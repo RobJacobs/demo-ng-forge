@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { IColumnConfiguration, ITableFilterEventData, ITableRowClickEventData, ITableSortEventData, SortDirection } from '@tylertech/forge';
-import { isDefined } from '@tylertech/forge-core';
-import { DialogConfig, DialogRef } from '@tylertech/forge-angular';
+import { Component, inject } from '@angular/core';
 import { finalize, Observable, Subject, takeUntil } from 'rxjs';
+import { isDefined } from '@tylertech/forge-core';
+import { IColumnConfiguration, ITableFilterEventData, ITableRowClickEventData, ITableSortEventData, SortDirection } from '@tylertech/forge';
+import { DialogConfig, DialogRef, ForgeIconButtonModule, ForgeIconModule, ForgePageStateModule, ForgePaginatorModule, ForgeSkeletonModule, ForgeTableModule } from '@tylertech/forge-angular';
+
 import { IFilterParameter, IFilter, IFilterResponse } from 'src/app/shared/interfaces/filter.interface';
 
 export interface IFieldHelpDialogConfig {
@@ -19,11 +20,19 @@ export interface IFieldHelpDialogConfig {
   styleUrls: ['./field-help-dialog.component.scss'],
   standalone: true,
   imports: [
-    CommonModule
-  ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    CommonModule,
+    ForgeIconButtonModule,
+    ForgeIconModule,
+    ForgePageStateModule,
+    ForgePaginatorModule,
+    ForgeSkeletonModule,
+    ForgeTableModule
+  ]
 })
 export class FieldHelpDialogComponent {
+  public dialogConfig = inject(DialogConfig<IFieldHelpDialogConfig>);
+  private dialogRef = inject(DialogRef);
+
   public title: string;
   public columnConfigurations: IColumnConfiguration[];
   public data: any[] = [];
@@ -44,14 +53,12 @@ export class FieldHelpDialogComponent {
   private filters: IFilter[] = [];
 
   constructor(
-    public dialogConfig: DialogConfig<IFieldHelpDialogConfig>,
-    private dialogRef: DialogRef
   ) {
-    this.title = this.dialogConfig.data.title;
-    this.columnConfigurations = this.dialogConfig.data.columnConfigurations;
-    this.dataObservable = this.dialogConfig.data.dataObservable;
-    this.key = this.dialogConfig.data.key;
-    this.sort.property = this.columnConfigurations.find(c => c.initialSort)?.property || this.columnConfigurations[0].property;
+    this.title = this.dialogConfig.data?.title || '';
+    this.columnConfigurations = this.dialogConfig.data?.columnConfigurations || [];
+    this.dataObservable = this.dialogConfig.data?.dataObservable as any;
+    this.key = this.dialogConfig.data?.key || '';
+    this.sort.property = this.columnConfigurations.find(c => c.initialSort)?.property || this.columnConfigurations[0].property as string;
     this.getData();
   }
 
@@ -66,14 +73,14 @@ export class FieldHelpDialogComponent {
   }
 
   public onTableSort(value: ITableSortEventData) {
-    this.sort.property = this.columnConfigurations[value.columnIndex].property;
+    this.sort.property = this.columnConfigurations[value.columnIndex].property as string;
     this.sort.direction = value.direction;
     this.paginator.pageIndex = 0;
     this.getData();
   }
 
   public onTableFilter(filter: ITableFilterEventData) {
-    const filterProperty = this.columnConfigurations[filter.columnIndex].property;
+    const filterProperty = this.columnConfigurations[filter.columnIndex].property as string;
     if (isDefined(filter.value) && filter.value?.toString().length) {
       this.filters.push({ property: filterProperty, value: filter.value });
     } else {

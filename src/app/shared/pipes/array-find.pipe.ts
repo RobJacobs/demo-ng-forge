@@ -7,7 +7,7 @@ import { isDeepEqual } from '@tylertech/forge-core';
   standalone: true
 })
 export class ArrayFindPipe implements PipeTransform {
-  transform(value: string | number, source: any[], filterProperty: string, returnProperty = null) {
+  transform(value: string | number, source: any[], filterProperty: string, returnProperty?: string) {
     if (!value?.toString().length || !source.length || !filterProperty.length) {
       return;
     }

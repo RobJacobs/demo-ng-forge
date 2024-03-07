@@ -1,21 +1,38 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, OnInit, ViewChild, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { IOption, SortDirection } from '@tylertech/forge';
 import { isDefined } from '@tylertech/forge-core';
-import { AgGridAngular } from 'ag-grid-angular';
+import { ForgeIconButtonModule, ForgeIconModule, ForgeOptionModule, ForgePaginatorModule, ForgeSelectDropdownModule, ForgeToolbarModule } from '@tylertech/forge-angular';
+import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
 import { ColDef, ColumnMovedEvent, ColumnResizedEvent, ColumnVisibleEvent, GridOptions, GridReadyEvent, ICellRendererComp, ICellRendererParams, SortChangedEvent } from 'ag-grid-community';
 import { finalize } from 'rxjs';
+
 import { IPerson } from 'src/app/shared/interfaces/person.interface';
 import { Utils } from 'src/utils';
 import { AppDataService } from '../app-data.service';
 
 @Component({
   selector: 'app-ag-grid-demo',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ForgeIconButtonModule,
+    ForgeIconModule,
+    ForgeOptionModule,
+    ForgePaginatorModule,
+    ForgeSelectDropdownModule,
+    ForgeToolbarModule,
+    AgGridModule
+  ],
   templateUrl: './ag-grid-demo.component.html',
-  styleUrls: ['./ag-grid-demo.component.scss']
+  styleUrls: ['./ag-grid-demo.component.scss'],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AgGridDemoComponent implements OnInit {
+  private appDataService = inject(AppDataService);
+
   @ViewChild('agGrid', { read: AgGridAngular })
-  private agGrid: AgGridAngular;
+  private agGrid?: AgGridAngular;
   private storageKey = 'ag-grid-demo';
 
   public isBusy = false;
@@ -24,7 +41,7 @@ export class AgGridDemoComponent implements OnInit {
       property: 'lastName',
       direction: SortDirection.Ascending
     },
-    filters: [] as any[],
+    filters: [],
     skip: 0,
     take: 25
   }
@@ -47,32 +64,28 @@ export class AgGridDemoComponent implements OnInit {
   ];
 
   public get optionalTableColumns(): IOption[] {
-    return this.columnDefs.filter(c => c.field).map(c => ({ value: c.field, label: c.headerName || c.field }));
+    return this.columnDefs.filter(c => c.field).map(c => ({ value: c.field, label: c.headerName || c.field })) as IOption[];
   }
-  public selectedTableColumns: string[] = [];
-
-  constructor(
-    private appDataService: AppDataService,
-  ) { }
+  public selectedTableColumns?: (string | undefined)[];
 
   public ngOnInit() {
     this.getRecords();
   }
 
   public onGridReady(event: GridReadyEvent) {
-    this.agGrid.api.sizeColumnsToFit();
+    this.agGrid?.api.sizeColumnsToFit();
     const columnState = localStorage.getItem(this.storageKey);
     if (columnState?.length) {
-      this.agGrid.columnApi.applyColumnState({
+      this.agGrid?.api.applyColumnState({
         state: JSON.parse(columnState),
         applyOrder: true
       });
     }
-    this.selectedTableColumns = this.agGrid.columnApi.getAllDisplayedColumns().map(c => c.getColDef().field);
+    this.selectedTableColumns = this.agGrid?.api.getAllDisplayedColumns().map(c => c.getColDef().field);
   }
 
   public onTableSort(event: SortChangedEvent) {
-    localStorage.setItem(this.storageKey, JSON.stringify(event.columnApi.getColumnState()));
+    localStorage.setItem(this.storageKey, JSON.stringify(event.api.getColumnState()));
   }
 
   public onTableStateChange(event: ColumnResizedEvent | ColumnMovedEvent | ColumnVisibleEvent) {
@@ -82,14 +95,14 @@ export class AgGridDemoComponent implements OnInit {
 
     const eventSources = ['uiColumnResized', 'uiColumnMoved'];
     if (eventSources.includes(event.source) || event.type === 'columnVisible') {
-      localStorage.setItem(this.storageKey, JSON.stringify(event.columnApi.getColumnState()));
+      localStorage.setItem(this.storageKey, JSON.stringify(event.api.getColumnState()));
     }
   }
 
   public onTableColumnOptionSelected(columnFields: string[]) {
     this.selectedTableColumns = columnFields;
-    this.agGrid.columnApi.setColumnsVisible(columnFields, true);
-    this.agGrid.columnApi.setColumnsVisible(this.columnDefs.map(c => c.field).filter(c => !columnFields.includes(c)), false);
+    this.agGrid?.api.setColumnsVisible(columnFields, true);
+    this.agGrid?.api.setColumnsVisible(this.columnDefs.map(c => c.field).filter(c => !columnFields.includes(c as string)) as string[], false);
   }
 
   public onTablePaginatorChange(detail: { pageIndex: number; pageSize: number }) {
@@ -117,10 +130,10 @@ export class AgGridDemoComponent implements OnInit {
 }
 
 class ImageCellRendererComponent implements ICellRendererComp {
-  private cellElement: HTMLImageElement;
+  private cellElement?: HTMLImageElement;
 
   getGui(): HTMLElement {
-    return this.cellElement;
+    return this.cellElement as HTMLElement;
   }
 
   init?(params: ICellRendererParams<any, any, any>) {
@@ -130,7 +143,7 @@ class ImageCellRendererComponent implements ICellRendererComp {
   }
 
   refresh(params: ICellRendererParams<any, any, any>): boolean {
-    this.cellElement.src = `mock-data/${Utils.formatNumber(params.data.id, '2.0-0')}-small.png`;
+    this.cellElement!.src = `mock-data/${Utils.formatNumber(params.data.id, '2.0-0')}-small.png`;
 
     return true;
   }
