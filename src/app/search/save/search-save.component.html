@@ -1,7 +1,7 @@
 <div class="dialog__header">
-  <span class="forge-typography--headline5">Save search</span>
+  <h2 class="forge-typography--headline5" id="save-search--title">Save search</h2>
   <forge-icon-button class="forge-flex-item--right">
-    <button type="button" aria-label="close" (click)="onCancel()">
+    <button type="button" aria-label="Close" (click)="onCancel()">
       <forge-icon name="close"></forge-icon>
     </button>
   </forge-icon-button>
@@ -10,7 +10,7 @@
 <div class="dialog__body">
   <form class="form-grid" novalidate autocomplete="off" [formGroup]="formGroup">
     <forge-text-field required [appFormControlInvalid]="formGroup.controls.name">
-      <input type="text" appAutoFocus id="search-save-name" formControlName="name">
+      <input type="text" id="search-save-name" formControlName="name">
       <label for="search-save-name" slot="label">Name</label>
       <span slot="helper-text" class="app-form-control-invalid">A name is required</span>
     </forge-text-field>

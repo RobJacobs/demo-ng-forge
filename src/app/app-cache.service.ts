@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Subject } from 'rxjs';
 
 export interface IAppCacheService {
-  isBusy: boolean;
+  isBusy: ReturnType<typeof signal<boolean>>;
   layoutMode: string;
   menu: {
     type: string;
@@ -15,7 +15,7 @@ export interface IAppCacheService {
   providedIn: 'root'
 })
 export class AppCacheService implements IAppCacheService {
-  public isBusy = false;
+  public isBusy = signal<boolean>(false);
   public storageKey = 'demo-ng-forge--app';
   public theme: 'dark' | 'light' = 'light';
   public layoutMode: 'sm' | 'md' | 'lg' = 'lg';
@@ -48,7 +48,7 @@ export class AppCacheService implements IAppCacheService {
       },
       { label: 'Formly', value: 'formly-demo', icon: 'article' },
       { label: 'Table', value: 'table-demo', icon: 'table_rows' },
-      // { label: 'AG Grid', value: 'ag-grid-demo', icon: 'table_rows' },
+      { label: 'AG Grid', value: 'ag-grid-demo', icon: 'table_rows' },
       { label: 'Storage', value: 'storage', icon: 'storage' },
       { label: 'IMask', value: 'imask', icon: 'masks' },
       { label: 'Charts', value: 'charts', icon: 'bar_chart' },

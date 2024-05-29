@@ -13,9 +13,9 @@ import { IPerson } from 'src/app/shared/interfaces/person.interface';
 import { BaseTableComponent } from 'src/app/shared/table/base-table.component';
 import { RouterlinkButtonComponent } from 'src/app/shared/components/routerlink-button/routerlink-button.component';
 import { FilterChipsComponent } from 'src/app/shared/components/filter-chips/filter-chips.component';
+import { TableDetailComponent } from 'src/app/shared/components/table-detail/table-detail.component';
 import { PeopleCacheService } from '../people-cache.service';
 import { FilterComponent } from './filter/filter.component';
-import { TableDetailComponent } from './table-detail/table-detail.component';
 
 @Component({
   selector: 'app-people-home',
@@ -92,6 +92,7 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
         template: (rowIndex: number, cellElement: HTMLElement, data: any) => {
           const imgElement = document.createElement('img') as HTMLImageElement;
           imgElement.src = `mock-data/${Utils.formatNumber(data.id, '2.0-0')}-small.png`;
+          imgElement.setAttribute('alt', '');
           imgElement.classList.add('forge-table-cell__image');
           return imgElement;
         }

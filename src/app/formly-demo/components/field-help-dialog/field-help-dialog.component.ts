@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
+import { CdkTrapFocus } from '@angular/cdk/a11y';
 import { finalize, Observable, Subject, takeUntil } from 'rxjs';
 import { isDefined } from '@tylertech/forge-core';
 import { IColumnConfiguration, ITableFilterEventData, ITableRowClickEventData, ITableSortEventData, SortDirection } from '@tylertech/forge';
@@ -27,11 +28,13 @@ export interface IFieldHelpDialogConfig {
     ForgePaginatorModule,
     ForgeSkeletonModule,
     ForgeTableModule
-  ]
+  ],
+  hostDirectives: [CdkTrapFocus]
 })
 export class FieldHelpDialogComponent {
   public dialogConfig = inject(DialogConfig<IFieldHelpDialogConfig>);
   private dialogRef = inject(DialogRef);
+  private trapFocusDirective = inject(CdkTrapFocus);
 
   public title: string;
   public columnConfigurations: IColumnConfiguration[];
@@ -59,6 +62,8 @@ export class FieldHelpDialogComponent {
     this.dataObservable = this.dialogConfig.data?.dataObservable as any;
     this.key = this.dialogConfig.data?.key || '';
     this.sort.property = this.columnConfigurations.find(c => c.initialSort)?.property || this.columnConfigurations[0].property as string;
+    this.dialogRef.nativeElement.setAttribute('aria-labelledby', 'field-help--title');
+    this.trapFocusDirective.autoCapture = true;
     this.getData();
   }
 

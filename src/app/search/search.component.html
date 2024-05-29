@@ -43,12 +43,12 @@
       <span>{{search.name}}</span>
       <div slot="trailing">
         <forge-icon-button>
-          <button (click)="onSearchAction($any($event), 'edit', search.id)">
+          <button (click)="onSearchAction($any($event), 'edit', search.id)" aria-label="Edit">
             <forge-icon name="edit"></forge-icon>
           </button>
         </forge-icon-button>
         <forge-icon-button>
-          <button (click)="onSearchAction($any($event), 'delete', search.id)">
+          <button (click)="onSearchAction($any($event), 'delete', search.id)" aria-label="Delete">
             <forge-icon name="delete"></forge-icon>
           </button>
         </forge-icon-button>
@@ -66,11 +66,7 @@
           <input type="text" id="app--search--name" />
           <label for="app--search--name">Name</label>
           <forge-icon slot="trailing" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
-          <forge-icon-button slot="addon-end" class="operator__addon" [ngClass]="{'operator__addon--selected': formGroup.controls.name.value.operator}">
-            <button type="button" #nameOperatorPopup="forgePopup" [forgePopup]="operatorPopupTemplate" (click)="onOperatorPopupOpen($event, nameOperatorPopup, 'name')">
-              <forge-icon name="bolt"></forge-icon>
-            </button>
-          </forge-icon-button>
+          <ng-container *ngTemplateOutlet="opertatorAddonTemplate, context: { name: 'name' }"></ng-container>
         </forge-text-field>
       </forge-autocomplete>
     </ng-container>
@@ -80,11 +76,7 @@
         <forge-text-field>
           <input type="text" id="app--search--date-of-birth" />
           <label for="app--search--date-of-birth">Date</label>
-          <forge-icon-button slot="addon-end" class="operator__addon" [ngClass]="{'operator__addon--selected': formGroup.controls.dateOfBirth.value.operator}">
-            <button type="button" #dateOfBirthOperatorPopup="forgePopup" [forgePopup]="operatorPopupTemplate" (click)="onOperatorPopupOpen($event, dateOfBirthOperatorPopup, 'dateOfBirth')">
-              <forge-icon name="bolt"></forge-icon>
-            </button>
-          </forge-icon-button>
+          <ng-container *ngTemplateOutlet="opertatorAddonTemplate, context: { name: 'dateOfBirth' }"></ng-container>
         </forge-text-field>
       </forge-date-picker>
     </ng-container>
@@ -110,7 +102,7 @@
 
 <ng-template #opertatorAddonTemplate let-name="name">
   <forge-icon-button slot="addon-end" class="operator__addon" [ngClass]="{'operator__addon--selected': formGroup.get(name)?.value.operator}">
-    <button type="button" #operatorPopup="forgePopup" [forgePopup]="operatorPopupTemplate" (click)="onOperatorPopupOpen($event, operatorPopup, name)">
+    <button type="button" #operatorPopup="forgePopup" [forgePopup]="operatorPopupTemplate" (click)="onOperatorPopupOpen($event, operatorPopup, name)" aria-label="Filter operator">
       <forge-icon name="bolt"></forge-icon>
     </button>
   </forge-icon-button>

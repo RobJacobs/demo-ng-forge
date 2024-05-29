@@ -133,9 +133,8 @@ export class SearchComponent implements OnInit {
       isPublic: activeSearch?.isPublic,
       filters: this.formGroup.value
     };
-    const dialogRef = this.dialogService.show(SearchSaveComponent, { backdropClose: false, escapeClose: false }, { data: record });
-    const sub = dialogRef.afterClosed.subscribe((result) => {
-      sub.unsubscribe();
+
+    this.dialogService.show(SearchSaveComponent, { backdropClose: false, escapeClose: false }, { data: record }).afterClosed.subscribe(result => {
       if (result) {
         if (isDefined(result.id)) {
           const searchIndex = this.searchCache.searches.findIndex((s) => s.id === result.id);
@@ -159,7 +158,7 @@ export class SearchComponent implements OnInit {
           }
         );
       }
-    });
+    })
   }
 
   public onClearSearch() {

@@ -29,7 +29,7 @@ import { FormlyFieldDirective } from './formly-field.directive';
             }
             <td class="forge-table-cell forge-table-body__cell forge-table-cell__button">
               <forge-icon-button>
-                <button type="button" (click)="onRemove(i)">
+                <button type="button" (click)="onRemove(i)" aria-label="Delete">
                   <forge-icon name="delete"></forge-icon>
                 </button>
               </forge-icon-button>

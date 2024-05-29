@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { CdkTrapFocus } from '@angular/cdk/a11y';
 import { DialogConfig, DialogRef, ForgeButtonModule, ForgeCheckboxModule, ForgeIconButtonModule, ForgeIconModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
 
 import { AutoFocusDirective } from 'src/app/shared/directives/auto-focus/auto-focus.directive';
@@ -21,11 +22,13 @@ import { FormControlInvalidDirective } from 'src/app/shared/directives/form-cont
     FormControlInvalidDirective
   ],
   templateUrl: './search-save.component.html',
-  styleUrls: ['./search-save.component.scss']
+  styleUrls: ['./search-save.component.scss'],
+  hostDirectives: [CdkTrapFocus]
 })
 export class SearchSaveComponent {
   public dialogConfig = inject(DialogConfig);
   private dialogRef = inject(DialogRef);
+  private trapFocusDirective = inject(CdkTrapFocus);
 
   public record: {
     id: number;
@@ -45,24 +48,16 @@ export class SearchSaveComponent {
   constructor() {
     this.record = this.dialogConfig.data;
     this.formGroup.patchValue(this.record);
+    this.dialogRef.nativeElement.setAttribute('aria-labelledby', 'save-search--title');
+    this.trapFocusDirective.autoCapture = true;
   }
 
   public onSave() {
-    this.dialogRef.close(this.parseFormGroup());
+    this.dialogRef.close(this.formGroup.getRawValue());
   }
 
   public onCancel() {
+    this.formGroup.markAsPristine();
     this.dialogRef.close(false);
-  }
-
-  private parseFormGroup() {
-    return {
-      id: this.record.id,
-      name: this.formGroup.value.name,
-      description: this.formGroup.value.description,
-      isDefault: this.formGroup.value.isDefault,
-      isPublic: this.formGroup.value.isPublic,
-      filters: this.record.filters
-    };
   }
 }

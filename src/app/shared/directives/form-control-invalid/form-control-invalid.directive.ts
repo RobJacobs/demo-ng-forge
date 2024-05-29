@@ -13,16 +13,15 @@ export class FormControlInvalidDirective implements OnInit {
   private elementRef = inject(ElementRef<HTMLElement>);
   private renderer = inject(Renderer2);
 
-  @Input('appFormControlInvalid')
-  public control?: AbstractControl;
+  @Input({ alias: 'appFormControlInvalid', required: true })
+  public control!: AbstractControl;
 
   public ngOnInit() {
     const blur$ = fromEvent<FocusEvent>(this.elementRef.nativeElement, 'focusout').pipe(delay(0));
-    const statusChanges$ = this.control?.statusChanges.pipe(startWith(this.control.status));
+    const statusChanges$ = this.control.statusChanges.pipe(startWith(this.control.status));
 
-    // TODO
-    combineLatest([blur$, statusChanges$]).pipe(
-      map(value => (value as any)[1] === 'INVALID' && this.control?.touched),
+    combineLatest({ event: blur$, status: statusChanges$ }).pipe(
+      map(value => value.status === 'INVALID' && this.control.touched),
       distinctUntilChanged(),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(shouldMarkInvalid => {

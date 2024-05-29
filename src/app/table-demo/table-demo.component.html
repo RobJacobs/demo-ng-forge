@@ -8,7 +8,8 @@
       <table #table class="forge-table forge-table--fixed">
         <thead [style.--table-header-offset]="tableHeaderOffset" [style.--table-header-translate-y]="(tableHeaderOffset * -48) + 'px'">
           <tr class="forge-table-row forge-table-head__row" cdkDropList (cdkDropListDropped)="onColumnHeaderDragDrop($event)" cdkDropListOrientation="horizontal">
-            @for (col of tableColumns | appCallback:$any(visibleColumns); track i; let i = $index) {
+            <th class="forge-table-cell forge-table-head__cell forge-table-row__expander"></th>
+            @for (col of tableColumns | appCallback:$any(visibleColumns); track colIndex; let colIndex = $index) {
             <th scope="col" class="forge-table-cell forge-table-head__cell forge-table-head__cell--sortable" cdkDrag cdkDragLockAxis="x" (cdkDragStarted)="onColumnHeaderDragStart()" (click)="columnHeaderPopup.close(); onTableSort(col)" #columnHeaderPopup="forgePopup" [forgePopup]="columnHeaderPopupTemplate" [forgePopupPlacement]="'right-end'" (contextmenu)="onColumnHeaderRightClick($any($event))" tabindex="-1" [style.--table-column-width]="col.width">
               <div class="forge-table-head__cell-container">
                 <span class="forge-table-head__cell-text">{{col.header}}</span>
@@ -18,22 +19,38 @@
               </div>
               <div class="forge-table-head__cell-actions">
                 <div class="forge-table-head__cell-dragger" cdkDragHandle></div>
-                <div class="forge-table-head__cell-resizer" (mousedown)="onColumnHeaderResize($event, i, col)"></div>
+                <div class="forge-table-head__cell-resizer" (mousedown)="onColumnHeaderResize($event, colIndex + 1, col)"></div>
               </div>
             </th>
             }
           </tr>
         </thead>
         <tbody>
-          <tr *cdkVirtualFor="let record of recordset$; trackBy: recordsetTrackBy" class="forge-table-row forge-table-body__row">
-            @for (col of tableColumns | appCallback:$any(visibleColumns); track i; let i = $index) {
-            <td class="forge-table-cell forge-table-body__cell">
-              <div class="forge-table-cell__container">
-                {{record[col.property]}}
-              </div>
-            </td>
+          <ng-container *cdkVirtualFor="let record of recordset$; trackBy: recordsetTrackBy; let recordIndex = index">
+            <tr class="forge-table-row forge-table-body__row" [ngClass]="{'forge-table-row--expanded': expandedRows[recordIndex]}">
+              <td class="forge-table-cell forge-table-body__cell forge-table-row__expander">
+                <forge-icon-button>
+                  <button type="button" (click)="onExpandRow(recordIndex, record)" aria-label="Toggle details">
+                    <forge-icon [name]="expandedRows[recordIndex] ? 'expand_less' : 'expand_more'"></forge-icon>
+                  </button>
+                </forge-icon-button>
+              </td>
+              @for (col of tableColumns | appCallback:$any(visibleColumns); track colIndex; let colIndex = $index) {
+              <td class="forge-table-cell forge-table-body__cell">
+                <div class="forge-table-cell__container">
+                  {{$any(record)[col.property]}}
+                </div>
+              </td>
+              }
+            </tr>
+            @if (expandedRows[recordIndex]) {
+            <tr class="forge-table-row forge-table-body__row forge-table-row__expandable-content">
+              <td class="forge-table-row__expandable-content-cell" [attr.colspan]="(tableColumns | appCallback:$any(visibleColumns)).length + 1">
+                <app-table-detail [data]="expandedRows[recordIndex]" [rowIndex]="recordIndex"></app-table-detail>
+              </td>
+            </tr>
             }
-          </tr>
+          </ng-container>
         </tbody>
       </table>
     </cdk-virtual-scroll-viewport>

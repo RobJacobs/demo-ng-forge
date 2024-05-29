@@ -36,10 +36,10 @@
           // https://github.com/angular/components/issues/14833
           top: calc(var(--table-header-offset, 0) * $table-row-height * -1);
 
-          &:first-child {
-            padding-left: 24px !important;
-            padding-right: 12px !important;
-          }
+          // &:first-child {
+          //   padding-left: 24px !important;
+          //   padding-right: 12px !important;
+          // }
 
           &:hover {
             .forge-table-head__cell {
@@ -123,10 +123,10 @@
           padding-right: 12px;
           border-right: 1px solid transparent;
 
-          &:first-child {
-            padding-left: 24px !important;
-            padding-right: 12px !important;
-          }
+          // &:first-child {
+          //   padding-left: 24px !important;
+          //   padding-right: 12px !important;
+          // }
 
           &--resizing {
             border-right-color: var(--mdc-theme-primary);
@@ -139,6 +139,19 @@
             background-color: var(--mdc-theme-surface);
             border-right-color: var(--mdc-theme-primary);
           }
+        }
+      }
+
+      &-row {
+        &__expander {
+          width: 48px;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+        }
+
+        &__expandable-content {
+          background-color: $mat-color-indigo-50 !important;
+          @include app-border(border-bottom);
         }
       }
     }

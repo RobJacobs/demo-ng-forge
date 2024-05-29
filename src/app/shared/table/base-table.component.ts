@@ -28,8 +28,8 @@ export abstract class BaseTableComponent {
     return this.filterCache?.filters?.length ? true : false;
   }
 
-  public getColumnIndex(column: string): number {
-    return this.tableColumns.map((c) => c.property).indexOf(column);
+  public getColumnIndex(property: string): number {
+    return this.tableColumns.findIndex(c => c.property === property);
   }
 
   public onTableSort(sort: { columnIndex: number; direction: SortDirection }): void {

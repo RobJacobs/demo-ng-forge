@@ -1,12 +1,12 @@
 <forge-app-bar title-text="Demo Angular & Forge components" type="static" raised="true">
   <forge-icon slot="logo" name="tyler_talking_t_logo"></forge-icon>
   <forge-icon-button slot="end">
-    <button type="button" (click)="onThemeChange()">
+    <button type="button" (click)="onThemeChange()" aria-label="Toggle theme">
       <forge-icon [name]="appCache.theme === 'dark' ? 'wb_sunny' : 'nightlight_round'"></forge-icon>
-      <forge-tooltip>Toggle dark theme</forge-tooltip>
+      <forge-tooltip>Toggle theme</forge-tooltip>
     </button>
   </forge-icon-button>
 </forge-app-bar>
-@if (appCache.isBusy) {
+@if (appCache.isBusy()) {
 <forge-linear-progress determinate="false"></forge-linear-progress>
 }

@@ -2,9 +2,9 @@
   <app-header slot="header"></app-header>
 
   <forge-drawer slot="body-left">
-    <app-menu></app-menu>
+    <app-menu [options]="appCache.menu.options" [type]="appCache.menu.type" [selectedValue]="appCache.activeRoute"></app-menu>
     <forge-button slot="footer" class="expander">
-      <button type="button" aria-label="expand menu" (click)="expand()">
+      <button type="button" aria-label="Expand menu" (click)="expand()">
         <forge-icon [name]="appCache.menu.type === 'mini' ? 'chevron_right' : 'chevron_left'"></forge-icon>
       </button>
     </forge-button>

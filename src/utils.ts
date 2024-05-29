@@ -186,9 +186,9 @@ export class Utils {
 
   public static parseQueryStringParameters(): any {
     const params = {};
-
-    if (window.location.search.length) {
-      const httpParams = new HttpParams({ fromString: window.location.search.substring(1) });
+    const queryIndex = window.location.href.indexOf('?');
+    if (queryIndex !== -1) {
+      const httpParams = new HttpParams({ fromString: window.location.href.substring(queryIndex) });
       httpParams.keys().forEach(k => {
         const value = httpParams.getAll(k) as string[];
         if (value.length) {

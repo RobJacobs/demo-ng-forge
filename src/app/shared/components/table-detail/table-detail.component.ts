@@ -4,7 +4,7 @@ import { CardComponent } from 'src/app/shared/components/card/card.component';
 
 
 @Component({
-  selector: 'app-people-home-table-detail',
+  selector: 'app-table-detail',
   standalone: true,
   imports: [
     CommonModule,

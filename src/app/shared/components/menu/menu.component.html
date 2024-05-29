@@ -1,23 +1,25 @@
-<forge-list class="menu" role="navigation" (forge-list-item-select)="menuItemSelected($event.detail.value)" [ngClass]="'menu--' + appCache.menu.type">
-  @for (o of appCache.menu.options; track i; let i = $index) {
-  <ng-container *ngTemplateOutlet="o.options?.length ? itemExpanderTemplate : itemTemplate; context: { option: o, index: i }">
-  </ng-container>
-  }
-</forge-list>
+<nav>
+  <forge-list class="menu" role="list" (forge-list-item-select)="menuItemSelected($event.detail.value)" [ngClass]="'menu--' + type">
+    @for (o of options; track i; let i = $index) {
+    <ng-container *ngTemplateOutlet="o.options?.length ? itemExpanderTemplate : itemTemplate; context: { option: o, index: i }">
+    </ng-container>
+    }
+  </forge-list>
+</nav>
 
 <ng-template #itemTemplate let-option="option">
-  <forge-list-item class="menu__item" [value]="option.value" [selected]="option.value === appCache.activeRoute[0] || option.value === appCache.activeRoute.join('/')">
+  <forge-list-item class="menu__item" [value]="option.value" [selected]="option.value === $any(selectedValue)[0] || option.value === selectedValue?.join('/')">
     @if (option.icon) {
     <forge-icon slot="leading" [name]="option.icon"></forge-icon>
     }
-    @if (appCache.menu.type === 'dismissible') {
+    @if (type === 'dismissible') {
     <span>{{option.label}}</span>
     }
   </forge-list-item>
 </ng-template>
 
 <ng-template #itemExpanderTemplate let-option="option" let-index="index">
-  @if (appCache.menu.type === 'dismissible') {
+  @if (type === 'dismissible') {
   <forge-expansion-panel>
     <forge-list-item class="menu__item menu__item--expander" slot="header">
       @if (option.icon) {
@@ -35,9 +37,9 @@
   </forge-expansion-panel>
   }
 
-  @if (appCache.menu.type === 'mini') {
+  @if (type === 'mini') {
   <forge-menu [options]="option.options" placement="right-start" (forge-menu-select)="menuItemSelected($event.detail.value)">
-    <forge-list-item class="menu__item" [value]="option.value" [selected]="option.value === appCache.activeRoute.join('/')">
+    <forge-list-item class="menu__item" [value]="option.value" [selected]="option.value === selectedValue?.join('/')">
       <forge-icon *ngIf="option.icon" slot="leading" [name]="option.icon"></forge-icon>
     </forge-list-item>
   </forge-menu>

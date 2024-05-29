@@ -1,12 +1,31 @@
-import { ApplicationConfig } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { HttpClientModule, provideHttpClient } from '@angular/common/http';
 
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import { interceptorProviders } from './shared/interceptors/interceptors';
+
+export function initializeAppFactory(): () => Promise<void> {
+  return () => {
+    return new Promise<void>((resolve) => {
+      window.setTimeout(() => {
+        resolve();
+      }, 1000);
+    });
+  }
+}
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideHttpClient(),
-    provideRouter(routes)
+    provideRouter(routes),
+    importProvidersFrom(HttpClientModule),
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeAppFactory,
+      multi: true,
+      deps: []
+    },
+    interceptorProviders
   ]
 };

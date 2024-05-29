@@ -4,14 +4,14 @@
   <label [attr.for]="id" slot="label">{{label}}</label>
   }
   <forge-icon-button slot="trailing">
-    <button tabindex="-1" type="button" #calendarPopup="forgePopup" [forgePopup]="calendarPopupTemplate" [forgePopupPlacement]="'bottom-end'" (click)="onOpenPopup(calendarPopup)">
+    <button tabindex="-1" type="button" #calendarPopup="forgePopup" [forgePopup]="calendarPopupTemplate" [forgePopupPlacement]="'bottom-end'" (click)="onOpenPopup(calendarPopup)" aria-label="Open calendar">
       <forge-icon name="insert_invitation"></forge-icon>
     </button>
   </forge-icon-button>
 </forge-text-field>
 
 <ng-template #calendarPopupTemplate>
-  <div style="padding-bottom: 8px;" (keydown.tab)="onKeyDown($event)">
+  <div style="padding-bottom: 8px;" (keydown.tab)="onKeyDown($any($event))">
     <forge-calendar [attr.id]="'calendar-' + id" prevent-focus="true" (forge-calendar-date-select)="onDateSelected($event)"></forge-calendar>
     <forge-divider style="margin: 8px 0;"></forge-divider>
     <forge-time-picker style="margin: 0 8px;" [formControl]="time">

@@ -7,7 +7,7 @@
     </forge-text-field>
 
     <forge-text-field required [appFormControlInvalid]="formGroup.controls.lastName">
-      <input type="text" id="personal-form--first-name" formControlName="lastName" />
+      <input type="text" id="personal-form--last-name" formControlName="lastName" />
       <label for="personal-form--last-name" slot="label">Last Name</label>
       <span slot="helper-text" class="app-form-control-invalid">Last name is required</span>
     </forge-text-field>
@@ -68,7 +68,7 @@
           <span slot="helper-text" class="app-form-control-invalid">A friend is required</span>
         </forge-select>
         <forge-icon-button>
-          <button type="button" aria-label="delete" (click)="onDeleteFriend(i)">
+          <button type="button" aria-label="Delete" (click)="onDeleteFriend(i)">
             <forge-icon name="delete"></forge-icon>
           </button>
         </forge-icon-button>

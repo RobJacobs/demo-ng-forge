@@ -5,12 +5,13 @@ import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-
 import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
 import { IColumnConfiguration, SortDirection } from '@tylertech/forge';
 import { isDefined } from '@tylertech/forge-core';
-import { ForgeCheckboxModule, ForgeDividerModule, ForgeIconModule, ForgeListItemModule, ForgeListModule, ForgePopupModule, ForgeToolbarModule, PopupDirective } from '@tylertech/forge-angular';
+import { ForgeCheckboxModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIconModule, ForgeListItemModule, ForgeListModule, ForgePopupModule, ForgeToolbarModule, PopupDirective } from '@tylertech/forge-angular';
 
 import { IPerson } from 'src/app/shared/interfaces/person.interface';
 import { AppDataService } from 'src/app/app-data.service';
 import { AutoFocusDirective } from 'src/app/shared/directives/auto-focus/auto-focus.directive';
 import { CallbackPipe } from 'src/app/shared/pipes/callback.pipe';
+import { TableDetailComponent } from 'src/app/shared/components/table-detail/table-detail.component';
 
 @Component({
   selector: 'app-table-demo',
@@ -21,11 +22,13 @@ import { CallbackPipe } from 'src/app/shared/pipes/callback.pipe';
     ScrollingModule,
     ForgeCheckboxModule,
     ForgeDividerModule,
+    ForgeIconButtonModule,
     ForgeIconModule,
     ForgeListItemModule,
     ForgeListModule,
     ForgePopupModule,
     ForgeToolbarModule,
+    TableDetailComponent,
     AutoFocusDirective,
     CallbackPipe
   ],
@@ -58,13 +61,14 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
   public recordset$ = new BehaviorSubject<IPerson[]>([]);
   public recordCount = 0;
   public tableColumns: IColumnConfiguration[] = [
-    { header: 'Id', property: 'id' },
-    { header: 'First', property: 'firstName', width: 400 },
+    { header: 'Id', property: 'id', width: 48 },
+    { header: 'First', property: 'firstName' },
     { header: 'Last', property: 'lastName' },
     { header: 'Gender', property: 'gender' },
     { header: 'Occupation', property: 'occupation' }
   ];
   public tableHeaderOffset = 0;
+  public expandedRows: any[] = [];
 
   public visibleColumns = (columns: IColumnConfiguration[]) => {
     return columns.filter(c => c.hidden !== true);
@@ -216,6 +220,7 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
       (this.filterCache as any).sort = column.sortDirection ? { property: column.property, direction: column.sortDirection } : undefined;
       this.filterCache.skip = 0;
       this.virtualScrollViewport?.scrollToOffset(0);
+      this.expandedRows.length = 0;
       this.getRecords();
     }
   }
@@ -223,7 +228,16 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
   public onTablePaginatorChange(detail: { pageIndex: number; pageSize: number }) {
     this.filterCache.skip = detail.pageIndex * detail.pageSize;
     this.filterCache.take = detail.pageSize;
+    this.expandedRows.length = 0;
     this.getRecords();
+  }
+
+  public onExpandRow(index: number, value: any) {
+    if (this.expandedRows[index]) {
+      this.expandedRows[index] = undefined;
+    } else {
+      this.expandedRows[index] = value;
+    }
   }
 
   private getRecords() {

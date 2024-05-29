@@ -19,7 +19,7 @@
           <input type="text" placeholder="max" [attr.maxlength]="maxlength" [(ngModel)]="rangeMax" />
         </forge-text-field>
         <forge-icon-button>
-          <button type="button" aria-label="add search range" (click)="onAddRangeOption()">
+          <button type="button" aria-label="Add search range" (click)="onAddRangeOption()">
             <forge-icon name="add"></forge-icon>
           </button>
         </forge-icon-button>
@@ -32,7 +32,7 @@
       @for (option of rangeOptions; track i; let i = $index) {
       <forge-list-item>
         <forge-icon-button slot="leading">
-          <button type="button" aria-label="delete search range" (click)="onDeleteRangeOption(option)">
+          <button type="button" aria-label="Delete search range" (click)="onDeleteRangeOption(option)">
             <forge-icon name="delete"></forge-icon>
           </button>
         </forge-icon-button>

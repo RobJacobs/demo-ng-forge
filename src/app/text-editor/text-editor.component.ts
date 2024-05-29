@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, inject } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ForgeButtonModule, ForgeToolbarModule } from '@tylertech/forge-angular';
-import { Quill } from 'quill';
 import { QuillModule, QuillModules } from 'ngx-quill';
 
 // https://quilljs.com/docs/
@@ -46,7 +45,7 @@ export class TextEditorComponent {
     }
   };
 
-  public onEditorCreated(quill: Quill) {
+  public onEditorCreated(quill: any) {
     console.log(quill);
     this.elementRef.nativeElement.querySelectorAll('.ql-toolbar button').forEach((el: HTMLElement) => el.tabIndex = -1);
     this.elementRef.nativeElement.querySelectorAll('.ql-toolbar [role="button"]').forEach((el: HTMLElement) => el.tabIndex = -1);

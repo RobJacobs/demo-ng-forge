@@ -1,10 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { ForgeButtonModule, ForgeExpansionPanelModule, ForgeIconModule, ForgeListItemModule, ForgeListModule, ForgeMenuModule } from '@tylertech/forge-angular';
 import { isDefined } from '@tylertech/forge-core';
-
-import { AppCacheService } from 'src/app/app-cache.service';
 
 @Component({
   selector: 'app-menu',
@@ -23,7 +21,13 @@ import { AppCacheService } from 'src/app/app-cache.service';
 })
 export class MenuComponent {
   private router = inject(Router);
-  public appCache = inject(AppCacheService);
+
+  @Input()
+  public options?: any[];
+  @Input()
+  public type: 'dismissible' | 'mini' = 'dismissible';
+  @Input()
+  public selectedValue?: string[];
 
   public menuItemSelected(option: string): void {
     if (isDefined(option)) {

@@ -58,9 +58,9 @@ export class AgGridDemoComponent implements OnInit {
   public columnDefs: ColDef[] = [
     { field: 'image', headerName: '', cellRenderer: ImageCellRendererComponent, sortable: false, width: 80, suppressSizeToFit: true, suppressAutoSize: false, resizable: false },
     { field: 'firstName', headerName: 'First', filter: true },
-    { field: 'lastName', headerName: 'Last', hide: true },
-    { field: 'gender', headerName: 'Gender', hide: true },
-    { field: 'occupation', headerName: 'Occupation', hide: true }
+    { field: 'lastName', headerName: 'Last' },
+    { field: 'gender', headerName: 'Gender' },
+    { field: 'occupation', headerName: 'Occupation' }
   ];
 
   public get optionalTableColumns(): IOption[] {
