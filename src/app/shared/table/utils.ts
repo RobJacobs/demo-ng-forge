@@ -13,14 +13,15 @@ export class TableUtils {
     return linkElement;
   }
 
-  public static createIconButton(icon: string, clickHandler?: (event: Event) => void, title?: string): HTMLElement {
+  public static createIconButton(icon: string, clickHandler: (event: Event) => void, title?: string): HTMLElement {
     const iconButtonElement = document.createElement('forge-icon-button');
 
     const buttonElement = document.createElement('button');
     buttonElement.type = 'button';
-    if (clickHandler) {
-      buttonElement.addEventListener('click', clickHandler);
-    }
+    buttonElement.addEventListener('click', (event) => {
+      event.stopPropagation();
+      clickHandler(event);
+    });
 
     const iconElement = document.createElement('forge-icon');
     iconElement.setAttribute('name', icon);
@@ -41,7 +42,7 @@ export class TableUtils {
     menuElement.options = options;
     menuElement.addEventListener('forge-menu-select', selectHandler);
 
-    menuElement.appendChild(this.createIconButton(icon, undefined, title));
+    menuElement.appendChild(this.createIconButton(icon, () => { }, title));
 
     return menuElement;
   }

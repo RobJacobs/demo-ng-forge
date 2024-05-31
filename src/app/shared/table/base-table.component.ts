@@ -15,6 +15,10 @@ export abstract class BaseTableComponent {
   constructor() { }
 
   public initializeSort() {
+    this.tableColumns.filter((c) => c.initialSort || isDefined(c.sortDirection)).forEach((c) => {
+      c.initialSort = false;
+      c.sortDirection = undefined;
+    });
     if (this.filterCache?.sort?.property.length) {
       const column = this.tableColumns.find((c) => c.property === this.filterCache?.sort?.property) as IColumnConfiguration;
       if (isDefined(column)) {

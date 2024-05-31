@@ -145,7 +145,7 @@ export class Utils {
         if (!isNaN(parseFloat(a)) && !isNaN(parseFloat(b))) {
           return ('' + a).localeCompare('' + b, navigator.language, { numeric: true });
         } else {
-          return ('' + a).localeCompare('' + b);
+          return ('' + a).localeCompare('' + b, navigator.language, { sensitivity: 'base' });
         }
     }
 
