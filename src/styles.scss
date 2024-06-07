@@ -1,26 +1,24 @@
 @use '@tylertech/forge/dist/forge-core';
 
 @use '@tylertech/forge/dist/forge';
-// includes
-// @use '@tylertech/forge/styles/theme/forge-theme'; // *required
-// @use '@tylertech/forge/styles/typography/forge-typography'; // *required
+@use '@tylertech/forge/dist/table/forge-table.css';
 
-// @use '@tylertech/forge/styles/button/forge-button';
-// @use '@tylertech/forge/styles/floating-action-button/forge-floating-action-button';
-// @use '@tylertech/forge/styles/icon-button/forge-icon-button';
-// @use '@tylertech/forge/styles/table/forge-table';
-// @use '@tylertech/forge/styles/tooltip/forge-tooltip';
-// @use '@tylertech/forge/styles/ripple/forge-ripple';
-// @use '@tylertech/forge/styles/quantity-field/forge-quantity-field';
-// @use '@tylertech/forge/styles/popup/forge-popup';
-// @use '@tylertech/forge/styles/busy-indicator/forge-busy-indicator';
-// @use '@tylertech/forge/styles/dialog/forge-dialog';
-// @use '@tylertech/forge/styles/dialog/forge-dialog-utils';
-// @use '@tylertech/forge/styles/expansion-panel/forge-expansion-panel';
+// @use '@tylertech/forge/sass/button/forge-button';
+// @use '@tylertech/forge/sass/floating-action-button/forge-floating-action-button';
+// @use '@tylertech/forge/sass/icon-button/forge-icon-button';
+// @use '@tylertech/forge/sass/table/forge-table';
+// @use '@tylertech/forge/sass/tooltip/forge-tooltip';
+// @use '@tylertech/forge/sass/ripple/forge-ripple';
+// @use '@tylertech/forge/sass/quantity-field/forge-quantity-field';
+// @use '@tylertech/forge/sass/popup/forge-popover';
+// @use '@tylertech/forge/sass/busy-indicator/forge-busy-indicator';
+// @use '@tylertech/forge/sass/dialog/forge-dialog';
+// @use '@tylertech/forge/sass/dialog/forge-dialog-utils';
+// @use '@tylertech/forge/sass/expansion-panel/forge-expansion-panel';
 
 @use 'src/global' as *;
 
-@use '@tylertech/forge/styles/theme/theme-dark';
+@use '@tylertech/forge/sass/theme/theme-dark';
 
 @use 'ag-grid-community/styles/ag-grid.css';
 @use 'ag-grid-community/styles/ag-theme-material.css';
@@ -57,6 +55,7 @@ app-root {
   margin: 0;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 router-outlet {
@@ -77,55 +76,11 @@ router-outlet {
   }
 }
 
-// forge & mdc theme variables
-
-// :root {
-//   --forge-theme-tertiary: #3d5afe;
-//   --forge-theme-on-tertiary: #ffffff;
-//   --forge-theme-border-color: #e0e0e0;
-//   --forge-theme-danger: #b00020;
-//   --forge-theme-error-hover: #db8a98;
-//   --forge-theme-warning: #d14900;
-//   --forge-theme-success: #2e7d32;
-//   --forge-theme-info: #424242;
-//   --forge-theme-icon-color: #757575;
-//   --forge-theme-form-field-label-on-background: rgba(0, 0, 0, 0.65);
-//   --forge-theme-form-field-icon-disabled-on-background: rgba(0, 0, 0, 0.26);
-//   --forge-theme-form-field-text-disabled-on-background: rgba(0, 0, 0, 0.6);
-//   --forge-theme-form-field-disabled-on-background: #f5f5f5;
-//   --forge-theme-label-disabled-on-background: rgba(0, 0, 0, 0.38);
-//   --forge-theme-elevated-surface: #ffffff;
-//   --forge-theme-on-elevated-surface: rgba(0, 0, 0, 0.87);
-//   --forge-theme-popup-elevation: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),0px 2px 2px 0px rgba(0, 0, 0, 0.14),0px 1px 5px 0px rgba(0, 0, 0, 0.12);
-//   --forge-theme-scrollbar-thumb: #bdbdbd;
-//   --forge-theme-scrollbar-thumb-hover: #9e9e9e;
-//   --forge-theme-scrollbar-track: #f0f0f0;
-//   --forge-theme-scrollbar-track-hover: #ececec;
-// }
-
-// :root {
-//   --mdc-theme-primary: #3f51b5;
-//   --mdc-theme-secondary: #ffc107;
-//   --mdc-theme-background: #fafafa;
-//   --mdc-theme-error: #b00020;
-//   --mdc-theme-on-primary: #ffffff;
-//   --mdc-theme-on-secondary: #000000;
-//   --mdc-theme-surface: #ffffff;
-//   --mdc-theme-on-surface: #000000;
-//   --mdc-theme-on-error: #ffffff;
-//   --mdc-theme-text-primary-on-background: rgba(0, 0, 0, 0.87);
-//   --mdc-theme-text-secondary-on-background: rgba(0, 0, 0, 0.54);
-//   --mdc-theme-text-hint-on-background: rgba(0, 0, 0, 0.38);
-//   --mdc-theme-text-disabled-on-background: rgba(0, 0, 0, 0.12);
-//   --mdc-theme-text-icon-on-background: rgba(0, 0, 0, 0.38);
-//   --mdc-theme-text-primary-on-light: rgba(0, 0, 0, 0.87);
-//   --mdc-theme-text-secondary-on-light: rgba(0, 0, 0, 0.54);
-//   --mdc-theme-text-hint-on-light: rgba(0, 0, 0, 0.38);
-//   --mdc-theme-text-disabled-on-light: rgba(0, 0, 0, 0.38);
-//   --mdc-theme-text-icon-on-light: rgba(0, 0, 0, 0.38);
-//   --mdc-theme-text-primary-on-dark: rgba(255, 255, 255, 0.87);
-//   --mdc-theme-text-secondary-on-dark: rgba(255, 255, 255, 0.7);
-//   --mdc-theme-text-hint-on-dark: rgba(255, 255, 255, 0.5);
-//   --mdc-theme-text-disabled-on-dark: rgba(255, 255, 255, 0.5);
-//   --mdc-theme-text-icon-on-dark: rgba(255, 255, 255, 0.5);
-// }
+forge-dialog {
+  &::part(surface) {
+    display: flex;
+  }
+  forge-scaffold {
+    height: auto;
+  }
+}

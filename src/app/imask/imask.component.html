@@ -1,13 +1,13 @@
 <forge-toolbar class="header">
-  <h2 slot="start" class="forge-typography--title">IMask</h2>
+  <h2 slot="start" class="forge-typography--subheading4">IMask</h2>
 </forge-toolbar>
 
 <div class="body">
   <form novalidate autocomplete="off" [formGroup]="formGroup">
     <forge-text-field>
-      <input #input id="imask-form--input" type="text" [imask]="mask" [unmask]="unmask" #imaskRef="imask" formControlName="input" />
-      <label for="imask-form--input" slot="label">Input</label>
-      <span slot="helper-text">{{helpText}}</span>
+      <input #input id="imask--input" type="text" [imask]="mask" [unmask]="unmask" #imaskRef="imask" formControlName="input">
+      <label for="imask--input" slot="label">Input</label>
+      <span slot="support-text">{{helpText}}</span>
     </forge-text-field>
     <div style="width: 600px;">
       <div>
@@ -18,8 +18,8 @@
       </div>
     </div>
     <forge-text-field>
-      <input #input id="imask-form--format" type="text" formControlName="format" />
-      <label for="imask-form--format" slot="label">Format</label>
+      <input #input id="imask--format" type="text" formControlName="format">
+      <label for="imask--format" slot="label">Format</label>
     </forge-text-field>
     <div style="display: flex; column-gap: 8px; align-items: center;">
       <forge-select style="flex-grow: 1;" formControlName="maskType" label="Mask type">
@@ -27,10 +27,8 @@
         <forge-option [value]="option.value">{{option.label}}</forge-option>
         }
       </forge-select>
-      <forge-button type="outlined">
-        <button type="button" (click)="onApply()">
-          Apply
-        </button>
+      <forge-button variant="outlined" (click)="onApply()">
+        Apply
       </forge-button>
     </div>
   </form>

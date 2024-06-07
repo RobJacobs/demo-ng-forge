@@ -2,37 +2,35 @@
   <h2 slot="secondary-title">Welcome to</h2>
   <h3 slot="main-title">Dashboard component</h3>
 
-  <forge-button slot="action" type="raised">
-    <button type="button">Take action</button>
-  </forge-button>
+  <forge-button slot="action" variant="raised">Take action</forge-button>
 
   <div class="announcements" slot="announcements">
     Announcing announcements
   </div>
 
   <div slot="left" class="body">
-    <forge-card>
-      <img src="https://cdn.forge.tylertech.com/v1/images/spot/activities-1-spot.svg" alt="" />
-      <h3 class="forge-typography--headline4">Task one</h3>
-      <div class="forge-typography--body2">You can do something here.</div>
-      <forge-button type="raised">
-        <button type="button" (click)="onNavigate('1')">One</button>
+    <forge-card raised>
+      <img src="https://cdn.forge.tylertech.com/v1/images/spot/activities-1-spot.svg" alt>
+      <h3 class="forge-typography--subheading5">Task one</h3>
+      <div class="forge-typography--body1">You can do something here.</div>
+      <forge-button variant="raised" (click)="onNavigate('1')">
+        One
       </forge-button>
     </forge-card>
-    <forge-card>
-      <img src="https://cdn.forge.tylertech.com/v1/images/spot/activities-2-spot.svg" alt="" />
-      <h3 class="forge-typography--headline4">Task two</h3>
-      <div class="forge-typography--body2">You can do something there.</div>
-      <forge-button type="raised">
-        <button type="button" (click)="onNavigate('2')">Two</button>
+    <forge-card raised>
+      <img src="https://cdn.forge.tylertech.com/v1/images/spot/activities-2-spot.svg" alt>
+      <h3 class="forge-typography--subheading5">Task two</h3>
+      <div class="forge-typography--body1">You can do something there.</div>
+      <forge-button variant="raised" (click)="onNavigate('2')">
+        Two
       </forge-button>
     </forge-card>
-    <forge-card>
-      <img src="https://cdn.forge.tylertech.com/v1/images/spot/target-spot.svg" alt="" />
-      <h3 class="forge-typography--headline4">Task three</h3>
-      <div class="forge-typography--body2">You can do something anywhere.</div>
-      <forge-button type="raised">
-        <button type="button" (click)="onNavigate('3')">Three</button>
+    <forge-card raised>
+      <img src="https://cdn.forge.tylertech.com/v1/images/spot/target-spot.svg" alt>
+      <h3 class="forge-typography--subheading5">Task three</h3>
+      <div class="forge-typography--body1">You can do something anywhere.</div>
+      <forge-button variant="raised" (click)="onNavigate('3')">
+        Three
       </forge-button>
     </forge-card>
   </div>

@@ -28,10 +28,8 @@ import { FormlyFieldDirective } from './formly-field.directive';
               </td>
             }
             <td class="forge-table-cell forge-table-body__cell forge-table-cell__button">
-              <forge-icon-button>
-                <button type="button" (click)="onRemove(i)" aria-label="Delete">
-                  <forge-icon name="delete"></forge-icon>
-                </button>
+              <forge-icon-button (click)="onRemove(i)" aria-label="Delete">
+                <forge-icon name="delete"></forge-icon>
               </forge-icon-button>
             </td>
           </tr>
@@ -40,9 +38,7 @@ import { FormlyFieldDirective } from './formly-field.directive';
       <tfoot>
         <tr>
           <td>
-            <forge-button>
-              <button type="button" (click)="onAdd()">Add</button>
-            </forge-button>
+            <forge-button (click)="onAdd()">Add</forge-button>
           </td>
         </tr>
       </tfoot>
@@ -77,7 +73,7 @@ import { FormlyFieldDirective } from './formly-field.directive';
           vertical-align: top;
 
           formly-field {
-            background-color: var(--mdc-theme-surface);
+            background-color: var(--forge-theme-surface);
           }
         }
       }

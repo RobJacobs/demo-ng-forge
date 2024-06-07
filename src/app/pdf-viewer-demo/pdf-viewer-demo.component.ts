@@ -5,7 +5,7 @@ import { debounceTime } from 'rxjs';
 import { PdfViewerModule as NgPdfViewerModule } from 'ng2-pdf-viewer';
 import { PDFDocumentProxy, PDFProgressData, PDFSource, ZoomScale, PdfViewerComponent } from 'ng2-pdf-viewer';
 import { removeAllChildren, debounce } from '@tylertech/forge-core';
-import { ForgeBannerModule, ForgeButtonModule, ForgeCheckboxModule, ForgeCircularProgressModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIconModule, ForgePopupModule, ForgeTextFieldModule, ForgeToolbarModule, ForgeTooltipModule, PopupDirective } from '@tylertech/forge-angular';
+import { ForgeBannerModule, ForgeButtonModule, ForgeCheckboxModule, ForgeCircularProgressModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIconModule, ForgePopoverModule, ForgeTextFieldModule, ForgeToolbarModule, ForgeTooltipModule, PopoverDirective } from '@tylertech/forge-angular';
 
 import { CallbackPipe } from 'src/app/shared/pipes/callback.pipe';
 import { pdfString } from './pdf-string';
@@ -31,7 +31,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     ForgeDividerModule,
     ForgeIconButtonModule,
     ForgeIconModule,
-    ForgePopupModule,
+    ForgePopoverModule,
     ForgeTextFieldModule,
     ForgeToolbarModule,
     ForgeTooltipModule,
@@ -48,7 +48,7 @@ export class PdfViewerDemoComponent {
   @ViewChild('pdfViewerLeftToolbar')
   private pdfViewerLeftToolbarRef?: ElementRef<HTMLElement>;
   @ViewChild('searchPopup')
-  private searchPopupDirective?: PopupDirective;
+  private searchPopupDirective?: PopoverDirective;
   @ViewChild('searchInput')
   private searchInputElementRef?: ElementRef<HTMLInputElement>;
 
@@ -77,6 +77,7 @@ export class PdfViewerDemoComponent {
   });
 
   public constructor() {
+    (window as any).pdfWorkerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.3.136/legacy/build/pdf.worker.min.mjs';
     this.searchFormGroup.controls.query.valueChanges.pipe(
       debounceTime(300),
       takeUntilDestroyed(this.destroyRef)

@@ -1,10 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { CdkTrapFocus } from '@angular/cdk/a11y';
 import { isDefined } from '@tylertech/forge-core';
-import { DialogConfig, DialogRef, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule } from '@tylertech/forge-angular';
+import { DIALOG_DATA, DialogRef, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule } from '@tylertech/forge-angular';
+import { DialogComponent } from '../dialog/dialog.component';
 
-import { AutoFocusDirective } from 'src/app/shared/directives/auto-focus/auto-focus.directive';
+export interface IConfirmDialogData {
+  title: string;
+  message: string;
+  showFooter?: boolean;
+}
 
 @Component({
   selector: 'app-confirm-dialog',
@@ -16,27 +20,24 @@ import { AutoFocusDirective } from 'src/app/shared/directives/auto-focus/auto-fo
     ForgeButtonModule,
     ForgeIconButtonModule,
     ForgeIconModule,
-    AutoFocusDirective
-  ],
-  hostDirectives: [CdkTrapFocus]
+    DialogComponent
+  ]
 })
 export class ConfirmDialogComponent {
-  public dialogConfig = inject(DialogConfig);
+  public dialogConfig = inject<IConfirmDialogData>(DIALOG_DATA);
   private dialogRef = inject(DialogRef);
-  private trapFocusDirective = inject(CdkTrapFocus);
 
-  public title: string;
+  public dialogTitle: string;
   public message: string;
   public showFooter?: boolean;
 
   constructor() {
-    this.title = this.dialogConfig.data.title;
-    this.message = this.dialogConfig.data.message;
-    this.showFooter = isDefined(this.dialogConfig.data.showFooter) ? this.dialogConfig.data.showFooter : true;
-    this.trapFocusDirective.autoCapture = true;
+    this.dialogTitle = this.dialogConfig.title;
+    this.message = this.dialogConfig.message;
+    this.showFooter = isDefined(this.dialogConfig.showFooter) ? this.dialogConfig.showFooter : true;
   }
 
-  public onClose(response = false): void {
+  public onClose(response = false) {
     this.dialogRef.close(response);
   }
 }

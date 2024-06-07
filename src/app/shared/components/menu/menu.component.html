@@ -1,5 +1,5 @@
 <nav>
-  <forge-list class="menu" role="list" (forge-list-item-select)="menuItemSelected($event.detail.value)" [ngClass]="'menu--' + type">
+  <forge-list class="menu" navlist (forge-list-item-select)="menuItemSelected($any($event.detail.value))">
     @for (o of options; track i; let i = $index) {
     <ng-container *ngTemplateOutlet="o.options?.length ? itemExpanderTemplate : itemTemplate; context: { option: o, index: i }">
     </ng-container>
@@ -9,24 +9,28 @@
 
 <ng-template #itemTemplate let-option="option">
   <forge-list-item class="menu__item" [value]="option.value" [selected]="option.value === $any(selectedValue)[0] || option.value === selectedValue?.join('/')">
-    @if (option.icon) {
-    <forge-icon slot="leading" [name]="option.icon"></forge-icon>
-    }
-    @if (type === 'dismissible') {
-    <span>{{option.label}}</span>
+    @if (open) {
+    <forge-icon slot="start" [name]="option.icon"></forge-icon>
+    <button type="button">
+      {{option.label}}
+    </button>
+    } @else {
+    <button type="button">
+      <forge-icon [name]="option.icon"></forge-icon>
+    </button>
     }
   </forge-list-item>
 </ng-template>
 
 <ng-template #itemExpanderTemplate let-option="option" let-index="index">
-  @if (type === 'dismissible') {
+  @if (open) {
   <forge-expansion-panel>
     <forge-list-item class="menu__item menu__item--expander" slot="header">
       @if (option.icon) {
-      <forge-icon slot="leading" [name]="option.icon"></forge-icon>
+      <forge-icon slot="start" [name]="option.icon"></forge-icon>
       }
       <span>{{option.label}}</span>
-      <forge-open-icon slot="trailing"></forge-open-icon>
+      <forge-open-icon slot="end"></forge-open-icon>
     </forge-list-item>
     <forge-list class="menu__item menu__item--nested">
       @for (o of option.options; track i; let i = $index) {
@@ -35,12 +39,10 @@
       }
     </forge-list>
   </forge-expansion-panel>
-  }
-
-  @if (type === 'mini') {
+  } @else {
   <forge-menu [options]="option.options" placement="right-start" (forge-menu-select)="menuItemSelected($event.detail.value)">
     <forge-list-item class="menu__item" [value]="option.value" [selected]="option.value === selectedValue?.join('/')">
-      <forge-icon *ngIf="option.icon" slot="leading" [name]="option.icon"></forge-icon>
+      <forge-icon *ngIf="option.icon" slot="start" [name]="option.icon"></forge-icon>
     </forge-list-item>
   </forge-menu>
   }

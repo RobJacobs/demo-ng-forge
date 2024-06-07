@@ -1,25 +1,22 @@
 <forge-toolbar class="header">
-  <h2 slot="start" class="forge-typography--title">Icons</h2>
+  <h2 slot="start" class="forge-typography--subheading4">Forge Icons - Standard</h2>
+  <forge-autocomplete slot="start" [filter]="iconOptionFilter" (forge-autocomplete-change)="onIconSelected($event.detail)">
+    <forge-text-field>
+      @if (selectedIcon) {
+      <forge-icon slot="start" [name]="selectedIcon"></forge-icon>
+      }
+      <input type="text">
+      <forge-icon slot="end" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
+    </forge-text-field>
+  </forge-autocomplete>
 </forge-toolbar>
 
 <div class="body">
-  <forge-autocomplete [filter]="iconOptionFilter" (forge-autocomplete-change)="onIconSelected($event.detail)">
-    <forge-text-field>
-      @if (selectedIcon) {
-      <forge-icon slot="leading" [name]="selectedIcon"></forge-icon>
-      }
-
-      <input id="autocomplete01" type="text" />
-      <label for="autocomplete01">Icon</label>
-      <forge-icon slot="trailing" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
-    </forge-text-field>
-  </forge-autocomplete>
-
-  <div class="all-icons">
+  <div class="body__icons">
     @for (icon of cache.iconOptions; track i; let i = $index) {
     <div class="icon">
-      <forge-icon [name]="icon.value"></forge-icon>
-      <div class="forge-typography--caption">{{icon.value}}</div>
+      <forge-icon lazy [name]="icon.value"></forge-icon>
+      <div class="forge-typography--label1">{{icon.value}}</div>
     </div>
     }
   </div>

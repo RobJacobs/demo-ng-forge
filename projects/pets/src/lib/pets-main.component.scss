@@ -1,8 +1,10 @@
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
   padding: 24px;
 }
 
 forge-button {
-  display: block;
+  align-self: flex-start;
 }

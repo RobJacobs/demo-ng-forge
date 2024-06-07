@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { select, format, timeFormat, hierarchy, pack } from 'd3';
 import { ChartUtils, IChartConfig } from './chart-utils';
-import { CHART_CONSTANTS, CHART_CONSTANTS as constants } from './chart-constants';
+import { CHART_CONSTANTS } from './chart-constants';
 
 export class BubbleChartService {
   public static buildBubbleChart(config: IChartConfig): Promise<void> {
-    const promise = new Promise<void>((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       if (!config.container || config.container.tagName !== 'svg') {
         reject();
         return;
@@ -20,29 +20,29 @@ export class BubbleChartService {
       const chart = pack().size([Math.min(...[size.width, size.height]), Math.min(...[size.width, size.height])]);
       chart(chartData as any);
 
-      let rootNode = container.select(`g.${constants.classes.CHART_ROOT}`);
+      let rootNode = container.select(`g.${CHART_CONSTANTS.classes.CHART_ROOT}`);
       if (!rootNode.node()) {
-        rootNode = container.append('g').classed(constants.classes.CHART_ROOT, true) as any;
-        rootNode.append('g').classed(`${constants.classes.CHART_PREFIX}__chart`, true).classed(`${constants.classes.CHART_PREFIX}__bubble`, true);
+        rootNode = container.append('g').classed(CHART_CONSTANTS.classes.CHART_ROOT, true) as any;
+        rootNode.append('g').classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__chart`, true).classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__bubble`, true);
       }
 
       container.attr('width', size.width);
       container.attr('height', size.height);
 
-      const chartNode = rootNode.select(`g.${constants.classes.CHART_PREFIX}__bubble`);
+      const chartNode = rootNode.select(`g.${CHART_CONSTANTS.classes.CHART_PREFIX}__bubble`);
       const nodes = chartNode.selectAll('g').data(chartData.leaves(), (d: any) => d.data.id);
 
       nodes.exit().select('text').remove();
-      nodes.exit().select('circle').transition().duration(constants.numbers.TRANSITION_DURATION).attr('r', 0);
-      nodes.exit().transition().delay(constants.numbers.TRANSITION_DURATION).remove();
+      nodes.exit().select('circle').transition().duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION).attr('r', 0);
+      nodes.exit().transition().delay(CHART_CONSTANTS.numbers.TRANSITION_DURATION).remove();
 
       const enterNodes = nodes.enter().append('g');
 
       enterNodes.append('circle');
-      enterNodes.append('clipPath').attr('id', (d: any) => `${constants.classes.CHART_CLIP}-${d.data.id}`).append('circle');
+      enterNodes.append('clipPath').attr('id', (d: any) => `${CHART_CONSTANTS.classes.CHART_CLIP}-${d.data.id}`).append('circle');
       enterNodes.append('text')
-        .classed(constants.classes.CHART_TEXT, true)
-        .attr('clip-path', (d: any) => `url(#${constants.classes.CHART_CLIP}-${d.data.id})`)
+        .classed(CHART_CONSTANTS.classes.CHART_TEXT, true)
+        .attr('clip-path', (d: any) => `url(#${CHART_CONSTANTS.classes.CHART_CLIP}-${d.data.id})`)
         .style('text-anchor', 'middle');
 
       if (config.selectedCallback) {
@@ -64,7 +64,7 @@ export class BubbleChartService {
         });
 
       mergeNodes.transition()
-        .duration(constants.numbers.TRANSITION_DURATION)
+        .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
         .attr('transform', (d: any) => 'translate(' + d.x + ',' + d.y + ')');
 
       mergeNodes.select('g > circle')
@@ -89,10 +89,8 @@ export class BubbleChartService {
           mergeNodes.select('text').style('display', null);
           resolve();
         })
-        .duration(constants.numbers.TRANSITION_DURATION)
+        .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
         .attr('r', (d: any) => d.r);
     });
-
-    return promise;
   }
 }

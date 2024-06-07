@@ -49,7 +49,8 @@ import {
   tylIconApps,
   tylIconZoomIn,
   tylIconZoomOut,
-  tylIconFitScreen
+  tylIconFitScreen,
+  tylIconAdjust
 } from '@tylertech/tyler-icons/standard';
 
 import {
@@ -106,7 +107,8 @@ const standardIcons = [
   tylIconApps,
   tylIconZoomIn,
   tylIconZoomOut,
-  tylIconFitScreen
+  tylIconFitScreen,
+  tylIconAdjust
 ];
 
 const customIcons = [

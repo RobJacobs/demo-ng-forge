@@ -16,10 +16,6 @@
     }
   }
 
-  :root {
-    --forge-theme-border: #{$forge-theme-border};
-  }
-
 }
 
 .body {
@@ -28,7 +24,7 @@
 }
 
 .form {
-  @include app-container-outlined();
+  @include app-container-raised();
   padding: 16px;
 
   min-width: 680px;

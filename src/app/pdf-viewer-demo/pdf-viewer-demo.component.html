@@ -1,10 +1,9 @@
 <forge-toolbar class="header">
-  <h2 slot="start" class="forge-typography--title">PDF Viewer</h2>
+  <h2 slot="start" class="forge-typography--subheading4">PDF Viewer</h2>
 
   <div slot="end">
-    <forge-button type="outlined">
-      <button type="button" (click)="onLoadData()">Load data</button>
-    </forge-button>
+    <forge-button variant="outlined" (click)="onLoadData()">
+      Load data</forge-button>
   </div>
 
 </forge-toolbar>
@@ -13,58 +12,44 @@
   @if (pdf) {
   <forge-toolbar class="pdf-viewer__header">
     <ng-container>
-      <forge-icon-button slot="start" dense>
-        <button type="button" aria-label="Toggle sidebar" (click)="showLeftToolbar = !showLeftToolbar">
-          <forge-icon name="apps"></forge-icon>
-          <forge-tooltip>Toggle sidebar</forge-tooltip>
-        </button>
+      <forge-icon-button slot="start" dense aria-label="Toggle sidebar" (click)="showLeftToolbar = !showLeftToolbar">
+        <forge-icon name="apps"></forge-icon>
       </forge-icon-button>
+      <forge-tooltip slot="start">Toggle sidebar</forge-tooltip>
       <div slot="center">
-        <forge-icon-button dense>
-          <button type="button" aria-label="Previous page" (click)="onPageChange('prev')" [disabled]="page | appCallback:navButtonDisabled:'prev'">
-            <forge-icon name="keyboard_arrow_left"></forge-icon>
-            <forge-tooltip>Previous page</forge-tooltip>
-          </button>
+        <forge-icon-button dense aria-label="Previous page" (click)="onPageChange('prev')" [disabled]="page | appCallback:navButtonDisabled:'prev'">
+          <forge-icon name="keyboard_arrow_left"></forge-icon>
         </forge-icon-button>
+        <forge-tooltip>Previous page</forge-tooltip>
         <div class="pdf-viewer__paginator">
           <span>Page</span>
-          <input type="number" [(ngModel)]="page" [disabled]="pdf.numPages === 1" />
+          <input type="number" [(ngModel)]="page" [disabled]="pdf.numPages === 1">
           <span>of {{pdf.numPages}}</span>
         </div>
-        <forge-icon-button dense>
-          <button type="button" aria-label="Next page" (click)="onPageChange('next')" [disabled]="page | appCallback:navButtonDisabled:'next'">
-            <forge-icon name="keyboard_arrow_right"></forge-icon>
-            <forge-tooltip>Naxt page</forge-tooltip>
-          </button>
+        <forge-icon-button dense aria-label="Next page" (click)="onPageChange('next')" [disabled]="page | appCallback:navButtonDisabled:'next'">
+          <forge-icon name="keyboard_arrow_right"></forge-icon>
         </forge-icon-button>
-        <forge-icon-button dense>
-          <button type="button" aria-label="Find in document" #searchPopup="forgePopup" [forgePopup]="searchPopupTemplate" [forgePopupPlacement]="'bottom-end'" (click)="onShowSearchPopup()">
-            <forge-icon name="search"></forge-icon>
-            <forge-tooltip>Find in document</forge-tooltip>
-          </button>
+        <forge-tooltip>Naxt page</forge-tooltip>
+        <forge-icon-button dense aria-label="Find in document" #searchPopup="forgePopover" [forgePopover]="searchPopupTemplate" [forgePopoverPlacement]="'bottom-end'" (click)="onShowSearchPopup()">
+          <forge-icon name="search"></forge-icon>
         </forge-icon-button>
+        <forge-tooltip>Find in document</forge-tooltip>
       </div>
       <div slot="end">
-        <forge-icon-button dense>
-          <button type="button" aria-label="Zoom out" (click)="onZoom('out')">
-            <forge-icon name="zoom_out"></forge-icon>
-            <forge-tooltip>Zoom out</forge-tooltip>
-          </button>
+        <forge-icon-button dense aria-label="Zoom out" (click)="onZoom('out')">
+          <forge-icon name="zoom_out"></forge-icon>
         </forge-icon-button>
+        <forge-tooltip>Zoom out</forge-tooltip>
         <span>{{zoom | percent}}</span>
-        <forge-icon-button dense>
-          <button type="button" aria-label="Zoom in" (click)="onZoom('in')">
-            <forge-icon name="zoom_in"></forge-icon>
-            <forge-tooltip>Zoom in</forge-tooltip>
-          </button>
+        <forge-icon-button dense aria-label="Zoom in" (click)="onZoom('in')">
+          <forge-icon name="zoom_in"></forge-icon>
         </forge-icon-button>
+        <forge-tooltip>Zoom in</forge-tooltip>
         <forge-divider vertical></forge-divider>
-        <forge-icon-button dense>
-          <button type="button" aria-label="Fit to page" (click)="onZoom('fit')">
-            <forge-icon name="fit_screen"></forge-icon>
-            <forge-tooltip>Fit to page</forge-tooltip>
-          </button>
+        <forge-icon-button dense aria-label="Fit to page" (click)="onZoom('fit')">
+          <forge-icon name="fit_screen"></forge-icon>
         </forge-icon-button>
+        <forge-tooltip>Fit to page</forge-tooltip>
       </div>
     </ng-container>
   </forge-toolbar>
@@ -80,7 +65,7 @@
     @if (!isLoaded && !error) {
     <div class="pdf-viewer__loading-indicator">
       <forge-circular-progress></forge-circular-progress>
-      <span class="forge-typography--subtitle1">Loading document...</span>
+      <span class="forge-typography--subheading2">Loading document...</span>
     </div>
     }
 
@@ -94,33 +79,27 @@
 <ng-template #searchPopupTemplate>
   <form class="pdf-viewer__search-popup" novalidate autocomplete="off" [formGroup]="searchFormGroup">
     <forge-text-field>
-      <input #searchInput type="text" formControlName="query" />
+      <input #searchInput type="text" formControlName="query">
     </forge-text-field>
     <div class="pdf-viewer__search-popup__features">
-      <forge-icon-button dense>
-        <button type="button" aria-label="Previous instance" (click)="onSearchNav('prev')" [disabled]="searchMatches < 2">
-          <forge-icon name="keyboard_arrow_left"></forge-icon>
-          <forge-tooltip>Previous instance</forge-tooltip>
-        </button>
+      <forge-icon-button dense aria-label="Previous instance" (click)="onSearchNav('prev')" [disabled]="searchMatches < 2">
+        <forge-icon name="keyboard_arrow_left"></forge-icon>
+        <forge-tooltip>Previous instance</forge-tooltip>
       </forge-icon-button>
-      <forge-icon-button dense>
-        <button type="button" aria-label="Next instance" (click)="onSearchNav('next')" [disabled]="searchMatches < 2">
-          <forge-icon name="keyboard_arrow_right"></forge-icon>
-          <forge-tooltip>Naxt instance</forge-tooltip>
-        </button>
+      <forge-icon-button dense aria-label="Next instance" (click)="onSearchNav('next')" [disabled]="searchMatches < 2">
+        <forge-icon name="keyboard_arrow_right"></forge-icon>
+        <forge-tooltip>Naxt instance</forge-tooltip>
       </forge-icon-button>
       @if (searchMatches !== -1) {
-      <span class="forge-typography--caption">{{searchMatches}} matches found</span>
+      <span class="forge-typography--label1">{{searchMatches}} matches found</span>
       }
     </div>
     <div class="pdf-viewer__search-popup__features">
-      <forge-checkbox>
-        <input type="checkbox" id="app--pdf-view--highlightall" formControlName="hightlightAll" />
-        <label for="app--pdf-view--highlightall">Highlight all</label>
+      <forge-checkbox formControlName="hightlightAll">
+        Highlight all
       </forge-checkbox>
-      <forge-checkbox>
-        <input type="checkbox" id="app--pdf-view--casesensitive" formControlName="caseSensitive" />
-        <label for="app--pdf-view--casesensitive">Match case</label>
+      <forge-checkbox formControlName="caseSensitive">
+        Match case
       </forge-checkbox>
     </div>
   </form>

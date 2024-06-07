@@ -9,6 +9,8 @@
 
   &__input {
     padding-left: 16px;
+    padding-bottom: 8px;
+    --forge-field-height: 2.5rem;
 
     &__header {
       font-size: 14px;
@@ -21,8 +23,8 @@
       align-items: center;
     }
 
-    .forge-typography--caption {
-      @include forge-theme-property(color, danger);
+    .forge-typography--label1 {
+      color: var(--forge-theme-error);
     }
   }
 

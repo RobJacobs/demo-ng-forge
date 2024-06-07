@@ -25,11 +25,11 @@ export class MenuComponent {
   @Input()
   public options?: any[];
   @Input()
-  public type: 'dismissible' | 'mini' = 'dismissible';
+  public open = true;
   @Input()
   public selectedValue?: string[];
 
-  public menuItemSelected(option: string): void {
+  public menuItemSelected(option: string) {
     if (isDefined(option)) {
       this.router.navigate([option]);
     }

@@ -14,13 +14,13 @@ export abstract class BaseValueAccessorComponent implements ControlValueAccessor
   public onChange = (fn: any) => { };
   public onTouched = () => { };
 
-  public registerOnChange(fn: any): void {
+  public registerOnChange(fn: any) {
     this.onChange = fn;
   }
 
-  public registerOnTouched(fn: any): void {
+  public registerOnTouched(fn: any) {
     this.onTouched = fn;
   }
 
-  abstract writeValue(value: any): void;
+  public abstract writeValue(value: any): void;
 }

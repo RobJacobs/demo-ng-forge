@@ -1,29 +1,29 @@
 <forge-toolbar class="header">
   <div slot="start">
-    <h2 class="forge-typography--title">Profile</h2>
+    <h2 class="forge-typography--subheading4">Profile</h2>
     @if (imageUrl) {
-    <img [src]="imageUrl" (error)="onImageError($event)" alt="" />
+    <img [src]="imageUrl" (error)="onImageError($event)" alt>
     }
   </div>
 
   <div slot="end">
-    <forge-button type="outlined">
-      <button type="button" (click)="onLoadProfile()">Load profile</button>
+    <forge-button variant="outlined" (click)="onLoadProfile()">
+      Load profile
     </forge-button>
   </div>
 </forge-toolbar>
 
-<forge-tab-bar [activeTab]="activeTab">
-  <forge-tab (forge-tab-interacted)="onTabSelected('personal')">
+<forge-tab-bar secondary [activeTab]="activeTab">
+  <forge-tab (forge-tab-select)="onTabSelected('personal')">
     Personal
     @if ([personalFormGroup.invalid, personalFormGroup.touched] | appCallback:isInvalid) {
-    <forge-icon slot="trailing" name="error"></forge-icon>
+    <forge-icon slot="end" name="error"></forge-icon>
     }
   </forge-tab>
-  <forge-tab (forge-tab-interacted)="onTabSelected('address')">
+  <forge-tab (forge-tab-select)="onTabSelected('address')">
     Address
     @if ([addressFormGroup.invalid, addressFormGroup.touched] | appCallback:isInvalid) {
-    <forge-icon slot="trailing" name="error"></forge-icon>
+    <forge-icon slot="end" name="error"></forge-icon>
     }
   </forge-tab>
 </forge-tab-bar>
@@ -39,11 +39,11 @@
 
 <forge-toolbar class="footer" inverted>
   <div slot="end">
-    <forge-button type="outlined">
-      <button type="button" (click)="onCancel()">Cancel</button>
+    <forge-button variant="outlined" (click)="onCancel()">
+      Cancel
     </forge-button>
-    <forge-button type="raised">
-      <button type="button" (click)="onSave()" [disabled]="cache.formGroup.invalid || !cache.formGroup.dirty">Save</button>
+    <forge-button variant="raised" (click)="onSave()" [disabled]="cache.formGroup.invalid || !cache.formGroup.dirty">
+      Save
     </forge-button>
   </div>
 </forge-toolbar>

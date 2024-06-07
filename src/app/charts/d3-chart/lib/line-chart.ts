@@ -3,7 +3,7 @@ import { select, format, timeFormat, axisBottom, scaleLinear, axisLeft, line } f
 import { interpolatePath } from 'd3-interpolate-path';
 import { isArray } from '@tylertech/forge-core';
 import { ChartUtils, IChartData, IChartConfig } from './chart-utils';
-import { CHART_CONSTANTS, CHART_CONSTANTS as constants } from './chart-constants';
+import { CHART_CONSTANTS } from './chart-constants';
 
 export interface ILineChartConfig extends IChartConfig<ILineChartData> {
   categoryTicks?: number | number[];
@@ -23,7 +23,7 @@ export interface ILineChartData {
 export class LineChartService {
 
   public static buildLineChart(config: ILineChartConfig): Promise<void> {
-    const promise = new Promise<void>((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       if (!config.container || config.container.tagName !== 'svg') {
         reject();
         return;
@@ -44,7 +44,7 @@ export class LineChartService {
       const chartMargin = {
         top: 16,
         bottom: 16,
-        left: 16 + ChartUtils.getTextWidth(maxValue.toString(), `${constants.strings.FONT_SIZE_SMALL} ${constants.strings.FONT_FAMILY}`),
+        left: 16 + ChartUtils.getTextWidth(maxValue.toString(), `${CHART_CONSTANTS.strings.FONT_SIZE_SMALL} ${CHART_CONSTANTS.strings.FONT_FAMILY}`),
         right: 16
       };
       const size = ChartUtils.chartSize(config.container);
@@ -113,23 +113,23 @@ export class LineChartService {
         .x((d: any) => xScale(d.category))
         .y(size.height - chartMargin.top);
 
-      let rootNode = container.select(`g.${constants.classes.CHART_ROOT}`);
+      let rootNode = container.select(`g.${CHART_CONSTANTS.classes.CHART_ROOT}`);
       if (!rootNode.node()) {
-        rootNode = container.append('g').classed(constants.classes.CHART_ROOT, true) as any;
-        rootNode.append('g').classed(constants.classes.CHART_XAXIS, true);
+        rootNode = container.append('g').classed(CHART_CONSTANTS.classes.CHART_ROOT, true) as any;
+        rootNode.append('g').classed(CHART_CONSTANTS.classes.CHART_XAXIS, true);
         if (isArray(config.categoryTickValues)) {
-          rootNode.select(`g.${constants.classes.CHART_XAXIS}`).classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__xaxis--align-boundry-ticks`, true);
+          rootNode.select(`g.${CHART_CONSTANTS.classes.CHART_XAXIS}`).classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__xaxis--align-boundry-ticks`, true);
         }
-        rootNode.append('g').classed(constants.classes.CHART_YAXIS, true);
-        rootNode.append('g').classed(`${constants.classes.CHART_PREFIX}__line`, true);
+        rootNode.append('g').classed(CHART_CONSTANTS.classes.CHART_YAXIS, true);
+        rootNode.append('g').classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__line`, true);
       }
 
       container.attr('width', size.width);
       container.attr('height', size.height);
-      container.select(`g.${constants.classes.CHART_XAXIS}`).attr('transform', `translate(${chartMargin.left}, ${size.height - chartMargin.bottom})`).call(xAxis as any);
-      container.select(`g.${constants.classes.CHART_YAXIS}`).attr('transform', `translate(${chartMargin.left}, ${chartMargin.top})`).call(yAxis as any);
+      container.select(`g.${CHART_CONSTANTS.classes.CHART_XAXIS}`).attr('transform', `translate(${chartMargin.left}, ${size.height - chartMargin.bottom})`).call(xAxis as any);
+      container.select(`g.${CHART_CONSTANTS.classes.CHART_YAXIS}`).attr('transform', `translate(${chartMargin.left}, ${chartMargin.top})`).call(yAxis as any);
 
-      const chartNode = rootNode.select(`g.${constants.classes.CHART_PREFIX}__line`);
+      const chartNode = rootNode.select(`g.${CHART_CONSTANTS.classes.CHART_PREFIX}__line`);
       chartNode.attr('transform', `translate(${chartMargin.left + linePadding}, ${chartMargin.top})`);
 
       config.data.forEach((l, index) => {
@@ -149,7 +149,7 @@ export class LineChartService {
           .merge(nodes as any)
           .attr('stroke', d => (d as any).color)
           .transition()
-          .duration(constants.numbers.TRANSITION_DURATION)
+          .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
           .call(ChartUtils.transitionsComplete as any, () => {
             if (index === config.data.length - 1) {
               resolve();
@@ -170,7 +170,5 @@ export class LineChartService {
       }
 
     });
-
-    return promise;
   }
 }

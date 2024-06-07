@@ -152,7 +152,7 @@ export class Utils {
     return a < b ? -1 : a > b ? 1 : 0;
   }
 
-  public static navigateBack(location: Location, router: Router, fallbackRoute: any[]): void {
+  public static navigateBack(location: Location, router: Router, fallbackRoute: any[]) {
     if ((location.getState() as any)?.navigationId === 1) {
       router.navigate(fallbackRoute);
     } else {

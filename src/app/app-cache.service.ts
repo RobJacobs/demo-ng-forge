@@ -5,7 +5,7 @@ export interface IAppCacheService {
   isBusy: ReturnType<typeof signal<boolean>>;
   layoutMode: string;
   menu: {
-    type: string;
+    open: boolean;
     options: any[]
   }
   activeRoute: string[];
@@ -20,7 +20,8 @@ export class AppCacheService implements IAppCacheService {
   public theme: 'dark' | 'light' = 'light';
   public layoutMode: 'sm' | 'md' | 'lg' = 'lg';
   public menu = {
-    type: 'dismissible' as 'dismissible' | 'mini',
+    // type: 'dismissible' as 'dismissible' | 'mini',
+    open: true,
     options: [
       { label: 'Dashboard', value: 'dashboard', icon: 'home' },
       { label: 'Profile', value: 'profile', icon: 'person' },
@@ -36,6 +37,7 @@ export class AppCacheService implements IAppCacheService {
       { label: 'Search', value: 'search', icon: 'search' },
       { label: 'Query Builder', value: 'query-builder', icon: 'category' },
       { label: 'Icons', value: 'icons', icon: 'star' },
+      { label: 'CSS Variables', value: 'css-variables', icon: 'adjust' },
       {
         label: 'Examples', icon: 'directions',
         options: [

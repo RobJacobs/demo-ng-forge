@@ -3,19 +3,22 @@ import { ActivatedRouteSnapshot, Router, ActivatedRoute, NavigationEnd, Navigati
 import { filter } from 'rxjs/operators';
 
 import { AppCacheService } from './app-cache.service';
-import { ForgeButtonModule, ForgeDrawerModule, ForgeIconModule, ForgeScaffoldModule } from '@tylertech/forge-angular';
+import { ForgeButtonModule, ForgeDrawerModule, ForgeIconModule, ForgeMiniDrawerModule, ForgeScaffoldModule } from '@tylertech/forge-angular';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { MenuComponent } from './shared/components/menu/menu.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     RouterOutlet,
+    CommonModule,
     ForgeScaffoldModule,
     ForgeDrawerModule,
     ForgeButtonModule,
     ForgeIconModule,
+    ForgeMiniDrawerModule,
     HeaderComponent,
     MenuComponent
   ],
@@ -37,13 +40,13 @@ export class AppComponent {
   }
 
   public expand() {
-    this.appCache.menu.type = this.appCache.menu.type === 'dismissible' ? 'mini' : 'dismissible';
-    if (this.appCache.menu.type === 'mini') {
+    this.appCache.menu.open = !this.appCache.menu.open;
+    if (!this.appCache.menu.open) {
       (this.elementRef.nativeElement as HTMLElement).querySelectorAll('forge-expansion-panel').forEach(element => element.open = false);
     }
   }
 
-  private initRouteWatch(): void {
+  private initRouteWatch() {
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(() => {
       const routes: string[] = [];
       const parseRoute = (r: ActivatedRouteSnapshot) => {
@@ -63,14 +66,14 @@ export class AppComponent {
     });
   }
 
-  private initLayoutWatch(): void {
+  private initLayoutWatch() {
     const layoutHandler = () => {
       document.body.classList.remove('app--layout-sm', 'app--layout-md', 'app--layout-lg');
 
       // https://forge.tylertech.com/core-patterns/layout/grid#responsive-breakpoints
       if (window.innerWidth <= 600) {
         this.appCache.layoutMode = 'sm';
-        this.appCache.menu.type = 'mini';
+        this.appCache.menu.open = false;
       } else if (window.innerWidth <= 960) {
         this.appCache.layoutMode = 'md';
       } else {

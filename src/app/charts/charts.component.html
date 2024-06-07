@@ -1,7 +1,7 @@
 <forge-toolbar class="header">
   <div slot="start">
-    <h2 class="forge-typography--title">Charts</h2>
-    <forge-select label="Chart type" [(ngModel)]="chartType">
+    <h2 class="forge-typography--subheading4">Charts</h2>
+    <forge-select [(ngModel)]="chartType">
       <forge-option value="bar">bar</forge-option>
       <forge-option value="bubble">bubble</forge-option>
       <forge-option value="donut">donut</forge-option>
@@ -11,21 +11,21 @@
       <forge-option value="treemap">treemap</forge-option>
       <forge-option value="tree">tree</forge-option>
     </forge-select>
-    <forge-button type="outlined">
-      <button type="button" (click)="onAction('update')" [disabled]="activeTab === 0 && chartType === 'tree'">Update</button>
+    <forge-button variant="outlined" (click)="onAction('update')" [disabled]="activeTab === 0 && chartType === 'tree'">
+      Update
     </forge-button>
-    <forge-button type="outlined">
-      <button type="button" (click)="onAction('add')" [disabled]="chartType === 'tree'">Add</button>
+    <forge-button variant="outlined" (click)="onAction('add')" [disabled]="chartType === 'tree'">
+      Add
     </forge-button>
-    <forge-button type="outlined">
-      <button type="button" (click)="onAction('delete')" [disabled]="chartType === 'tree'">Delete</button>
+    <forge-button variant="outlined" (click)="onAction('delete')" [disabled]="chartType === 'tree'">
+      Delete
     </forge-button>
   </div>
 </forge-toolbar>
 
-<forge-tab-bar [activeTab]="activeTab">
-  <forge-tab (forge-tab-interacted)="onTabSelected(0)">D3</forge-tab>
-  <forge-tab (forge-tab-interacted)="onTabSelected(1)">Google</forge-tab>
+<forge-tab-bar secondary [activeTab]="activeTab">
+  <forge-tab (forge-tab-select)="onTabSelected(0)">D3</forge-tab>
+  <forge-tab (forge-tab-select)="onTabSelected(1)">Google</forge-tab>
 </forge-tab-bar>
 
 <div class="body">

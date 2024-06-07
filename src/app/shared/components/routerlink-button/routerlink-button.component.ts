@@ -24,10 +24,10 @@ export class RouterlinkButtonComponent {
   public queryParams?: any;
 
   @Input()
-  public icon?: string;
+  public label?: string;
 
   @Input()
-  public tooltip?: string;
+  public icon?: string;
 
   @Input()
   public disabled?: boolean;

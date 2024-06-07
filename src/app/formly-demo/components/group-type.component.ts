@@ -44,7 +44,7 @@ import { FormlyFieldDirective } from './formly-field.directive';
           display: flex;
           flex-direction: column;
           row-gap: 16px;
-          border: var(--forge-theme-border);
+          border: var(--forge-theme-outline);
           border-radius: 4px;
           padding: 16px;
         }

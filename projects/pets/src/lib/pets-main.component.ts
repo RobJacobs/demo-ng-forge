@@ -18,7 +18,7 @@ export class PetsMainComponent {
 
   public onToggleMenu() {
     if (this.moduleConfig) {
-      this.moduleConfig.appCache.menu.type = this.moduleConfig.appCache.menu.type === 'dismissible' ? 'mini' : 'dismissible';
+      this.moduleConfig.appCache.menu.open = !this.moduleConfig.appCache.menu.open;
     }
   }
 }

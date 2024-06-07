@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { AbstractControl, Form, FormControl, FormGroup } from '@angular/forms';
 import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
 import { FormlyDemoService } from './formly-demo.service';
@@ -12,6 +12,7 @@ import { formlyDemoConstants } from './formly-demo.constants';
 })
 export class FormlyDemoComponent implements OnInit {
   private changeDetectorRef = inject(ChangeDetectorRef);
+  private destroyRef = inject(DestroyRef);
   private moduleService = inject(FormlyDemoService);
 
   private form?: Form;
@@ -37,7 +38,7 @@ export class FormlyDemoComponent implements OnInit {
 
   constructor() {
     this.moduleService.formMessage.pipe(
-      takeUntilDestroyed()
+      takeUntilDestroyed(this.destroyRef)
     ).subscribe(result => {
       this.formMessage = result;
     });

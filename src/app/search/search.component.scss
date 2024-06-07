@@ -43,7 +43,6 @@
 
 .body {
   overflow: auto;
-  // margin: 24px;
   padding: 24px;
   .form {
     @include app-container-raised();
@@ -54,15 +53,8 @@
 
 .operator {
   &__addon {
-    // TODO fix with forge-icon-button element density-level attribute
-    button {
-      width: 36px;
-      height: 36px;
-    }
-    border-radius: 50%;
-
     &--selected {
-      background-color: $mat-color-indigo-100;
+      color: var(--forge-theme-info);
     }
   }
 }

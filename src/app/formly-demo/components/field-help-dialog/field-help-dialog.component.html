@@ -1,33 +1,32 @@
-<div class="dialog__header">
-  <h2 class="forge-typography--headline5" id="field-help--title">{{title}}</h2>
-  <forge-icon-button class="forge-flex-item--right">
-    <button type="button" aria-label="Close" (click)="onClose()">
+<forge-scaffold>
+  <forge-toolbar slot="header">
+    <h2 slot="start" class="forge-typography--heading4" [id]="id + '--title'">{{dialogTitle}}</h2>
+    <forge-icon-button class="header__close" slot="end" aria-label="Close" (click)="onClose()">
       <forge-icon name="close"></forge-icon>
-    </button>
-  </forge-icon-button>
-</div>
+    </forge-icon-button>
+  </forge-toolbar>
+  <div slot="body">
+    <forge-table [ngClass]="{'app--hidden': isBusy}" [data]="data" [columnConfigurations]="columnConfigurations" allow-row-click (forge-table-row-click)="onTableRowClick($event.detail)" (forge-table-sort)="onTableSort($any($event).detail)" filter="true" (forge-table-filter)="onTableFilter($event.detail)"></forge-table>
 
-<div class="dialog__body">
-  <forge-table [ngClass]="{'app--hidden': isBusy}" [data]="data" [columnConfigurations]="columnConfigurations" allow-row-click (forge-table-row-click)="onTableRowClick($event.detail)" (forge-table-sort)="onTableSort($any($event).detail)" filter="true" (forge-table-filter)="onTableFilter($event.detail)"></forge-table>
+    @if (!isBusy && !data.length) {
+    <forge-page-state>
+      <img src="https://cdn.forge.tylertech.com/v1/images/spot/no-search-results-spot.svg" slot="graphic" alt="No records found">
+      <div slot="message">No records were found.</div>
+    </forge-page-state>
+    }
 
-  @if (!isBusy && !data.length) {
-  <forge-page-state>
-    <img src="https://cdn.forge.tylertech.com/v1/images/spot/no-search-results-spot.svg" slot="graphic" alt="No records found" />
-    <div slot="message">No records were found.</div>
-  </forge-page-state>
-  }
+    @if (isBusy) {
+    <ng-container>
+      <forge-skeleton list-item></forge-skeleton>
+      <forge-skeleton list-item></forge-skeleton>
+      <forge-skeleton list-item></forge-skeleton>
+      <forge-skeleton list-item></forge-skeleton>
+    </ng-container>
+    }
+  </div>
 
-  @if (isBusy) {
-  <ng-container>
-    <forge-skeleton list-item></forge-skeleton>
-    <forge-skeleton list-item></forge-skeleton>
-    <forge-skeleton list-item></forge-skeleton>
-    <forge-skeleton list-item></forge-skeleton>
-  </ng-container>
-  }
-</div>
-
-<div class="dialog__footer">
-  <forge-paginator [pageIndex]="paginator.pageIndex" [pageSize]="paginator.pageSize" [total]="paginator.total" (forge-paginator-change)="onPaginatorChange($event.detail)" [disabled]="isBusy || !data.length">
-  </forge-paginator>
-</div>
+  <forge-toolbar slot="footer" inverted="true">
+    <forge-paginator slot="end" [pageIndex]="paginator.pageIndex" [pageSize]="paginator.pageSize" [total]="paginator.total" (forge-paginator-change)="onPaginatorChange($event.detail)" [disabled]="isBusy || !data.length">
+    </forge-paginator>
+  </forge-toolbar>
+</forge-scaffold>

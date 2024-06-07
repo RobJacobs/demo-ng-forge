@@ -49,7 +49,7 @@ export class DetailComponent {
     }
   }
 
-  public onNavigate(route: string): void {
+  public onNavigate(route: string) {
     switch (route) {
       case 'back':
         this.router.navigate(['people/home']);
@@ -57,11 +57,11 @@ export class DetailComponent {
     }
   }
 
-  public onViewWiki(): void {
+  public onViewWiki() {
     window.open(this.person?.url, '_blank');
   }
 
-  public onImageError(event: Event): void {
+  public onImageError(event: Event) {
     const targetElement = event.target as HTMLImageElement;
     if (!targetElement.src.includes(this.noImageUrl)) {
       targetElement.src = this.noImageUrl;

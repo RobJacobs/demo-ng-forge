@@ -1,15 +1,13 @@
 <forge-toolbar class="header">
   <div slot="start">
-    <forge-icon-button>
-      <button (click)="onNavigate('back')" aria-label="Go back">
-        <forge-icon name="arrow_back"></forge-icon>
-      </button>
+    <forge-icon-button (click)="onNavigate('back')" aria-label="Go back">
+      <forge-icon name="arrow_back"></forge-icon>
     </forge-icon-button>
-    <h2 class="forge-typography--title">{{person?.firstName + ' ' + person?.lastName}}</h2>
+    <h2 class="forge-typography--subheading4">{{person?.firstName + ' ' + person?.lastName}}</h2>
   </div>
   <div slot="end">
-    <forge-button type="outlined">
-      <button type="button" (click)="onViewWiki()" [disabled]="!person?.url?.length">View wiki</button>
+    <forge-button variant="outlined" (click)="onViewWiki()" [disabled]="!person?.url?.length">
+      View wiki
     </forge-button>
   </div>
 </forge-toolbar>
@@ -31,6 +29,6 @@
   </div>
 
   <div class="body__right">
-    <img [src]="imageUrl" (error)="onImageError($event)" alt="" />
+    <img [src]="imageUrl" (error)="onImageError($event)" alt>
   </div>
 </div>

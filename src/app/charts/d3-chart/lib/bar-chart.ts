@@ -2,7 +2,7 @@
 import { select, format, timeFormat, axisBottom, scaleLinear, axisLeft, scaleBand } from 'd3';
 import { isArray, isDefined } from '@tylertech/forge-core';
 import { ChartUtils, IChartData, IChartConfig } from './chart-utils';
-import { CHART_CONSTANTS, CHART_CONSTANTS as constants } from './chart-constants';
+import { CHART_CONSTANTS } from './chart-constants';
 
 export interface IBarChartConfig extends IChartConfig {
   valueTicks?: number | number[];
@@ -15,7 +15,7 @@ export interface IBarChartConfig extends IChartConfig {
 export class BarChartService {
 
   public static buildBarChart(config: IBarChartConfig): Promise<void> {
-    const promise = new Promise<void>((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       if (!config.container || config.container.tagName !== 'svg') {
         reject();
         return;
@@ -35,7 +35,7 @@ export class BarChartService {
       const chartMargin = {
         top: 16,
         bottom: 16,
-        left: 16 + ChartUtils.getMaxTextWidth(valueTickText as string[], `${constants.strings.FONT_SIZE_SMALL} ${constants.strings.FONT_FAMILY}`),
+        left: 16 + ChartUtils.getMaxTextWidth(valueTickText as string[], `${CHART_CONSTANTS.strings.FONT_SIZE_SMALL} ${CHART_CONSTANTS.strings.FONT_FAMILY}`),
         right: 16
       };
       const chartWidth = config.data.length * (barWidth + barPadding);
@@ -69,36 +69,36 @@ export class BarChartService {
         yAxis.tickFormat(timeFormat(config.valueDateFormat) as any);
       }
 
-      let rootNode = container.select(`g.${constants.classes.CHART_ROOT}`);
+      let rootNode = container.select(`g.${CHART_CONSTANTS.classes.CHART_ROOT}`);
       if (!rootNode.node()) {
-        rootNode = container.append('g').classed(constants.classes.CHART_ROOT, true) as any;
-        rootNode.append('g').classed(constants.classes.CHART_YAXIS, true);
-        rootNode.append('g').classed(constants.classes.CHART_XAXIS, true);
-        rootNode.append('g').classed(`${constants.classes.CHART_PREFIX}__chart`, true).classed(`${constants.classes.CHART_PREFIX}__bar`, true);
+        rootNode = container.append('g').classed(CHART_CONSTANTS.classes.CHART_ROOT, true) as any;
+        rootNode.append('g').classed(CHART_CONSTANTS.classes.CHART_YAXIS, true);
+        rootNode.append('g').classed(CHART_CONSTANTS.classes.CHART_XAXIS, true);
+        rootNode.append('g').classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__chart`, true).classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__bar`, true);
       }
 
       const minContainerWidth = chartWidth + chartMargin.left;
       // container.attr('width', minContainerWidth > size.width ? minContainerWidth : size.width);
       container.attr('width', chartWidth + chartMargin.left);
       container.attr('height', size.height);
-      container.select(`g.${constants.classes.CHART_YAXIS}`).attr('transform', `translate(${chartMargin.left}, ${chartMargin.top})`).call(yAxis as any); // TODO
-      container.select(`g.${constants.classes.CHART_XAXIS}`).attr('transform', `translate(${chartMargin.left}, ${size.height - chartMargin.bottom})`);
+      container.select(`g.${CHART_CONSTANTS.classes.CHART_YAXIS}`).attr('transform', `translate(${chartMargin.left}, ${chartMargin.top})`).call(yAxis as any); // TODO
+      container.select(`g.${CHART_CONSTANTS.classes.CHART_XAXIS}`).attr('transform', `translate(${chartMargin.left}, ${size.height - chartMargin.bottom})`);
       if (isArray(config.categoryTickValues) && config.categoryTickValues?.length) {
         const xAxis = axisBottom(scaleBand().domain(config.categoryTickValues as string[]).range([0, chartWidth]));
-        container.select(`g.${constants.classes.CHART_XAXIS}`).call(xAxis as any); // TODO
+        container.select(`g.${CHART_CONSTANTS.classes.CHART_XAXIS}`).call(xAxis as any); // TODO
       }
 
-      const chartNode = rootNode.select(`g.${constants.classes.CHART_PREFIX}__bar`);
+      const chartNode = rootNode.select(`g.${CHART_CONSTANTS.classes.CHART_PREFIX}__bar`);
       chartNode.attr('transform', `translate(${chartMargin.left}, -${chartMargin.bottom - chartMargin.top})`);
 
       const nodes = chartNode.selectAll('rect').data(config.data, (d: any) => d.id);
 
       nodes.exit()
         .transition()
-        .duration(constants.numbers.TRANSITION_DURATION)
+        .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
         .attr('y', (d: any) => size.height - chartMargin.top)
         .attr('height', 0);
-      nodes.exit().transition().delay(constants.numbers.TRANSITION_DURATION).remove();
+      nodes.exit().transition().delay(CHART_CONSTANTS.numbers.TRANSITION_DURATION).remove();
 
       const enterNodes = nodes.enter();
 
@@ -113,7 +113,7 @@ export class BarChartService {
         .call(ChartUtils.transitionsComplete as any, () => {
           resolve();
         })
-        .duration(constants.numbers.TRANSITION_DURATION)
+        .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
         .attr('y', (d: IChartData) => d.value ? yScale(d.value) + chartMargin.bottom : 0)
         .attr('height', (d: IChartData) => d.value ? size.height - chartMargin.top - chartMargin.bottom - yScale(d.value) : 0)
         .attr('fill', (d: IChartData) => {
@@ -139,7 +139,5 @@ export class BarChartService {
         enterNodes.selectAll('rect').on('mouseleave', (e, d) => (config.hoverCallback as any)(false, d as IChartData, e.target as SVGElement));
       }
     });
-
-    return promise;
   }
 }

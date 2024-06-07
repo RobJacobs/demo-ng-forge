@@ -1,11 +1,6 @@
 <forge-toolbar class="header">
-  <h2 slot="start" class="forge-typography--title">People</h2>
-  <!-- <forge-icon-button slot="end">
-    <a routerLink="/profile" class="forge-icon-button">
-      <forge-icon name="view_column"></forge-icon>
-    </a>
-  </forge-icon-button> -->
-  <app-routerlink-button slot="end" route="/profile" icon="person"></app-routerlink-button>
+  <h2 slot="start" class="forge-typography--subheading4">People</h2>
+  <app-routerlink-button slot="end" route="/profile" icon="person" label="View profile"></app-routerlink-button>
 </forge-toolbar>
 
 <div class="body">
@@ -14,22 +9,18 @@
       <div class="table__header" [ngClass]="{'table__header-action': selectedPeople.length}">
         @if (!selectedPeople.length) {
         <app-filter-chips [filters]="filterCache.filters" (filter)="onApplyFilter(true)"></app-filter-chips>
-        <forge-button class="app--flex-right" type="outlined">
-          <button type="button" (click)="viewCache.showFilter = !viewCache.showFilter">
-            @if (filterCache.filters.length) {
-            <forge-badge class="table__header__filter-count" theme="info-primary">{{filterCache.filters.length}}</forge-badge>
-            } @else {
-            <forge-icon name="filter_list"></forge-icon>
-            }
-            <span>Filter</span>
-          </button>
+        <forge-button class="app--flex-right" variant="outlined" (click)="onTableShowFilter()">
+          @if (filterCache.filters.length) {
+          <forge-badge class="table__header__filter-count" theme="info-primary">{{filterCache.filters.length}}</forge-badge>
+          } @else {
+          <forge-icon name="filter_list"></forge-icon>
+          }
+          <span>Filter</span>
         </forge-button>
-        <forge-icon-button id="home--column-select" class="table__header__columns">
-          <button type="button" aria-label="Choose table columns">
-            <forge-icon name="view_column"></forge-icon>
-          </button>
+        <forge-icon-button id="people--home--column-select" class="table__header__columns" aria-label="Choose table columns">
+          <forge-icon name="view_column"></forge-icon>
         </forge-icon-button>
-        <forge-select-dropdown target="#home--column-select" multiple [value]="selectedTableColumns" (change)="onTableOptionSelected($event.detail)">
+        <forge-select-dropdown target="#people--home--column-select" multiple [value]="selectedTableColumns" (change)="onTableOptionSelected($event.detail)">
           @for (column of optionalTableColumns; track i; let i = $index) {
           <forge-option [value]="column.property">
             {{column.header}}
@@ -41,7 +32,7 @@
         }
       </div>
 
-      <forge-table #peopleTable class="table__body" [ngClass]="{'app--hidden': !recordCount}" [data]="recordset" [columnConfigurations]="tableColumns" (forge-table-sort)="onTableSort($any($event).detail)" select="true" select-key="id" (forge-table-select)="onPeopleSelected()" (forge-table-select-all)="onPeopleSelected()" fixed-headers="true"></forge-table>
+      <forge-table #peopleTable class="table__body" [ngClass]="{'app--hidden': !recordCount}" [data]="recordset" [columnConfigurations]="tableColumns" (forge-table-sort)="onTableSort($any($event).detail)" select-key="id" (forge-table-select)="onPeopleSelected()" (forge-table-select-all)="onPeopleSelected()" fixed-headers="true" [filter]="viewCache.showFilter" (forge-table-filter)="onTableFilter($event.detail)"></forge-table>
 
       @if (recordCount) {
       <div class="table__footer">
@@ -52,7 +43,7 @@
 
     @if (!isBusy && !recordCount) {
     <div class="empty-state">
-      <img src="https://cdn.forge.tylertech.com/v1/images/spot-hero/general-empty-state-spot-hero.svg" alt="" />
+      <img src="https://cdn.forge.tylertech.com/v1/images/spot-hero/general-empty-state-spot-hero.svg" alt>
       <div>No people found.</div>
     </div>
     }

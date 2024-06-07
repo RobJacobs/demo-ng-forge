@@ -1,4 +1,3 @@
-@use '@material/card' as mat-card;
 @use 'src/global' as *;
 
 $form-cell-width: 192;
@@ -15,19 +14,8 @@ $form-column-gap: 16;
     margin: 8px 0;
 
     &__condition {
-      width: #{calc($form-cell-width / 2)}px;
-      background-color: $mat-color-grey-200;
-      border-radius: 4px;
-
-      &::part(container) {
-        &::before {
-          border: none;
-        }
-      }
-
-      &::part(text) {
-        padding: 0 16px;
-      }
+      --forge-field-height: 2.5rem;
+      background-color: $forge-color-grey-200;
     }
   }
 
@@ -54,12 +42,12 @@ $form-column-gap: 16;
     padding: 16px;
 
     & .filter__group {
-      border: 1px dashed $mat-color-grey-500;
+      border: 1px dashed $forge-color-grey-500;
       margin: 8px 0;
       padding: 8px 16px;
     }
 
-    border-left: 4px solid $forge-theme-primary;
+    border-left: 4px solid var(--forge-theme-primary);
     margin: 16px 0;
 
     &:first-of-type {
@@ -67,17 +55,10 @@ $form-column-gap: 16;
     }
 
     &__add {
-      border: 1px dashed $mat-color-grey-500;
-      @include mat-card.shape-radius(medium);
-      background-color: $mat-color-grey-100;
-      width: 100%;
-
-      button {
-        width: 100%;
-        justify-content: flex-start;
-        padding: 16px;
-        height: auto;
-      }
+      --forge-button-height: 3rem;
+      border: 1px dashed $forge-color-grey-500;
+      border-radius: var(--forge-shape-medium);
+      background-color: $forge-color-grey-100;
     }
   }
 }

@@ -20,5 +20,6 @@ export const routes: Routes = [
   { path: 'charts', loadComponent: () => import('./charts/charts.component').then((m) => m.ChartsComponent) },
   { path: 'text-edit', loadComponent: () => import('./text-editor/text-editor.component').then((m) => m.TextEditorComponent) },
   { path: 'pdf-viewer', loadComponent: () => import('./pdf-viewer-demo/pdf-viewer-demo.component').then((m) => m.PdfViewerDemoComponent) },
+  { path: 'css-variables', loadComponent: () => import('./css-variables/css-variables.component').then((m) => m.CssVariablesComponent) },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
 ];

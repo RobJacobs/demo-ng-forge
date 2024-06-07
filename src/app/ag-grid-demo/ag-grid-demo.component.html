@@ -1,10 +1,8 @@
 <forge-toolbar class="header">
-  <h2 slot="start" class="forge-typography--title">Ag Grid Demo</h2>
+  <h2 slot="start" class="forge-typography--subheading4">Ag Grid Demo</h2>
   <div slot="end">
-    <forge-icon-button id="ag-grid-demo--column-select" class="table__header__columns">
-      <button type="button" aria-label="Choose table columns">
-        <forge-icon name="view_column"></forge-icon>
-      </button>
+    <forge-icon-button id="ag-grid-demo--column-select" class="table__header__columns" aria-label="Choose table columns">
+      <forge-icon name="view_column"></forge-icon>
     </forge-icon-button>
     <forge-select-dropdown target="#ag-grid-demo--column-select" multiple [value]="selectedTableColumns" (change)="onTableColumnOptionSelected($event.detail)">
       @for (column of optionalTableColumns; track i; let i = $index) {

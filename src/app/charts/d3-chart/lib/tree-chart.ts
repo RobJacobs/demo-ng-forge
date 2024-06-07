@@ -3,7 +3,7 @@ import { select, hierarchy, tree, line, Selection, BaseType, HierarchyNode, Hier
 import { interpolatePath } from 'd3-interpolate-path';
 import { isArray, isDefined, scrollParent } from '@tylertech/forge-core';
 import { ChartUtils } from './chart-utils';
-import { CHART_CONSTANTS as constants } from './chart-constants';
+import { CHART_CONSTANTS } from './chart-constants';
 
 export interface ITreeChartData {
   id: number | string;
@@ -59,7 +59,7 @@ export class TreeChartService {
   }
 
   public static buildTreeChart(config: ITreeChartConfig): Promise<void> {
-    const promise = new Promise<void>((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       if (!config.container || config.container.tagName !== 'svg') {
         reject();
         return;
@@ -104,10 +104,10 @@ export class TreeChartService {
         }
       });
 
-      let rootNode = container.select(`g.${constants.classes.CHART_ROOT}`);
+      let rootNode = container.select(`g.${CHART_CONSTANTS.classes.CHART_ROOT}`);
       if (!rootNode.node()) {
-        rootNode = container.append('g').classed(constants.classes.CHART_ROOT, true) as any;
-        rootNode.append('g').classed(`${constants.classes.CHART_PREFIX}__tree`, true);
+        rootNode = container.append('g').classed(CHART_CONSTANTS.classes.CHART_ROOT, true) as any;
+        rootNode.append('g').classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__tree`, true);
       }
 
       const zoomScale = ((rootNode.node() as SVGGElement).getCTM() as DOMMatrix).a;
@@ -161,15 +161,15 @@ export class TreeChartService {
         );
       }
 
-      const chartNode = rootNode.select(`g.${constants.classes.CHART_PREFIX}__tree`);
+      const chartNode = rootNode.select(`g.${CHART_CONSTANTS.classes.CHART_PREFIX}__tree`);
       chartNode.attr('transform', `translate(${Math.abs(xMin) + Math.round(config.node.size.width / 2) + chartPadding}, ${chartPadding})`);
 
-      const nodes = chartNode.selectAll(`.${constants.classes.CHART_PREFIX}__tree__node`).data(chartData.descendants().filter(d => d.depth > 0), (d: any) => d.data.nodeId);
+      const nodes = chartNode.selectAll(`.${CHART_CONSTANTS.classes.CHART_PREFIX}__tree__node`).data(chartData.descendants().filter(d => d.depth > 0), (d: any) => d.data.nodeId);
 
       const exitNodes = nodes.exit();
       exitNodes
         .transition()
-        .duration(constants.numbers.TRANSITION_DURATION)
+        .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
         .attr('transform', (d: any) => {
           if (d.parent) {
             return `translate(${this.nodeCenterHorizontal(d, config.node.size.width, d.parent.x)}, ${d.parent.y})`;
@@ -180,7 +180,7 @@ export class TreeChartService {
         .remove();
 
       const enterNodes = nodes.enter().append('g')
-        .classed(`${constants.classes.CHART_PREFIX}__tree__node`, true)
+        .classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__tree__node`, true)
         .attr('transform', (d: any) => {
           if (d.parent) {
             return `translate(${this.nodeCenterHorizontal(d, config.node.size.width, d.parent.x)}, ${d.parent.y})`;
@@ -209,7 +209,7 @@ export class TreeChartService {
         config.nodeBuilder(enterNodes);
       } else {
         enterNodes.append('text')
-          .classed(constants.classes.CHART_TEXT, true)
+          .classed(CHART_CONSTANTS.classes.CHART_TEXT, true)
           .attr('x', config.node.padding)
           .attr('y', config.node.size.height / 2)
           .style('pointer-events', 'none')
@@ -265,7 +265,7 @@ export class TreeChartService {
 
           resolve();
         })
-        .duration(constants.numbers.TRANSITION_DURATION)
+        .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
         .attr('transform', (d: any) => `translate(${this.nodeCenterHorizontal(d, config.node.size.width)}, ${d.y})`);
 
       const nodePath = (start: { x: number; y: number }, end: { x: number; y: number }) => {
@@ -273,11 +273,11 @@ export class TreeChartService {
         return line()([[start.x, start.y], [start.x, start.y - offSet], [end.x, end.y + offSet], [end.x, end.y]]);
       };
 
-      const linkNodes = chartNode.selectAll(`.${constants.classes.CHART_PREFIX}__tree__path`).data(chartData.descendants().filter(d => d.depth > 1), (d: any) => d.data.nodeId);
+      const linkNodes = chartNode.selectAll(`.${CHART_CONSTANTS.classes.CHART_PREFIX}__tree__path`).data(chartData.descendants().filter(d => d.depth > 1), (d: any) => d.data.nodeId);
 
       linkNodes.exit()
         .transition()
-        .duration(constants.numbers.TRANSITION_DURATION)
+        .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
         .attrTween('d', (d: any, i, element) => {
           const current = (element[i] as SVGPathElement).getAttribute('d') as string;
           const next = nodePath({ x: Math.round(d.parent.x), y: Math.round(d.parent.y + config.node.size.height) }, { x: Math.round(d.parent.x), y: Math.round(d.parent.y + config.node.size.height) }) as string;
@@ -286,7 +286,7 @@ export class TreeChartService {
         .remove();
 
       const enterLinkNodes = linkNodes.enter().insert('path')
-        .classed(`${constants.classes.CHART_PREFIX}__tree__path`, true)
+        .classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__tree__path`, true)
         .style('fill', 'none')
         .style('stroke', strokeColor)
         .style('shape-rendering', 'crispEdges')
@@ -297,9 +297,9 @@ export class TreeChartService {
       mergeLinkNodes
         .transition()
         .call(ChartUtils.transitionsComplete as any, () => {
-          chartNode.selectAll(`.${constants.classes.CHART_PREFIX}__tree__path-label`).raise();
+          chartNode.selectAll(`.${CHART_CONSTANTS.classes.CHART_PREFIX}__tree__path-label`).raise();
         })
-        .duration(constants.numbers.TRANSITION_DURATION)
+        .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
         .attrTween('d', (d: any, i, element) => {
           const current = (element[i] as SVGPathElement).getAttribute('d') as string;
           const next = nodePath({ x: Math.round(d.parent.x), y: Math.round(d.parent.y + config.node.size.height) }, { x: Math.round(d.x), y: Math.round(d.y) }) as string;
@@ -307,11 +307,11 @@ export class TreeChartService {
         });
 
       if (config.levelLabels.length) {
-        const linkLabelNodes = chartNode.selectAll(`.${constants.classes.CHART_PREFIX}__tree__path-label`).data(chartData.descendants().filter(d => d.depth > 0 && isArray(d.data.children) && (d.data.children as ITreeChartData[]).length), (d: any) => d.data.nodeId);
+        const linkLabelNodes = chartNode.selectAll(`.${CHART_CONSTANTS.classes.CHART_PREFIX}__tree__path-label`).data(chartData.descendants().filter(d => d.depth > 0 && isArray(d.data.children) && (d.data.children as ITreeChartData[]).length), (d: any) => d.data.nodeId);
         const linkLabelNodeHeight = 24;
 
         const enterlinkLabelNodes = linkLabelNodes.enter().insert('g')
-          .classed(`${constants.classes.CHART_PREFIX}__tree__path-label`, true)
+          .classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__tree__path-label`, true)
           .attr('visibility', 'hidden')
           .attr('transform', (d: any) => `translate(${this.nodeCenterHorizontal(d, config.node.size.width)}, ${d.y + config.node.size.height + config.node.padding})`);
 
@@ -334,7 +334,7 @@ export class TreeChartService {
           .style('fill', strokeColor);
 
         enterlinkLabelNodes.append('text')
-          .classed(constants.classes.CHART_TEXT, true)
+          .classed(CHART_CONSTANTS.classes.CHART_TEXT, true)
           .attr('x', Math.round(config.node.size.width / 2))
           .attr('y', linkLabelNodeHeight / 2)
           .style('pointer-events', 'none')
@@ -354,19 +354,19 @@ export class TreeChartService {
             enterlinkLabelNodes.attr('visibility', null);
             resolve();
           })
-          .duration(constants.numbers.TRANSITION_DURATION)
+          .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
           .attr('transform', (d: any) => `translate(${this.nodeCenterHorizontal(d, config.node.size.width)}, ${d.y + config.node.size.height + ((config.node.margin - linkLabelNodeHeight) / 2)})`);
       }
 
       mergeNodes.each((d: any, i: number) => {
         const mergeNode = select(mergeNodes.nodes()[i]);
 
-        const childrenIconNode = select(mergeNode.node()?.querySelector(`.${constants.classes.CHART_PREFIX}__tree__node__children-icon`) as any);
+        const childrenIconNode = select(mergeNode.node()?.querySelector(`.${CHART_CONSTANTS.classes.CHART_PREFIX}__tree__node__children-icon`) as any);
         if (this.hasChildren(d)) {
           if (!childrenIconNode.node()) {
             mergeNode
               .append('path')
-              .classed(`${constants.classes.CHART_PREFIX}__tree__node__children-icon`, true)
+              .classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__tree__node__children-icon`, true)
               .attr('d', 'M0,0L12,0L6,6,L0,0')
               .attr('transform', `translate(${config.node.size.width - 20}, ${(config.node.size.height / 2) - 4})`)
               .style('fill', iconColor);
@@ -376,12 +376,12 @@ export class TreeChartService {
         }
 
         if (config.popupCallback) {
-          let infoIconNode = select(mergeNode.node()?.querySelector(`.${constants.classes.CHART_PREFIX}__tree__node__info-icon`) as any);
+          let infoIconNode = select(mergeNode.node()?.querySelector(`.${CHART_CONSTANTS.classes.CHART_PREFIX}__tree__node__info-icon`) as any);
           if (!infoIconNode.node()) {
             const xTransform = this.hasChildren(d) ? config.node.size.width - 54 : config.node.size.width - 32;
             infoIconNode = mergeNode
               .append('path')
-              .classed(`${constants.classes.CHART_PREFIX}__tree__node__info-icon`, true)
+              .classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__tree__node__info-icon`, true)
               .attr('d', 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z')
               .attr('transform', `translate(${xTransform}, ${(config.node.size.height / 2) - 12})`)
               .style('fill', iconColor)
@@ -397,7 +397,5 @@ export class TreeChartService {
         }
       });
     });
-
-    return promise;
   }
 }

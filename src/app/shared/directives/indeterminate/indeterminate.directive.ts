@@ -1,4 +1,4 @@
-import { Directive, ElementRef, forwardRef, HostListener, inject, Input } from '@angular/core';
+import { Directive, ElementRef, forwardRef, HostListener, inject, Input, Renderer2 } from '@angular/core';
 import { StaticProvider } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { isDefined } from '@tylertech/forge-core';
@@ -15,28 +15,22 @@ export const INDETERMINATE_VALUE_ACCESSOR: StaticProvider = {
   providers: [INDETERMINATE_VALUE_ACCESSOR]
 })
 export class IndeterminateDirective implements ControlValueAccessor {
+  private renderer = inject(Renderer2);
   private elementRef = inject(ElementRef);
-
-  #value?: boolean | null;
-  #indeterminateEnabled = true;
+  private value?: boolean | null;
+  private indeterminateEnabled = true;
 
   @HostListener('change')
   public elementChange() {
-    if (this.#indeterminateEnabled) {
-      if (!isDefined(this.#value)) {
-        this.#value = true;
-      } else if (this.#value) {
-        this.#value = false;
-      } else {
-        this.#value = null;
-      }
-      (this.elementRef.nativeElement as HTMLInputElement).indeterminate = !isDefined(this.#value);
-      (this.elementRef.nativeElement as HTMLInputElement).checked = this.#value ? true : false;
+    if (this.indeterminateEnabled) {
+      this.value === true ? false : this.value === false ? null : true;
+      this.renderer.setProperty(this.elementRef.nativeElement, 'indeterminate', !isDefined(this.value));
+      this.renderer.setProperty(this.elementRef.nativeElement, 'checked', this.value ? true : false);
     } else {
-      this.#value = (this.elementRef.nativeElement as HTMLInputElement).checked;
+      this.value = (this.elementRef.nativeElement as HTMLInputElement).checked;
     }
 
-    this.change(this.#value);
+    this.onChange(this.value);
     this.onTouched();
   }
   @HostListener('blur')
@@ -46,37 +40,33 @@ export class IndeterminateDirective implements ControlValueAccessor {
 
   @Input()
   public set appIndeterminate(value: boolean) {
-    this.#indeterminateEnabled = value?.toString() === 'false' ? false : true;
-    if (!this.#indeterminateEnabled && (this.elementRef.nativeElement as HTMLInputElement).indeterminate) {
+    this.indeterminateEnabled = value?.toString() === 'false' ? false : true;
+    if (!this.indeterminateEnabled && (this.elementRef.nativeElement as HTMLInputElement).indeterminate) {
       (this.elementRef.nativeElement as HTMLInputElement).indeterminate = false;
       (this.elementRef.nativeElement as HTMLInputElement).checked = false;
-      this.#value = false;
-      this.change(this.#value);
+      this.value = false;
+      this.onChange(this.value);
     }
   }
 
   public onChange = (_: any) => { };
   public onTouched = () => { };
 
-  public writeValue(value: any): void {
-    if (this.#value !== value) {
-      this.#value = value;
-      if (this.#indeterminateEnabled) {
-        (this.elementRef.nativeElement as HTMLInputElement).indeterminate = !isDefined(this.#value);
+  public writeValue(value: any) {
+    if (this.value !== value) {
+      this.value = value;
+      if (this.indeterminateEnabled) {
+        (this.elementRef.nativeElement as HTMLInputElement).indeterminate = !isDefined(this.value);
       }
-      (this.elementRef.nativeElement as HTMLInputElement).checked = this.#value ? true : false;
+      (this.elementRef.nativeElement as HTMLInputElement).checked = this.value ? true : false;
     }
   }
 
-  public registerOnChange(fn: (_: boolean) => void): void {
+  public registerOnChange(fn: (_: boolean) => void) {
     this.onChange = fn;
   }
 
-  public registerOnTouched(fn: () => void): void {
+  public registerOnTouched(fn: () => void) {
     this.onTouched = fn;
-  }
-
-  public change(value: boolean | null): void {
-    this.onChange(value);
   }
 }

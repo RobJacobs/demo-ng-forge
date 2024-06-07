@@ -1,11 +1,10 @@
-@use '@material/elevation/elevation-theme' as mat-elevation-theme;
 @use 'src/global' as *;
 
 :host {
   display: grid;
   grid-template-rows: auto 1fr;
   overflow: hidden;
-  @include forge-theme-property(background-color, surface);
+  background-color: var(--forge-theme-surface);
 
   ::ng-deep {
     .forge-table {
@@ -67,7 +66,7 @@
           }
 
           &--resizing {
-            border-right-color: var(--mdc-theme-primary);
+            border-right-color: var(--forge-theme-primary);
 
             .forge-table-head__cell {
 
@@ -86,8 +85,8 @@
             position: sticky;
             left: 0;
             z-index: 2 !important;
-            background-color: var(--mdc-theme-surface);
-            border-right-color: var(--mdc-theme-primary);
+            background-color: var(--forge-theme-surface);
+            border-right-color: var(--forge-theme-primary);
           }
 
           &-dragger,
@@ -129,15 +128,15 @@
           // }
 
           &--resizing {
-            border-right-color: var(--mdc-theme-primary);
+            border-right-color: var(--forge-theme-primary);
           }
 
           &--frozen {
             position: sticky;
             left: 0;
             z-index: 2 !important;
-            background-color: var(--mdc-theme-surface);
-            border-right-color: var(--mdc-theme-primary);
+            background-color: var(--forge-theme-surface);
+            border-right-color: var(--forge-theme-primary);
           }
         }
       }
@@ -150,7 +149,7 @@
         }
 
         &__expandable-content {
-          background-color: $mat-color-indigo-50 !important;
+          background-color: $forge-color-indigo-50 !important;
           @include app-border(border-bottom);
         }
       }
@@ -187,9 +186,8 @@
 .cdk-drag {
 
   &-preview {
-    @include mat-elevation-theme.elevation(3);
-    @include forge-theme-property(background, surface);
-    border: solid 2px $mat-color-indigo-500;
+    @include app-container-outlined();
+    border: solid 2px $forge-color-indigo-500;
     display: flex;
     padding: 0 24px;
 
@@ -203,7 +201,7 @@
       visibility: hidden;
     }
 
-    background-color: $mat-color-indigo-50;
+    background-color: $forge-color-indigo-50;
   }
 
   &-animating {

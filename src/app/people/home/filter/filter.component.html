@@ -1,37 +1,35 @@
-<forge-drawer direction="right" type="dismissible" [open]="viewCache.showFilter" open="false" (forge-drawer-close)="viewCache.showFilter = false">
+<forge-drawer direction="right" [open]="viewCache.showFilter" open="false" (forge-drawer-close)="viewCache.showFilter = false">
   <div slot="header" class="header">
-    <span class="header__title forge-typography--subtitle1">Filter people</span>
-    <forge-icon-button class="app--flex-right">
-      <button type="button" aria-label="Close" (click)="viewCache.showFilter = false">
-        <forge-icon name="close"></forge-icon>
-      </button>
+    <span class="header__title forge-typography--subheading2">Filter people</span>
+    <forge-icon-button class="app--flex-right" aria-label="Close" (click)="viewCache.showFilter = false">
+      <forge-icon name="close"></forge-icon>
     </forge-icon-button>
   </div>
 
   <form class="body" [formGroup]="formGroup" novalidate autocomplete="off" (ngSubmit)="onApplyFilter()">
     <forge-text-field>
-      <input type="text" id="home-filter--first-name" formControlName="firstName">
-      <label for="home-filter--first-name" slot="label">First name</label>
+      <input type="text" id="people--home--filter--first-name" formControlName="firstName">
+      <label for="people--home--filter--first-name" slot="label">First name</label>
     </forge-text-field>
     <forge-text-field>
-      <input type="text" id="home-filter--last-name" formControlName="lastName">
-      <label for="home-filter--last-name" slot="label">Last name</label>
+      <input type="text" id="people--home--filter--last-name" formControlName="lastName">
+      <label for="people--home--filter--last-name" slot="label">Last name</label>
     </forge-text-field>
     <forge-select label="Gender" formControlName="gender" [options]="genderOptions" multiple="true"></forge-select>
     <forge-text-field>
-      <input type="text" id="home-filter--occupation" formControlName="occupation">
-      <label for="home-filter--occupation" slot="label">Occupation</label>
+      <input type="text" id="people--home--filter--occupation" formControlName="occupation">
+      <label for="people--home--filter--occupation" slot="label">Occupation</label>
     </forge-text-field>
     <forge-divider></forge-divider>
     <app-autocomplete-range [optionFilter]="facetFilter" formControlName="facet" label="Facet"></app-autocomplete-range>
   </form>
 
   <div slot="footer" class="footer">
-    <forge-button type="outlined">
-      <button type="button" (click)="onClearFilter()">Clear</button>
+    <forge-button variant="outlined" (click)="onClearFilter()">
+      Clear
     </forge-button>
-    <forge-button type="raised">
-      <button type="submit" (click)="onApplyFilter()">Apply</button>
+    <forge-button variant="raised" type="submit" (click)="onApplyFilter()">
+      Apply
     </forge-button>
   </div>
 </forge-drawer>

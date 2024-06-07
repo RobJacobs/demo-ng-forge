@@ -12,7 +12,7 @@ export interface IPetsService {
     layoutMode: 'sm' | 'md' | 'lg';
     activeRoute: string[];
     menu: {
-      type: 'dismissible' | 'mini';
+      open: boolean;
     };
   };
 }

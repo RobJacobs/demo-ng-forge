@@ -21,6 +21,6 @@ export class DashboardComponent {
     defineLandingPageLayoutComponent();
   }
 
-  public onNavigate(route: string): void { }
+  public onNavigate(route: string) { }
 
 }

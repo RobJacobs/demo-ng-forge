@@ -11,10 +11,10 @@
     &--tree-node {
       @include app-border();
       white-space: nowrap;
-      background-color: $mat-color-indigo-50;
+      background-color: $forge-color-indigo-50;
 
       &--selected {
-        background-color: $mat-color-indigo-500;
+        background-color: $forge-color-indigo-500;
         color: white;
       }
     }
@@ -25,10 +25,12 @@
   }
 }
 
-.chart-container {
-  padding: 16px;
-  position: relative;
-  height: 100%;
-  width: 100%;
-  overflow: auto;
+.chart-card {
+  margin: 24px;
+  height: calc(100% - 48px);
+  @include app-container-raised();
+  .chart-container {
+    position: relative;
+    height: 100%;
+  }
 }

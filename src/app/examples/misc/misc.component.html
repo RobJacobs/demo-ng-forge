@@ -1,17 +1,15 @@
 <forge-toolbar class="header">
-  <h2 slot="start" class="forge-typography--title">Misc examples</h2>
+  <h2 slot="start" class="forge-typography--subheading4">Misc examples</h2>
 </forge-toolbar>
 
 <div class="body">
-  <app-card border="outlined">
+  <app-card border="raised">
     <div app-card-header slot="start">
       <span>Card header</span>
     </div>
     <div app-card-header slot="end">
-      <forge-icon-button>
-        <button type="button" aria-label="Close">
-          <forge-icon name="close"></forge-icon>
-        </button>
+      <forge-icon-button aria-label="Close">
+        <forge-icon name="close"></forge-icon>
       </forge-icon-button>
     </div>
 
@@ -23,11 +21,11 @@
     <div>{{1 | appArrayFind:data:'value' | json}}</div>
 
     <div app-card-footer slot="end">
-      <forge-button type="outlined">
-        <button type="button">Cancel</button>
+      <forge-button variant="outlined">
+        Cancel
       </forge-button>
-      <forge-button type="raised">
-        <button type="button">Save</button>
+      <forge-button variant="raised">
+        Save
       </forge-button>
     </div>
   </app-card>

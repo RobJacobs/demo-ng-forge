@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IOption } from '@tylertech/forge';
-import { ForgeButtonModule, ForgeDatePickerModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIconModule, ForgeLabelValueModule, ForgeRadioModule, ForgeSelectModule, ForgeSliderModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
+import { ForgeButtonModule, ForgeDatePickerModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIconModule, ForgeLabelValueModule, ForgeRadioGroupModule, ForgeRadioModule, ForgeSelectModule, ForgeSliderModule, ForgeSwitchModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
 
 import { AppDataService } from 'src/app/app-data.service';
 import { FormControlInvalidDirective } from 'src/app/shared/directives/form-control-invalid/form-control-invalid.directive';
@@ -22,8 +22,10 @@ import { ProfileCacheService } from '../profile-cache.service';
     ForgeIconModule,
     ForgeLabelValueModule,
     ForgeRadioModule,
+    ForgeRadioGroupModule,
     ForgeSelectModule,
     ForgeSliderModule,
+    ForgeSwitchModule,
     ForgeTextFieldModule,
     FormControlInvalidDirective,
     InputCasingDirective

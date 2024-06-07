@@ -1,11 +1,9 @@
 <forge-toolbar class="header">
   <div slot="start">
-    <forge-icon-button>
-      <button type="button" (click)="onNavigate('test/parent')" aria-label="Go back">
-        <forge-icon name="arrow_back"></forge-icon>
-      </button>
+    <forge-icon-button (click)="onNavigate('test/parent')" aria-label="Go back">
+      <forge-icon name="arrow_back"></forge-icon>
     </forge-icon-button>
-    <h2 class="forge-typography--title">Child</h2>
+    <h2 class="forge-typography--subheading4">Child</h2>
   </div>
 </forge-toolbar>
 

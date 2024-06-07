@@ -60,13 +60,10 @@ export class ProfileComponent {
     }
 
     return new Observable<boolean>(s => {
-      const dialogRef = this.dialogService.show(
+      this.dialogService.open(
         ConfirmDialogComponent,
-        { backdropClose: false, escapeClose: false },
-        { data: { title: 'Unsaved changes', message: 'You have unsaved changes which will be lost, do you want to continue?' } }
-      );
-      const dialogSub = dialogRef.afterClosed.subscribe((result) => {
-        dialogSub.unsubscribe();
+        { options: { persistent: true }, data: { title: 'Unsaved changes', message: 'You have unsaved changes which will be lost, do you want to continue?' } }
+      ).afterClosed.subscribe((result) => {
         if (result) {
           this.cache.formGroup.reset();
         }

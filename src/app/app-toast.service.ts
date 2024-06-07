@@ -7,10 +7,10 @@ import { ToastService } from '@tylertech/forge-angular';
 export class AppToastService {
   private toastService = inject(ToastService);
 
-  public show(message: string): void {
+  public show(message: string) {
     const toast = this.toastService.show({
       message: `${message}`,
-      actionHandler: () => toast.hide(),
+      actionHandler: () => toast.close(),
       placement: 'bottom',
       duration: 3000
     });

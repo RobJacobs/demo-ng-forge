@@ -4,7 +4,7 @@
   display: grid;
   grid-template-rows: auto auto 1fr auto;
   overflow: hidden;
-  @include forge-theme-property(background-color, surface);
+  background-color: var(--forge-theme-surface);
 }
 
 .header {
@@ -25,14 +25,15 @@
 }
 
 forge-tab-bar {
-  display: inline-flex;
-  @include app-border(border-bottom);
+  &::part(container) {
+    justify-items: flex-start;
+  }
 
   forge-tab {
     min-width: 240px;
 
     forge-icon {
-      color: $forge-theme-danger;
+      color: var(--forge-theme-error);
     }
   }
 }

@@ -8,9 +8,9 @@ import { FormlyDemoService } from '../formly-demo.service';
 @Component({
   selector: 'app-formly-tab',
   template: `
-    <forge-tab-bar [activeTab]="activeTab">
+    <forge-tab-bar secondary [activeTab]="activeTab">
       @for (field of $any(field.fieldGroup); track i; let i = $index) {
-        <forge-tab (forge-tab-interacted)="onTabSelected(field)">
+        <forge-tab (forge-tab-select)="onTabSelected(field)">
           {{field.props?.label}}
         </forge-tab>
       }
@@ -23,9 +23,10 @@ import { FormlyDemoService } from '../formly-demo.service';
     }
 
     forge-tab-bar {
-      display: inline-flex;
-      width: 100%;
-      border-bottom: var(--forge-theme-border);
+      &::part(container) {
+        justify-items: flex-start;
+      }
+
       margin: 16px 0;
     }
 

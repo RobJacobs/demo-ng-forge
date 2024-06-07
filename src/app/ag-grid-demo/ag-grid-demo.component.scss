@@ -5,7 +5,7 @@
   display: grid;
   grid-template-rows: auto 1fr;
   overflow: hidden;
-  @include forge-theme-property(background-color, surface);
+  background-color: var(--forge-theme-surface);
 }
 
 ::ng-deep {

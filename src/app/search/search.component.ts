@@ -2,7 +2,7 @@ import { Component, ViewChild, OnInit, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { isDefined } from '@tylertech/forge-core';
 import { AutocompleteFilterCallback, IOption } from '@tylertech/forge';
-import { PopupDirective, DialogService, ToastService, ForgeToolbarModule, ForgeDividerModule, ForgeButtonModule, ForgeIconModule, ForgeListModule, ForgeListItemModule, ForgeIconButtonModule, ForgeAutocompleteModule, ForgeTextFieldModule, ForgeDatePickerModule, ForgeCheckboxModule, ForgePopupModule } from '@tylertech/forge-angular';
+import { PopoverDirective, DialogService, ToastService, ForgeToolbarModule, ForgeDividerModule, ForgeButtonModule, ForgeIconModule, ForgeListModule, ForgeListItemModule, ForgeIconButtonModule, ForgeAutocompleteModule, ForgeTextFieldModule, ForgeDatePickerModule, ForgeCheckboxModule, ForgePopoverModule } from '@tylertech/forge-angular';
 import { Observable, lastValueFrom, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -11,7 +11,9 @@ import { ISearch } from 'src/app/shared/interfaces/search.interface';
 import { SearchSaveComponent } from './save/search-save.component';
 import { CommonModule } from '@angular/common';
 import { AutocompleteRangeComponent } from 'src/app/shared/components/autocomplete-range/autocomplete-range.component';
-import { IndeterminateDirective } from 'src/app/shared/directives/indeterminate/indeterminate.directive';
+import { IndeterminateDirective } from '../shared/directives/indeterminate/indeterminate.directive';
+import { CheckboxIndeterminateComponent } from '../shared/components/checkbox-indeterminate/checkbox-indeterminate.component';
+// import { IndeterminateDirective } from 'src/app/shared/directives/indeterminate/indeterminate.directive';
 
 @Component({
   selector: 'app-search',
@@ -28,11 +30,11 @@ import { IndeterminateDirective } from 'src/app/shared/directives/indeterminate/
     ForgeIconModule,
     ForgeListItemModule,
     ForgeListModule,
-    ForgePopupModule,
+    ForgePopoverModule,
     ForgeTextFieldModule,
     ForgeToolbarModule,
     AutocompleteRangeComponent,
-    IndeterminateDirective
+    CheckboxIndeterminateComponent
   ],
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss']
@@ -43,9 +45,9 @@ export class SearchComponent implements OnInit {
   private dataService = inject(AppDataService);
 
   @ViewChild('searchesPopup', { static: false })
-  private searchesPopup?: PopupDirective;
+  private searchesPopup?: PopoverDirective;
   private storageKey = 'search-searches';
-  private operatorPopup?: PopupDirective;
+  private operatorPopup?: PopoverDirective;
 
   public searchName?: string;
   public searchDescription?: string;
@@ -96,7 +98,7 @@ export class SearchComponent implements OnInit {
     return of(this.facetOptions);
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.dataService.getSearches(this.storageKey).subscribe((result) => {
       this.searchCache.searches = result || [];
 
@@ -134,7 +136,7 @@ export class SearchComponent implements OnInit {
       filters: this.formGroup.value
     };
 
-    this.dialogService.show(SearchSaveComponent, { backdropClose: false, escapeClose: false }, { data: record }).afterClosed.subscribe(result => {
+    this.dialogService.open(SearchSaveComponent, { data: record, options: { persistent: true } }).afterClosed.subscribe(result => {
       if (result) {
         if (isDefined(result.id)) {
           const searchIndex = this.searchCache.searches.findIndex((s) => s.id === result.id);
@@ -183,6 +185,7 @@ export class SearchComponent implements OnInit {
             this.searchCache.activeSearchId = search?.id;
             this.searchName = search?.name;
             this.searchDescription = search?.description;
+            this.formGroup.patchValue(search?.filters);
             this.onSearch();
             break;
           case 'edit':
@@ -218,7 +221,7 @@ export class SearchComponent implements OnInit {
     }
   }
 
-  public onOperatorPopupOpen(event: Event, popup: PopupDirective, name: string) {
+  public onOperatorPopupOpen(event: Event, popup: PopoverDirective, name: string) {
     event.stopPropagation();
     this.operatorPopupFormGroup = this.formGroup.get(name) as FormGroup;
     this.operatorPopup = popup;

@@ -2,7 +2,7 @@
 import { select, format, timeFormat, arc, pie } from 'd3';
 import { isDefined } from '@tylertech/forge-core';
 import { ChartUtils, IChartConfig } from './chart-utils';
-import { CHART_CONSTANTS, CHART_CONSTANTS as constants } from './chart-constants';
+import { CHART_CONSTANTS } from './chart-constants';
 
 export type PieChartType = 'pie' | 'donut' | 'donut-meter';
 
@@ -15,7 +15,7 @@ export interface IPieChartConfig extends IChartConfig {
 export class PieChartService {
 
   public static buildPieChart(config: IPieChartConfig): Promise<void> {
-    const promise = new Promise<void>((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       if (!config.container || config.container.tagName !== 'svg') {
         reject();
         return;
@@ -36,16 +36,16 @@ export class PieChartService {
       const chartArc = arc().outerRadius(radius.outer).innerRadius(radius.inner);
       const chart = pie().value((d: any) => d.value).sort(null);
 
-      let rootNode = container.select(`g.${constants.classes.CHART_ROOT}`);
+      let rootNode = container.select(`g.${CHART_CONSTANTS.classes.CHART_ROOT}`);
       if (!rootNode.node()) {
-        rootNode = container.append('g').classed(constants.classes.CHART_ROOT, true) as any;
-        rootNode.append('g').classed(`${constants.classes.CHART_PREFIX}__${config.type}`, true);
+        rootNode = container.append('g').classed(CHART_CONSTANTS.classes.CHART_ROOT, true) as any;
+        rootNode.append('g').classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__${config.type}`, true);
       }
 
       container.attr('width', size.width);
       container.attr('height', size.height);
 
-      const chartNode = rootNode.select(`g.${constants.classes.CHART_PREFIX}__${config.type}`);
+      const chartNode = rootNode.select(`g.${CHART_CONSTANTS.classes.CHART_PREFIX}__${config.type}`);
       chartNode.attr('transform', `translate(${radius.outer}, ${radius.outer})`);
 
       chartNode.selectAll('g').select('path').each((d: any) => {
@@ -54,8 +54,8 @@ export class PieChartService {
 
       const nodes = chartNode.selectAll('g').data(chart(config.data as any), (d: any) => d.data.id);
 
-      nodes.exit().select('path').transition().duration(constants.numbers.TRANSITION_DURATION).attrTween('d', (d: any) => ChartUtils.arcTween(d, { startAngle: 0, endAngle: 0 }, chartArc));
-      nodes.exit().transition().delay(constants.numbers.TRANSITION_DURATION).remove();
+      nodes.exit().select('path').transition().duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION).attrTween('d', (d: any) => ChartUtils.arcTween(d, { startAngle: 0, endAngle: 0 }, chartArc));
+      nodes.exit().transition().delay(CHART_CONSTANTS.numbers.TRANSITION_DURATION).remove();
 
       const enterNodes = nodes.enter().append('g');
 
@@ -92,17 +92,17 @@ export class PieChartService {
           switch (config.type) {
             case 'donut-meter':
               if (!config.hideLabel) {
-                let meterTextNode = chartNode.select('.' + constants.classes.CHART_TEXT);
+                let meterTextNode = chartNode.select('.' + CHART_CONSTANTS.classes.CHART_TEXT);
                 if (!meterTextNode.node()) {
                   meterTextNode = chartNode.append('text')
-                    .classed(constants.classes.CHART_TEXT, true) as any;
+                    .classed(CHART_CONSTANTS.classes.CHART_TEXT, true) as any;
                   meterTextNode.append('tspan')
-                    .classed(constants.classes.CHART_TEXT_VALUE, true);
+                    .classed(CHART_CONSTANTS.classes.CHART_TEXT_VALUE, true);
                   meterTextNode.append('tspan')
                     .attr('x', 0)
                     .attr('y', 0)
                     .attr('dy', '1.25em')
-                    .classed(constants.classes.CHART_TEXT_LABEL, true);
+                    .classed(CHART_CONSTANTS.classes.CHART_TEXT_LABEL, true);
                 }
                 // meterTextNode.attr('transform',  `translate(${radius.outer}, ${radius.outer})`);
                 let centerValue = '';
@@ -115,20 +115,18 @@ export class PieChartService {
                     centerValue = config.data[0].value.toString();
                   }
                 }
-                meterTextNode.select(`tspan.${constants.classes.CHART_TEXT_VALUE}`).text(centerValue);
-                meterTextNode.select(`tspan.${constants.classes.CHART_TEXT_LABEL}`).text(isDefined(config.data[0].label) ? config.data[0].label as string : '');
+                meterTextNode.select(`tspan.${CHART_CONSTANTS.classes.CHART_TEXT_VALUE}`).text(centerValue);
+                meterTextNode.select(`tspan.${CHART_CONSTANTS.classes.CHART_TEXT_LABEL}`).text(isDefined(config.data[0].label) ? config.data[0].label as string : '');
                 break;
               }
           }
           resolve();
         })
-        .duration(constants.numbers.TRANSITION_DURATION)
+        .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
         .style('stroke', '#fff')
         .attrTween('d', (d: any) => {
           return ChartUtils.arcTween(lastAngles[d.data.id] || { startAngle: 0, endAngle: 0 }, d, chartArc);
         });
     });
-
-    return promise;
   }
 }

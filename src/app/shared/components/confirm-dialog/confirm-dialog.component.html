@@ -1,23 +1,14 @@
-<div class="dialog__header">
-  <span class="forge-typography--headline5">{{title}}</span>
-  <forge-icon-button>
-    <button type="button" aria-label="Close" (click)="onClose()">
-      <forge-icon name="close"></forge-icon>
-    </button>
-  </forge-icon-button>
-</div>
-
-<div class="dialog__body">
+<app-dialog [dialogTitle]="dialogTitle">
   {{message}}
-</div>
 
-@if (showFooter) {
-<div class="dialog__footer">
-  <forge-button type="outlined">
-    <button type="button" (click)="onClose()">Cancel</button>
-  </forge-button>
-  <forge-button type="raised">
-    <button appAutoFocus type="button" (click)="onClose(true)">Ok</button>
-  </forge-button>
-</div>
-}
+  @if (showFooter) {
+  <ng-container app-dialog-footer>
+    <forge-button slot="end" variant="outlined" (click)="onClose()">
+      Cancel
+    </forge-button>
+    <forge-button slot="end" variant="raised" appAutoFocus (click)="onClose(true)" autofocus>
+      Ok
+    </forge-button>
+  </ng-container>
+  }
+</app-dialog>

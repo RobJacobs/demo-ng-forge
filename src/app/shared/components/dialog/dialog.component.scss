@@ -1,0 +1,22 @@
+@use 'src/global' as *;
+
+:host {
+  display: contents;
+}
+
+.header {
+  &__close {
+    margin-right: -8px;
+  }
+}
+
+.body {
+  padding: 16px;
+}
+
+.footer {
+  &::part(section-start),
+  &::part(section-end) {
+    column-gap: 16px;
+  }
+}

@@ -12,14 +12,6 @@
   }
 }
 
-// :host(.app-card--raised) {
-//   @include app--container-raised();
-// }
-
-// :host(.app-card--outlined) {
-//   @include app--container-outlined();
-// }
-
 .header {
   ::ng-deep {
     [slot='end'] {

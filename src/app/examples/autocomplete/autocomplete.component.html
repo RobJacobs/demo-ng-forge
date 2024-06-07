@@ -2,45 +2,45 @@
   <div>
     <forge-autocomplete [filter]="singleSelectPrimitiveFilter" formControlName="autocomplete01">
       <forge-text-field>
-        <input id="autocomplete01" type="text" [disabled]="formGroup.controls.autocomplete01.disabled" />
-        <label for="autocomplete01">Autocomplete01 - single primitive</label>
-        <forge-icon slot="trailing" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
+        <input id="examples--autocomplete--01" type="text" [disabled]="formGroup.controls.autocomplete01.disabled">
+        <label for="examples--autocomplete--01">Autocomplete01 - single primitive</label>
+        <forge-icon slot="end" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
       </forge-text-field>
     </forge-autocomplete>
-    <forge-button>
-      <button type="button" (click)="onDisable()">Disable</button>
+    <forge-button (click)="onDisable()">
+      Disable
     </forge-button>
   </div>
 
   <forge-autocomplete [filter]="singleSelectObjectFilter" formControlName="autocomplete02">
     <forge-text-field>
-      <input id="autocomplete02" type="text" />
-      <label for="autocomplete02">Autocomplete02 - single object</label>
-      <forge-icon slot="trailing" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
+      <input id="examples--autocomplete--02" type="text">
+      <label for="examples--autocomplete--02">Autocomplete02 - single object</label>
+      <forge-icon slot="end" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
     </forge-text-field>
   </forge-autocomplete>
 
   <forge-autocomplete [filter]="multipleSelectFilter" formControlName="autocomplete03" multiple>
     <forge-text-field>
-      <input id="autocomplete03" type="text" />
-      <label for="autocomplete03">Autocomplete03 - multiple select</label>
-      <forge-icon slot="trailing" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
+      <input id="examples--autocomplete--03" type="text">
+      <label for="examples--autocomplete--03">Autocomplete03 - multiple select</label>
+      <forge-icon slot="end" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
     </forge-text-field>
   </forge-autocomplete>
 
   <forge-autocomplete [filter]="singleSelectObjectFilter" formControlName="autocomplete04" [optionBuilder]="optionBuilder">
     <forge-text-field>
-      <input id="autocomplete04" type="text" />
-      <label for="autocomplete04">Autocomplete04 - option builder</label>
-      <forge-icon slot="trailing" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
+      <input id="examples--autocomplete--04" type="text">
+      <label for="examples--autocomplete--04">Autocomplete04 - option builder</label>
+      <forge-icon slot="end" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
     </forge-text-field>
   </forge-autocomplete>
 
   <forge-autocomplete [filter]="singleSelectPrimitiveFilter" formControlName="autocomplete05" [selectedTextBuilder]="selectedTextBuilder">
     <forge-text-field>
-      <input id="autocomplete05" type="text" />
-      <label for="autocomplete05">Autocomplete05 - selected text builder</label>
-      <forge-icon slot="trailing" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
+      <input id="examples--autocomplete--05" type="text">
+      <label for="examples--autocomplete--05">Autocomplete05 - selected text builder</label>
+      <forge-icon slot="end" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
     </forge-text-field>
   </forge-autocomplete>
 
@@ -52,19 +52,19 @@
 <div class="form-grid">
   <forge-autocomplete [filter]="singleSelectPrimitiveFilter" [(ngModel)]="autocomplete06">
     <forge-text-field>
-      <input id="autocomplete06" type="text" />
-      <label for="autocomplete06">Autocomplete06 - ngModel binding</label>
-      <forge-icon slot="trailing" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
-      <span slot="helper-text">selected value: {{autocomplete06}}</span>
+      <input id="examples--autocomplete--06" type="text">
+      <label for="examples--autocomplete--06">Autocomplete06 - ngModel binding</label>
+      <forge-icon slot="end" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
+      <span slot="support-text">selected value: {{autocomplete06}}</span>
     </forge-text-field>
   </forge-autocomplete>
 
   <forge-autocomplete [filter]="singleSelectPrimitiveFilter" [value]="autocomplete07" (forge-autocomplete-change)="onAutocompleteChange($event)">
     <forge-text-field>
-      <input id="autocomplete07" type="text" />
-      <label for="autocomplete07">Autocomplete07 - value binding</label>
-      <forge-icon slot="trailing" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
-      <span slot="helper-text">selected value: {{autocomplete07}}</span>
+      <input id="examples--autocomplete--07" type="text">
+      <label for="examples--autocomplete--07">Autocomplete07 - value binding</label>
+      <forge-icon slot="end" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
+      <span slot="support-text">selected value: {{autocomplete07}}</span>
     </forge-text-field>
   </forge-autocomplete>
 </div>

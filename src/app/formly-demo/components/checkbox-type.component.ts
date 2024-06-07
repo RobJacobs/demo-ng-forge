@@ -10,15 +10,13 @@ import { FormlyDemoService } from '../formly-demo.service';
 @Component({
   selector: 'app-formly-checkbox',
   template: `
-    <forge-checkbox>
-      <input
-        [id]="id"
-        type="checkbox"
-        [readonly]="props.readonly"
-        [formControl]="formControl"
-        [formlyAttributes]="field" />
+    <forge-checkbox
+      [id]="id"
+      [readonly]="props.readonly"
+      [formControl]="formControl"
+      [formlyAttributes]="field">
       @if (props.label) {
-        <label [attr.for]="id" slot="label">{{props.label}}</label>
+        {{props.label}}
       }
       @if (props.description) {
         <span slot="helper-text">{{props.description}}</span>

@@ -4,13 +4,13 @@
   display: grid;
   grid-template-rows: auto 1fr;
   overflow: hidden;
-  @include forge-theme-property(background-color, surface);
+  background-color: var(--forge-theme-surface);
 
   ::ng-deep {
     .forge-table {
       &-row {
         &__expandable-content {
-          background-color: $mat-color-indigo-50 !important;
+          background-color: $forge-color-indigo-50 !important;
           @include app-border(border-bottom);
         }
 

@@ -13,8 +13,9 @@ export class ProfileCacheService {
       phone: new FormControl<string | null>(null, { validators: [Validators.required] }),
       dateOfBirth: new FormControl<string | Date | null>(null),
       comment: new FormControl<string | null>(null),
-      rank: new FormControl<number>(0),
+      rank: new FormControl<number>(5),
       size: new FormControl<string | null>(null),
+      citizen: new FormControl<boolean>(false),
       friends: new FormArray<FormControl>([])
     }),
     addressFormGroup: new FormGroup({

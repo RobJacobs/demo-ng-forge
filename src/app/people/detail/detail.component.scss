@@ -23,15 +23,15 @@
 
   &__left {
     @include app-container-raised();
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
     padding: 16px;
-    forge-label-value {
-      margin-bottom: 16px;
-    }
   }
 
   &__right {
     img {
-      width: 256px;
+      height: 480px;
     }
   }
 }

@@ -23,11 +23,8 @@ import { FieldHelpDialogComponent } from './field-help-dialog/field-help-dialog.
       @if (props.label) {
         <label [attr.for]="id" slot="label">{{props.label}}</label>
       }
-      <forge-icon-button slot="addon-end" dense>
-        <button type="button" aria-label="Browse options" [disabled]="formControl.disabled"
-          (click)="onShowDialog()">
-          <forge-icon name="more_horiz"></forge-icon>
-        </button>
+      <forge-icon-button slot="addon-end" dense aria-label="Browse options" [disabled]="formControl.disabled" (click)="onShowDialog()">
+        <forge-icon name="more_horiz"></forge-icon>
       </forge-icon-button>
       @if (showError) {
         <span slot="helper-text">
@@ -86,7 +83,7 @@ export class InputHelpTypeComponent extends FieldType<FieldTypeConfig> implement
   }
 
   public onShowDialog() {
-    const dialogRef = this.dialogService.show(FieldHelpDialogComponent, { fullscreen: true }, {
+    this.dialogService.open(FieldHelpDialogComponent, {
       data: {
         columnConfigurations: (this.props.options as { label: string; property: string }[]).map(o => ({
           header: o.label,
@@ -99,10 +96,7 @@ export class InputHelpTypeComponent extends FieldType<FieldTypeConfig> implement
         key: this.props['optionsKey'],
         title: `Select a ${this.props.label}`,
       }
-    });
-
-    const dialogSub = dialogRef.afterClosed.subscribe(result => {
-      dialogSub.unsubscribe();
+    }).afterClosed.subscribe(result => {
       if (result) {
         this.formControl.setValue(result);
       }

@@ -13,31 +13,29 @@ export class TableUtils {
     return linkElement;
   }
 
-  public static createIconButton(icon: string, clickHandler: (event: Event) => void, title?: string): HTMLElement {
-    const iconButtonElement = document.createElement('forge-icon-button');
+  public static createIconButton(icon: string, clickHandler: (event: Event) => void, title: string): HTMLElement {
+    const containerElement = document.createElement('div');
 
-    const buttonElement = document.createElement('button');
-    buttonElement.type = 'button';
-    buttonElement.addEventListener('click', (event) => {
+    const iconButtonElement = document.createElement('forge-icon-button');
+    iconButtonElement.setAttribute('aria-label', title);
+    iconButtonElement.addEventListener('click', (event) => {
       event.stopPropagation();
       clickHandler(event);
     });
+    containerElement.appendChild(iconButtonElement)
 
     const iconElement = document.createElement('forge-icon');
     iconElement.setAttribute('name', icon);
+    iconButtonElement.appendChild(iconElement);
 
-    buttonElement.appendChild(iconElement);
-    iconButtonElement.appendChild(buttonElement);
+    const tooltipElement = document.createElement('forge-tooltip');
+    tooltipElement.innerHTML = title;
+    containerElement.appendChild(tooltipElement);
 
-    if (title) {
-      const tooltipElement = document.createElement('forge-tooltip');
-      tooltipElement.innerHTML = title;
-      buttonElement.appendChild(tooltipElement);
-    }
-    return iconButtonElement;
+    return containerElement;
   }
 
-  public static createMenuButton(icon: string, selectHandler: (event: Event) => void, options: IMenuOption[], title?: string): HTMLElement {
+  public static createMenuButton(icon: string, selectHandler: (event: Event) => void, options: IMenuOption[], title: string): HTMLElement {
     const menuElement = document.createElement('forge-menu') as MenuComponent;
     menuElement.options = options;
     menuElement.addEventListener('forge-menu-select', selectHandler);
@@ -52,7 +50,7 @@ export class TableUtils {
     tableElement: TableComponent,
     viewContainerRef: ViewContainerRef,
     component: Type<T>,
-    title?: string,
+    title: string,
     data?: any,
     callback?: (value?: any) => any
   ): HTMLElement {

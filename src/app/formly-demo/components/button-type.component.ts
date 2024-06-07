@@ -6,10 +6,8 @@ import { ForgeButtonModule } from '@tylertech/forge-angular';
 @Component({
   selector: 'app-formly-button',
   template: `
-    <forge-button type="raised">
-      <button type="button" (click)="onClick($event)">
-        {{props.label}}
-      </button>
+    <forge-button variant="raised" (click)="onClick($event)">
+      {{props.label}}
     </forge-button>
   `,
   imports: [

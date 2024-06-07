@@ -1,6 +1,8 @@
 @use 'src/global' as *;
 
-@include app-dialog();
+:host {
+  display: contents;
+}
 
 .form-grid {
   @include app-form-grid();

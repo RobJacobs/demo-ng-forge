@@ -1,12 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CdkTrapFocus } from '@angular/cdk/a11y';
-import { DialogConfig, DialogRef, ForgeButtonModule, ForgeCheckboxModule, ForgeIconButtonModule, ForgeIconModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
+import { DIALOG_DATA, DialogRef, ForgeButtonModule, ForgeCheckboxModule, ForgeIconButtonModule, ForgeIconModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
 
 import { AutoFocusDirective } from 'src/app/shared/directives/auto-focus/auto-focus.directive';
 import { FormControlInvalidDirective } from 'src/app/shared/directives/form-control-invalid/form-control-invalid.directive';
+import { DialogComponent } from 'src/app/shared/components/dialog/dialog.component';
 
+export interface ISearchSaveDialogData {
+  id: number;
+  name: string;
+  description: string;
+  isDefault: boolean;
+  isPublic: boolean;
+  filters: { property: string; value: string }[];
+}
 @Component({
   selector: 'app-search-save',
   standalone: true,
@@ -19,25 +27,17 @@ import { FormControlInvalidDirective } from 'src/app/shared/directives/form-cont
     ForgeIconModule,
     ForgeTextFieldModule,
     AutoFocusDirective,
-    FormControlInvalidDirective
+    FormControlInvalidDirective,
+    DialogComponent
   ],
   templateUrl: './search-save.component.html',
-  styleUrls: ['./search-save.component.scss'],
-  hostDirectives: [CdkTrapFocus]
+  styleUrls: ['./search-save.component.scss']
 })
 export class SearchSaveComponent {
-  public dialogConfig = inject(DialogConfig);
+  private dialogConfig = inject<ISearchSaveDialogData>(DIALOG_DATA);
   private dialogRef = inject(DialogRef);
-  private trapFocusDirective = inject(CdkTrapFocus);
 
-  public record: {
-    id: number;
-    name: string;
-    description: string;
-    isDefault: boolean;
-    isPublic: boolean;
-    filters: { property: string; value: string }[];
-  };
+  public record: ISearchSaveDialogData;
   public formGroup = new FormGroup({
     name: new FormControl<string | null>(null, { validators: [Validators.required] }),
     description: new FormControl(),
@@ -46,14 +46,12 @@ export class SearchSaveComponent {
   });
 
   constructor() {
-    this.record = this.dialogConfig.data;
+    this.record = this.dialogConfig;
     this.formGroup.patchValue(this.record);
-    this.dialogRef.nativeElement.setAttribute('aria-labelledby', 'save-search--title');
-    this.trapFocusDirective.autoCapture = true;
   }
 
   public onSave() {
-    this.dialogRef.close(this.formGroup.getRawValue());
+    this.dialogRef.close({ ...this.record, ...this.formGroup.getRawValue() });
   }
 
   public onCancel() {

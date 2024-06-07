@@ -1,4 +1,4 @@
-@use '@material/theme/color-palette' as mat-color;
+@use '@tylertech/forge/sass/core/styles/tokens/color-palette' as forge-color;
 
 @mixin chart-styles() {
   .app-chart__donut-meter {
@@ -10,14 +10,14 @@
       }
 
       .app-chart__text-label {
-        fill: mat-color.$grey-500;
+        fill: forge-color.$grey-500;
       }
     }
   }
 
   .app-chart__legend-text-label {
     font-size: 10px;
-    fill: mat-color.$grey-500;
+    fill: forge-color.$grey-500;
   }
 
   .app-chart__xaxis,
@@ -26,12 +26,12 @@
     font-size: 10px;
 
     .domain {
-      stroke: mat-color.$grey-300;
+      stroke: forge-color.$grey-300;
     }
 
     .tick {
       line {
-        stroke: mat-color.$grey-300;
+        stroke: forge-color.$grey-300;
       }
     }
   }

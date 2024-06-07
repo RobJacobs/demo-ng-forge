@@ -5,7 +5,7 @@ import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-
 import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
 import { IColumnConfiguration, SortDirection } from '@tylertech/forge';
 import { isDefined } from '@tylertech/forge-core';
-import { ForgeCheckboxModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIconModule, ForgeListItemModule, ForgeListModule, ForgePopupModule, ForgeToolbarModule, PopupDirective } from '@tylertech/forge-angular';
+import { ForgeCheckboxModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIconModule, ForgeListItemModule, ForgeListModule, ForgePopoverModule, ForgeToolbarModule, PopoverDirective } from '@tylertech/forge-angular';
 
 import { IPerson } from 'src/app/shared/interfaces/person.interface';
 import { AppDataService } from 'src/app/app-data.service';
@@ -26,7 +26,7 @@ import { TableDetailComponent } from 'src/app/shared/components/table-detail/tab
     ForgeIconModule,
     ForgeListItemModule,
     ForgeListModule,
-    ForgePopupModule,
+    ForgePopoverModule,
     ForgeToolbarModule,
     TableDetailComponent,
     AutoFocusDirective,
@@ -40,8 +40,8 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('table', { static: true })
   private tableElementRef?: ElementRef;
-  @ViewChild('columnHeaderPopup', { read: PopupDirective })
-  private columnHeaderPopupDirective?: PopupDirective;
+  @ViewChild('columnHeaderPopup', { read: PopoverDirective })
+  private columnHeaderPopupDirective?: PopoverDirective;
   @ViewChild(CdkVirtualScrollViewport)
   public virtualScrollViewport?: CdkVirtualScrollViewport;
   private tableColumnResize$ = new Subject<void>();
@@ -170,7 +170,7 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public onColumnHeaderRightClick(event: PointerEvent) {
     event.preventDefault();
-    if (this.columnHeaderPopupDirective?.popupElement) {
+    if (this.columnHeaderPopupDirective?.popoverElement) {
       this.columnHeaderPopupDirective.close();
     } else {
       this.columnHeaderPopupDirective?.open();

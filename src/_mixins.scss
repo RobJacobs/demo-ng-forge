@@ -1,21 +1,18 @@
-@use '@material/theme/color-palette' as mat-color;
-@use '@material/elevation' as mat-elevation;
-@use '@material/card' as mat-card;
-@use '@tylertech/forge/styles/theme' as forge-theme;
-@use '@tylertech/forge/styles/typography' as forge-typography;
-@use '@tylertech/forge/styles/utils/mixins-flex' as forge-flex;
+@use '@tylertech/forge/sass/core/styles/tokens/color-palette' as forge-color;
+@use '@tylertech/forge/sass/utils/mixins-flex' as forge-flex;
 @use 'src/variables' as app-var;
 
-@mixin container-raised($elevation: 1) {
-  @include mat-card.fill-color(surface);
-  @include mat-card.shape-radius(medium);
-  @include mat-elevation.elevation($elevation);
+@mixin container-outlined {
+  background-color: var(--forge-theme-surface);
+  border-radius: var(--forge-shape-medium);
+  @include border();
 }
 
-@mixin container-outlined {
-  @include mat-card.fill-color(surface);
-  @include mat-card.shape-radius(medium);
-  @include border();
+@mixin container-raised() {
+  background-color: var(--forge-theme-surface);
+  border-radius: var(--forge-shape-medium);
+  border-color: var(--forge-theme-outline);
+  box-shadow: var(--forge-elevation-1);
 }
 
 @mixin table-header-footer {
@@ -27,7 +24,7 @@
     &-action {
       border-radius: 4px;
       padding: 8px;
-      background-color: mat-color.$indigo-50;
+      background-color: forge-color.$indigo-50;
     }
   }
 
@@ -95,7 +92,7 @@
     &:empty {
       &::before {
         content: 'n/a';
-        color: var(--mdc-theme-text-secondary-on-background);
+        color: var(--forge-theme-text-medium);
         font-style: italic;
       }
     }
@@ -116,7 +113,7 @@
       padding-left: 16px;
       @include border(border-bottom);
 
-      .forge-typography--headline5 {
+      .forge-typography--heading4 {
         margin-right: 16px;
       }
 
@@ -149,7 +146,7 @@
       &:empty {
         &::before {
           content: 'n/a';
-          color: var(--mdc-theme-text-secondary-on-background);
+          color: var(--forge-theme-text-medium);
           font-style: italic;
         }
       }
@@ -158,36 +155,7 @@
 }
 
 @mixin border($border: 'border') {
-  #{$border}: 1px solid var(--forge-theme-border-color);
-}
-
-@mixin icon-button-color {
-  forge-icon-button>button {
-    &[disabled] {
-
-      &,
-      forge-open-icon::part(icon) {
-        color: var(--mdc-theme-text-disabled-on-background) !important;
-      }
-    }
-
-    &:not([disabled], .forge-icon-button--on) {
-
-      &,
-      forge-open-icon::part(icon) {
-        color: var(--mdc-theme-text-secondary-on-background);
-      }
-
-      &:active,
-      &:focus {
-
-        &,
-        forge-open-icon::part(icon) {
-          color: var(--mdc-theme-text-primary-on-background);
-        }
-      }
-    }
-  }
+  #{$border}: 1px solid var(--forge-theme-outline);
 }
 
 @mixin form-control-invalid() {

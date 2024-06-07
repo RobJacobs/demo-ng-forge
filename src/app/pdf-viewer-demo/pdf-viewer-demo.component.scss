@@ -32,6 +32,12 @@
         column-gap: 16px;
       }
     }
+
+    .page {
+      canvas {
+        @include app-border();
+      }
+    }
   }
 }
 
@@ -79,7 +85,7 @@
     input {
       border: none;
       @include app-border(border-bottom);
-      color: var(--mdc-theme-text-primary-on-background);
+      color: var(--forge-theme-text-high);
       background-color: transparent;
       outline: none;
       width: 3em;

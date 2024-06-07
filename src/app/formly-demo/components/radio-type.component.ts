@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
-import { ForgeRadioModule } from '@tylertech/forge-angular';
+import { ForgeRadioGroupModule, ForgeRadioModule } from '@tylertech/forge-angular';
 
 @Component({
   selector: 'app-formly-radio',
@@ -10,23 +10,21 @@ import { ForgeRadioModule } from '@tylertech/forge-angular';
     @if (props.label) {
       <label [attr.for]="id" slot="label">{{props.label}}</label>
     }
-    <div role="radiogroup">
+    <forge-radio-group name="app--radio-type">
       @for (option of $any(props.options); track i; let i = $index) {
-        <forge-radio>
-          <input
-            type="radio"
-            [id]="id + '-' + i"
-            [value]="option.value"
-            [formControl]="formControl"
-            [formlyAttributes]="field" />
+        <forge-radio
+          [id]="id + '-' + i"
+          [value]="option.value"
+          [formControl]="formControl"
+          [formlyAttributes]="field">
           @if (option.label) {
-            <label [for]="id + '-' + i">{{option.label}}</label>
+            {{option.label}}
           }
         </forge-radio>
       }
-    </div>
+    </forge-radio-group>
     @if (showError) {
-      <div class="forge-typography--caption">
+      <div class="forge-typography--label1">
         <formly-validation-message [field]="field"></formly-validation-message>
       </div>
     }
@@ -49,15 +47,16 @@ import { ForgeRadioModule } from '@tylertech/forge-angular';
       }
     }
 
-    .forge-typography--caption {
-      color: var(--forge-theme-danger);
+    .forge-typography--label1 {
+      color: var(--forge-theme-error);
     }
   `],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     FormlyModule,
-    ForgeRadioModule
+    ForgeRadioModule,
+    ForgeRadioGroupModule
   ],
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

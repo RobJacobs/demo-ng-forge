@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { select, hierarchy, format, timeFormat, treemap } from 'd3';
 import { ChartUtils, IChartConfig } from './chart-utils';
-import { CHART_CONSTANTS, CHART_CONSTANTS as constants } from './chart-constants';
+import { CHART_CONSTANTS } from './chart-constants';
 
 export class TreemapChartService {
 
   public static buildTreemapChart(config: IChartConfig): Promise<void> {
-    const promise = new Promise<void>((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       if (!config.container || config.container.tagName !== 'svg') {
         reject();
         return;
@@ -21,29 +21,29 @@ export class TreemapChartService {
       const chart = treemap().size([size.width, size.height]);
       chart(chartData as any);
 
-      let rootNode = container.select(`g.${constants.classes.CHART_ROOT}`);
+      let rootNode = container.select(`g.${CHART_CONSTANTS.classes.CHART_ROOT}`);
       if (!rootNode.node()) {
-        rootNode = container.append('g').classed(constants.classes.CHART_ROOT, true) as any;
-        rootNode.append('g').classed(`${constants.classes.CHART_PREFIX}__treemap`, true);
+        rootNode = container.append('g').classed(CHART_CONSTANTS.classes.CHART_ROOT, true) as any;
+        rootNode.append('g').classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__treemap`, true);
       }
 
       container.attr('width', size.width);
       container.attr('height', size.height);
 
-      const chartNode = rootNode.select(`g.${constants.classes.CHART_PREFIX}__treemap`);
+      const chartNode = rootNode.select(`g.${CHART_CONSTANTS.classes.CHART_PREFIX}__treemap`);
 
       const nodes = chartNode.selectAll('g').data(chartData.leaves(), (d: any) => d.data.id);
 
       nodes.exit().select('text').remove();
-      nodes.exit().select('rect').transition().duration(constants.numbers.TRANSITION_DURATION).attr('width', 0).attr('height', 0);
-      nodes.exit().transition().delay(constants.numbers.TRANSITION_DURATION).remove();
+      nodes.exit().select('rect').transition().duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION).attr('width', 0).attr('height', 0);
+      nodes.exit().transition().delay(CHART_CONSTANTS.numbers.TRANSITION_DURATION).remove();
 
       const enterNodes = nodes.enter().append('g');
       enterNodes.append('rect');
-      enterNodes.append('clipPath').attr('id', (d: any) => `${constants.classes.CHART_CLIP}-${d.data.id}`).append('rect');
+      enterNodes.append('clipPath').attr('id', (d: any) => `${CHART_CONSTANTS.classes.CHART_CLIP}-${d.data.id}`).append('rect');
       enterNodes.append('text')
-        .classed(constants.classes.CHART_TEXT, true)
-        .attr('clip-path', (d: any) => `url(#${constants.classes.CHART_CLIP}-${d.data.id})`)
+        .classed(CHART_CONSTANTS.classes.CHART_TEXT, true)
+        .attr('clip-path', (d: any) => `url(#${CHART_CONSTANTS.classes.CHART_CLIP}-${d.data.id})`)
         .attr('dx', 5)
         .attr('dy', 20);
 
@@ -60,7 +60,7 @@ export class TreemapChartService {
 
       mergeNodes
         .transition()
-        .duration(constants.numbers.TRANSITION_DURATION)
+        .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
         .attr('transform', (d: any) => `translate(${d.x0}, ${d.y0})`);
 
       mergeNodes.select('text')
@@ -96,11 +96,9 @@ export class TreemapChartService {
 
           resolve();
         })
-        .duration(constants.numbers.TRANSITION_DURATION)
+        .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
         .attr('width', (d: any) => d.x1 - d.x0)
         .attr('height', (d: any) => d.y1 - d.y0);
     });
-
-    return promise;
   }
 }

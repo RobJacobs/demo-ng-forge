@@ -1,0 +1,27 @@
+@use 'src/global' as *;
+
+:host {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+}
+
+.header {
+  forge-text-field {
+    margin-left: 24px;
+    --forge-field-height: 2.5rem;
+    width: 320px;
+    &::part(label) {
+      display: none;
+    }
+  }
+}
+
+.body {
+  overflow: auto;
+  padding: 24px;
+
+  &__table {
+    @include app-container-raised();
+  }
+}

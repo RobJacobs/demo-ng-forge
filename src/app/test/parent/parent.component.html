@@ -1,13 +1,13 @@
 <forge-toolbar class="header">
-  <h2 slot="start" class="forge-typography--title">Parent</h2>
+  <h2 slot="start" class="forge-typography--subheading4">Parent</h2>
 </forge-toolbar>
 
 <div class="body">
   <p>Parent content</p>
-  <forge-button type="raised">
-    <button type="button" (click)="onNavigate('test/child')">View child</button>
+  <forge-button variant="raised" (click)="onNavigate('test/child')">
+    View child
   </forge-button>
-  <forge-button type="raised" style="margin: 16px;">
-    <button type="button" (click)="onMakeRequest()">Make request</button>
+  <forge-button style="margin: 16px;" variant="raised" (click)="onMakeRequest()">
+    Make request
   </forge-button>
 </div>

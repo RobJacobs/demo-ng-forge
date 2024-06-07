@@ -1,11 +1,13 @@
-<div #chartContainer class="chart-container"></div>
+<div class="chart-card">
+  <div #chartContainer class="chart-container"></div>
+</div>
 @if (showLegend) {
 <div class="legend-container">
   <forge-list class="chart-legend">
     <forge-list-item *ngFor="let item of legendData">
-      <div slot="leading" [style.--item-color]="item.color"></div>
-      <span slot="title">{{item.label}}</span>
-      <span slot="subtitle">{{item.value}}</span>
+      <div slot="start" [style.--item-color]="item.color"></div>
+      <span>{{item.label}}</span>
+      <span slot="secondary-text">{{item.value}}</span>
     </forge-list-item>
   </forge-list>
 </div>

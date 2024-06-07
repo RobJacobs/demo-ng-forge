@@ -6,23 +6,16 @@
 
 [slot='body'] {
   display: grid;
-  @include forge-theme-property(background-color, background);
+  background-color: var(--forge-theme-surface-dim);
 }
 
-forge-drawer {
-  --forge-drawer-width: auto;
+.menu-expander {
+  --forge-button-height: 3rem;
 
-  .expander {
-    width: 100%;
-    padding: 8px;
-
-    button {
-      min-width: 100%;
-      @include forge-flex-container(flex, row, nowrap, center);
-
-      forge-icon {
-        margin-left: auto;
-      }
+  &--open {
+    forge-icon {
+      margin-left: auto;
+      margin-right: 8px;
     }
   }
 }

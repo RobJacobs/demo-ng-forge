@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { CdkTrapFocus } from '@angular/cdk/a11y';
 import { finalize, Observable, Subject, takeUntil } from 'rxjs';
 import { isDefined } from '@tylertech/forge-core';
 import { IColumnConfiguration, ITableFilterEventData, ITableRowClickEventData, ITableSortEventData, SortDirection } from '@tylertech/forge';
-import { DialogConfig, DialogRef, ForgeIconButtonModule, ForgeIconModule, ForgePageStateModule, ForgePaginatorModule, ForgeSkeletonModule, ForgeTableModule } from '@tylertech/forge-angular';
+import { DIALOG_DATA, DialogRef, ForgeIconButtonModule, ForgeIconModule, ForgePageStateModule, ForgePaginatorModule, ForgeScaffoldModule, ForgeSkeletonModule, ForgeTableModule, ForgeToolbarModule } from '@tylertech/forge-angular';
 
 import { IFilterParameter, IFilter, IFilterResponse } from 'src/app/shared/interfaces/filter.interface';
+import { Utils } from 'src/utils';
 
 export interface IFieldHelpDialogConfig {
   columnConfigurations: IColumnConfiguration[];
@@ -26,17 +26,18 @@ export interface IFieldHelpDialogConfig {
     ForgeIconModule,
     ForgePageStateModule,
     ForgePaginatorModule,
+    ForgeScaffoldModule,
     ForgeSkeletonModule,
-    ForgeTableModule
-  ],
-  hostDirectives: [CdkTrapFocus]
+    ForgeTableModule,
+    ForgeToolbarModule
+  ]
 })
 export class FieldHelpDialogComponent {
-  public dialogConfig = inject(DialogConfig<IFieldHelpDialogConfig>);
+  public dialogConfig = inject<IFieldHelpDialogConfig>(DIALOG_DATA);
   private dialogRef = inject(DialogRef);
-  private trapFocusDirective = inject(CdkTrapFocus);
 
-  public title: string;
+  public id = Utils.elementId('app-');
+  public dialogTitle: string;
   public columnConfigurations: IColumnConfiguration[];
   public data: any[] = [];
   public paginator = {
@@ -57,13 +58,12 @@ export class FieldHelpDialogComponent {
 
   constructor(
   ) {
-    this.title = this.dialogConfig.data?.title || '';
-    this.columnConfigurations = this.dialogConfig.data?.columnConfigurations || [];
-    this.dataObservable = this.dialogConfig.data?.dataObservable as any;
-    this.key = this.dialogConfig.data?.key || '';
+    this.dialogTitle = this.dialogConfig.title || '';
+    this.columnConfigurations = this.dialogConfig.columnConfigurations || [];
+    this.dataObservable = this.dialogConfig.dataObservable as any;
+    this.key = this.dialogConfig.key || '';
     this.sort.property = this.columnConfigurations.find(c => c.initialSort)?.property || this.columnConfigurations[0].property as string;
-    this.dialogRef.nativeElement.setAttribute('aria-labelledby', 'field-help--title');
-    this.trapFocusDirective.autoCapture = true;
+    this.dialogRef.nativeElement.setAttribute('aria-labelledby', `${this.id}--title`);
     this.getData();
   }
 

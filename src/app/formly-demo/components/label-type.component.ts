@@ -5,7 +5,7 @@ import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
 @Component({
   selector: 'app-formly-label',
   template: `
-  <label [attr.for]="id" class="forge-typography--body2">{{props.label}}</label>
+  <label [attr.for]="id" class="forge-typography--body1">{{props.label}}</label>
   `,
   styles: [`
     :host {

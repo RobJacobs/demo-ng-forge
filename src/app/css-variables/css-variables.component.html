@@ -1,0 +1,12 @@
+<forge-toolbar class="header">
+  <h2 slot="start" class="forge-typography--subheading4">Forge CSS Variables</h2>
+  <forge-text-field slot="start">
+    <input type="text" [(ngModel)]="variableFilter" (input)="onFilter()" />
+  </forge-text-field>
+</forge-toolbar>
+
+<div class="body">
+  <div class="body__table">
+    <forge-table [columnConfigurations]="tableColumns" [data]="recordset"></forge-table>
+  </div>
+</div>

@@ -135,7 +135,7 @@ export class AutocompleteRangeComponent implements ControlValueAccessor, AfterVi
     return '';
   };
 
-  writeValue(values: Array<IOption> | Array<string | string[] | number>): void {
+  public writeValue(values: Array<IOption> | Array<string | string[] | number>) {
     const options: IOption[] = [];
     this.rangeOptions.length = 0;
     if (isArray(values)) {
@@ -153,30 +153,30 @@ export class AutocompleteRangeComponent implements ControlValueAccessor, AfterVi
     });
   }
 
-  ngAfterViewInit(): void {
+  public ngAfterViewInit() {
     window.requestAnimationFrame(() => {
       this.rangeRef = this.viewContainerRef.createEmbeddedView(this.rangeTemplateRef as TemplateRef<any>);
       (this.rangeRef.rootNodes[0] as HTMLElement).remove();
     });
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy() {
     this.rangeRef?.destroy();
   }
 
-  registerOnChange(fn: any): void {
+  public registerOnChange(fn: any) {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  public registerOnTouched(fn: any) {
     this.onTouched = fn;
   }
 
-  public onAutocompleteChange(): void {
+  public onAutocompleteChange() {
     this.emitChangeEvents();
   }
 
-  public onAddRangeOption(): void {
+  public onAddRangeOption() {
     if (!this.rangeMin?.length && !this.rangeMax?.length) {
       this.rangeMessage = 'A min or max value is required.';
       return;
@@ -220,7 +220,7 @@ export class AutocompleteRangeComponent implements ControlValueAccessor, AfterVi
     (this.filterInputRef as ElementRef).nativeElement.value = this.selectedTextBuilder(this.autocompleteRef?.nativeElement.value);
   }
 
-  public onDeleteRangeOption(option: IOption): void {
+  public onDeleteRangeOption(option: IOption) {
     (this.rangeRef?.rootNodes[0] as HTMLElement).focus();
     const optionIndex = this.rangeOptions.findIndex((o) => o.value === option.value);
     if (optionIndex !== -1) {
@@ -230,7 +230,7 @@ export class AutocompleteRangeComponent implements ControlValueAccessor, AfterVi
     }
   }
 
-  private emitChangeEvents(): void {
+  private emitChangeEvents() {
     const options = [];
     if (isArray(this.rangeOptions) && this.rangeOptions.length) {
       options.push(...this.rangeOptions.map((o) => o.value));

@@ -1,12 +1,10 @@
 <forge-text-field>
-  <input type="text" [attr.id]="id" [formControl]="dateTime" [imask]="mask" [unmask]="'typed'" />
+  <input type="text" [attr.id]="id" [formControl]="dateTime" [imask]="mask" [unmask]="'typed'">
   @if (label?.length) {
   <label [attr.for]="id" slot="label">{{label}}</label>
   }
-  <forge-icon-button slot="trailing">
-    <button tabindex="-1" type="button" #calendarPopup="forgePopup" [forgePopup]="calendarPopupTemplate" [forgePopupPlacement]="'bottom-end'" (click)="onOpenPopup(calendarPopup)" aria-label="Open calendar">
-      <forge-icon name="insert_invitation"></forge-icon>
-    </button>
+  <forge-icon-button slot="end" tabindex="-1" #calendarPopup="forgePopover" [forgePopover]="calendarPopupTemplate" [forgePopoverPlacement]="'bottom-end'" (click)="onOpenPopup(calendarPopup)" aria-label="Open calendar">
+    <forge-icon name="insert_invitation"></forge-icon>
   </forge-icon-button>
 </forge-text-field>
 
@@ -16,7 +14,7 @@
     <forge-divider style="margin: 8px 0;"></forge-divider>
     <forge-time-picker style="margin: 0 8px;" [formControl]="time">
       <forge-text-field>
-        <input type="text" [attr.id]="'time-' + id" placeholder="hh:mm:ss aa" />
+        <input type="text" [attr.id]="'time-' + id" placeholder="hh:mm:ss aa">
         <label [attr.for]="'time-' + id" slot="label">Time</label>
       </forge-text-field>
     </forge-time-picker>
