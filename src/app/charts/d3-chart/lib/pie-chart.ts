@@ -25,9 +25,9 @@ export class PieChartService {
       const container = select(config.container);
       const colorScale = config.palette && config.palette.length ? ChartUtils.colorScale(config.data.map(d => d.value), config.palette.length === 2 ? config.palette : config.palette.length) : undefined;
       const valueFormat = config.valueFormat ? format(config.valueFormat) : config.valueDateFormat ? timeFormat(config.valueDateFormat) : undefined;
-      const size = ChartUtils.chartSize(config.container);
+      const chartSize = ChartUtils.chartSize(config.container);
       const radius = {
-        outer: Math.min(size.width, size.height) / 2,
+        outer: Math.min(chartSize.width, chartSize.height) / 2,
         inner: 0
       };
       if (config.type === 'donut' || config.type === 'donut-meter') {
@@ -42,8 +42,8 @@ export class PieChartService {
         rootNode.append('g').classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__${config.type}`, true);
       }
 
-      container.attr('width', size.width);
-      container.attr('height', size.height);
+      container.attr('width', chartSize.width);
+      container.attr('height', chartSize.height);
 
       const chartNode = rootNode.select(`g.${CHART_CONSTANTS.classes.CHART_PREFIX}__${config.type}`);
       chartNode.attr('transform', `translate(${radius.outer}, ${radius.outer})`);

@@ -5,7 +5,7 @@
       @if (selectedIcon) {
       <forge-icon slot="start" [name]="selectedIcon"></forge-icon>
       }
-      <input type="text">
+      <input type="text" aria-label="Filter icons" placeholder="Filter">
       <forge-icon slot="end" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
     </forge-text-field>
   </forge-autocomplete>

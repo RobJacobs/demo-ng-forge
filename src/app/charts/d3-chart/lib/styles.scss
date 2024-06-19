@@ -15,6 +15,16 @@
     }
   }
 
+  .app-chart__gantt {
+    .app-chart__text {
+      stroke: #f5f5f5;
+      stroke-width: .5rem;
+      fill: black;
+      paint-order: stroke;
+      stroke-linejoin: round;
+    }
+  }
+
   .app-chart__legend-text-label {
     font-size: 10px;
     fill: forge-color.$grey-500;
@@ -48,5 +58,22 @@
         text-anchor: end;
       }
     }
+  }
+
+  .app-chart__popover {
+    position: absolute;
+    border: 1px solid #757575;
+    border-radius: 4px;
+    background-color: white;
+    padding: 4px 8px;
+    font-size: .85rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 8px;
+    pointer-events: none;
+    visibility: hidden;
+    min-width: 176px;
+    max-width: 320px;
+    word-break: break-word;
   }
 }

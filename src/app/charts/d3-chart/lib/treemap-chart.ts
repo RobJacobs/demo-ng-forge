@@ -16,9 +16,9 @@ export class TreemapChartService {
       const colorScale = config.palette && config.palette.length ? ChartUtils.colorScale(config.data.map(d => d.value), config.palette.length === 2 ? config.palette : config.palette.length) : undefined;
       const valueFormat = config.valueFormat ? format(config.valueFormat) : config.valueDateFormat ? timeFormat(config.valueDateFormat) : undefined;
       const nodePadding = 8;
-      const size = ChartUtils.chartSize(config.container);
+      const chartSize = ChartUtils.chartSize(config.container);
       const chartData = hierarchy({ children: config.data }).sum((d: any) => d.value).sort((a: any, b: any) => b.value - a.value);
-      const chart = treemap().size([size.width, size.height]);
+      const chart = treemap().size([chartSize.width, chartSize.height]);
       chart(chartData as any);
 
       let rootNode = container.select(`g.${CHART_CONSTANTS.classes.CHART_ROOT}`);
@@ -27,8 +27,8 @@ export class TreemapChartService {
         rootNode.append('g').classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__treemap`, true);
       }
 
-      container.attr('width', size.width);
-      container.attr('height', size.height);
+      container.attr('width', chartSize.width);
+      container.attr('height', chartSize.height);
 
       const chartNode = rootNode.select(`g.${CHART_CONSTANTS.classes.CHART_PREFIX}__treemap`);
 

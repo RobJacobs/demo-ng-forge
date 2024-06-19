@@ -23,8 +23,8 @@ export class BarChartService {
 
       config.valueTicks = config.valueTicks || 5;
 
-      const minValue = 0;
-      const maxValue = Math.max(...config.data.map(d => d.value as number)) || 0;
+      const valueMin = 0;
+      const valueMax = Math.max(...config.data.map(d => d.value as number)) || 0;
       const container = select(config.container);
       const colorScale = config.palette && config.palette.length ? ChartUtils.colorScale(config.data.map(d => d.value), config.palette.length === 2 ? config.palette : config.palette.length) : undefined;
 
@@ -38,13 +38,13 @@ export class BarChartService {
         left: 16 + ChartUtils.getMaxTextWidth(valueTickText as string[], `${CHART_CONSTANTS.strings.FONT_SIZE_SMALL} ${CHART_CONSTANTS.strings.FONT_FAMILY}`),
         right: 16
       };
-      const chartWidth = config.data.length * (barWidth + barPadding);
-      const size = ChartUtils.chartSize(config.container);
-      const yScale = ChartUtils.yScale(config.data.map(d => d.value), size.height - chartMargin.top - chartMargin.bottom);
-      const yAxis = axisLeft(scaleLinear().domain([minValue, maxValue]).range([size.height - chartMargin.top - chartMargin.bottom, 0])).ticks(config.valueTicks).tickSize(-chartWidth);
+      const chartSize = ChartUtils.chartSize(config.container);
+      chartSize.width = config.data.length * (barWidth + barPadding);
+      const yScale = ChartUtils.yScale(config.data.map(d => d.value), chartSize.height - chartMargin.top - chartMargin.bottom);
+      const yAxis = axisLeft(scaleLinear().domain([valueMin, valueMax]).range([chartSize.height - chartMargin.top - chartMargin.bottom, 0]).nice()).ticks(config.valueTicks).tickSize(-chartSize.width);
 
       if (isArray(config.valueTickValues)) {
-        const valueScale = scaleLinear().domain([0, (config.valueTickValues as []).length - 1]).range([minValue, maxValue]);
+        const valueScale = scaleLinear().domain([0, (config.valueTickValues as []).length - 1]).range([valueMin, valueMax]);
         config.valueTicks = [];
         config.valueTickValues?.forEach((v, i) => {
           (config.valueTicks as number[]).push(valueScale(i) as number);
@@ -77,14 +77,12 @@ export class BarChartService {
         rootNode.append('g').classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__chart`, true).classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__bar`, true);
       }
 
-      const minContainerWidth = chartWidth + chartMargin.left;
-      // container.attr('width', minContainerWidth > size.width ? minContainerWidth : size.width);
-      container.attr('width', chartWidth + chartMargin.left);
-      container.attr('height', size.height);
+      container.attr('width', chartSize.width + chartMargin.left);
+      container.attr('height', chartSize.height);
       container.select(`g.${CHART_CONSTANTS.classes.CHART_YAXIS}`).attr('transform', `translate(${chartMargin.left}, ${chartMargin.top})`).call(yAxis as any); // TODO
-      container.select(`g.${CHART_CONSTANTS.classes.CHART_XAXIS}`).attr('transform', `translate(${chartMargin.left}, ${size.height - chartMargin.bottom})`);
+      container.select(`g.${CHART_CONSTANTS.classes.CHART_XAXIS}`).attr('transform', `translate(${chartMargin.left}, ${chartSize.height - chartMargin.bottom})`);
       if (isArray(config.categoryTickValues) && config.categoryTickValues?.length) {
-        const xAxis = axisBottom(scaleBand().domain(config.categoryTickValues as string[]).range([0, chartWidth]));
+        const xAxis = axisBottom(scaleBand().domain(config.categoryTickValues as string[]).range([0, chartSize.width]));
         container.select(`g.${CHART_CONSTANTS.classes.CHART_XAXIS}`).call(xAxis as any); // TODO
       }
 
@@ -96,7 +94,7 @@ export class BarChartService {
       nodes.exit()
         .transition()
         .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
-        .attr('y', (d: any) => size.height - chartMargin.top)
+        .attr('y', (d: any) => chartSize.height - chartMargin.top)
         .attr('height', 0);
       nodes.exit().transition().delay(CHART_CONSTANTS.numbers.TRANSITION_DURATION).remove();
 
@@ -104,7 +102,7 @@ export class BarChartService {
 
       enterNodes.append('rect')
         .attr('x', (d: IChartData, i: number) => i * (barWidth + barPadding) + (barPadding / 2))
-        .attr('y', size.height - chartMargin.top)
+        .attr('y', chartSize.height - chartMargin.top)
         .attr('width', (d: IChartData) => barWidth)
         .attr('height', 0)
         .merge(nodes as any)
@@ -115,7 +113,7 @@ export class BarChartService {
         })
         .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
         .attr('y', (d: IChartData) => d.value ? yScale(d.value) + chartMargin.bottom : 0)
-        .attr('height', (d: IChartData) => d.value ? size.height - chartMargin.top - chartMargin.bottom - yScale(d.value) : 0)
+        .attr('height', (d: IChartData) => d.value ? chartSize.height - chartMargin.top - chartMargin.bottom - yScale(d.value) : 0)
         .attr('fill', (d: IChartData) => {
           if (d.color) {
             return d.color;

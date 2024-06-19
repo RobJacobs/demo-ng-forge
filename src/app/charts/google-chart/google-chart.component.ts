@@ -4,6 +4,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, filter, fromEvent } from 'rxjs';
 
 import { GoogleChartService } from './google-chart.service';
+import { ChartTypes } from '../charts.component';
 
 interface IChartItem {
   id: number;
@@ -41,21 +42,21 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
 
   public chartIsPanning = false;
 
-  #chartType: 'bar' | 'bubble' | 'donut' | 'donut-meter' | 'line' | 'pie' | 'treemap' | 'tree' = 'bar';
+  #chartType: ChartTypes = ChartTypes.bar;
   @Input()
-  public set chartType(value: 'bar' | 'bubble' | 'donut' | 'donut-meter' | 'line' | 'pie' | 'treemap' | 'tree') {
+  public set chartType(value: ChartTypes) {
     this.#chartType = value;
     if (this.googleChartsLoaded) {
       this.drawChart('create');
     }
   }
-  public get chartType(): 'bar' | 'bubble' | 'donut' | 'donut-meter' | 'line' | 'pie' | 'treemap' | 'tree' {
+  public get chartType(): ChartTypes {
     return this.#chartType;
   }
 
   public ngOnInit() {
     GoogleChartService.loadGoogleChartService().subscribe(() => {
-      google.charts.load('current', { 'packages': ['corechart', 'treemap', 'orgchart'] }).then(() => {
+      google.charts.load('current', { 'packages': ['corechart', 'treemap', 'orgchart', 'gantt'] }).then(() => {
         this.googleChartsLoaded = true;
         this.drawChart('create');
       });
@@ -98,7 +99,7 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
 
     switch (this.chartType) {
       // https://developers.google.com/chart/interactive/docs/gallery/barchart
-      case 'bar': {
+      case ChartTypes.bar: {
         if (action === 'create') {
           // vertical bars
           this.chart = new google.visualization.ColumnChart(this.chartContainer?.nativeElement);
@@ -114,7 +115,7 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
         break;
       }
       // https://developers.google.com/chart/interactive/docs/gallery/bubblechart
-      case 'bubble': {
+      case ChartTypes.bubble: {
         if (action === 'create') {
           this.chart = new google.visualization.BubbleChart(this.chartContainer?.nativeElement);
           this.addChartEvents();
@@ -126,7 +127,7 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
         (this.chart as google.visualization.BubbleChart).draw(this.chartData as google.visualization.DataTable, bubbleChartOptions);
         break;
       }
-      case 'donut': {
+      case ChartTypes.donut: {
         if (action === 'create') {
           this.chart = new google.visualization.PieChart(this.chartContainer?.nativeElement);
           this.addChartEvents();
@@ -140,7 +141,7 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
         break;
       }
       // https://developers.google.com/chart/interactive/docs/gallery/piechart
-      case 'pie': {
+      case ChartTypes.pie: {
         if (action === 'create') {
           this.chart = new google.visualization.PieChart(this.chartContainer?.nativeElement);
           this.addChartEvents();
@@ -153,7 +154,7 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
         break;
       }
       // https://developers.google.com/chart/interactive/docs/gallery/linechart
-      case 'line': {
+      case ChartTypes.line: {
         if (action === 'create') {
           this.chart = new google.visualization.LineChart(this.chartContainer?.nativeElement);
           this.addChartEvents();
@@ -167,7 +168,7 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
         break;
       }
       // https://developers.google.com/chart/interactive/docs/gallery/treemap
-      case 'treemap': {
+      case ChartTypes.treemap: {
         if (action === 'create') {
           this.chart = new google.visualization.TreeMap(this.chartContainer?.nativeElement);
           this.addChartEvents();
@@ -180,7 +181,7 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
         break;
       }
       // https://developers.google.com/chart/interactive/docs/gallery/orgchart
-      case 'tree': {
+      case ChartTypes.tree: {
         if (action === 'create') {
           this.chart = new google.visualization.OrgChart(this.chartContainer?.nativeElement);
           this.addChartEvents();
@@ -194,6 +195,17 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
         };
 
         (this.chart as google.visualization.OrgChart).draw(this.chartData as google.visualization.DataTable, orgChartOptions);
+        break;
+      }
+      case ChartTypes.gantt: {
+        if (action === 'create') {
+          this.chart = new google.visualization.Gantt(this.chartContainer?.nativeElement);
+          this.addChartEvents();
+        }
+
+        const ganttChartOptions: google.visualization.GanttChartOptions = {
+        };
+        (this.chart as google.visualization.Gantt).draw(this.chartData as google.visualization.DataTable, ganttChartOptions);
       }
     }
   }
@@ -205,14 +217,14 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
       case 'create': {
         this.chartData = new google.visualization.DataTable();
         switch (this.chartType) {
-          case 'bar':
-          case 'donut':
-          case 'pie':
+          case ChartTypes.bar:
+          case ChartTypes.donut:
+          case ChartTypes.pie:
             this.chartData.addColumn('string', 'Label', 'label');
             this.chartData.addColumn('number', 'Value', 'value');
             this.chartData.addRows(this.getData(10, 0).map(d => [d.label, d.value]));
             break;
-          case 'bubble': {
+          case ChartTypes.bubble: {
             this.chartData.addColumn('string', 'Id', 'id');
             this.chartData.addColumn('number', 'Value', 'value');
             this.chartData.addColumn('number', 'Category', 'category');
@@ -225,7 +237,7 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
             this.chartData.addRows(bubbleChartData);
             break;
           }
-          case 'line': {
+          case ChartTypes.line: {
             this.chartData.addColumn('string', 'Label', 'label');
             this.chartData.addColumn('number', 'Line 1', 'line1');
             this.chartData.addColumn('number', 'Line 2', 'line2');
@@ -237,7 +249,7 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
             this.chartData.addRows(lineChartData);
             break;
           }
-          case 'treemap': {
+          case ChartTypes.treemap: {
             this.chartData.addColumn('string', 'Label', 'label');
             this.chartData.addColumn('string', 'Parent', 'parent');
             this.chartData.addColumn('number', 'Value', 'value');
@@ -246,28 +258,45 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
             this.chartData.addRows(this.getData(20, 0).map(d => [d.label, 'Root', d.value, d.category]));
             break;
           }
-          case 'tree': {
+          case ChartTypes.tree: {
             this.chartData.addColumn('string', 'Id', 'id');
             this.chartData.addColumn('string', 'ParentId', 'parentId');
             this.chartData.addRow([{ v: '0', f: 'Item 0' }, null]);
             this.chartData.addRows(this.buildTreeNodeData('0', this.randomNumber(1, 5)));
             break;
           }
+          case ChartTypes.gantt: {
+            this.chartData.addColumn('string', 'Id', 'id');
+            this.chartData.addColumn('string', 'Name', 'name');
+            this.chartData.addColumn('string', 'Resource', 'resource');
+            this.chartData.addColumn('date', 'Start Date', 'startDate');
+            this.chartData.addColumn('date', 'End Date', 'endDate');
+            this.chartData.addColumn('number', 'Duration', 'duration');
+            this.chartData.addColumn('number', 'Progress', 'progress');
+            this.chartData.addColumn('string', 'Dependencies', 'dependencies');
+            this.chartData.addRows([
+              ['0', 'Item 01', '', new Date(2024, 0, 1), new Date(2024, 0, 31), null, 10, null],
+              ['1', 'Item 02', '', new Date(2024, 1, 1), new Date(2024, 1, 10), null, 20, null],
+              ['2', 'Item 03', '', new Date(2024, 1, 1), new Date(2024, 1, 20), null, 30, null],
+              ['3', 'Item 04', '', new Date(2024, 3, 15), new Date(2024, 8, 20), null, 40, null],
+              ['4', 'Item 05', '', new Date(2024, 10, 1), new Date(2025, 10, 30), null, 90, null]
+            ]);
+          }
         }
         break;
       }
       case 'update': {
         switch (this.chartType) {
-          case 'bar':
-          case 'donut':
-          case 'pie': {
+          case ChartTypes.bar:
+          case ChartTypes.donut:
+          case ChartTypes.pie: {
             const data = this.getData(chartRows);
             data.forEach((d, i) => {
               this.chartData?.setValue(i, 1, d.value);
             });
             break;
           }
-          case 'bubble': {
+          case ChartTypes.bubble: {
             for (let i = 0; i < chartRows; i++) {
               this.chartData?.setValue(i, 1, this.randomNumber(0, 1000));
               this.chartData?.setValue(i, 2, this.randomNumber(0, 1000));
@@ -275,7 +304,7 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
             }
             break;
           }
-          case 'line': {
+          case ChartTypes.line: {
             for (let i = 0; i < chartRows; i++) {
               for (let ii = 1; ii < chartColumns; ii++) {
                 this.chartData?.setValue(i, ii, this.randomNumber(0, 1000));
@@ -283,14 +312,14 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
             }
             break;
           }
-          case 'treemap': {
+          case ChartTypes.treemap: {
             for (let i = 1; i < chartRows; i++) {
               this.chartData?.setValue(i, 2, this.randomNumber(0, 1000));
               this.chartData?.setValue(i, 3, this.randomNumber(0, 1000));
             }
             break;
           }
-          case 'tree': {
+          case ChartTypes.tree: {
             this.chartData?.removeRows(0, this.chartData.getNumberOfRows());
             this.chartData?.addRows(this.buildTreeNodeData('0', this.randomNumber(1, 5)));
             break;
@@ -300,24 +329,24 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
       }
       case 'add': {
         switch (this.chartType) {
-          case 'bar':
-          case 'donut':
-          case 'pie': {
+          case ChartTypes.bar:
+          case ChartTypes.donut:
+          case ChartTypes.pie: {
             this.chartData?.addRows(this.getData(1, chartRows).map(d => [d.label, d.value]));
             break;
           }
-          case 'bubble': {
+          case ChartTypes.bubble: {
             this.chartData?.addRow([(chartRows).toString(), this.randomNumber(0, 1000), this.randomNumber(0, 1000), `Item ${chartRows}`, this.randomNumber(0, 1000)])
             break;
           }
-          case 'line': {
+          case ChartTypes.line: {
             this.chartData?.addColumn('number', `Line ${chartColumns}`, `line${chartColumns}`);
             for (let i = 0; i < 10; i++) {
               this.chartData?.setValue(i, chartColumns, this.randomNumber(0, 1000));
             }
             break;
           }
-          case 'treemap': {
+          case ChartTypes.treemap: {
             this.chartData?.addRow([`Item ${chartRows}`, 'Root', this.randomNumber(0, 1000), this.randomNumber(0, 1000)]);
             break;
           }
@@ -327,15 +356,15 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
       case 'delete': {
         if (chartRows > 1) {
           switch (this.chartType) {
-            case 'bar':
-            case 'bubble':
-            case 'donut':
-            case 'pie':
-            case 'treemap': {
+            case ChartTypes.bar:
+            case ChartTypes.bubble:
+            case ChartTypes.donut:
+            case ChartTypes.pie:
+            case ChartTypes.treemap: {
               this.chartData?.removeRow(chartRows - 1);
               break;
             }
-            case 'line': {
+            case ChartTypes.line: {
               this.chartData?.removeColumn(chartColumns - 1);
               break;
             }

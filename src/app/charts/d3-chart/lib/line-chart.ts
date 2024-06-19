@@ -35,24 +35,24 @@ export class LineChartService {
       const data = config.data.map(d => d.data).reduce((a: any, b: any) => a.concat(b), []);
       const values = data.map((d: any) => d.value);
       const categories = data.map((d: any) => parseFloat(d.category)).filter((d: any, i: any, s: any) => s.indexOf(d) === i).sort((a: any, b: any) => a - b);
-      const minValue = Math.min(...values) || 0;
-      const maxValue = Math.max(...values) || 0;
-      const minCategory = Math.min(...categories) || 0;
-      const maxCategory = Math.max(...categories) || 0;
+      const valueMin = Math.min(...values) || 0;
+      const valueMax = Math.max(...values) || 0;
+      const categoryMin = Math.min(...categories) || 0;
+      const categoryMax = Math.max(...categories) || 0;
       const container = select(config.container);
       const linePadding = 2;
       const chartMargin = {
         top: 16,
         bottom: 16,
-        left: 16 + ChartUtils.getTextWidth(maxValue.toString(), `${CHART_CONSTANTS.strings.FONT_SIZE_SMALL} ${CHART_CONSTANTS.strings.FONT_FAMILY}`),
+        left: 16 + ChartUtils.getTextWidth(valueMax.toString(), `${CHART_CONSTANTS.strings.FONT_SIZE_SMALL} ${CHART_CONSTANTS.strings.FONT_FAMILY}`),
         right: 16
       };
-      const size = ChartUtils.chartSize(config.container);
-      const xScale = ChartUtils.xScale([minCategory, maxCategory], size.width - chartMargin.left - chartMargin.right);
-      const xAxis = axisBottom(scaleLinear().domain([minCategory, maxCategory]).range([0, size.width - chartMargin.left - chartMargin.right]));
+      const chartSize = ChartUtils.chartSize(config.container);
+      const xScale = ChartUtils.xScale([categoryMin, categoryMax], chartSize.width - chartMargin.left - chartMargin.right);
+      const xAxis = axisBottom(scaleLinear().domain([categoryMin, categoryMax]).range([0, chartSize.width - chartMargin.left - chartMargin.right]).nice());
 
       if (isArray(config.categoryTickValues)) {
-        const categoryScale = scaleLinear().domain([0, (config.categoryTickValues as []).length - 1]).range([minCategory, maxCategory]);
+        const categoryScale = scaleLinear().domain([0, (config.categoryTickValues as []).length - 1]).range([categoryMin, categoryMax]);
         config.categoryTicks = [];
         config.categoryTickValues?.forEach((c, i) => {
           (config.categoryTicks as number[]).push(categoryScale(i) as number);
@@ -77,11 +77,11 @@ export class LineChartService {
         xAxis.tickFormat(timeFormat(config.categoryDateFormat) as any);
       }
 
-      const yScale = ChartUtils.yScale([minValue, maxValue], size.height - chartMargin.top - chartMargin.bottom);
-      const yAxis = axisLeft(scaleLinear().domain([0, maxValue]).range([size.height - chartMargin.top - chartMargin.bottom, 0])).tickSize(-(size.width - chartMargin.left - chartMargin.right));
+      const yScale = ChartUtils.yScale([valueMin, valueMax], chartSize.height - chartMargin.top - chartMargin.bottom);
+      const yAxis = axisLeft(scaleLinear().domain([0, valueMax]).range([chartSize.height - chartMargin.top - chartMargin.bottom, 0]).nice()).tickSize(-(chartSize.width - chartMargin.left - chartMargin.right));
 
       if (isArray(config.valueTickValues)) {
-        const valueScale = scaleLinear().domain([0, (config.valueTickValues as []).length - 1]).range([minValue, maxValue]);
+        const valueScale = scaleLinear().domain([0, (config.valueTickValues as []).length - 1]).range([valueMin, valueMax]);
         config.valueTicks = [];
         config.valueTickValues?.forEach((v, i) => {
           (config.valueTicks as number[]).push(valueScale(i) as number);
@@ -111,7 +111,7 @@ export class LineChartService {
         .y((d: any) => yScale(d.value));
       const enterChart = line()
         .x((d: any) => xScale(d.category))
-        .y(size.height - chartMargin.top);
+        .y(chartSize.height - chartMargin.top);
 
       let rootNode = container.select(`g.${CHART_CONSTANTS.classes.CHART_ROOT}`);
       if (!rootNode.node()) {
@@ -124,9 +124,9 @@ export class LineChartService {
         rootNode.append('g').classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__line`, true);
       }
 
-      container.attr('width', size.width);
-      container.attr('height', size.height);
-      container.select(`g.${CHART_CONSTANTS.classes.CHART_XAXIS}`).attr('transform', `translate(${chartMargin.left}, ${size.height - chartMargin.bottom})`).call(xAxis as any);
+      container.attr('width', chartSize.width);
+      container.attr('height', chartSize.height);
+      container.select(`g.${CHART_CONSTANTS.classes.CHART_XAXIS}`).attr('transform', `translate(${chartMargin.left}, ${chartSize.height - chartMargin.bottom})`).call(xAxis as any);
       container.select(`g.${CHART_CONSTANTS.classes.CHART_YAXIS}`).attr('transform', `translate(${chartMargin.left}, ${chartMargin.top})`).call(yAxis as any);
 
       const chartNode = rootNode.select(`g.${CHART_CONSTANTS.classes.CHART_PREFIX}__line`);
@@ -142,7 +142,6 @@ export class LineChartService {
         enterNodes.append('path')
           .classed(`path-${l.id}`, true)
           .style('fill', 'none')
-          .style('stroke-width', '1px')
           .style('stroke-linejoin', 'round')
           .style('stroke-linecap', 'round')
           .attr('d', (d: any) => enterChart(d.data))

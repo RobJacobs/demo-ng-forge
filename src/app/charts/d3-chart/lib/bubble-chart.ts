@@ -15,9 +15,9 @@ export class BubbleChartService {
       const colorScale = config.palette && config.palette.length ? ChartUtils.colorScale(config.data.map(d => d.value), config.palette.length === 2 ? config.palette : config.palette.length) : undefined;
       const valueFormat = config.valueFormat ? format(config.valueFormat) : config.valueDateFormat ? timeFormat(config.valueDateFormat) : undefined;
       const nodePadding = 10;
-      const size = ChartUtils.chartSize(config.container);
+      const chartSize = ChartUtils.chartSize(config.container);
       const chartData = hierarchy({ children: config.data }).sum((d: any) => d.value).sort((a: any, b: any) => b.value - a.value);
-      const chart = pack().size([Math.min(...[size.width, size.height]), Math.min(...[size.width, size.height])]);
+      const chart = pack().size([Math.min(...[chartSize.width, chartSize.height]), Math.min(...[chartSize.width, chartSize.height])]);
       chart(chartData as any);
 
       let rootNode = container.select(`g.${CHART_CONSTANTS.classes.CHART_ROOT}`);
@@ -26,8 +26,8 @@ export class BubbleChartService {
         rootNode.append('g').classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__chart`, true).classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__bubble`, true);
       }
 
-      container.attr('width', size.width);
-      container.attr('height', size.height);
+      container.attr('width', chartSize.width);
+      container.attr('height', chartSize.height);
 
       const chartNode = rootNode.select(`g.${CHART_CONSTANTS.classes.CHART_PREFIX}__bubble`);
       const nodes = chartNode.selectAll('g').data(chartData.leaves(), (d: any) => d.data.id);

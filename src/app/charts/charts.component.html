@@ -1,23 +1,24 @@
 <forge-toolbar class="header">
   <div slot="start">
     <h2 class="forge-typography--subheading4">Charts</h2>
-    <forge-select [(ngModel)]="chartType">
-      <forge-option value="bar">bar</forge-option>
-      <forge-option value="bubble">bubble</forge-option>
-      <forge-option value="donut">donut</forge-option>
-      <forge-option value="donut-meter">donut meter</forge-option>
-      <forge-option value="line">line</forge-option>
-      <forge-option value="pie">pie</forge-option>
-      <forge-option value="treemap">treemap</forge-option>
-      <forge-option value="tree">tree</forge-option>
+    <forge-select [(ngModel)]="chartType" aria-label="Change chart type">
+      <forge-option [value]="chartTypesEnum.bar">Bar</forge-option>
+      <forge-option [value]="chartTypesEnum.bubble">Bubble</forge-option>
+      <forge-option [value]="chartTypesEnum.donut">Donut</forge-option>
+      <forge-option [value]="chartTypesEnum.donutMeter">Donut Meter</forge-option>
+      <forge-option [value]="chartTypesEnum.gantt">Gantt</forge-option>
+      <forge-option [value]="chartTypesEnum.line">Line</forge-option>
+      <forge-option [value]="chartTypesEnum.pie">Pie</forge-option>
+      <forge-option [value]="chartTypesEnum.treemap">Treemap</forge-option>
+      <forge-option [value]="chartTypesEnum.tree">Tree</forge-option>
     </forge-select>
-    <forge-button variant="outlined" (click)="onAction('update')" [disabled]="activeTab === 0 && chartType === 'tree'">
+    <forge-button variant="outlined" (click)="onAction('update')" [disabled]="((activeTab === 0 && chartType === chartTypesEnum.tree) || chartType === chartTypesEnum.gantt)">
       Update
     </forge-button>
-    <forge-button variant="outlined" (click)="onAction('add')" [disabled]="chartType === 'tree'">
+    <forge-button variant="outlined" (click)="onAction('add')" [disabled]="chartType === chartTypesEnum.tree || chartType === chartTypesEnum.gantt">
       Add
     </forge-button>
-    <forge-button variant="outlined" (click)="onAction('delete')" [disabled]="chartType === 'tree'">
+    <forge-button variant="outlined" (click)="onAction('delete')" [disabled]="chartType === chartTypesEnum.tree || chartType === chartTypesEnum.gantt">
       Delete
     </forge-button>
   </div>

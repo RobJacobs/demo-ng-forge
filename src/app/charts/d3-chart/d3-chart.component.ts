@@ -1,4 +1,4 @@
-import { Component, DestroyRef, ElementRef, Input, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, DestroyRef, ElementRef, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, fromEvent } from 'rxjs';
@@ -20,6 +20,8 @@ import {
   TreeChartService,
   ITreeChartData
 } from './lib';
+import { ChartTypes } from '../charts.component';
+import { GanttChartService, IGanttChartConfig } from './lib/gantt-chart';
 
 interface IChartItem {
   id: number;
@@ -47,22 +49,22 @@ export class D3ChartComponent implements OnInit {
   // @ts-expect-error ignore
   private chartPalette = Object.keys(ChartUtils.chartPalette).map(key => ChartUtils.chartPalette[key]);
 
-  #chartType: 'bar' | 'bubble' | 'donut' | 'donut-meter' | 'line' | 'pie' | 'treemap' | 'tree' = 'bar';
+  #chartType: ChartTypes = ChartTypes.bar;
   @Input()
-  public set chartType(value: 'bar' | 'bubble' | 'donut' | 'donut-meter' | 'line' | 'pie' | 'treemap' | 'tree') {
+  public set chartType(value: ChartTypes) {
     this.#chartType = value;
     this.setChartData('create');
     this.initializeChartContainer();
     requestAnimationFrame(() => {
       this.drawChart();
     });
-    if (this.#chartType === 'donut-meter' || this.#chartType === 'treemap' || this.#chartType === 'tree') {
+    if (this.#chartType === ChartTypes.donutMeter || this.#chartType === ChartTypes.gantt || this.#chartType === ChartTypes.treemap || this.#chartType === ChartTypes.tree) {
       this.showLegend = false;
     } else {
       this.showLegend = true
     }
   }
-  public get chartType(): 'bar' | 'bubble' | 'donut' | 'donut-meter' | 'line' | 'pie' | 'treemap' | 'tree' {
+  public get chartType(): ChartTypes {
     return this.#chartType;
   }
   public chartData?: IChartItem[];
@@ -90,15 +92,15 @@ export class D3ChartComponent implements OnInit {
   }
 
   private setChartData(action: 'create' | 'update' | 'add' | 'delete') {
-    if (this.chartType === 'donut-meter') {
+    if (this.chartType === ChartTypes.donutMeter) {
       return;
     }
 
     switch (action) {
       case 'create': {
-        if (this.chartType === 'line') {
+        if (this.chartType === ChartTypes.line) {
           this.lineChartData = [this.getData(10)];
-        } else if (this.chartType === 'tree') {
+        } else if (this.chartType === ChartTypes.tree) {
           this.treeChartData = {
             id: '0', children: [
               { id: '0-1', label: 'Item 0-1', children: true },
@@ -111,7 +113,7 @@ export class D3ChartComponent implements OnInit {
         break;
       }
       case 'update': {
-        if (this.chartType === 'line') {
+        if (this.chartType === ChartTypes.line) {
           this.lineChartData?.forEach((d, i) => {
             this.getData(d.length).forEach((dd, i) => {
               d[i].value = dd.value;
@@ -127,7 +129,7 @@ export class D3ChartComponent implements OnInit {
         break;
       }
       case 'add': {
-        if (this.chartType === 'line') {
+        if (this.chartType === ChartTypes.line) {
           this.lineChartData?.push(this.getData(10));
           // this.lineChartData.forEach((d, i) => {
           //   let maxId = Math.max(...d.map(dd => dd.id)) || 0;
@@ -143,7 +145,7 @@ export class D3ChartComponent implements OnInit {
         break;
       }
       case 'delete': {
-        if (this.chartType === 'line') {
+        if (this.chartType === ChartTypes.line) {
           this.lineChartData?.pop();
         } else {
           if (this.chartData!.length > 10) {
@@ -154,7 +156,7 @@ export class D3ChartComponent implements OnInit {
       }
     }
 
-    if (this.chartType === 'bubble' || this.chartType === 'donut' || this.chartType === 'pie' || this.chartType === 'treemap') {
+    if (this.chartType === ChartTypes.bubble || this.chartType === ChartTypes.donut || this.chartType === ChartTypes.pie || this.chartType === ChartTypes.treemap) {
       this.chartData = this.chartData?.sort((a, b) => { return (a.category as number) - (b.category as number); });
     }
   }
@@ -181,15 +183,15 @@ export class D3ChartComponent implements OnInit {
       container: this.chartContainer?.nativeElement.querySelector('svg'),
       data: this.chartData?.map((d, i) => ({ ...d, color: this.chartPalette[i % this.chartPalette.length] })),
       palette: this.chartPalette,
-      // selectedCallback: this.selectedCallback,
-      // hoverCallback: this.hoverCallback
+      selectedCallback: this.selectedCallback,
+      hoverCallback: this.hoverCallback
     } as IChartConfig;
 
     chartConfig.container.setAttribute('width', '0');
     chartConfig.container.setAttribute('height', '0');
 
     switch (this.chartType) {
-      case 'bar': {
+      case ChartTypes.bar: {
         const barConfig = {
           ...chartConfig,
           // barWidth: 80,
@@ -202,11 +204,11 @@ export class D3ChartComponent implements OnInit {
         BarChartService.buildBarChart(barConfig);
         break;
       }
-      case 'bubble': {
+      case ChartTypes.bubble: {
         BubbleChartService.buildBubbleChart(chartConfig);
         break;
       }
-      case 'donut': {
+      case ChartTypes.donut: {
         const donutConfig = {
           ...chartConfig,
           type: 'donut',
@@ -214,7 +216,7 @@ export class D3ChartComponent implements OnInit {
         PieChartService.buildPieChart(donutConfig);
         break;
       }
-      case 'donut-meter': {
+      case ChartTypes.donutMeter: {
         const value = this.randomNumber(20, 80);
         const donutMeterConfig = {
           ...chartConfig,
@@ -227,7 +229,7 @@ export class D3ChartComponent implements OnInit {
         PieChartService.buildPieChart(donutMeterConfig);
         break;
       }
-      case 'line': {
+      case ChartTypes.line: {
         const lineChartData = this.lineChartData?.map((d, i) => {
           return {
             id: i,
@@ -237,14 +239,14 @@ export class D3ChartComponent implements OnInit {
           } as ILineChartData
         });
         const lineConfig = {
-          container: chartConfig.container,
+          ...chartConfig,
           data: lineChartData
         } as ILineChartConfig;
         LineChartService.buildLineChart(lineConfig);
         this.legendData = lineChartData?.map((d, i) => ({ id: d.id, color: d.color, value: null, label: d.data[0].label })) as any[];
         break;
       }
-      case 'pie': {
+      case ChartTypes.pie: {
         const pieConfig = {
           ...chartConfig,
           type: 'pie'
@@ -252,14 +254,13 @@ export class D3ChartComponent implements OnInit {
         PieChartService.buildPieChart(pieConfig);
         break;
       }
-      case 'treemap': {
+      case ChartTypes.treemap: {
         TreemapChartService.buildTreemapChart(chartConfig);
         break;
       }
-      case 'tree': {
+      case ChartTypes.tree: {
         const treeConfig = {
-          // ...chartConfig,
-          container: chartConfig.container,
+          ...chartConfig,
           data: this.treeChartData,
           node: {
             size: { width: 200, height: 48 },
@@ -286,6 +287,53 @@ export class D3ChartComponent implements OnInit {
           }
         } as ITreeChartConfig;
         TreeChartService.buildTreeChart(treeConfig);
+        break;
+      }
+      case ChartTypes.gantt: {
+        const ganttConfig = {
+          ...chartConfig,
+          categoryTimeSpan: 'week',
+          data: [
+            {
+              id: 0,
+              label: 'Item 01',
+              startDate: new Date(2024, 0, 1),
+              endDate: new Date(2024, 0, 31),
+              progress: 10
+            },
+            {
+              id: 1,
+              label: 'Item 02',
+              startDate: new Date(2024, 1, 1),
+              endDate: new Date(2024, 1, 10),
+              progress: 20
+            },
+            {
+              id: 2,
+              label: 'Item 03',
+              startDate: new Date(2024, 1, 1),
+              endDate: new Date(2024, 1, 20),
+              progress: 30
+            },
+            {
+              id: 3,
+              label: 'Item 04',
+              startDate: new Date(2024, 3, 15),
+              endDate: new Date(2024, 8, 20),
+              progress: 40,
+              color: 'red'
+            },
+            {
+              id: 4,
+              label: 'Item 05',
+              description: 'Item 05 description goes here, blah blah blah.  This description should wrap at 320px',
+              startDate: new Date(2024, 10, 1),
+              endDate: new Date(2025, 10, 30),
+              progress: 90
+            }
+          ]
+        } as IGanttChartConfig;
+        GanttChartService.buildGanttChart(ganttConfig);
         break;
       }
     }

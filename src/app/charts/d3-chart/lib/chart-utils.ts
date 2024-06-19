@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { scaleLinear, ScaleLinear, ScaleTime, scaleTime, extent, interpolate, Arc, Transition } from 'd3';
 import { isDefined } from '@tylertech/forge-core';
+import { Data } from '@angular/router';
 
 export interface IChartData {
   id: any;
@@ -50,17 +51,19 @@ export class ChartUtils {
     lime200: '#e6ee9c',
     amber200: '#ffe082',
     deepOrange200: '#ffab91',
-    grey400: '#bdbdbd'
+    grey400: '#bdbdbd',
+    stroke: '#757575',
+    fill: '#f5f5f5'
   };
 
-  public static chartSize(chart: SVGElement): any {
+  public static chartSize(chart: SVGElement): { width: number; height: number } {
     if (!chart) {
-      return;
+      return { width: 0, height: 0 };
     }
 
     const parentElement = chart.parentNode as HTMLElement;
     if (!parentElement) {
-      return;
+      return { width: 0, height: 0 };
     }
 
     const parentElementStyle = getComputedStyle(parentElement);
@@ -71,12 +74,12 @@ export class ChartUtils {
     };
   }
 
-  public static xScale(data: number[], width: number, round = true, timeScale = false): any {
+  public static xScale(data: number[] | Data[], width: number, round = true, timeScale = false): any {
     let scale: ScaleLinear<number, number> | ScaleTime<number, number>;
     if (timeScale) {
-      scale = scaleTime().domain(extent(data) as number[]);
+      scale = scaleTime().domain(extent(data as any) as any);
     } else {
-      scale = scaleLinear().domain(extent(data) as number[]);
+      scale = scaleLinear().domain(extent(data as any) as any);
     }
 
     if (round) {
@@ -221,5 +224,9 @@ export class ChartUtils {
     }
 
     return textArray;
+  }
+
+  public static showPopover() {
+
   }
 }

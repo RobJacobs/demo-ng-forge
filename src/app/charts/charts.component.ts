@@ -6,6 +6,18 @@ import { ForgeButtonModule, ForgeOptionModule, ForgeSelectModule, ForgeTabBarMod
 import { D3ChartComponent } from './d3-chart/d3-chart.component';
 import { GoogleChartComponent } from './google-chart/google-chart.component';
 
+export enum ChartTypes {
+  bar,
+  bubble,
+  donut,
+  donutMeter,
+  gantt,
+  line,
+  pie,
+  treemap,
+  tree
+}
+
 @Component({
   selector: 'app-charts',
   standalone: true,
@@ -30,7 +42,8 @@ export class ChartsComponent {
   @ViewChild(GoogleChartComponent)
   private googleChart?: GoogleChartComponent;
 
-  public chartType: 'bar' | 'bubble' | 'donut' | 'donut-meter' | 'line' | 'pie' | 'treemap' | 'tree' = 'bar';
+  public chartTypesEnum = ChartTypes;
+  public chartType = ChartTypes.bar;
   public activeTab = 0;
 
   public onAction(action: 'add' | 'update' | 'delete') {

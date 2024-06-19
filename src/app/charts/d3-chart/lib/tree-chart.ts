@@ -66,10 +66,9 @@ export class TreeChartService {
       }
 
       const container = select(config.container);
-      const size = { width: 0, height: 0 };
+      const chartSize = { width: 0, height: 0 };
       const levelLabelWidths: number[] = [];
       const chartPadding = 8;
-      const strokeColor = '#757575';
       const iconColor = '#212121';
       const currentSize = {
         width: container.attr('width') ? parseInt(container.attr('width'), 10) : 0,
@@ -93,8 +92,8 @@ export class TreeChartService {
         }
 
         d.y = (d.depth - 1) * (config.node.size.height + config.node.margin);
-        if (d.y > size.height) {
-          size.height = d.y;
+        if (d.y > chartSize.height) {
+          chartSize.height = d.y;
         }
 
         if (d.x > xMax) {
@@ -111,14 +110,14 @@ export class TreeChartService {
       }
 
       const zoomScale = ((rootNode.node() as SVGGElement).getCTM() as DOMMatrix).a;
-      size.width = ((Math.abs(xMin) + xMax + config.node.size.width) * zoomScale) + (chartPadding * 2);
-      size.height = ((size.height + config.node.size.height) * zoomScale) + (chartPadding * 2);
+      chartSize.width = ((Math.abs(xMin) + xMax + config.node.size.width) * zoomScale) + (chartPadding * 2);
+      chartSize.height = ((chartSize.height + config.node.size.height) * zoomScale) + (chartPadding * 2);
 
-      if (currentSize.width < size.width) {
-        container.attr('width', size.width);
+      if (currentSize.width < chartSize.width) {
+        container.attr('width', chartSize.width);
       }
-      if (currentSize.height < size.height) {
-        container.attr('height', size.height);
+      if (currentSize.height < chartSize.height) {
+        container.attr('height', chartSize.height);
       }
 
       if (config.zoomScale) {
@@ -142,10 +141,10 @@ export class TreeChartService {
             } else if (event.sourceEvent.type === 'wheel') {
               rootNode.attr('transform', `scale(${event.transform.k},${event.transform.k})`);
               const bBox = (rootNode.node() as SVGGElement).getBBox();
-              size.width = (bBox.width * event.transform.k) + (chartPadding * 2);
-              size.height = (bBox.height * event.transform.k) + (chartPadding * 2);
-              container.attr('width', size.width);
-              container.attr('height', size.height);
+              chartSize.width = (bBox.width * event.transform.k) + (chartPadding * 2);
+              chartSize.height = (bBox.height * event.transform.k) + (chartPadding * 2);
+              container.attr('width', chartSize.width);
+              container.attr('height', chartSize.height);
             }
           })
           .on('start', event => {
@@ -200,7 +199,7 @@ export class TreeChartService {
         .attr('width', config.node.size.width)
         .attr('height', config.node.size.height)
         .attr('rx', 4)
-        .style('stroke', strokeColor)
+        .style('stroke', ChartUtils.chartPalette.stroke)
         .style('fill', (d: any) => {
           return config.palette[d.depth - (Math.trunc(d.depth / config.palette.length) * config.palette.length)];
         });
@@ -245,11 +244,11 @@ export class TreeChartService {
         .transition()
         .call(ChartUtils.transitionsComplete as any, () => {
 
-          if (currentSize.width > size.width) {
-            container.attr('width', size.width);
+          if (currentSize.width > chartSize.width) {
+            container.attr('width', chartSize.width);
           }
-          if (currentSize.height > size.height) {
-            container.attr('height', size.height);
+          if (currentSize.height > chartSize.height) {
+            container.attr('height', chartSize.height);
           }
 
           const parentNode = (enterNodes.nodes().length ? (enterNodes.data()[0] as any).parent :
@@ -288,7 +287,7 @@ export class TreeChartService {
       const enterLinkNodes = linkNodes.enter().insert('path')
         .classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__tree__path`, true)
         .style('fill', 'none')
-        .style('stroke', strokeColor)
+        .style('stroke', ChartUtils.chartPalette.stroke)
         .style('shape-rendering', 'crispEdges')
         .style('stroke-width', '2');
 
@@ -331,7 +330,7 @@ export class TreeChartService {
           .attr('transform', (d: any) => `translate(${(config.node.size.width / 2) - (levelLabelWidths[d.depth - 1] / 2)}, 0)`)
           .attr('height', linkLabelNodeHeight)
           .attr('rx', linkLabelNodeHeight / 2)
-          .style('fill', strokeColor);
+          .style('fill', ChartUtils.chartPalette.stroke);
 
         enterlinkLabelNodes.append('text')
           .classed(CHART_CONSTANTS.classes.CHART_TEXT, true)
