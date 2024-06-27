@@ -38,7 +38,6 @@ export class IconsComponent {
 
   public onIconSelected(value: string) {
     this.selectedIcon = this.cache.iconOptions?.find(o => o.value === value)?.value;
-    console.log(this.selectedIcon);
   }
 
 }

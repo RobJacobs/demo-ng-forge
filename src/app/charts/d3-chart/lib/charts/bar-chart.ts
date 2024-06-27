@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { select, format, timeFormat, axisBottom, scaleLinear, axisLeft, scaleBand } from 'd3';
 import { isArray, isDefined } from '@tylertech/forge-core';
-import { ChartUtils, IChartData, IChartConfig } from './chart-utils';
-import { CHART_CONSTANTS } from './chart-constants';
+import { ChartUtils, IChartData, IChartConfig, CHART_CONSTANTS } from '../index';
 
 export interface IBarChartConfig extends IChartConfig {
   valueTicks?: number | number[];
@@ -40,17 +39,17 @@ export class BarChartService {
       };
       const chartSize = ChartUtils.chartSize(config.container);
       chartSize.width = config.data.length * (barWidth + barPadding);
-      const yScale = ChartUtils.yScale(config.data.map(d => d.value), chartSize.height - chartMargin.top - chartMargin.bottom);
-      const yAxis = axisLeft(scaleLinear().domain([valueMin, valueMax]).range([chartSize.height - chartMargin.top - chartMargin.bottom, 0]).nice()).ticks(config.valueTicks).tickSize(-chartSize.width);
+      const yScale = ChartUtils.yScale(config.data.map(d => d.value), chartSize.height - chartMargin.top - chartMargin.bottom).nice();
+      const yAxis = axisLeft(yScale).ticks(config.valueTicks).tickSize(-chartSize.width);
 
       if (isArray(config.valueTickValues)) {
         const valueScale = scaleLinear().domain([0, (config.valueTickValues as []).length - 1]).range([valueMin, valueMax]);
         config.valueTicks = [];
-        config.valueTickValues?.forEach((v, i) => {
+        config.valueTickValues?.forEach((_v, i) => {
           (config.valueTicks as number[]).push(valueScale(i) as number);
         });
 
-        yAxis.tickFormat((d: any, i: number) => {
+        yAxis.tickFormat((_d: any, i: number) => {
           return (config.valueTickValues as [])[i] || '';
         });
       }
@@ -61,8 +60,8 @@ export class BarChartService {
         yAxis.ticks(config.valueTicks);
       }
 
-      if (config.valueFormat) {
-        yAxis.tickFormat(format(config.valueFormat));
+      if (config.valueFormat?.length) {
+        yAxis.tickFormat(format(config.valueFormat) as any);
       }
 
       if (config.valueDateFormat) {
@@ -94,16 +93,16 @@ export class BarChartService {
       nodes.exit()
         .transition()
         .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
-        .attr('y', (d: any) => chartSize.height - chartMargin.top)
+        .attr('y', (_d: any) => chartSize.height - chartMargin.top)
         .attr('height', 0);
       nodes.exit().transition().delay(CHART_CONSTANTS.numbers.TRANSITION_DURATION).remove();
 
       const enterNodes = nodes.enter();
 
       enterNodes.append('rect')
-        .attr('x', (d: IChartData, i: number) => i * (barWidth + barPadding) + (barPadding / 2))
+        .attr('x', (_d: IChartData, i: number) => i * (barWidth + barPadding) + (barPadding / 2))
         .attr('y', chartSize.height - chartMargin.top)
-        .attr('width', (d: IChartData) => barWidth)
+        .attr('width', (_d: IChartData) => barWidth)
         .attr('height', 0)
         .merge(nodes as any)
         .attr('id', (d: any) => `${CHART_CONSTANTS.classes.CHART_PREFIX}__node-${d.id}`)

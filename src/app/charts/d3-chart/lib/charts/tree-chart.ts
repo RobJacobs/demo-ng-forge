@@ -2,8 +2,7 @@
 import { select, hierarchy, tree, line, Selection, BaseType, HierarchyNode, HierarchyPointNode, zoom } from 'd3';
 import { interpolatePath } from 'd3-interpolate-path';
 import { isArray, isDefined, scrollParent } from '@tylertech/forge-core';
-import { ChartUtils } from './chart-utils';
-import { CHART_CONSTANTS } from './chart-constants';
+import { ChartUtils, CHART_CONSTANTS } from '../index';
 
 export interface ITreeChartData {
   id: number | string;
@@ -32,7 +31,7 @@ export interface ITreeChartConfig {
 export class TreeChartService {
   public static hasChildren = (node: HierarchyNode<ITreeChartData>): boolean => {
     return node.data.children === true || (isArray(node.data.children) && (node.data.children as ITreeChartData[]).length > 0);
-  }
+  };
 
   public static getParentIds = (node: HierarchyNode<ITreeChartData>): any[] => {
     const ids = [];
@@ -42,7 +41,7 @@ export class TreeChartService {
       parent = parent.parent;
     }
     return ids.reverse().slice(1);
-  }
+  };
 
   public static getParentDepths = (node: HierarchyNode<ITreeChartData>): any[] => {
     const depths = [];
@@ -52,11 +51,11 @@ export class TreeChartService {
       parent = parent.parent;
     }
     return depths.reverse().slice(1);
-  }
+  };
 
   public static nodeCenterHorizontal = (node: HierarchyPointNode<ITreeChartData>, width: number, x = node.x): number => {
     return Math.round(x - (width / 2));
-  }
+  };
 
   public static buildTreeChart(config: ITreeChartConfig): Promise<void> {
     return new Promise<void>((resolve, reject) => {
@@ -199,7 +198,7 @@ export class TreeChartService {
         .attr('width', config.node.size.width)
         .attr('height', config.node.size.height)
         .attr('rx', 4)
-        .style('stroke', ChartUtils.chartPalette.stroke)
+        .style('stroke', CHART_CONSTANTS.chartTheme.outlineMedium)
         .style('fill', (d: any) => {
           return config.palette[d.depth - (Math.trunc(d.depth / config.palette.length) * config.palette.length)];
         });
@@ -213,7 +212,7 @@ export class TreeChartService {
           .attr('y', config.node.size.height / 2)
           .style('pointer-events', 'none')
           .style('dominant-baseline', 'middle')
-          .text((d: any, i: number) => {
+          .text((d: any, _i: number) => {
             if (!isDefined(d.data.label)) {
               return null;
             }
@@ -267,7 +266,7 @@ export class TreeChartService {
         .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
         .attr('transform', (d: any) => `translate(${this.nodeCenterHorizontal(d, config.node.size.width)}, ${d.y})`);
 
-      const nodePath = (start: { x: number; y: number }, end: { x: number; y: number }) => {
+      const nodePath = (start: { x: number; y: number }, end: { x: number; y: number }): string | null => {
         const offSet = (start.y - end.y) / 2;
         return line()([[start.x, start.y], [start.x, start.y - offSet], [end.x, end.y + offSet], [end.x, end.y]]);
       };
@@ -287,7 +286,7 @@ export class TreeChartService {
       const enterLinkNodes = linkNodes.enter().insert('path')
         .classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__tree__path`, true)
         .style('fill', 'none')
-        .style('stroke', ChartUtils.chartPalette.stroke)
+        .style('stroke', CHART_CONSTANTS.chartTheme.outlineMedium)
         .style('shape-rendering', 'crispEdges')
         .style('stroke-width', '2');
 
@@ -330,7 +329,7 @@ export class TreeChartService {
           .attr('transform', (d: any) => `translate(${(config.node.size.width / 2) - (levelLabelWidths[d.depth - 1] / 2)}, 0)`)
           .attr('height', linkLabelNodeHeight)
           .attr('rx', linkLabelNodeHeight / 2)
-          .style('fill', ChartUtils.chartPalette.stroke);
+          .style('fill', CHART_CONSTANTS.chartTheme.outlineMedium);
 
         enterlinkLabelNodes.append('text')
           .classed(CHART_CONSTANTS.classes.CHART_TEXT, true)
@@ -340,7 +339,7 @@ export class TreeChartService {
           .style('dominant-baseline', 'middle')
           .style('text-anchor', 'middle')
           .style('font-size', '14px')
-          .style('fill', 'white')
+          .style('fill', CHART_CONSTANTS.chartTheme.textInverse)
           .text(d => (config.levelLabels as string[])[d.depth - 1]);
 
         linkLabelNodes.exit().remove();

@@ -1,15 +1,15 @@
-import { Component, DestroyRef, ElementRef, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, DestroyRef, ElementRef, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, fromEvent } from 'rxjs';
 import { ForgeListItemModule, ForgeListModule } from '@tylertech/forge-angular';
 
 import {
+  CHART_CONSTANTS,
   BarChartService,
   BubbleChartService,
   LineChartService,
   PieChartService,
-  ChartUtils,
   IBarChartConfig,
   IChartConfig,
   IPieChartConfig,
@@ -18,10 +18,11 @@ import {
   TreemapChartService,
   ITreeChartConfig,
   TreeChartService,
-  ITreeChartData
+  ITreeChartData,
+  GanttChartService,
+  IGanttChartConfig
 } from './lib';
 import { ChartTypes } from '../charts.component';
-import { GanttChartService, IGanttChartConfig } from './lib/gantt-chart';
 
 interface IChartItem {
   id: number;
@@ -46,8 +47,7 @@ export class D3ChartComponent implements OnInit {
 
   @ViewChild('chartContainer', { static: true })
   private chartContainer?: ElementRef;
-  // @ts-expect-error ignore
-  private chartPalette = Object.keys(ChartUtils.chartPalette).map(key => ChartUtils.chartPalette[key]);
+  private chartPalette = Object.keys(CHART_CONSTANTS.chartPalette).map(key => CHART_CONSTANTS.chartPalette[key]);
 
   #chartType: ChartTypes = ChartTypes.bar;
   @Input()
@@ -69,6 +69,7 @@ export class D3ChartComponent implements OnInit {
   }
   public chartData?: IChartItem[];
   public lineChartData?: IChartItem[][];
+  public donutMeterChartData = 0;
   public treeChartData?: ITreeChartData;
   public legendData?: { id: number; value: unknown; label: string; color: string; }[];
   public showLegend = false;
@@ -93,6 +94,7 @@ export class D3ChartComponent implements OnInit {
 
   private setChartData(action: 'create' | 'update' | 'add' | 'delete') {
     if (this.chartType === ChartTypes.donutMeter) {
+      this.donutMeterChartData = this.randomNumber(20, 80);
       return;
     }
 
@@ -172,7 +174,7 @@ export class D3ChartComponent implements OnInit {
       // data.push({id: i + startId, value: randomNumber(1, 2000), label: 'Item ' + (i + startId), category: categories[randomNumber(0, 9)]});
       // data.push({id: i + startId, value: i * 100, label: 'Item ' + (i + startId), category: randomNumber(0, 100)});
     }
-
+    console.log(data.sort((a, b) => { return (a.category as number) - (b.category as number); }));
     return data.sort((a, b) => { return (a.category as number) - (b.category as number); });
   }
 
@@ -217,13 +219,12 @@ export class D3ChartComponent implements OnInit {
         break;
       }
       case ChartTypes.donutMeter: {
-        const value = this.randomNumber(20, 80);
         const donutMeterConfig = {
           ...chartConfig,
           type: 'donut-meter',
           data: [
-            { id: 0, value: value, label: 'percent', color: ChartUtils.chartPalette.indigoA200 },
-            { id: 1, value: 100 - value, color: ChartUtils.chartPalette.grey400 }
+            { id: 0, value: this.donutMeterChartData, label: 'percent', color: CHART_CONSTANTS.chartPalette.indigoA200 },
+            { id: 1, value: 100 - this.donutMeterChartData, color: CHART_CONSTANTS.chartPalette.grey400 }
           ]
         } as IPieChartConfig;
         PieChartService.buildPieChart(donutMeterConfig);
@@ -285,14 +286,14 @@ export class D3ChartComponent implements OnInit {
               this.drawChart();
             }
           }
-        } as ITreeChartConfig;
+        } as any;
         TreeChartService.buildTreeChart(treeConfig);
         break;
       }
       case ChartTypes.gantt: {
         const ganttConfig = {
           ...chartConfig,
-          categoryTimeSpan: 'week',
+          // categoryTimeSpan: 'year',
           data: [
             {
               id: 0,

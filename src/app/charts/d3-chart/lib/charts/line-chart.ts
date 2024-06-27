@@ -2,8 +2,7 @@
 import { select, format, timeFormat, axisBottom, scaleLinear, axisLeft, line } from 'd3';
 import { interpolatePath } from 'd3-interpolate-path';
 import { isArray } from '@tylertech/forge-core';
-import { ChartUtils, IChartData, IChartConfig } from './chart-utils';
-import { CHART_CONSTANTS } from './chart-constants';
+import { ChartUtils, IChartData, IChartConfig, CHART_CONSTANTS } from '../index';
 
 export interface ILineChartConfig extends IChartConfig<ILineChartData> {
   categoryTicks?: number | number[];
@@ -49,16 +48,16 @@ export class LineChartService {
       };
       const chartSize = ChartUtils.chartSize(config.container);
       const xScale = ChartUtils.xScale([categoryMin, categoryMax], chartSize.width - chartMargin.left - chartMargin.right);
-      const xAxis = axisBottom(scaleLinear().domain([categoryMin, categoryMax]).range([0, chartSize.width - chartMargin.left - chartMargin.right]).nice());
+      const xAxis = axisBottom(xScale);
 
       if (isArray(config.categoryTickValues)) {
         const categoryScale = scaleLinear().domain([0, (config.categoryTickValues as []).length - 1]).range([categoryMin, categoryMax]);
         config.categoryTicks = [];
-        config.categoryTickValues?.forEach((c, i) => {
+        config.categoryTickValues?.forEach((_c, i) => {
           (config.categoryTicks as number[]).push(categoryScale(i) as number);
         });
 
-        xAxis.tickFormat((d: any, i: number) => {
+        xAxis.tickFormat((_d: any, i: number) => {
           return (config.categoryTickValues as [])[i] || '';
         });
       }
@@ -70,7 +69,7 @@ export class LineChartService {
       }
 
       if (config.categoryFormat) {
-        xAxis.tickFormat(format(config.categoryFormat));
+        xAxis.tickFormat(format(config.categoryFormat) as any);
       }
 
       if (config.categoryDateFormat) {
@@ -78,16 +77,16 @@ export class LineChartService {
       }
 
       const yScale = ChartUtils.yScale([valueMin, valueMax], chartSize.height - chartMargin.top - chartMargin.bottom);
-      const yAxis = axisLeft(scaleLinear().domain([0, valueMax]).range([chartSize.height - chartMargin.top - chartMargin.bottom, 0]).nice()).tickSize(-(chartSize.width - chartMargin.left - chartMargin.right));
+      const yAxis = axisLeft(yScale).tickSize(-(chartSize.width - chartMargin.left - chartMargin.right));
 
       if (isArray(config.valueTickValues)) {
         const valueScale = scaleLinear().domain([0, (config.valueTickValues as []).length - 1]).range([valueMin, valueMax]);
         config.valueTicks = [];
-        config.valueTickValues?.forEach((v, i) => {
+        config.valueTickValues?.forEach((_v, i) => {
           (config.valueTicks as number[]).push(valueScale(i) as number);
         });
 
-        yAxis.tickFormat((d: any, i: number) => {
+        yAxis.tickFormat((_d: any, i: number) => {
           return (config.valueTickValues as [])[i] || '';
         });
       }
@@ -99,7 +98,7 @@ export class LineChartService {
       }
 
       if (config.valueFormat) {
-        yAxis.tickFormat(format(config.valueFormat));
+        yAxis.tickFormat(format(config.valueFormat) as any);
       }
 
       if (config.valueDateFormat) {
@@ -154,7 +153,7 @@ export class LineChartService {
               resolve();
             }
           })
-          .attrTween('d', (d, i, element) => {
+          .attrTween('d', (d, _i, element) => {
             const current = (element[0] as SVGPathElement).getAttribute('d') as string;
             const next = chart((d as any).data) as string;
             return interpolatePath(current, next);

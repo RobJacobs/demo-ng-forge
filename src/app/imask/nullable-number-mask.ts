@@ -11,13 +11,11 @@ export class NullableNumberMask extends IMask.MaskedNumber {
     return super.append(isDefined(str) ? str.toString() : '', flags, tail);
   }
 
-  // @ts-expect-error override
-  public override get typedValue() {
+  public override get typedValue(): number | null {
     return this.unmaskedValue !== '' ? super.typedValue : null;
   }
 
-  // @ts-expect-error override
-  public override set typedValue(value) {
+  public override set typedValue(value: number | null) {
     super.typedValue = value ?? '' as any;
   }
 }

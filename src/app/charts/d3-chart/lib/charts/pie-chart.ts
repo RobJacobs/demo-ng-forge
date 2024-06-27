@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { select, format, timeFormat, arc, pie } from 'd3';
 import { isDefined } from '@tylertech/forge-core';
-import { ChartUtils, IChartConfig } from './chart-utils';
-import { CHART_CONSTANTS } from './chart-constants';
+import { ChartUtils, IChartConfig, CHART_CONSTANTS } from '../index';
 
 export type PieChartType = 'pie' | 'donut' | 'donut-meter';
 
@@ -95,8 +94,11 @@ export class PieChartService {
                 let meterTextNode = chartNode.select('.' + CHART_CONSTANTS.classes.CHART_TEXT);
                 if (!meterTextNode.node()) {
                   meterTextNode = chartNode.append('text')
+                    .style('fill', CHART_CONSTANTS.chartTheme.textHigh)
+                    .style('text-anchor', 'middle')
                     .classed(CHART_CONSTANTS.classes.CHART_TEXT, true) as any;
                   meterTextNode.append('tspan')
+                    .style('font-size', '2rem')
                     .classed(CHART_CONSTANTS.classes.CHART_TEXT_VALUE, true);
                   meterTextNode.append('tspan')
                     .attr('x', 0)
@@ -104,7 +106,7 @@ export class PieChartService {
                     .attr('dy', '1.25em')
                     .classed(CHART_CONSTANTS.classes.CHART_TEXT_LABEL, true);
                 }
-                // meterTextNode.attr('transform',  `translate(${radius.outer}, ${radius.outer})`);
+
                 let centerValue = '';
                 if (config.centerValue) {
                   centerValue = config.centerValue;
