@@ -1,16 +1,17 @@
-import { axisTop, scaleTime, select, timeDay, timeMonth, timeWeek, timeYear } from 'd3';
+import { axisTop, select, timeDay, timeMonth, timeWeek, timeYear } from 'd3';
 import {
   format as dateFormat,
   max as dateMax,
   min as dateMin,
+  isMonday as dateIsMonday,
   previousMonday as datePreviousMonday,
+  isSunday as dateIsSunday,
   nextSunday as dateNextSunday,
   differenceInDays as dateDifferenceInDays,
   differenceInWeeks as dateDifferenceInWeeks,
   differenceInMonths as dateDifferenceInMonths
 } from 'date-fns';
-import { ChartUtils, IChartConfig } from './chart-utils';
-import { CHART_CONSTANTS } from './chart-constants';
+import { ChartUtils, IChartConfig, CHART_CONSTANTS } from '../index';
 
 export interface IGanttChartConfig extends IChartConfig<IGanttChartData> {
   categoryTimeSpan?: 'year' | 'month' | 'week' | 'day';
@@ -34,8 +35,14 @@ export class GanttChartService {
         return;
       }
 
-      const categoryMin = datePreviousMonday(dateMin(config.data.map(d => d.startDate)));
-      const categoryMax = dateNextSunday(dateMax(config.data.map(d => d.endDate)));
+      let categoryMin = dateMin(config.data.map(d => d.startDate));
+      if (!dateIsMonday(categoryMin)) {
+        categoryMin = datePreviousMonday(categoryMin);
+      }
+      let categoryMax = dateMax(config.data.map(d => d.endDate));
+      if (!dateIsSunday(categoryMax)) {
+        categoryMax = dateNextSunday(categoryMax);
+      }
       const container = select(config.container);
       let popoverNode: any;
       const barPadding = 16;
@@ -83,8 +90,8 @@ export class GanttChartService {
         chartSize.width = categoryTimeSpan * 48;
       }
 
-      const xScale = ChartUtils.xScale([categoryMin, categoryMax], chartSize.width - chartMargin.left - chartMargin.right, true, true);
-      const xAxis = axisTop(scaleTime().domain([categoryMin, categoryMax]).range([0, chartSize.width - chartMargin.left - chartMargin.right]).nice()).ticks(xAxisTicks, xAxisTickFormat).tickSize(-chartSize.height);
+      const xScale = ChartUtils.xScale([categoryMin, categoryMax], chartSize.width - chartMargin.left - chartMargin.right, false, true).nice();
+      const xAxis = axisTop(xScale).ticks(xAxisTicks, xAxisTickFormat).tickSize(-chartSize.height);
 
       let rootNode = container.select(`g.${CHART_CONSTANTS.classes.CHART_ROOT}`);
       if (!rootNode.node()) {
@@ -142,25 +149,30 @@ export class GanttChartService {
         enterNodes.on('click', (e, d) => (config.selectedCallback as any)(d as any, e.target.parentElement as SVGElement));
       }
 
-      const meterGradient = enterNodes.append('defs').append('linearGradient').attr('id', (d: IGanttChartData, i: number) => `meter-gradient--${i}`);
-      meterGradient.append('stop').attr('offset', '0%').attr('stop-color', ChartUtils.chartPalette.indigoA200);
-      meterGradient.append('stop').attr('offset', (d: IGanttChartData) => `${d.progress || 0}%`).attr('stop-color', ChartUtils.chartPalette.indigoA200);
-      meterGradient.append('stop').attr('offset', (d: IGanttChartData) => `${d.progress || 0}%`).attr('stop-color', ChartUtils.chartPalette.indigo200);
-      meterGradient.append('stop').attr('offset', '100%').attr('stop-color', ChartUtils.chartPalette.indigo200);
+      const meterGradient = enterNodes.append('defs').append('linearGradient').attr('id', (_d: IGanttChartData, i: number) => `meter-gradient--${i}`);
+      meterGradient.append('stop').attr('offset', '0%').attr('stop-color', CHART_CONSTANTS.chartPalette.indigoA200);
+      meterGradient.append('stop').attr('offset', (d: IGanttChartData) => `${d.progress || 0}%`).attr('stop-color', CHART_CONSTANTS.chartPalette.indigoA200);
+      meterGradient.append('stop').attr('offset', (d: IGanttChartData) => `${d.progress || 0}%`).attr('stop-color', CHART_CONSTANTS.chartPalette.indigo200);
+      meterGradient.append('stop').attr('offset', '100%').attr('stop-color', CHART_CONSTANTS.chartPalette.indigo200);
 
       enterNodes.append('rect')
         .classed(CHART_CONSTANTS.classes.CHART_NODE, true)
         .attr('width', 0)
         .attr('height', barHeight)
         .attr('rx', 4)
-        .style('stroke', (d) => d.color?.length ? d.color : ChartUtils.chartPalette.stroke)
-        .style('fill', ChartUtils.chartPalette.fill);
+        .style('stroke', (d) => d.color?.length ? d.color : CHART_CONSTANTS.chartTheme.outlineMedium)
+        .style('fill', CHART_CONSTANTS.chartTheme.surfaceDim);
 
       enterNodes.append('text')
         .classed(CHART_CONSTANTS.classes.CHART_TEXT, true)
         .attr('x', nodePadding.x)
         .attr('y', nodePadding.y)
         .style('font-size', '.85rem')
+        .style('stroke', CHART_CONSTANTS.chartTheme.surfaceDim)
+        .style('stroke-width', '.5rem')
+        .style('fill', CHART_CONSTANTS.chartTheme.textHigh)
+        .style('paint-order', 'stroke')
+        .style('stroke-linejoin', 'round')
         .style('display', 'none');
 
       enterNodes.append('rect')
@@ -169,7 +181,7 @@ export class GanttChartService {
         .attr('y', barHeight - meterHeight - nodePadding.x)
         .attr('width', 0)
         .attr('height', meterHeight)
-        .style('fill', (d: IGanttChartData, i: number) => `url(#meter-gradient--${i})`);
+        .style('fill', (_d: IGanttChartData, i: number) => `url(#meter-gradient--${i})`);
 
       const mergeNodes = enterNodes.merge(nodes as any);
 
@@ -198,7 +210,7 @@ export class GanttChartService {
           resolve();
         })
         .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
-        .text((d: IGanttChartData, i: number, t: any) => {
+        .text((d: IGanttChartData, _i: number, _t: any) => {
           return `${d.label}`;
         });
     });

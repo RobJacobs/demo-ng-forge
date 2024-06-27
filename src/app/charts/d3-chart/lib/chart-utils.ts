@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { scaleLinear, ScaleLinear, ScaleTime, scaleTime, extent, interpolate, Arc, Transition } from 'd3';
 import { isDefined } from '@tylertech/forge-core';
-import { Data } from '@angular/router';
 
 export interface IChartData {
   id: any;
@@ -25,7 +24,7 @@ export class ChartUtils {
   public static svgNS = 'http://www.w3.org/2000/svg';
 
   private static _bodyFont: string;
-  public static get bodyFont() {
+  public static get bodyFont(): string {
     if (!this._bodyFont) {
       const bodyStyle = getComputedStyle(document.body);
       this._bodyFont = `${bodyStyle.fontSize} ${bodyStyle.fontFamily}`;
@@ -33,28 +32,6 @@ export class ChartUtils {
 
     return this._bodyFont;
   }
-
-  // From TUX color specs
-  // https://confl.tylertech.com/pages/viewpage.action?pageId=7008553
-  public static chartPalette = {
-    amber600: '#ffb300',
-    cyan400: '#26c6da',
-    purple300: '#ba68c8',
-    indigoA200: '#536dfe',
-    green400: '#66bb6a',
-    deepOrangeA200: '#ff6e40',
-    amberA200: '#ffd740',
-    purple200: '#ce93d8',
-    indigo200: '#9fa8da',
-    lightBlue200: '#81d4fa',
-    green200: '#a5d6a7',
-    lime200: '#e6ee9c',
-    amber200: '#ffe082',
-    deepOrange200: '#ffab91',
-    grey400: '#bdbdbd',
-    stroke: '#757575',
-    fill: '#f5f5f5'
-  };
 
   public static chartSize(chart: SVGElement): { width: number; height: number } {
     if (!chart) {
@@ -74,12 +51,12 @@ export class ChartUtils {
     };
   }
 
-  public static xScale(data: number[] | Data[], width: number, round = true, timeScale = false): any {
+  public static xScale(data: number[] | Date[], width: number, round = true, timeScale = false): any {
     let scale: ScaleLinear<number, number> | ScaleTime<number, number>;
     if (timeScale) {
-      scale = scaleTime().domain(extent(data as any) as any);
+      scale = scaleTime().domain(extent(data as Date[]) as Date[]);
     } else {
-      scale = scaleLinear().domain(extent(data as any) as any);
+      scale = scaleLinear().domain(extent(data as number[]) as number[]);
     }
 
     if (round) {
@@ -116,12 +93,12 @@ export class ChartUtils {
     }
   }
 
-  public static arcTween(from: any, to: any, arc: Arc<any, any>) {
+  public static arcTween(from: any, to: any, arc: Arc<any, any>): any {
     const inter = interpolate({ startAngle: from.startAngle, endAngle: from.endAngle }, { startAngle: to.startAngle, endAngle: to.endAngle });
     return (tween: any): any => arc(inter(tween));
   }
 
-  public static transitionsComplete(transition: Transition<Element, any, Element, any>, callback: () => void) {
+  public static transitionsComplete(transition: Transition<Element, any, Element, any>, callback: () => void): void {
     let i = 0;
     transition.each(() => {
       i++;
@@ -224,9 +201,5 @@ export class ChartUtils {
     }
 
     return textArray;
-  }
-
-  public static showPopover() {
-
   }
 }

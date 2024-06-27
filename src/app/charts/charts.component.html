@@ -15,10 +15,10 @@
     <forge-button variant="outlined" (click)="onAction('update')" [disabled]="((activeTab === 0 && chartType === chartTypesEnum.tree) || chartType === chartTypesEnum.gantt)">
       Update
     </forge-button>
-    <forge-button variant="outlined" (click)="onAction('add')" [disabled]="chartType === chartTypesEnum.tree || chartType === chartTypesEnum.gantt">
+    <forge-button variant="outlined" (click)="onAction('add')" [disabled]="chartType === chartTypesEnum.donutMeter || chartType === chartTypesEnum.tree || chartType === chartTypesEnum.gantt">
       Add
     </forge-button>
-    <forge-button variant="outlined" (click)="onAction('delete')" [disabled]="chartType === chartTypesEnum.tree || chartType === chartTypesEnum.gantt">
+    <forge-button variant="outlined" (click)="onAction('delete')" [disabled]="chartType === chartTypesEnum.donutMeter || chartType === chartTypesEnum.tree || chartType === chartTypesEnum.gantt">
       Delete
     </forge-button>
   </div>
