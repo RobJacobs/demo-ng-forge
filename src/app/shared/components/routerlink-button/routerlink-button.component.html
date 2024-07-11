@@ -1,8 +1,8 @@
 <forge-icon-button role="presentation" tabindex="-1">
-  <a [routerLink]="route" [queryParams]="queryParams" [attr.aria-label]="label" class="forge-icon-button" [ngClass]="{'routerlink--disabled': disabled}">
+  <a [routerLink]="route" [queryParams]="queryParams" [attr.aria-label]="label" class="forge-icon-button" [ngClass]="{ 'routerlink--disabled': disabled }">
     <forge-icon [name]="icon"></forge-icon>
   </a>
 </forge-icon-button>
 @if (label?.length) {
-<forge-tooltip>{{label}}</forge-tooltip>
+  <forge-tooltip>{{ label }}</forge-tooltip>
 }

@@ -12,7 +12,6 @@ export interface IPieChartConfig extends IChartConfig {
 }
 
 export class PieChartService {
-
   public static buildPieChart(config: IPieChartConfig): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       if (!config.container || config.container.tagName !== 'svg') {
@@ -22,7 +21,13 @@ export class PieChartService {
 
       const lastAngles: any[] = [];
       const container = select(config.container);
-      const colorScale = config.palette && config.palette.length ? ChartUtils.colorScale(config.data.map(d => d.value), config.palette.length === 2 ? config.palette : config.palette.length) : undefined;
+      const colorScale =
+        config.palette && config.palette.length
+          ? ChartUtils.colorScale(
+              config.data.map((d) => d.value),
+              config.palette.length === 2 ? config.palette : config.palette.length
+            )
+          : undefined;
       const valueFormat = config.valueFormat ? format(config.valueFormat) : config.valueDateFormat ? timeFormat(config.valueDateFormat) : undefined;
       const chartSize = ChartUtils.chartSize(config.container);
       const radius = {
@@ -30,10 +35,12 @@ export class PieChartService {
         inner: 0
       };
       if (config.type === 'donut' || config.type === 'donut-meter') {
-        radius.inner = radius.outer - radius.outer * .35;
+        radius.inner = radius.outer - radius.outer * 0.35;
       }
       const chartArc = arc().outerRadius(radius.outer).innerRadius(radius.inner);
-      const chart = pie().value((d: any) => d.value).sort(null);
+      const chart = pie()
+        .value((d: any) => d.value)
+        .sort(null);
 
       let rootNode = container.select(`g.${CHART_CONSTANTS.classes.CHART_ROOT}`);
       if (!rootNode.node()) {
@@ -47,13 +54,21 @@ export class PieChartService {
       const chartNode = rootNode.select(`g.${CHART_CONSTANTS.classes.CHART_PREFIX}__${config.type}`);
       chartNode.attr('transform', `translate(${radius.outer}, ${radius.outer})`);
 
-      chartNode.selectAll('g').select('path').each((d: any) => {
-        lastAngles[d.data.id] = { startAngle: d.startAngle, endAngle: d.endAngle };
-      });
+      chartNode
+        .selectAll('g')
+        .select('path')
+        .each((d: any) => {
+          lastAngles[d.data.id] = { startAngle: d.startAngle, endAngle: d.endAngle };
+        });
 
       const nodes = chartNode.selectAll('g').data(chart(config.data as any), (d: any) => d.data.id);
 
-      nodes.exit().select('path').transition().duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION).attrTween('d', (d: any) => ChartUtils.arcTween(d, { startAngle: 0, endAngle: 0 }, chartArc));
+      nodes
+        .exit()
+        .select('path')
+        .transition()
+        .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
+        .attrTween('d', (d: any) => ChartUtils.arcTween(d, { startAngle: 0, endAngle: 0 }, chartArc));
       nodes.exit().transition().delay(CHART_CONSTANTS.numbers.TRANSITION_DURATION).remove();
 
       const enterNodes = nodes.enter().append('g');
@@ -71,7 +86,8 @@ export class PieChartService {
 
       const mergeNodes = enterNodes.merge(nodes as any);
 
-      mergeNodes.select('g > path')
+      mergeNodes
+        .select('g > path')
         .attr('fill', (d: any) => {
           if (d.data.color) {
             return d.data.color;
@@ -93,18 +109,9 @@ export class PieChartService {
               if (!config.hideLabel) {
                 let meterTextNode = chartNode.select('.' + CHART_CONSTANTS.classes.CHART_TEXT);
                 if (!meterTextNode.node()) {
-                  meterTextNode = chartNode.append('text')
-                    .style('fill', CHART_CONSTANTS.chartTheme.textHigh)
-                    .style('text-anchor', 'middle')
-                    .classed(CHART_CONSTANTS.classes.CHART_TEXT, true) as any;
-                  meterTextNode.append('tspan')
-                    .style('font-size', '2rem')
-                    .classed(CHART_CONSTANTS.classes.CHART_TEXT_VALUE, true);
-                  meterTextNode.append('tspan')
-                    .attr('x', 0)
-                    .attr('y', 0)
-                    .attr('dy', '1.25em')
-                    .classed(CHART_CONSTANTS.classes.CHART_TEXT_LABEL, true);
+                  meterTextNode = chartNode.append('text').style('fill', CHART_CONSTANTS.chartTheme.textHigh).style('text-anchor', 'middle').classed(CHART_CONSTANTS.classes.CHART_TEXT, true) as any;
+                  meterTextNode.append('tspan').style('font-size', '2rem').classed(CHART_CONSTANTS.classes.CHART_TEXT_VALUE, true);
+                  meterTextNode.append('tspan').attr('x', 0).attr('y', 0).attr('dy', '1.25em').classed(CHART_CONSTANTS.classes.CHART_TEXT_LABEL, true);
                 }
 
                 let centerValue = '';
@@ -118,7 +125,7 @@ export class PieChartService {
                   }
                 }
                 meterTextNode.select(`tspan.${CHART_CONSTANTS.classes.CHART_TEXT_VALUE}`).text(centerValue);
-                meterTextNode.select(`tspan.${CHART_CONSTANTS.classes.CHART_TEXT_LABEL}`).text(isDefined(config.data[0].label) ? config.data[0].label as string : '');
+                meterTextNode.select(`tspan.${CHART_CONSTANTS.classes.CHART_TEXT_LABEL}`).text(isDefined(config.data[0].label) ? (config.data[0].label as string) : '');
                 break;
               }
           }

@@ -27,13 +27,13 @@
 
   .app-chart__xaxis--align-boundry-ticks {
     .tick:first-of-type {
-      &>text {
+      & > text {
         text-anchor: start;
       }
     }
 
     .tick:last-of-type {
-      &>text {
+      & > text {
         text-anchor: end;
       }
     }
@@ -45,7 +45,7 @@
     border-radius: 4px;
     background-color: var(--app-chart-surface);
     padding: 4px 8px;
-    font-size: .85rem;
+    font-size: 0.85rem;
     display: grid;
     grid-template-columns: auto 1fr;
     column-gap: 8px;

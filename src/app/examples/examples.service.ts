@@ -27,9 +27,9 @@ export class ExamplesService {
       setTimeout(() => {
         let records = [];
         if (filterText?.length) {
-          records = this.mockData.filter(d => d.description.toLocaleLowerCase().includes(filterText.toLocaleLowerCase())).slice(0, take);
+          records = this.mockData.filter((d) => d.description.toLocaleLowerCase().includes(filterText.toLocaleLowerCase())).slice(0, take);
         } else if (value) {
-          records = this.mockData.filter(d => d.id.toString() === value.toString());
+          records = this.mockData.filter((d) => d.id.toString() === value.toString());
         } else {
           records = this.mockData.slice(0, take);
         }
@@ -48,10 +48,10 @@ export class ExamplesService {
       setTimeout(() => {
         let records = [];
         if (filterText?.length) {
-          records = this.mockData.filter(d => d.description.toLocaleLowerCase().includes(filterText.toLocaleLowerCase())).slice(0, take);
+          records = this.mockData.filter((d) => d.description.toLocaleLowerCase().includes(filterText.toLocaleLowerCase())).slice(0, take);
         } else {
           if (values?.length) {
-            records = [...new Set([...this.mockData.filter(d => values.map(v => v.toString()).includes(d.id.toString())), ...this.mockData.slice(0, take)])];
+            records = [...new Set([...this.mockData.filter((d) => values.map((v) => v.toString()).includes(d.id.toString())), ...this.mockData.slice(0, take)])];
           } else {
             records = this.mockData.slice(0, take);
           }

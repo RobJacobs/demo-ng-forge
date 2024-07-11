@@ -22,7 +22,7 @@
       }
     }
 
-    &__search-popup {
+    &__search-popover {
       width: 320px;
       padding: 16px;
 
@@ -58,7 +58,7 @@
 
   &__header {
     grid-row: 1;
-    font-size: .85em;
+    font-size: 0.85em;
 
     &::part(root) {
       padding: 4px 8px;
@@ -101,7 +101,7 @@
       margin: 0;
     }
 
-    input[type=number] {
+    input[type='number'] {
       -moz-appearance: textfield;
       appearance: textfield;
     }

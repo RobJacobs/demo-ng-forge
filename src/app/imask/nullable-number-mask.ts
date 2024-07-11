@@ -3,7 +3,7 @@ import { isDefined } from '@tylertech/forge-core';
 
 export class NullableNumberMask extends IMask.MaskedNumber {
   constructor(options: any) {
-    options.format = (value: any) => isDefined(value) ? value.toString() : '';
+    options.format = (value: any) => (isDefined(value) ? value.toString() : '');
     super(options);
   }
 
@@ -16,6 +16,6 @@ export class NullableNumberMask extends IMask.MaskedNumber {
   }
 
   public override set typedValue(value: number | null) {
-    super.typedValue = value ?? '' as any;
+    super.typedValue = value ?? ('' as any);
   }
 }

@@ -1,31 +1,31 @@
 <div [formGroup]="formGroup" class="form-grid">
   <forge-text-field required [appFormControlInvalid]="formGroup.controls.name" class="form-grid--row-break">
-    <input type="text" id="profile--address--name" formControlName="name">
+    <input type="text" id="profile--address--name" formControlName="name" />
     <label for="profile--address--name" slot="label">Name</label>
     <span slot="support-text" class="app-form-control-invalid">Name is required</span>
   </forge-text-field>
 
   <forge-text-field required [appFormControlInvalid]="formGroup.controls.street" class="form-grid--row-break">
-    <input type="text" id="profile--address--street" formControlName="street">
+    <input type="text" id="profile--address--street" formControlName="street" />
     <label for="profile--address--street" slot="label">Street</label>
     <span slot="support-text" class="app-form-control-invalid">Street is required</span>
   </forge-text-field>
 
   <forge-text-field required [appFormControlInvalid]="formGroup.controls.city">
-    <input type="text" id="profile--address-city" formControlName="city">
+    <input type="text" id="profile--address-city" formControlName="city" />
     <label for="profile--address--city" slot="label">City</label>
     <span slot="support-text" class="app-form-control-invalid">City is required</span>
   </forge-text-field>
 
   <div class="form-grid__state-zip">
     <forge-text-field required [appFormControlInvalid]="formGroup.controls.state">
-      <input type="text" id="profile--address--state" formControlName="state">
+      <input type="text" id="profile--address--state" formControlName="state" />
       <label for="profile--address--state" slot="label">State</label>
       <span slot="support-text" class="app-form-control-invalid">State is required</span>
     </forge-text-field>
 
     <forge-text-field required [appFormControlInvalid]="formGroup.controls.zip">
-      <input type="text" id="profile--address--zip" formControlName="zip">
+      <input type="text" id="profile--address--zip" formControlName="zip" />
       <label for="profile--address--zip" slot="label">Zip code</label>
       <span slot="support-text" class="app-form-control-invalid">Zip code is required</span>
     </forge-text-field>

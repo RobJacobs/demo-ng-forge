@@ -13,16 +13,7 @@ import { NullableNumberMask } from './nullable-number-mask';
 @Component({
   selector: 'app-imask',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    IMaskDirective,
-    ForgeButtonModule,
-    ForgeOptionModule,
-    ForgeSelectModule,
-    ForgeTextFieldModule,
-    ForgeToolbarModule
-  ],
+  imports: [CommonModule, ReactiveFormsModule, IMaskDirective, ForgeButtonModule, ForgeOptionModule, ForgeSelectModule, ForgeTextFieldModule, ForgeToolbarModule],
   templateUrl: './imask.component.html',
   styleUrls: ['./imask.component.scss']
 })
@@ -90,10 +81,10 @@ export class ImaskComponent implements AfterViewInit {
     if (!format?.length) {
       return {
         mask: /./
-      } as IMask.MaskedRegExp
+      } as IMask.MaskedRegExp;
     }
 
-    const mask = format.replace(/([0a*]*)/g, value => {
+    const mask = format.replace(/([0a*]*)/g, (value) => {
       // adds ` to prevent symbols shift back
       return value.length ? `\`${value}` : '';
     });
@@ -113,11 +104,11 @@ export class ImaskComponent implements AfterViewInit {
         mask: Number,
         scale: 0,
         signed: true
-      }) as IMask.MaskedNumber
+      }) as IMask.MaskedNumber;
     }
 
     const max = parseFloat(format.replace(/[#&-]/g, '9').replace(/,/g, ''));
-    const min = format.includes('&') ? format.includes('-') ? max * -1 : 0 : NaN;
+    const min = format.includes('&') ? (format.includes('-') ? max * -1 : 0) : NaN;
     return new NullableNumberMask({
       mask: Number,
       thousandsSeparator: format!.includes(',') ? ',' : '',
@@ -133,7 +124,7 @@ export class ImaskComponent implements AfterViewInit {
   private buildNumberSearchMask(): IMask.MaskedRegExp {
     return {
       mask: /^\s*[!\-.\d:<>=|\s+]*\s*$/
-    } as IMask.MaskedRegExp
+    } as IMask.MaskedRegExp;
   }
 
   private buildDateMask(): IMask.MaskedDate {
@@ -235,12 +226,12 @@ export class ImaskComponent implements AfterViewInit {
       parse: (value: string): Date => {
         return dateParse(value, 'MM/dd/yyyy hh:mm:ss aaa', new Date());
       }
-    })
+    });
   }
 
   private buildDateSearchMask(): IMask.MaskedRegExp {
     return {
       mask: /^\s*[!\-.\d:<>=|\s/]*\s*$/
-    } as IMask.MaskedRegExp
+    } as IMask.MaskedRegExp;
   }
 }

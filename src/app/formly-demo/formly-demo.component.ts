@@ -34,12 +34,10 @@ export class FormlyDemoComponent implements OnInit {
     age: 10
   };
   public record: any;
-  public formMessage?: { id: string; message: string; };
+  public formMessage?: { id: string; message: string };
 
   constructor() {
-    this.moduleService.formMessage.pipe(
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe(result => {
+    this.moduleService.formMessage.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result) => {
       this.formMessage = result;
     });
   }
@@ -55,8 +53,8 @@ export class FormlyDemoComponent implements OnInit {
     }
 
     if (control instanceof FormGroup) {
-      const formErrors = control.errors ? { groupError: control } : {} as any;
-      Object.keys(control.controls).forEach(key => {
+      const formErrors = control.errors ? { groupError: control } : ({} as any);
+      Object.keys(control.controls).forEach((key) => {
         const error = this.getFormErrors(control.get(key) as AbstractControl);
         if (error) {
           formErrors[key] = error;
@@ -68,5 +66,4 @@ export class FormlyDemoComponent implements OnInit {
 
     return null;
   }
-
 }

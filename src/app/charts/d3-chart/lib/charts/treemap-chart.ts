@@ -3,7 +3,6 @@ import { select, hierarchy, format, timeFormat, treemap } from 'd3';
 import { ChartUtils, IChartConfig, CHART_CONSTANTS } from '../index';
 
 export class TreemapChartService {
-
   public static buildTreemapChart(config: IChartConfig): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       if (!config.container || config.container.tagName !== 'svg') {
@@ -12,11 +11,19 @@ export class TreemapChartService {
       }
 
       const container = select(config.container);
-      const colorScale = config.palette && config.palette.length ? ChartUtils.colorScale(config.data.map(d => d.value), config.palette.length === 2 ? config.palette : config.palette.length) : undefined;
+      const colorScale =
+        config.palette && config.palette.length
+          ? ChartUtils.colorScale(
+              config.data.map((d) => d.value),
+              config.palette.length === 2 ? config.palette : config.palette.length
+            )
+          : undefined;
       const valueFormat = config.valueFormat ? format(config.valueFormat) : config.valueDateFormat ? timeFormat(config.valueDateFormat) : undefined;
       const nodePadding = 8;
       const chartSize = ChartUtils.chartSize(config.container);
-      const chartData = hierarchy({ children: config.data }).sum((d: any) => d.value).sort((a: any, b: any) => b.value - a.value);
+      const chartData = hierarchy({ children: config.data })
+        .sum((d: any) => d.value)
+        .sort((a: any, b: any) => b.value - a.value);
       const chart = treemap().size([chartSize.width, chartSize.height]);
       chart(chartData as any);
 
@@ -39,8 +46,12 @@ export class TreemapChartService {
 
       const enterNodes = nodes.enter().append('g');
       enterNodes.append('rect');
-      enterNodes.append('clipPath').attr('id', (d: any) => `${CHART_CONSTANTS.classes.CHART_CLIP}-${d.data.id}`).append('rect');
-      enterNodes.append('text')
+      enterNodes
+        .append('clipPath')
+        .attr('id', (d: any) => `${CHART_CONSTANTS.classes.CHART_CLIP}-${d.data.id}`)
+        .append('rect');
+      enterNodes
+        .append('text')
         .classed(CHART_CONSTANTS.classes.CHART_TEXT, true)
         .attr('clip-path', (d: any) => `url(#${CHART_CONSTANTS.classes.CHART_CLIP}-${d.data.id})`)
         .attr('dx', 5)
@@ -62,13 +73,15 @@ export class TreemapChartService {
         .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
         .attr('transform', (d: any) => `translate(${d.x0}, ${d.y0})`);
 
-      mergeNodes.select('text')
+      mergeNodes
+        .select('text')
         .style('display', 'none')
         .text((d: any) => {
           return valueFormat ? valueFormat(d.data.value) : d.data.value;
         });
 
-      mergeNodes.select('rect')
+      mergeNodes
+        .select('rect')
         .attr('fill', (d: any) => {
           if (d.color) {
             return d.color;
@@ -86,11 +99,12 @@ export class TreemapChartService {
         .attr('id', (d: any) => `${CHART_CONSTANTS.classes.CHART_PREFIX}__node-${d.data.id}`)
         .transition()
         .call(ChartUtils.transitionsComplete as any, () => {
-          mergeNodes.select('clipPath > rect')
+          mergeNodes
+            .select('clipPath > rect')
             .attr('x', (_d: any) => nodePadding / 2)
             .attr('y', (_d: any) => nodePadding / 2)
-            .attr('width', (d: any) => d.x1 - d.x0 > nodePadding ? d.x1 - d.x0 - nodePadding : 0)
-            .attr('height', (d: any) => d.y1 - d.y0 > nodePadding ? d.y1 - d.y0 - nodePadding : 0);
+            .attr('width', (d: any) => (d.x1 - d.x0 > nodePadding ? d.x1 - d.x0 - nodePadding : 0))
+            .attr('height', (d: any) => (d.y1 - d.y0 > nodePadding ? d.y1 - d.y0 - nodePadding : 0));
           mergeNodes.select('text').style('display', null);
 
           resolve();

@@ -1,20 +1,20 @@
 <forge-text-field>
-  <input type="text" [attr.id]="id" [formControl]="dateTime" [imask]="mask" [unmask]="'typed'">
+  <input type="text" [attr.id]="id" [formControl]="dateTime" [imask]="mask" [unmask]="'typed'" />
   @if (label?.length) {
-  <label [attr.for]="id" slot="label">{{label}}</label>
+    <label [attr.for]="id" slot="label">{{ label }}</label>
   }
-  <forge-icon-button slot="end" tabindex="-1" #calendarPopup="forgePopover" [forgePopover]="calendarPopupTemplate" [forgePopoverPlacement]="'bottom-end'" (click)="onOpenPopup(calendarPopup)" aria-label="Open calendar">
+  <forge-icon-button slot="end" tabindex="-1" #calendarPopover="forgePopover" [forgePopover]="calendarPopoverTemplate" [forgePopoverPlacement]="'bottom-end'" (click)="onOpenPopover(calendarPopover)" aria-label="Open calendar">
     <forge-icon name="insert_invitation"></forge-icon>
   </forge-icon-button>
 </forge-text-field>
 
-<ng-template #calendarPopupTemplate>
-  <div style="padding-bottom: 8px;" (keydown.tab)="onKeyDown($any($event))">
+<ng-template #calendarPopoverTemplate>
+  <div style="padding-bottom: 8px" (keydown.tab)="onKeyDown($any($event))">
     <forge-calendar [attr.id]="'calendar-' + id" prevent-focus="true" (forge-calendar-date-select)="onDateSelected($event)"></forge-calendar>
-    <forge-divider style="margin: 8px 0;"></forge-divider>
-    <forge-time-picker style="margin: 0 8px;" [formControl]="time">
+    <forge-divider style="margin: 8px 0"></forge-divider>
+    <forge-time-picker style="margin: 0 8px" [formControl]="time">
       <forge-text-field>
-        <input type="text" [attr.id]="'time-' + id" placeholder="hh:mm:ss aa">
+        <input type="text" [attr.id]="'time-' + id" placeholder="hh:mm:ss aa" />
         <label [attr.for]="'time-' + id" slot="label">Time</label>
       </forge-text-field>
     </forge-time-picker>

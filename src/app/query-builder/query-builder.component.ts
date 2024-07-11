@@ -11,19 +11,7 @@ import { FormControlInvalidDirective } from 'src/app/shared/directives/form-cont
 @Component({
   selector: 'app-query-builder',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    ForgeAutocompleteModule,
-    ForgeButtonModule,
-    ForgeIconButtonModule,
-    ForgeIconModule,
-    ForgeMenuModule,
-    ForgeOptionModule,
-    ForgeSelectModule,
-    ForgeTextFieldModule,
-    FormControlInvalidDirective
-  ],
+  imports: [CommonModule, ReactiveFormsModule, ForgeAutocompleteModule, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, ForgeMenuModule, ForgeOptionModule, ForgeSelectModule, ForgeTextFieldModule, FormControlInvalidDirective],
   templateUrl: './query-builder.component.html',
   styleUrls: ['./query-builder.component.scss']
 })

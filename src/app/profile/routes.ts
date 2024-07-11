@@ -9,9 +9,7 @@ export const PROFILE_ROUTES: Routes = [
     path: '',
     component: ProfileComponent,
     canDeactivate: [(component: ProfileComponent) => component.canDeactivate()],
-    providers: [
-      ProfileCacheService
-    ],
+    providers: [ProfileCacheService],
     children: [
       { path: 'address', component: AddressComponent },
       { path: 'personal', component: PersonalComponent },

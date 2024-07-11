@@ -6,13 +6,7 @@ import { Utils } from 'src/utils';
 @Component({
   selector: 'app-dialog',
   standalone: true,
-  imports: [
-    CommonModule,
-    ForgeIconButtonModule,
-    ForgeIconModule,
-    ForgeScaffoldModule,
-    ForgeToolbarModule
-  ],
+  imports: [CommonModule, ForgeIconButtonModule, ForgeIconModule, ForgeScaffoldModule, ForgeToolbarModule],
   templateUrl: './dialog.component.html',
   styleUrl: './dialog.component.scss'
 })

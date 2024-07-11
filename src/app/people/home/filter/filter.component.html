@@ -8,16 +8,16 @@
 
   <form class="body" [formGroup]="formGroup" novalidate autocomplete="off" (ngSubmit)="onApplyFilter()">
     <forge-text-field>
-      <input type="text" id="people--home--filter--first-name" formControlName="firstName">
+      <input type="text" id="people--home--filter--first-name" formControlName="firstName" />
       <label for="people--home--filter--first-name" slot="label">First name</label>
     </forge-text-field>
     <forge-text-field>
-      <input type="text" id="people--home--filter--last-name" formControlName="lastName">
+      <input type="text" id="people--home--filter--last-name" formControlName="lastName" />
       <label for="people--home--filter--last-name" slot="label">Last name</label>
     </forge-text-field>
     <forge-select label="Gender" formControlName="gender" [options]="genderOptions" multiple="true"></forge-select>
     <forge-text-field>
-      <input type="text" id="people--home--filter--occupation" formControlName="occupation">
+      <input type="text" id="people--home--filter--occupation" formControlName="occupation" />
       <label for="people--home--filter--occupation" slot="label">Occupation</label>
     </forge-text-field>
     <forge-divider></forge-divider>
@@ -25,11 +25,7 @@
   </form>
 
   <div slot="footer" class="footer">
-    <forge-button variant="outlined" (click)="onClearFilter()">
-      Clear
-    </forge-button>
-    <forge-button variant="raised" type="submit" (click)="onApplyFilter()">
-      Apply
-    </forge-button>
+    <forge-button variant="outlined" (click)="onClearFilter()"> Clear </forge-button>
+    <forge-button variant="raised" type="submit" (click)="onApplyFilter()"> Apply </forge-button>
   </div>
 </forge-drawer>

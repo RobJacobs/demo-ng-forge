@@ -4,11 +4,8 @@ import { RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-test',
   standalone: true,
-  imports: [
-    RouterOutlet
-  ],
+  imports: [RouterOutlet],
   templateUrl: './test.component.html',
   styleUrls: ['./test.component.scss']
 })
-export class TestComponent {
-}
+export class TestComponent {}

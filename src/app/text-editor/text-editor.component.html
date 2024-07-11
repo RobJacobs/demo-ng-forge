@@ -1,12 +1,19 @@
 <forge-toolbar class="header">
   <h2 slot="start" class="forge-typography--subheading4">Text Editor</h2>
-  <forge-button slot="end" variant="outlined" (click)="onToggleState()">
-    Toggle state
-  </forge-button>
+  <forge-button slot="end" variant="outlined" (click)="onToggleState()"> Toggle state </forge-button>
 </forge-toolbar>
 
 <div class="body">
-  <quill-editor [formControl]="textEditorFormControl" [sanitize]="true" placeholder [modules]="quillModules" [bounds]="elementRef.nativeElement" #quillEditor (keydown)="$event.stopPropagation()" (onEditorCreated)="onEditorCreated($event)"></quill-editor>
+  <quill-editor
+    [formControl]="textEditorFormControl"
+    [sanitize]="true"
+    placeholder
+    [modules]="quillModules"
+    [bounds]="elementRef.nativeElement"
+    #quillEditor
+    (keydown)="$event.stopPropagation()"
+    (onEditorCreated)="onEditorCreated($event)"
+  ></quill-editor>
 
-  <p>{{textEditorFormControl.value}}</p>
+  <p>{{ textEditorFormControl.value }}</p>
 </div>

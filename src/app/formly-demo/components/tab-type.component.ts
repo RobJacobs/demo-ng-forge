@@ -11,36 +11,32 @@ import { FormlyDemoService } from '../formly-demo.service';
     <forge-tab-bar secondary [activeTab]="activeTab">
       @for (field of $any(field.fieldGroup); track i; let i = $index) {
         <forge-tab (forge-tab-select)="onTabSelected(field)">
-          {{field.props?.label}}
+          {{ field.props?.label }}
         </forge-tab>
       }
     </forge-tab-bar>
     <formly-field [field]="$any(activeField)" #formlyField [formlyFieldDirective]="formlyField"></formly-field>
   `,
-  styles: [`
-    :host {
-      display: block;
-    }
-
-    forge-tab-bar {
-      &::part(container) {
-        justify-items: flex-start;
+  styles: [
+    `
+      :host {
+        display: block;
       }
 
-      margin: 16px 0;
-    }
+      forge-tab-bar {
+        &::part(container) {
+          justify-items: flex-start;
+        }
 
-    forge-tab {
-      min-width: 240px;
-    }
-  `],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormlyModule,
-    ForgeTabBarModule,
-    ForgeTabModule
+        margin: 16px 0;
+      }
+
+      forge-tab {
+        min-width: 240px;
+      }
+    `
   ],
+  imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeTabBarModule, ForgeTabModule],
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

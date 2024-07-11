@@ -20,9 +20,7 @@ import { FormlyFieldDirective } from './formly-field.directive';
 @NgModule({
   imports: [
     FormlyModule.forRoot({
-      extensions: [
-        { name: 'formly-field-extension', extension: formlyFieldExtension }
-      ],
+      extensions: [{ name: 'formly-field-extension', extension: formlyFieldExtension }],
       types: [
         { name: 'checkbox', component: CheckboxTypeComponent },
         { name: 'date-picker', component: DatePickerTypeComponent },
@@ -37,15 +35,13 @@ import { FormlyFieldDirective } from './formly-field.directive';
         { name: 'tab', component: TabTypeComponent },
         { name: 'table', component: TableTypeComponent },
         { name: 'label', component: LabelTypeComponent }
-      ],
+      ]
       // wrappers: [
       //   { name: 'container', component: ContainerWrapperComponent }
       // ]
     }),
     FormlyFieldDirective
   ],
-  exports: [
-    FormlyModule
-  ]
+  exports: [FormlyModule]
 })
-export class FormlyConfigModule { }
+export class FormlyConfigModule {}

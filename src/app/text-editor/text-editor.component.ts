@@ -10,13 +10,7 @@ import { QuillModule, QuillModules } from 'ngx-quill';
 @Component({
   selector: 'app-text-editor',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    QuillModule,
-    ForgeButtonModule,
-    ForgeToolbarModule
-  ],
+  imports: [CommonModule, ReactiveFormsModule, QuillModule, ForgeButtonModule, ForgeToolbarModule],
   templateUrl: './text-editor.component.html',
   styleUrls: ['./text-editor.component.scss']
 })
@@ -36,7 +30,7 @@ export class TextEditorComponent {
         ['clean'],
         [{ font: [] }, { size: [] }, { header: [1, 2, 3, 4, 5, 6, false] }],
         ['image']
-      ],
+      ]
       // handlers: {
       //   'link': (value) => {
       //     console.log(value);
@@ -47,8 +41,8 @@ export class TextEditorComponent {
 
   public onEditorCreated(quill: any) {
     console.log(quill);
-    this.elementRef.nativeElement.querySelectorAll('.ql-toolbar button').forEach((el: HTMLElement) => el.tabIndex = -1);
-    this.elementRef.nativeElement.querySelectorAll('.ql-toolbar [role="button"]').forEach((el: HTMLElement) => el.tabIndex = -1);
+    this.elementRef.nativeElement.querySelectorAll('.ql-toolbar button').forEach((el: HTMLElement) => (el.tabIndex = -1));
+    this.elementRef.nativeElement.querySelectorAll('.ql-toolbar [role="button"]').forEach((el: HTMLElement) => (el.tabIndex = -1));
   }
 
   public onToggleState() {

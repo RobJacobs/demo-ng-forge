@@ -4,48 +4,35 @@
   </div>
 
   <div slot="end">
-    <span>Total: {{storageSpace.total}}</span>
-    <span>Used: {{storageSpace.used}}</span>
-    <span>Local: {{storageSpace.localStorage}}</span>
+    <span>Total: {{ storageSpace.total }}</span>
+    <span>Used: {{ storageSpace.used }}</span>
+    <span>Local: {{ storageSpace.localStorage }}</span>
   </div>
 </forge-toolbar>
 
 <div class="body">
   <div class="card">
     <div class="card__actions">
-      <forge-button variant="outlined" (click)="onLoadLocal()">
-        Load local
-      </forge-button>
-      <forge-button variant="outlined" (click)="onSaveLocal()">
-        Save local
-      </forge-button>
-      <forge-button variant="outlined" (click)="onDeleteLocal()">
-        Delete local
-      </forge-button>
+      <forge-button variant="outlined" (click)="onLoadLocal()"> Load local </forge-button>
+      <forge-button variant="outlined" (click)="onSaveLocal()"> Save local </forge-button>
+      <forge-button variant="outlined" (click)="onDeleteLocal()"> Delete local </forge-button>
     </div>
     <forge-label-value>
       <span slot="label">localStorage</span>
-      <span slot="value">{{localStorageData | json}}</span>
+      <span slot="value">{{ localStorageData | json }}</span>
     </forge-label-value>
   </div>
 
   <div class="card">
     <div class="card__actions">
-      <forge-button variant="outlined" (click)="onLoadDb()">
-        Load db
-      </forge-button>
-      <forge-button variant="outlined" (click)="onSaveDb()">
-        Save db
-      </forge-button>
-      <forge-button variant="outlined" (click)="onDeleteDb()">
-        Delete db
-      </forge-button>
+      <forge-button variant="outlined" (click)="onLoadDb()"> Load db </forge-button>
+      <forge-button variant="outlined" (click)="onSaveDb()"> Save db </forge-button>
+      <forge-button variant="outlined" (click)="onDeleteDb()"> Delete db </forge-button>
     </div>
 
     <forge-label-value>
       <span slot="label">indexedDB</span>
-      <span slot="value">{{indexedDbData | json}}</span>
+      <span slot="value">{{ indexedDbData | json }}</span>
     </forge-label-value>
   </div>
-
 </div>

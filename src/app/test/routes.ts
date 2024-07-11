@@ -6,7 +6,8 @@ import { ChildComponent } from './child/child.component';
 
 export const TEST_ROUTES: Routes = [
   {
-    path: '', component: TestComponent,
+    path: '',
+    component: TestComponent,
     children: [
       { path: 'parent', component: ParentComponent },
       { path: 'child', component: ChildComponent },

@@ -1,4 +1,3 @@
-
 import { Pipe, PipeTransform } from '@angular/core';
 import { isDeepEqual } from '@tylertech/forge-core';
 
@@ -11,7 +10,7 @@ export class ArrayFindPipe implements PipeTransform {
     if (!value?.toString().length || !source.length || !filterProperty.length) {
       return;
     }
-    const sourceValue = source.find(o => isDeepEqual(o[filterProperty], value));
+    const sourceValue = source.find((o) => isDeepEqual(o[filterProperty], value));
     if (!sourceValue) {
       return;
     }

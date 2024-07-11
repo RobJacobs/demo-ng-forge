@@ -12,13 +12,15 @@ export abstract class BaseTableComponent {
 
   public abstract filterCache: IFilterParameter;
 
-  constructor() { }
+  constructor() {}
 
   public initializeSort() {
-    this.tableColumns.filter((c) => c.initialSort || isDefined(c.sortDirection)).forEach((c) => {
-      c.initialSort = false;
-      c.sortDirection = undefined;
-    });
+    this.tableColumns
+      .filter((c) => c.initialSort || isDefined(c.sortDirection))
+      .forEach((c) => {
+        c.initialSort = false;
+        c.sortDirection = undefined;
+      });
     if (this.filterCache?.sort?.property.length) {
       const column = this.tableColumns.find((c) => c.property === this.filterCache?.sort?.property) as IColumnConfiguration;
       if (isDefined(column)) {
@@ -29,8 +31,8 @@ export abstract class BaseTableComponent {
   }
 
   public initializeFilter() {
-    this.filterCache.filters?.forEach(f => {
-      const tableColumn = this.tableColumns.find(tc => tc.property === f.property && isDefined(tc.filterDelegate));
+    this.filterCache.filters?.forEach((f) => {
+      const tableColumn = this.tableColumns.find((tc) => tc.property === f.property && isDefined(tc.filterDelegate));
       if (tableColumn) {
         (tableColumn.filterDelegate as FormFieldComponentDelegate<any, any>).value = f.value;
       }
@@ -42,7 +44,7 @@ export abstract class BaseTableComponent {
   }
 
   public getColumnIndex(property: string): number {
-    return this.tableColumns.findIndex(c => c.property === property);
+    return this.tableColumns.findIndex((c) => c.property === property);
   }
 
   public onTableSort(sort: { columnIndex: number; direction: SortDirection }) {
@@ -62,7 +64,7 @@ export abstract class BaseTableComponent {
     detail.value = detail.value?.trim();
     const column = this.getColumnFromEventIndex(detail.columnIndex);
     if (column?.property?.length) {
-      const filterIndex = this.filterCache.filters?.findIndex(f => f.property === column.property) as number;
+      const filterIndex = this.filterCache.filters?.findIndex((f) => f.property === column.property) as number;
       if (filterIndex !== -1) {
         if (!detail.value?.length) {
           this.filterCache.filters?.splice(filterIndex, 1);

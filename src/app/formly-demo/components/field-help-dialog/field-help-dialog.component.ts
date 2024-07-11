@@ -20,17 +20,7 @@ export interface IFieldHelpDialogConfig {
   templateUrl: './field-help-dialog.component.html',
   styleUrls: ['./field-help-dialog.component.scss'],
   standalone: true,
-  imports: [
-    CommonModule,
-    ForgeIconButtonModule,
-    ForgeIconModule,
-    ForgePageStateModule,
-    ForgePaginatorModule,
-    ForgeScaffoldModule,
-    ForgeSkeletonModule,
-    ForgeTableModule,
-    ForgeToolbarModule
-  ]
+  imports: [CommonModule, ForgeIconButtonModule, ForgeIconModule, ForgePageStateModule, ForgePaginatorModule, ForgeScaffoldModule, ForgeSkeletonModule, ForgeTableModule, ForgeToolbarModule]
 })
 export class FieldHelpDialogComponent {
   public dialogConfig = inject<IFieldHelpDialogConfig>(DIALOG_DATA);
@@ -56,13 +46,12 @@ export class FieldHelpDialogComponent {
   };
   private filters: IFilter[] = [];
 
-  constructor(
-  ) {
+  constructor() {
     this.dialogTitle = this.dialogConfig.title || '';
     this.columnConfigurations = this.dialogConfig.columnConfigurations || [];
     this.dataObservable = this.dialogConfig.dataObservable as any;
     this.key = this.dialogConfig.key || '';
-    this.sort.property = this.columnConfigurations.find(c => c.initialSort)?.property || this.columnConfigurations[0].property as string;
+    this.sort.property = this.columnConfigurations.find((c) => c.initialSort)?.property || (this.columnConfigurations[0].property as string);
     this.dialogRef.nativeElement.setAttribute('aria-labelledby', `${this.id}--title`);
     this.getData();
   }
@@ -71,7 +60,7 @@ export class FieldHelpDialogComponent {
     this.dialogRef.close();
   }
 
-  public onPaginatorChange(value: { pageIndex: number; pageSize: number; }) {
+  public onPaginatorChange(value: { pageIndex: number; pageSize: number }) {
     this.paginator.pageIndex = value.pageIndex;
     this.paginator.pageSize = value.pageSize;
     this.getData();
@@ -89,7 +78,7 @@ export class FieldHelpDialogComponent {
     if (isDefined(filter.value) && filter.value?.toString().length) {
       this.filters.push({ property: filterProperty, value: filter.value });
     } else {
-      const index = this.filters.findIndex(f => f.property === filterProperty);
+      const index = this.filters.findIndex((f) => f.property === filterProperty);
       if (index !== -1) {
         this.filters.splice(index, 1);
       }
@@ -114,7 +103,7 @@ export class FieldHelpDialogComponent {
     };
     this.dataObservable(param)
       .pipe(
-        finalize(() => this.isBusy = false),
+        finalize(() => (this.isBusy = false)),
         takeUntil(this.unsubscribe)
       )
       .subscribe((r: IFilterResponse<any>) => {

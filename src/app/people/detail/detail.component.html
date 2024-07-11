@@ -3,12 +3,10 @@
     <forge-icon-button (click)="onNavigate('back')" aria-label="Go back">
       <forge-icon name="arrow_back"></forge-icon>
     </forge-icon-button>
-    <h2 class="forge-typography--subheading4">{{person?.firstName + ' ' + person?.lastName}}</h2>
+    <h2 class="forge-typography--subheading4">{{ person?.firstName + " " + person?.lastName }}</h2>
   </div>
   <div slot="end">
-    <forge-button variant="outlined" (click)="onViewWiki()" [disabled]="!person?.url?.length">
-      View wiki
-    </forge-button>
+    <forge-button variant="outlined" (click)="onViewWiki()" [disabled]="!person?.url?.length"> View wiki </forge-button>
   </div>
 </forge-toolbar>
 
@@ -16,19 +14,19 @@
   <div class="body__left">
     <forge-label-value>
       <span slot="label">Gender</span>
-      <span slot="value">{{person?.gender}}</span>
+      <span slot="value">{{ person?.gender }}</span>
     </forge-label-value>
     <forge-label-value>
       <span slot="label">Occupation</span>
-      <span slot="value">{{person?.occupation}}</span>
+      <span slot="value">{{ person?.occupation }}</span>
     </forge-label-value>
     <forge-label-value>
       <span slot="label">Quote</span>
-      <span slot="value">{{person?.quote}}</span>
+      <span slot="value">{{ person?.quote }}</span>
     </forge-label-value>
   </div>
 
   <div class="body__right">
-    <img [src]="imageUrl" (error)="onImageError($event)" alt>
+    <img [src]="imageUrl" (error)="onImageError($event)" alt />
   </div>
 </div>

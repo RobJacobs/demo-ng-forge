@@ -1,30 +1,8 @@
-import {
-  AfterViewInit,
-  Component,
-  EmbeddedViewRef,
-  Input,
-  OnDestroy,
-  TemplateRef,
-  ViewChild,
-  ViewContainerRef,
-  forwardRef,
-  ElementRef,
-  Output,
-  EventEmitter,
-  HostListener,
-  NgZone,
-  inject
-} from '@angular/core';
+import { AfterViewInit, Component, EmbeddedViewRef, Input, OnDestroy, TemplateRef, ViewChild, ViewContainerRef, forwardRef, ElementRef, Output, EventEmitter, HostListener, NgZone, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
-import {
-  AutocompleteFilterCallback,
-  IOption,
-  IAutocompleteOptionGroup,
-  AutocompleteSelectedTextBuilder,
-  AutocompleteComponent
-} from '@tylertech/forge';
+import { AutocompleteFilterCallback, IOption, IAutocompleteOptionGroup, AutocompleteSelectedTextBuilder, AutocompleteComponent } from '@tylertech/forge';
 import { isArray, isString, isDefined } from '@tylertech/forge-core';
 import { ForgeAutocompleteModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIconModule, ForgeListItemModule, ForgeListModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
 import { ListDropdownHeaderBuilder } from '@tylertech/forge/esm/list-dropdown';
@@ -35,17 +13,7 @@ import { Utils } from 'src/utils';
   templateUrl: './autocomplete-range.component.html',
   styleUrls: ['./autocomplete-range.component.scss'],
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ForgeAutocompleteModule,
-    ForgeDividerModule,
-    ForgeIconButtonModule,
-    ForgeIconModule,
-    ForgeListItemModule,
-    ForgeListModule,
-    ForgeTextFieldModule
-  ],
+  imports: [CommonModule, FormsModule, ForgeAutocompleteModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIconModule, ForgeListItemModule, ForgeListModule, ForgeTextFieldModule],
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => AutocompleteRangeComponent), multi: true }]
 })
 export class AutocompleteRangeComponent implements ControlValueAccessor, AfterViewInit, OnDestroy {
@@ -84,25 +52,22 @@ export class AutocompleteRangeComponent implements ControlValueAccessor, AfterVi
   private rangeRef?: EmbeddedViewRef<any>;
   private filter = '';
 
-  public onChange = (fn: any) => { };
-  public onTouched = () => { };
+  public onChange = (fn: any) => {};
+  public onTouched = () => {};
 
   public onFilter: AutocompleteFilterCallback = (filter: string): Promise<IOption[] | IAutocompleteOptionGroup[]> => {
     this.filter = filter;
     return new Promise((resolve, reject) => {
       if (this.optionFilter) {
-        this.optionFilter(this.filter).subscribe(
-          {
-            next: (response) => {
-              const options: IOption[] = [];
-              response.forEach((o) => (isArray(o.value) ? this.rangeOptions.push(o) : options.push(o)));
-              resolve(options);
-            },
-            error: () => reject()
-          }
-        );
+        this.optionFilter(this.filter).subscribe({
+          next: (response) => {
+            const options: IOption[] = [];
+            response.forEach((o) => (isArray(o.value) ? this.rangeOptions.push(o) : options.push(o)));
+            resolve(options);
+          },
+          error: () => reject()
+        });
       }
-
     });
   };
 
@@ -113,7 +78,7 @@ export class AutocompleteRangeComponent implements ControlValueAccessor, AfterVi
       this.rangeMessage = undefined;
     });
 
-    return this.rangeRef?.rootNodes[0] as HTMLElement
+    return this.rangeRef?.rootNodes[0] as HTMLElement;
   };
 
   public selectedTextBuilder: AutocompleteSelectedTextBuilder = (selectedOptions: IOption[]): string => {
@@ -205,12 +170,7 @@ export class AutocompleteRangeComponent implements ControlValueAccessor, AfterVi
 
     this.rangeMessage = undefined;
 
-    const label =
-      this.rangeMin?.length && this.rangeMax?.length
-        ? `${this.rangeMin} to ${this.rangeMax}`
-        : this.rangeMin?.length
-          ? `Greater than ${this.rangeMin}`
-          : `Less than ${this.rangeMax}`;
+    const label = this.rangeMin?.length && this.rangeMax?.length ? `${this.rangeMin} to ${this.rangeMax}` : this.rangeMin?.length ? `Greater than ${this.rangeMin}` : `Less than ${this.rangeMax}`;
 
     this.rangeOptions.push({ label, value: [this.rangeMin, this.rangeMax] });
     this.emitChangeEvents();

@@ -7,17 +7,13 @@ import { ForgeButtonModule } from '@tylertech/forge-angular';
   selector: 'app-formly-button',
   template: `
     <forge-button variant="raised" (click)="onClick($event)">
-      {{props.label}}
+      {{ props.label }}
     </forge-button>
   `,
-  imports: [
-    CommonModule,
-    ForgeButtonModule
-  ],
+  imports: [CommonModule, ForgeButtonModule],
   standalone: true
 })
 export class ButtonTypeComponent extends FieldType<FieldTypeConfig> {
-
   public onClick(event: MouseEvent) {
     console.log(event);
   }

@@ -20,7 +20,6 @@ export interface ILineChartData {
 }
 
 export class LineChartService {
-
   public static buildLineChart(config: ILineChartConfig): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       if (!config.container || config.container.tagName !== 'svg') {
@@ -31,9 +30,12 @@ export class LineChartService {
       config.categoryTicks = config.categoryTicks || 10;
       config.valueTicks = config.valueTicks || 5;
 
-      const data = config.data.map(d => d.data).reduce((a: any, b: any) => a.concat(b), []);
+      const data = config.data.map((d) => d.data).reduce((a: any, b: any) => a.concat(b), []);
       const values = data.map((d: any) => d.value);
-      const categories = data.map((d: any) => parseFloat(d.category)).filter((d: any, i: any, s: any) => s.indexOf(d) === i).sort((a: any, b: any) => a - b);
+      const categories = data
+        .map((d: any) => parseFloat(d.category))
+        .filter((d: any, i: any, s: any) => s.indexOf(d) === i)
+        .sort((a: any, b: any) => a - b);
       const valueMin = Math.min(...values) || 0;
       const valueMax = Math.max(...values) || 0;
       const categoryMin = Math.min(...categories) || 0;
@@ -51,7 +53,9 @@ export class LineChartService {
       const xAxis = axisBottom(xScale);
 
       if (isArray(config.categoryTickValues)) {
-        const categoryScale = scaleLinear().domain([0, (config.categoryTickValues as []).length - 1]).range([categoryMin, categoryMax]);
+        const categoryScale = scaleLinear()
+          .domain([0, (config.categoryTickValues as []).length - 1])
+          .range([categoryMin, categoryMax]);
         config.categoryTicks = [];
         config.categoryTickValues?.forEach((_c, i) => {
           (config.categoryTicks as number[]).push(categoryScale(i) as number);
@@ -80,7 +84,9 @@ export class LineChartService {
       const yAxis = axisLeft(yScale).tickSize(-(chartSize.width - chartMargin.left - chartMargin.right));
 
       if (isArray(config.valueTickValues)) {
-        const valueScale = scaleLinear().domain([0, (config.valueTickValues as []).length - 1]).range([valueMin, valueMax]);
+        const valueScale = scaleLinear()
+          .domain([0, (config.valueTickValues as []).length - 1])
+          .range([valueMin, valueMax]);
         config.valueTicks = [];
         config.valueTickValues?.forEach((_v, i) => {
           (config.valueTicks as number[]).push(valueScale(i) as number);
@@ -125,8 +131,14 @@ export class LineChartService {
 
       container.attr('width', chartSize.width);
       container.attr('height', chartSize.height);
-      container.select(`g.${CHART_CONSTANTS.classes.CHART_XAXIS}`).attr('transform', `translate(${chartMargin.left}, ${chartSize.height - chartMargin.bottom})`).call(xAxis as any);
-      container.select(`g.${CHART_CONSTANTS.classes.CHART_YAXIS}`).attr('transform', `translate(${chartMargin.left}, ${chartMargin.top})`).call(yAxis as any);
+      container
+        .select(`g.${CHART_CONSTANTS.classes.CHART_XAXIS}`)
+        .attr('transform', `translate(${chartMargin.left}, ${chartSize.height - chartMargin.bottom})`)
+        .call(xAxis as any);
+      container
+        .select(`g.${CHART_CONSTANTS.classes.CHART_YAXIS}`)
+        .attr('transform', `translate(${chartMargin.left}, ${chartMargin.top})`)
+        .call(yAxis as any);
 
       const chartNode = rootNode.select(`g.${CHART_CONSTANTS.classes.CHART_PREFIX}__line`);
       chartNode.attr('transform', `translate(${chartMargin.left + linePadding}, ${chartMargin.top})`);
@@ -138,14 +150,15 @@ export class LineChartService {
 
         const enterNodes = nodes.enter();
 
-        enterNodes.append('path')
+        enterNodes
+          .append('path')
           .classed(`path-${l.id}`, true)
           .style('fill', 'none')
           .style('stroke-linejoin', 'round')
           .style('stroke-linecap', 'round')
           .attr('d', (d: any) => enterChart(d.data))
           .merge(nodes as any)
-          .attr('stroke', d => (d as any).color)
+          .attr('stroke', (d) => (d as any).color)
           .transition()
           .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
           .call(ChartUtils.transitionsComplete as any, () => {
@@ -166,7 +179,6 @@ export class LineChartService {
           (pathNodes[i - 1] as HTMLElement)?.remove();
         }
       }
-
     });
   }
 }

@@ -11,17 +11,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
-    RouterOutlet,
-    CommonModule,
-    ForgeScaffoldModule,
-    ForgeDrawerModule,
-    ForgeButtonModule,
-    ForgeIconModule,
-    ForgeMiniDrawerModule,
-    HeaderComponent,
-    MenuComponent
-  ],
+  imports: [RouterOutlet, CommonModule, ForgeScaffoldModule, ForgeDrawerModule, ForgeButtonModule, ForgeIconModule, ForgeMiniDrawerModule, HeaderComponent, MenuComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
@@ -42,12 +32,12 @@ export class AppComponent {
   public expand() {
     this.appCache.menu.open = !this.appCache.menu.open;
     if (!this.appCache.menu.open) {
-      (this.elementRef.nativeElement as HTMLElement).querySelectorAll('forge-expansion-panel').forEach(element => element.open = false);
+      (this.elementRef.nativeElement as HTMLElement).querySelectorAll('forge-expansion-panel').forEach((element) => (element.open = false));
     }
   }
 
   private initRouteWatch() {
-    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(() => {
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
       const routes: string[] = [];
       const parseRoute = (r: ActivatedRouteSnapshot) => {
         if (r.url.length) {
@@ -61,7 +51,7 @@ export class AppComponent {
       this.appCache.activeRoute = routes;
     });
 
-    this.router.events.pipe(filter(event => event instanceof NavigationStart)).subscribe(() => {
+    this.router.events.pipe(filter((event) => event instanceof NavigationStart)).subscribe(() => {
       this.appCache.cancelHttpRequests.next();
     });
   }

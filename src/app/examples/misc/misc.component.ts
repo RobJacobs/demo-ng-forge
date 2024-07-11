@@ -8,15 +8,7 @@ import { ArrayFindPipe } from 'src/app/shared/pipes/array-find.pipe';
 @Component({
   selector: 'app-examples-misc',
   standalone: true,
-  imports: [
-    CommonModule,
-    ForgeButtonModule,
-    ForgeIconButtonModule,
-    ForgeIconModule,
-    ForgeToolbarModule,
-    CardComponent,
-    ArrayFindPipe
-  ],
+  imports: [CommonModule, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, ForgeToolbarModule, CardComponent, ArrayFindPipe],
   templateUrl: './misc.component.html',
   styleUrls: ['./misc.component.scss']
 })

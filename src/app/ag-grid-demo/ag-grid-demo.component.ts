@@ -14,16 +14,7 @@ import { AppDataService } from '../app-data.service';
 @Component({
   selector: 'app-ag-grid-demo',
   standalone: true,
-  imports: [
-    CommonModule,
-    ForgeIconButtonModule,
-    ForgeIconModule,
-    ForgeOptionModule,
-    ForgePaginatorModule,
-    ForgeSelectDropdownModule,
-    ForgeToolbarModule,
-    AgGridModule
-  ],
+  imports: [CommonModule, ForgeIconButtonModule, ForgeIconModule, ForgeOptionModule, ForgePaginatorModule, ForgeSelectDropdownModule, ForgeToolbarModule, AgGridModule],
   templateUrl: './ag-grid-demo.component.html',
   styleUrls: ['./ag-grid-demo.component.scss'],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -44,7 +35,7 @@ export class AgGridDemoComponent implements OnInit {
     filters: [],
     skip: 0,
     take: 25
-  }
+  };
   public recordset: IPerson[] = [];
   public recordCount = 0;
 
@@ -64,7 +55,7 @@ export class AgGridDemoComponent implements OnInit {
   ];
 
   public get optionalTableColumns(): IOption[] {
-    return this.columnDefs.filter(c => c.field).map(c => ({ value: c.field, label: c.headerName || c.field })) as IOption[];
+    return this.columnDefs.filter((c) => c.field).map((c) => ({ value: c.field, label: c.headerName || c.field })) as IOption[];
   }
   public selectedTableColumns?: (string | undefined)[];
 
@@ -81,7 +72,7 @@ export class AgGridDemoComponent implements OnInit {
         applyOrder: true
       });
     }
-    this.selectedTableColumns = this.agGrid?.api.getAllDisplayedColumns().map(c => c.getColDef().field);
+    this.selectedTableColumns = this.agGrid?.api.getAllDisplayedColumns().map((c) => c.getColDef().field);
   }
 
   public onTableSort(event: SortChangedEvent) {
@@ -102,7 +93,7 @@ export class AgGridDemoComponent implements OnInit {
   public onTableColumnOptionSelected(columnFields: string[]) {
     this.selectedTableColumns = columnFields;
     this.agGrid?.api.setColumnsVisible(columnFields, true);
-    this.agGrid?.api.setColumnsVisible(this.columnDefs.map(c => c.field).filter(c => !columnFields.includes(c as string)) as string[], false);
+    this.agGrid?.api.setColumnsVisible(this.columnDefs.map((c) => c.field).filter((c) => !columnFields.includes(c as string)) as string[], false);
   }
 
   public onTablePaginatorChange(detail: { pageIndex: number; pageSize: number }) {
@@ -119,9 +110,8 @@ export class AgGridDemoComponent implements OnInit {
         filters: this.filterCache.filters,
         skip: this.filterCache.skip,
         take: this.filterCache.take
-      }).pipe(
-        finalize(() => this.isBusy = false)
-      )
+      })
+      .pipe(finalize(() => (this.isBusy = false)))
       .subscribe((result) => {
         this.recordset = result.data;
         this.recordCount = result.count;
@@ -147,5 +137,4 @@ class ImageCellRendererComponent implements ICellRendererComp {
 
     return true;
   }
-
 }

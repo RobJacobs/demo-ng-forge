@@ -8,17 +8,13 @@ import { ForgeRadioGroupModule, ForgeRadioModule } from '@tylertech/forge-angula
   selector: 'app-formly-radio',
   template: `
     @if (props.label) {
-      <label [attr.for]="id" slot="label">{{props.label}}</label>
+      <label [attr.for]="id" slot="label">{{ props.label }}</label>
     }
-    <forge-radio-group name="app--radio-type">
+    <forge-radio-group [name]="id + '-radio-group'">
       @for (option of $any(props.options); track i; let i = $index) {
-        <forge-radio
-          [id]="id + '-' + i"
-          [value]="option.value"
-          [formControl]="formControl"
-          [formlyAttributes]="field">
+        <forge-radio [id]="id + '-' + i" [name]="id + '-radio-group'" [value]="option.value" [formControl]="formControl" [formlyAttributes]="field">
           @if (option.label) {
-            {{option.label}}
+            {{ option.label }}
           }
         </forge-radio>
       }
@@ -29,35 +25,31 @@ import { ForgeRadioGroupModule, ForgeRadioModule } from '@tylertech/forge-angula
       </div>
     }
   `,
-  styles: [`
-    :host {
-      display: block;
-    }
-
-    [role='radiogroup'] {
-      margin-left: -8px;
-      display: flex;
-      column-gap: 16px;
-      flex-direction: column;
-    }
-
-    forge-radio {
-      &::part(container) {
-        padding: 4px;
+  styles: [
+    `
+      :host {
+        display: block;
       }
-    }
 
-    .forge-typography--label1 {
-      color: var(--forge-theme-error);
-    }
-  `],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormlyModule,
-    ForgeRadioModule,
-    ForgeRadioGroupModule
+      [role='radiogroup'] {
+        margin-left: -8px;
+        display: flex;
+        column-gap: 16px;
+        flex-direction: column;
+      }
+
+      forge-radio {
+        &::part(container) {
+          padding: 4px;
+        }
+      }
+
+      .forge-typography--label1 {
+        color: var(--forge-theme-error);
+      }
+    `
   ],
+  imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeRadioModule, ForgeRadioGroupModule],
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

@@ -6,8 +6,8 @@ export interface IAppCacheService {
   layoutMode: string;
   menu: {
     open: boolean;
-    options: any[]
-  }
+    options: any[];
+  };
   activeRoute: string[];
 }
 
@@ -28,7 +28,8 @@ export class AppCacheService implements IAppCacheService {
       { label: 'People', value: 'people', icon: 'list_alt' },
       { label: 'Pets', value: 'pets', icon: 'pets' },
       {
-        label: 'Test', icon: 'child_friendly',
+        label: 'Test',
+        icon: 'child_friendly',
         options: [
           { label: 'Parent', value: 'test/parent', icon: 'home', leadingIconType: 'component' },
           { label: 'Child', value: 'test/child', icon: 'person', leadingIconType: 'component' }
@@ -39,7 +40,8 @@ export class AppCacheService implements IAppCacheService {
       { label: 'Icons', value: 'icons', icon: 'star' },
       { label: 'CSS Variables', value: 'css-variables', icon: 'adjust' },
       {
-        label: 'Examples', icon: 'directions',
+        label: 'Examples',
+        icon: 'directions',
         options: [
           { label: 'Autocomplete', value: 'examples/autocomplete' },
           { label: 'Drag Drop', value: 'examples/drag-drop' },

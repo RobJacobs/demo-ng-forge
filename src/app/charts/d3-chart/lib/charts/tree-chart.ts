@@ -23,7 +23,7 @@ export interface ITreeChartConfig {
   levelLabels: string[];
   zoomScale?: { min: number; max: number };
   nodeBuilder?: (nodes: Selection<SVGGElement, HierarchyNode<ITreeChartData>, BaseType, unknown>) => void;
-  popupCallback?: (data: ITreeChartData, parentIds: string[], element: SVGElement) => void;
+  popoverCallback?: (data: ITreeChartData, parentIds: string[], element: SVGElement) => void;
   selectedCallback?: (data: ITreeChartData, parentIds: string[], element: SVGElement) => void;
   hoverCallback?: (isHovered: boolean, data: ITreeChartData, parentIds: string[], element: SVGElement) => void;
 }
@@ -54,7 +54,7 @@ export class TreeChartService {
   };
 
   public static nodeCenterHorizontal = (node: HierarchyPointNode<ITreeChartData>, width: number, x = node.x): number => {
-    return Math.round(x - (width / 2));
+    return Math.round(x - width / 2);
   };
 
   public static buildTreeChart(config: ITreeChartConfig): Promise<void> {
@@ -75,32 +75,37 @@ export class TreeChartService {
       };
       const chartData = hierarchy(config.data);
 
-      const chartLayout = tree().nodeSize([config.node.size.width + 24, config.node.size.height + config.node.margin]).separation((a, b) => a.parent === b.parent ? 1 : 1.25);
+      const chartLayout = tree()
+        .nodeSize([config.node.size.width + 24, config.node.size.height + config.node.margin])
+        .separation((a, b) => (a.parent === b.parent ? 1 : 1.25));
       const chart = chartLayout(chartData as any);
       let xMin = 0;
       let xMax = 0;
-      chart.descendants().filter(d => d.depth > 0).forEach((d: HierarchyPointNode<any>) => {
-        if (!isDefined(d.data.nodeId)) {
-          const depths = this.getParentDepths(d);
-          const ids: string[] = [];
-          this.getParentIds(d).forEach((id, i) => {
-            ids.push(`${depths[i]}-${id}`);
-          });
-          ids.push(`${d.depth}-${d.data.id}`);
-          d.data.nodeId = ids.join('--');
-        }
+      chart
+        .descendants()
+        .filter((d) => d.depth > 0)
+        .forEach((d: HierarchyPointNode<any>) => {
+          if (!isDefined(d.data.nodeId)) {
+            const depths = this.getParentDepths(d);
+            const ids: string[] = [];
+            this.getParentIds(d).forEach((id, i) => {
+              ids.push(`${depths[i]}-${id}`);
+            });
+            ids.push(`${d.depth}-${d.data.id}`);
+            d.data.nodeId = ids.join('--');
+          }
 
-        d.y = (d.depth - 1) * (config.node.size.height + config.node.margin);
-        if (d.y > chartSize.height) {
-          chartSize.height = d.y;
-        }
+          d.y = (d.depth - 1) * (config.node.size.height + config.node.margin);
+          if (d.y > chartSize.height) {
+            chartSize.height = d.y;
+          }
 
-        if (d.x > xMax) {
-          xMax = d.x;
-        } else if (d.x < xMin) {
-          xMin = d.x;
-        }
-      });
+          if (d.x > xMax) {
+            xMax = d.x;
+          } else if (d.x < xMin) {
+            xMin = d.x;
+          }
+        });
 
       let rootNode = container.select(`g.${CHART_CONSTANTS.classes.CHART_ROOT}`);
       if (!rootNode.node()) {
@@ -109,8 +114,8 @@ export class TreeChartService {
       }
 
       const zoomScale = ((rootNode.node() as SVGGElement).getCTM() as DOMMatrix).a;
-      chartSize.width = ((Math.abs(xMin) + xMax + config.node.size.width) * zoomScale) + (chartPadding * 2);
-      chartSize.height = ((chartSize.height + config.node.size.height) * zoomScale) + (chartPadding * 2);
+      chartSize.width = (Math.abs(xMin) + xMax + config.node.size.width) * zoomScale + chartPadding * 2;
+      chartSize.height = (chartSize.height + config.node.size.height) * zoomScale + chartPadding * 2;
 
       if (currentSize.width < chartSize.width) {
         container.attr('width', chartSize.width);
@@ -129,40 +134,44 @@ export class TreeChartService {
         };
         container.style('cursor', 'grab');
 
-        container.call((zoom()
-          .scaleExtent([config.zoomScale.min, config.zoomScale.max])
-          .on('zoom', event => {
-            if (event.sourceEvent.type === 'mousemove') {
-              if (scrollParentElement) {
-                scrollParentElement.scrollTop = scrollPosition.top + (scrollPosition.y - event.sourceEvent.clientY);
-                scrollParentElement.scrollLeft = scrollPosition.left + (scrollPosition.x - event.sourceEvent.clientX);
+        container.call(
+          zoom()
+            .scaleExtent([config.zoomScale.min, config.zoomScale.max])
+            .on('zoom', (event) => {
+              if (event.sourceEvent.type === 'mousemove') {
+                if (scrollParentElement) {
+                  scrollParentElement.scrollTop = scrollPosition.top + (scrollPosition.y - event.sourceEvent.clientY);
+                  scrollParentElement.scrollLeft = scrollPosition.left + (scrollPosition.x - event.sourceEvent.clientX);
+                }
+              } else if (event.sourceEvent.type === 'wheel') {
+                rootNode.attr('transform', `scale(${event.transform.k},${event.transform.k})`);
+                const bBox = (rootNode.node() as SVGGElement).getBBox();
+                chartSize.width = bBox.width * event.transform.k + chartPadding * 2;
+                chartSize.height = bBox.height * event.transform.k + chartPadding * 2;
+                container.attr('width', chartSize.width);
+                container.attr('height', chartSize.height);
               }
-            } else if (event.sourceEvent.type === 'wheel') {
-              rootNode.attr('transform', `scale(${event.transform.k},${event.transform.k})`);
-              const bBox = (rootNode.node() as SVGGElement).getBBox();
-              chartSize.width = (bBox.width * event.transform.k) + (chartPadding * 2);
-              chartSize.height = (bBox.height * event.transform.k) + (chartPadding * 2);
-              container.attr('width', chartSize.width);
-              container.attr('height', chartSize.height);
-            }
-          })
-          .on('start', event => {
-            if (event.sourceEvent.type === 'mousedown') {
-              scrollPosition = {
-                left: scrollParentElement.scrollLeft,
-                top: scrollParentElement.scrollTop,
-                x: event.sourceEvent.clientX,
-                y: event.sourceEvent.clientY
-              };
-            }
-          })) as any
+            })
+            .on('start', (event) => {
+              if (event.sourceEvent.type === 'mousedown') {
+                scrollPosition = {
+                  left: scrollParentElement.scrollLeft,
+                  top: scrollParentElement.scrollTop,
+                  x: event.sourceEvent.clientX,
+                  y: event.sourceEvent.clientY
+                };
+              }
+            }) as any
         );
       }
 
       const chartNode = rootNode.select(`g.${CHART_CONSTANTS.classes.CHART_PREFIX}__tree`);
       chartNode.attr('transform', `translate(${Math.abs(xMin) + Math.round(config.node.size.width / 2) + chartPadding}, ${chartPadding})`);
 
-      const nodes = chartNode.selectAll(`.${CHART_CONSTANTS.classes.CHART_PREFIX}__tree__node`).data(chartData.descendants().filter(d => d.depth > 0), (d: any) => d.data.nodeId);
+      const nodes = chartNode.selectAll(`.${CHART_CONSTANTS.classes.CHART_PREFIX}__tree__node`).data(
+        chartData.descendants().filter((d) => d.depth > 0),
+        (d: any) => d.data.nodeId
+      );
 
       const exitNodes = nodes.exit();
       exitNodes
@@ -177,7 +186,9 @@ export class TreeChartService {
         })
         .remove();
 
-      const enterNodes = nodes.enter().append('g')
+      const enterNodes = nodes
+        .enter()
+        .append('g')
         .classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__tree__node`, true)
         .attr('transform', (d: any) => {
           if (d.parent) {
@@ -194,19 +205,21 @@ export class TreeChartService {
           }
         });
 
-      enterNodes.append('rect')
+      enterNodes
+        .append('rect')
         .attr('width', config.node.size.width)
         .attr('height', config.node.size.height)
         .attr('rx', 4)
         .style('stroke', CHART_CONSTANTS.chartTheme.outlineMedium)
         .style('fill', (d: any) => {
-          return config.palette[d.depth - (Math.trunc(d.depth / config.palette.length) * config.palette.length)];
+          return config.palette[d.depth - Math.trunc(d.depth / config.palette.length) * config.palette.length];
         });
 
       if (config.nodeBuilder) {
         config.nodeBuilder(enterNodes);
       } else {
-        enterNodes.append('text')
+        enterNodes
+          .append('text')
           .classed(CHART_CONSTANTS.classes.CHART_TEXT, true)
           .attr('x', config.node.padding)
           .attr('y', config.node.size.height / 2)
@@ -217,8 +230,8 @@ export class TreeChartService {
               return null;
             }
 
-            let width = config.node.size.width - (config.node.padding * 2);
-            if (config.popupCallback) {
+            let width = config.node.size.width - config.node.padding * 2;
+            if (config.popoverCallback) {
               width = width - 24;
             }
             if (this.hasChildren(d)) {
@@ -242,7 +255,6 @@ export class TreeChartService {
       mergeNodes
         .transition()
         .call(ChartUtils.transitionsComplete as any, () => {
-
           if (currentSize.width > chartSize.width) {
             container.attr('width', chartSize.width);
           }
@@ -250,12 +262,12 @@ export class TreeChartService {
             container.attr('height', chartSize.height);
           }
 
-          const parentNode = (enterNodes.nodes().length ? (enterNodes.data()[0] as any).parent :
-            exitNodes.nodes().length ? (exitNodes.data().sort((a: any, b: any) => a.depth as any < b.depth as any)[0] as any).parent :
-              null) as HierarchyPointNode<ITreeChartData>;
+          const parentNode = (
+            enterNodes.nodes().length ? (enterNodes.data()[0] as any).parent : exitNodes.nodes().length ? (exitNodes.data().sort((a: any, b: any) => ((a.depth as any) < b.depth) as any)[0] as any).parent : null
+          ) as HierarchyPointNode<ITreeChartData>;
 
           if (isDefined(parentNode) && parentNode.depth > 0) {
-            const parentElement = nodes.filter(d => d.data.nodeId === parentNode.data.nodeId).node() as SVGElement;
+            const parentElement = nodes.filter((d) => d.data.nodeId === parentNode.data.nodeId).node() as SVGElement;
             if (parentElement) {
               parentElement.scrollIntoView({ behavior: 'smooth' });
             }
@@ -268,12 +280,21 @@ export class TreeChartService {
 
       const nodePath = (start: { x: number; y: number }, end: { x: number; y: number }): string | null => {
         const offSet = (start.y - end.y) / 2;
-        return line()([[start.x, start.y], [start.x, start.y - offSet], [end.x, end.y + offSet], [end.x, end.y]]);
+        return line()([
+          [start.x, start.y],
+          [start.x, start.y - offSet],
+          [end.x, end.y + offSet],
+          [end.x, end.y]
+        ]);
       };
 
-      const linkNodes = chartNode.selectAll(`.${CHART_CONSTANTS.classes.CHART_PREFIX}__tree__path`).data(chartData.descendants().filter(d => d.depth > 1), (d: any) => d.data.nodeId);
+      const linkNodes = chartNode.selectAll(`.${CHART_CONSTANTS.classes.CHART_PREFIX}__tree__path`).data(
+        chartData.descendants().filter((d) => d.depth > 1),
+        (d: any) => d.data.nodeId
+      );
 
-      linkNodes.exit()
+      linkNodes
+        .exit()
         .transition()
         .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
         .attrTween('d', (d: any, i, element) => {
@@ -283,7 +304,9 @@ export class TreeChartService {
         })
         .remove();
 
-      const enterLinkNodes = linkNodes.enter().insert('path')
+      const enterLinkNodes = linkNodes
+        .enter()
+        .insert('path')
         .classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__tree__path`, true)
         .style('fill', 'none')
         .style('stroke', CHART_CONSTANTS.chartTheme.outlineMedium)
@@ -305,16 +328,22 @@ export class TreeChartService {
         });
 
       if (config.levelLabels.length) {
-        const linkLabelNodes = chartNode.selectAll(`.${CHART_CONSTANTS.classes.CHART_PREFIX}__tree__path-label`).data(chartData.descendants().filter(d => d.depth > 0 && isArray(d.data.children) && (d.data.children as ITreeChartData[]).length), (d: any) => d.data.nodeId);
+        const linkLabelNodes = chartNode.selectAll(`.${CHART_CONSTANTS.classes.CHART_PREFIX}__tree__path-label`).data(
+          chartData.descendants().filter((d) => d.depth > 0 && isArray(d.data.children) && (d.data.children as ITreeChartData[]).length),
+          (d: any) => d.data.nodeId
+        );
         const linkLabelNodeHeight = 24;
 
-        const enterlinkLabelNodes = linkLabelNodes.enter().insert('g')
+        const enterlinkLabelNodes = linkLabelNodes
+          .enter()
+          .insert('g')
           .classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__tree__path-label`, true)
           .attr('visibility', 'hidden')
           .attr('transform', (d: any) => `translate(${this.nodeCenterHorizontal(d, config.node.size.width)}, ${d.y + config.node.size.height + config.node.padding})`);
 
-        enterlinkLabelNodes.append('rect')
-          .attr('width', d => {
+        enterlinkLabelNodes
+          .append('rect')
+          .attr('width', (d) => {
             const depthIndex = d.depth - 1;
             const label = config.levelLabels[depthIndex];
             if (!isDefined(label) || !label.length) {
@@ -326,12 +355,13 @@ export class TreeChartService {
             }
             return levelLabelWidths[depthIndex];
           })
-          .attr('transform', (d: any) => `translate(${(config.node.size.width / 2) - (levelLabelWidths[d.depth - 1] / 2)}, 0)`)
+          .attr('transform', (d: any) => `translate(${config.node.size.width / 2 - levelLabelWidths[d.depth - 1] / 2}, 0)`)
           .attr('height', linkLabelNodeHeight)
           .attr('rx', linkLabelNodeHeight / 2)
           .style('fill', CHART_CONSTANTS.chartTheme.outlineMedium);
 
-        enterlinkLabelNodes.append('text')
+        enterlinkLabelNodes
+          .append('text')
           .classed(CHART_CONSTANTS.classes.CHART_TEXT, true)
           .attr('x', Math.round(config.node.size.width / 2))
           .attr('y', linkLabelNodeHeight / 2)
@@ -340,7 +370,7 @@ export class TreeChartService {
           .style('text-anchor', 'middle')
           .style('font-size', '14px')
           .style('fill', CHART_CONSTANTS.chartTheme.textInverse)
-          .text(d => (config.levelLabels as string[])[d.depth - 1]);
+          .text((d) => (config.levelLabels as string[])[d.depth - 1]);
 
         linkLabelNodes.exit().remove();
 
@@ -353,7 +383,7 @@ export class TreeChartService {
             resolve();
           })
           .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
-          .attr('transform', (d: any) => `translate(${this.nodeCenterHorizontal(d, config.node.size.width)}, ${d.y + config.node.size.height + ((config.node.margin - linkLabelNodeHeight) / 2)})`);
+          .attr('transform', (d: any) => `translate(${this.nodeCenterHorizontal(d, config.node.size.width)}, ${d.y + config.node.size.height + (config.node.margin - linkLabelNodeHeight) / 2})`);
       }
 
       mergeNodes.each((d: any, i: number) => {
@@ -366,14 +396,14 @@ export class TreeChartService {
               .append('path')
               .classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__tree__node__children-icon`, true)
               .attr('d', 'M0,0L12,0L6,6,L0,0')
-              .attr('transform', `translate(${config.node.size.width - 20}, ${(config.node.size.height / 2) - 4})`)
+              .attr('transform', `translate(${config.node.size.width - 20}, ${config.node.size.height / 2 - 4})`)
               .style('fill', iconColor);
           }
         } else if (childrenIconNode.node()) {
           childrenIconNode.remove();
         }
 
-        if (config.popupCallback) {
+        if (config.popoverCallback) {
           let infoIconNode = select(mergeNode.node()?.querySelector(`.${CHART_CONSTANTS.classes.CHART_PREFIX}__tree__node__info-icon`) as any);
           if (!infoIconNode.node()) {
             const xTransform = this.hasChildren(d) ? config.node.size.width - 54 : config.node.size.width - 32;
@@ -381,15 +411,15 @@ export class TreeChartService {
               .append('path')
               .classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__tree__node__info-icon`, true)
               .attr('d', 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z')
-              .attr('transform', `translate(${xTransform}, ${(config.node.size.height / 2) - 12})`)
+              .attr('transform', `translate(${xTransform}, ${config.node.size.height / 2 - 12})`)
               .style('fill', iconColor)
               .attr('cursor', 'pointer')
-              .on('click', e => {
+              .on('click', (e) => {
                 e.stopPropagation();
                 const nodeData = JSON.parse(JSON.stringify(d.data));
                 delete nodeData.children;
                 delete nodeData.nodeId;
-                (config.popupCallback as any)(nodeData, this.getParentIds(d), infoIconNode.node());
+                (config.popoverCallback as any)(nodeData, this.getParentIds(d), infoIconNode.node());
               });
           }
         }

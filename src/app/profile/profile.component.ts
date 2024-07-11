@@ -16,17 +16,7 @@ import { ProfileCacheService } from './profile-cache.service';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    ReactiveFormsModule,
-    ForgeButtonModule,
-    ForgeIconModule,
-    ForgeTabBarModule,
-    ForgeTabModule,
-    ForgeToolbarModule,
-    CallbackPipe
-  ],
+  imports: [CommonModule, RouterOutlet, ReactiveFormsModule, ForgeButtonModule, ForgeIconModule, ForgeTabBarModule, ForgeTabModule, ForgeToolbarModule, CallbackPipe],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
@@ -59,16 +49,15 @@ export class ProfileComponent {
       return true;
     }
 
-    return new Observable<boolean>(s => {
-      this.dialogService.open(
-        ConfirmDialogComponent,
-        { options: { persistent: true }, data: { title: 'Unsaved changes', message: 'You have unsaved changes which will be lost, do you want to continue?' } }
-      ).afterClosed.subscribe((result) => {
-        if (result) {
-          this.cache.formGroup.reset();
-        }
-        s.next(result);
-      });
+    return new Observable<boolean>((s) => {
+      this.dialogService
+        .open(ConfirmDialogComponent, { options: { persistent: true }, data: { title: 'Unsaved changes', message: 'You have unsaved changes which will be lost, do you want to continue?' } })
+        .afterClosed.subscribe((result) => {
+          if (result) {
+            this.cache.formGroup.reset();
+          }
+          s.next(result);
+        });
     });
   }
 
@@ -127,7 +116,7 @@ export class ProfileComponent {
   }
 
   public isInvalid(values: boolean[]) {
-    return values.every(v => v === true);
+    return values.every((v) => v === true);
   }
 
   private loadForm(profile: IProfile) {
@@ -151,5 +140,4 @@ export class ProfileComponent {
       address: this.addressFormGroup.value as any
     };
   }
-
 }

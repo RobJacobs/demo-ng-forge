@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class GoogleChartService {
   public static loadGoogleChartService(): Observable<void> {
-    return new Observable<void>(o => {
+    return new Observable<void>((o) => {
       let scriptElement = document.querySelector('script[src="https://www.gstatic.com/charts/loader.js"]') as HTMLOrSVGScriptElement;
       if (scriptElement) {
         o.next();
@@ -16,7 +16,7 @@ export class GoogleChartService {
         scriptElement.onload = () => {
           o.next();
           o.complete();
-        }
+        };
         document.body.appendChild(scriptElement);
       }
     });

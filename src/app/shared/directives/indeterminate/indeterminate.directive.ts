@@ -49,8 +49,8 @@ export class IndeterminateDirective implements ControlValueAccessor {
     }
   }
 
-  public onChange = (_: any) => { };
-  public onTouched = () => { };
+  public onChange = (_: any) => {};
+  public onTouched = () => {};
 
   public writeValue(value: any) {
     if (this.value !== value) {

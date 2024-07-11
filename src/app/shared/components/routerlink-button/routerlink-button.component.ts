@@ -8,13 +8,7 @@ import { ForgeIconButtonModule, ForgeIconModule, ForgeTooltipModule } from '@tyl
   templateUrl: './routerlink-button.component.html',
   styleUrls: ['./routerlink-button.component.scss'],
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    ForgeIconButtonModule,
-    ForgeIconModule,
-    ForgeTooltipModule
-  ]
+  imports: [CommonModule, RouterModule, ForgeIconButtonModule, ForgeIconModule, ForgeTooltipModule]
 })
 export class RouterlinkButtonComponent {
   @Input()

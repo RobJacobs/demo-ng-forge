@@ -7,7 +7,7 @@ import { FormlyFieldDirective } from './formly-field.directive';
   selector: 'app-formly-group',
   template: `
     @if (props.label?.length && field.parent?.type !== 'tab') {
-      <div class="label">{{props.label}}</div>
+      <div class="label">{{ props.label }}</div>
     }
     <div #fieldContainer>
       @for (f of field.fieldGroup; track i; let i = $index) {
@@ -16,50 +16,48 @@ import { FormlyFieldDirective } from './formly-field.directive';
       <ng-content></ng-content>
     </div>
   `,
-  styles: [`
-    :host {
-      display: block;
-      height: fit-content;
+  styles: [
+    `
+      :host {
+        display: block;
+        height: fit-content;
 
-      ::ng-deep {
-        .form-grid {
-          display: grid !important;
-          row-gap: 8px !important;
-          // row-gap: 0 !important;
-        }
+        ::ng-deep {
+          .form-grid {
+            display: grid !important;
+            row-gap: 8px !important;
+            // row-gap: 0 !important;
+          }
 
-        .form-vbox {
-          display: flex;
-          flex-direction: column;
-          row-gap: 16px;
-        }
+          .form-vbox {
+            display: flex;
+            flex-direction: column;
+            row-gap: 16px;
+          }
 
-        .form-hbox {
-          display: flex;
-          flex-direction: row;
-          column-gap: 16px;
-        }
+          .form-hbox {
+            display: flex;
+            flex-direction: row;
+            column-gap: 16px;
+          }
 
-        .form-group {
-          display: flex;
-          flex-direction: column;
-          row-gap: 16px;
-          border: var(--forge-theme-outline);
-          border-radius: 4px;
-          padding: 16px;
+          .form-group {
+            display: flex;
+            flex-direction: column;
+            row-gap: 16px;
+            border: var(--forge-theme-outline);
+            border-radius: 4px;
+            padding: 16px;
+          }
         }
       }
-    }
 
-    .label {
-      padding-bottom: 8px;
-    }
-  `],
-  imports: [
-    CommonModule,
-    FormlyModule,
-    FormlyFieldDirective
+      .label {
+        padding-bottom: 8px;
+      }
+    `
   ],
+  imports: [CommonModule, FormlyModule, FormlyFieldDirective],
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
@@ -107,7 +105,5 @@ export class GroupTypeComponent extends FieldType<FieldGroupTypeConfig> implemen
         }
         break;
     }
-
   }
-
 }

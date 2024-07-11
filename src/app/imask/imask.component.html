@@ -5,32 +5,26 @@
 <div class="body">
   <form novalidate autocomplete="off" [formGroup]="formGroup">
     <forge-text-field>
-      <input #input id="imask--input" type="text" [imask]="mask" [unmask]="unmask" #imaskRef="imask" formControlName="input">
+      <input #input id="imask--input" type="text" [imask]="mask" [unmask]="unmask" #imaskRef="imask" formControlName="input" />
       <label for="imask--input" slot="label">Input</label>
-      <span slot="support-text">{{helpText}}</span>
+      <span slot="support-text">{{ helpText }}</span>
     </forge-text-field>
-    <div style="width: 600px;">
-      <div>
-        <b>string mask</b>: (0) any digit, (a) any letter, (*) any char
-      </div>
-      <div>
-        <b>number mask</b>: (#) required digit, (&) optional digit, (-) sign, (.) decimal, (,) separator
-      </div>
+    <div style="width: 600px">
+      <div><b>string mask</b>: (0) any digit, (a) any letter, (*) any char</div>
+      <div><b>number mask</b>: (#) required digit, (&) optional digit, (-) sign, (.) decimal, (,) separator</div>
     </div>
     <forge-text-field>
-      <input #input id="imask--format" type="text" formControlName="format">
+      <input #input id="imask--format" type="text" formControlName="format" />
       <label for="imask--format" slot="label">Format</label>
     </forge-text-field>
-    <div style="display: flex; column-gap: 8px; align-items: center;">
-      <forge-select style="flex-grow: 1;" formControlName="maskType" label="Mask type">
+    <div style="display: flex; column-gap: 8px; align-items: center">
+      <forge-select style="flex-grow: 1" formControlName="maskType" label="Mask type">
         @for (option of maskOptions; track i; let i = $index) {
-        <forge-option [value]="option.value">{{option.label}}</forge-option>
+          <forge-option [value]="option.value">{{ option.label }}</forge-option>
         }
       </forge-select>
-      <forge-button variant="outlined" (click)="onApply()">
-        Apply
-      </forge-button>
+      <forge-button variant="outlined" (click)="onApply()"> Apply </forge-button>
     </div>
   </form>
-  <p>{{formGroup.getRawValue() | json}}</p>
+  <p>{{ formGroup.getRawValue() | json }}</p>
 </div>

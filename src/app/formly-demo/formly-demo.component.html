@@ -1,17 +1,17 @@
 <div class="body">
   <form class="form" novalidate autocomplete="off" [formGroup]="formGroup">
     @if (formDefinition) {
-    <formly-form [form]="formGroup" [model]="model" [fields]="formDefinition" [options]="formOptions"></formly-form>
+      <formly-form [form]="formGroup" [model]="model" [fields]="formDefinition" [options]="formOptions"></formly-form>
 
-    <p>
-      {{formGroup.value| json}}
-    </p>
+      <p>
+        {{ formGroup.value | json }}
+      </p>
     }
   </form>
 </div>
 
 <forge-toolbar class="footer" inverted>
   <span class="forge-typography--label1" slot="start">
-    {{formMessage?.message}}
+    {{ formMessage?.message }}
   </span>
 </forge-toolbar>

@@ -40,8 +40,8 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('table', { static: true })
   private tableElementRef?: ElementRef;
-  @ViewChild('columnHeaderPopup', { read: PopoverDirective })
-  private columnHeaderPopupDirective?: PopoverDirective;
+  @ViewChild('columnHeaderPopover', { read: PopoverDirective })
+  private columnHeaderPopoverDirective?: PopoverDirective;
   @ViewChild(CdkVirtualScrollViewport)
   public virtualScrollViewport?: CdkVirtualScrollViewport;
   private tableColumnResize$ = new Subject<void>();
@@ -56,7 +56,7 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
     filters: [] as any[],
     skip: 0,
     take: 25
-  }
+  };
   public recordset: IPerson[] = [];
   public recordset$ = new BehaviorSubject<IPerson[]>([]);
   public recordCount = 0;
@@ -71,34 +71,36 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
   public expandedRows: any[] = [];
 
   public visibleColumns = (columns: IColumnConfiguration[]) => {
-    return columns.filter(c => c.hidden !== true);
-  }
+    return columns.filter((c) => c.hidden !== true);
+  };
 
   public recordsetTrackBy = (index: number, person: IPerson) => {
     return person.id;
-  }
+  };
 
   public ngOnInit() {
     this.getRecords();
   }
 
   public ngAfterViewInit() {
-    this.virtualScrollViewport?.renderedRangeStream.subscribe(o => {
+    this.virtualScrollViewport?.renderedRangeStream.subscribe((o) => {
       this.tableHeaderOffset = o.start;
       if (!this.isBusy && o.start > 0 && o.end + 67 > this.recordCount) {
         this.isBusy = true;
         this.appDataService
           .getPeople({
             sort: this.filterCache.sort
-          }).pipe(
-            finalize(() => this.isBusy = false)
-          )
+          })
+          .pipe(finalize(() => (this.isBusy = false)))
           .subscribe((result) => {
             const startId = this.recordset.length + 1;
-            this.recordset = [...this.recordset, ...result.data.map((p, i) => {
-              p.id = startId + p.id;
-              return p;
-            })];
+            this.recordset = [
+              ...this.recordset,
+              ...result.data.map((p, i) => {
+                p.id = startId + p.id;
+                return p;
+              })
+            ];
             this.recordCount = this.recordset.length;
             this.recordset$.next(this.recordset);
           });
@@ -133,7 +135,7 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
       this.isColumnResizing = true;
       this.tableElementRef?.nativeElement.querySelector('.forge-table-head__row')?.classList.add('forge-table-head__row--resizing');
       columnHeaderElement.classList.add('forge-table-head__cell--resizing');
-      columnElements.forEach(c => c.classList.add('forge-table-body__cell--resizing'));
+      columnElements.forEach((c) => c.classList.add('forge-table-body__cell--resizing'));
 
       fromEvent<MouseEvent>(document.body, 'mousemove')
         .pipe(
@@ -142,13 +144,11 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
             column.width = columnHeaderElement.offsetWidth + (event.clientX - positionX);
             positionX = event.clientX;
           })
-        ).subscribe();
+        )
+        .subscribe();
 
       const theadElement = this.tableElementRef?.nativeElement.querySelector('thead');
-      merge(
-        fromEvent(theadElement, 'mouseup'),
-        fromEvent(theadElement, 'mouseleave')
-      )
+      merge(fromEvent(theadElement, 'mouseup'), fromEvent(theadElement, 'mouseleave'))
         .pipe(
           finalize(() =>
             requestAnimationFrame(() => {
@@ -162,39 +162,40 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
             this.tableColumnResize$.next();
             this.tableElementRef?.nativeElement.querySelector('.forge-table-head__row')?.classList.remove('forge-table-head__row--resizing');
             columnHeaderElement.classList.remove('forge-table-head__cell--resizing');
-            columnElements.forEach(c => c.classList.remove('forge-table-body__cell--resizing'));
+            columnElements.forEach((c) => c.classList.remove('forge-table-body__cell--resizing'));
           })
-        ).subscribe();
+        )
+        .subscribe();
     }
   }
 
   public onColumnHeaderRightClick(event: PointerEvent) {
     event.preventDefault();
-    if (this.columnHeaderPopupDirective?.popoverElement) {
-      this.columnHeaderPopupDirective.close();
+    if (this.columnHeaderPopoverDirective?.popoverElement) {
+      this.columnHeaderPopoverDirective.close();
     } else {
-      this.columnHeaderPopupDirective?.open();
+      this.columnHeaderPopoverDirective?.open();
     }
   }
 
-  public onColumnPopupItemSelected(value: any) {
+  public onColumnPopoverItemSelected(value: any) {
     switch (value) {
       case 'reset-column-width':
-        this.tableColumns.forEach(c => c.width = undefined);
+        this.tableColumns.forEach((c) => (c.width = undefined));
         break;
       case 'freeze-column': {
         const columnHeaderElement = (this.tableElementRef?.nativeElement as HTMLTableElement).querySelectorAll('thead tr th')[0];
         const columnElements = (this.tableElementRef?.nativeElement as HTMLTableElement).querySelectorAll(`tbody tr td:nth-child(${1})`);
         columnHeaderElement.classList.add('forge-table-head__cell--frozen');
-        columnElements.forEach(c => c.classList.add('forge-table-body__cell--frozen'));
+        columnElements.forEach((c) => c.classList.add('forge-table-body__cell--frozen'));
         break;
       }
 
       default: {
-        const tableColumn = this.tableColumns.find(c => c.property === value.property);
+        const tableColumn = this.tableColumns.find((c) => c.property === value.property);
         if (tableColumn) {
           // prevent hiding all columns
-          if (this.tableColumns.filter(c => !c.hidden).length) {
+          if (this.tableColumns.filter((c) => !c.hidden).length) {
             tableColumn.hidden = isDefined(tableColumn.hidden) ? !tableColumn.hidden : true;
             tableColumn.sortDirection = undefined;
             this.tableColumns = [...this.tableColumns];
@@ -203,12 +204,12 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       }
     }
-    this.columnHeaderPopupDirective?.close();
+    this.columnHeaderPopoverDirective?.close();
   }
 
   public onTableSort(column: IColumnConfiguration) {
     if (!this.isColumnResizing) {
-      this.tableColumns.filter(c => c.property !== column.property).forEach(c => c.sortDirection = undefined);
+      this.tableColumns.filter((c) => c.property !== column.property).forEach((c) => (c.sortDirection = undefined));
       if (column.sortDirection === SortDirection.Ascending) {
         column.sortDirection = SortDirection.Descending;
       } else if (column.sortDirection === SortDirection.Descending) {
@@ -245,9 +246,8 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
     this.appDataService
       .getPeople({
         sort: this.filterCache.sort
-      }).pipe(
-        finalize(() => this.isBusy = false)
-      )
+      })
+      .pipe(finalize(() => (this.isBusy = false)))
       .subscribe((result) => {
         this.recordset = result.data;
         this.recordCount = result.count;

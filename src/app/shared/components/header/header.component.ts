@@ -7,14 +7,7 @@ import { AppCacheService } from 'src/app/app-cache.service';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [
-    CommonModule,
-    ForgeAppBarModule,
-    ForgeIconModule,
-    ForgeIconButtonModule,
-    ForgeLinearProgressModule,
-    ForgeTooltipModule
-  ],
+  imports: [CommonModule, ForgeAppBarModule, ForgeIconModule, ForgeIconButtonModule, ForgeLinearProgressModule, ForgeTooltipModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
@@ -29,9 +22,6 @@ export class HeaderComponent {
       this.appCache.theme = 'light';
       document.body.classList.remove('forge-theme-dark');
     }
-    localStorage.setItem(
-      this.appCache.storageKey,
-      JSON.stringify({ theme: this.appCache.theme })
-    );
+    localStorage.setItem(this.appCache.storageKey, JSON.stringify({ theme: this.appCache.theme }));
   }
 }

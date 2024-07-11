@@ -87,9 +87,13 @@ export class ChartUtils {
 
   public static colorScale(data: any[], colors: number | string[]): any {
     if (colors instanceof Array) {
-      return scaleLinear().domain(extent(data) as number[]).range([colors[0] as any, colors[1] as any]);
+      return scaleLinear()
+        .domain(extent(data) as number[])
+        .range([colors[0] as any, colors[1] as any]);
     } else {
-      return scaleLinear().domain(extent(data) as number[]).rangeRound([0, colors - 1]);
+      return scaleLinear()
+        .domain(extent(data) as number[])
+        .rangeRound([0, colors - 1]);
     }
   }
 
@@ -100,17 +104,20 @@ export class ChartUtils {
 
   public static transitionsComplete(transition: Transition<Element, any, Element, any>, callback: () => void): void {
     let i = 0;
-    transition.each(() => {
-      i++;
-    }).on('end', () => {
-      i--; if (i === 0) {
-        callback();
-      }
-    });
+    transition
+      .each(() => {
+        i++;
+      })
+      .on('end', () => {
+        i--;
+        if (i === 0) {
+          callback();
+        }
+      });
   }
 
   public static convertData(data: any[], mapping: IChartData): IChartData[] {
-    return data.map(d => {
+    return data.map((d) => {
       const value = typeof d[mapping.value.toString()] === 'number' ? d[mapping.value.toString()] : d[mapping.value.toString()] instanceof Date ? d[mapping.value.toString()].valueOf() : parseInt(d[mapping.value.toString()], 10);
       return {
         id: d[mapping.id],
@@ -137,7 +144,7 @@ export class ChartUtils {
       return 0;
     }
     let maxWidth = 0;
-    values.forEach(v => {
+    values.forEach((v) => {
       const width = this.getTextWidth(v, font);
       if (width > maxWidth) {
         maxWidth = width;

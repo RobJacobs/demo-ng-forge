@@ -6,11 +6,7 @@ import { ForgeTextFieldModule } from '@tylertech/forge-angular';
 @Component({
   selector: 'app-examples-binding-child',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ForgeTextFieldModule
-  ],
+  imports: [CommonModule, FormsModule, ForgeTextFieldModule],
   templateUrl: './child.component.html',
   styleUrls: ['./child.component.scss']
 })

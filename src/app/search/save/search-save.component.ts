@@ -18,18 +18,7 @@ export interface ISearchSaveDialogData {
 @Component({
   selector: 'app-search-save',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    ForgeButtonModule,
-    ForgeCheckboxModule,
-    ForgeIconButtonModule,
-    ForgeIconModule,
-    ForgeTextFieldModule,
-    AutoFocusDirective,
-    FormControlInvalidDirective,
-    DialogComponent
-  ],
+  imports: [CommonModule, ReactiveFormsModule, ForgeButtonModule, ForgeCheckboxModule, ForgeIconButtonModule, ForgeIconModule, ForgeTextFieldModule, AutoFocusDirective, FormControlInvalidDirective, DialogComponent],
   templateUrl: './search-save.component.html',
   styleUrls: ['./search-save.component.scss']
 })

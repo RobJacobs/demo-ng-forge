@@ -11,11 +11,19 @@ export class BubbleChartService {
       }
 
       const container = select(config.container);
-      const colorScale = config.palette && config.palette.length ? ChartUtils.colorScale(config.data.map(d => d.value), config.palette.length === 2 ? config.palette : config.palette.length) : undefined;
+      const colorScale =
+        config.palette && config.palette.length
+          ? ChartUtils.colorScale(
+              config.data.map((d) => d.value),
+              config.palette.length === 2 ? config.palette : config.palette.length
+            )
+          : undefined;
       const valueFormat = config.valueFormat ? format(config.valueFormat) : config.valueDateFormat ? timeFormat(config.valueDateFormat) : undefined;
       const nodePadding = 10;
       const chartSize = ChartUtils.chartSize(config.container);
-      const chartData = hierarchy({ children: config.data }).sum((d: any) => d.value).sort((a: any, b: any) => b.value - a.value);
+      const chartData = hierarchy({ children: config.data })
+        .sum((d: any) => d.value)
+        .sort((a: any, b: any) => b.value - a.value);
       const chart = pack().size([Math.min(...[chartSize.width, chartSize.height]), Math.min(...[chartSize.width, chartSize.height])]);
       chart(chartData as any);
 
@@ -38,8 +46,12 @@ export class BubbleChartService {
       const enterNodes = nodes.enter().append('g');
 
       enterNodes.append('circle');
-      enterNodes.append('clipPath').attr('id', (d: any) => `${CHART_CONSTANTS.classes.CHART_CLIP}-${d.data.id}`).append('circle');
-      enterNodes.append('text')
+      enterNodes
+        .append('clipPath')
+        .attr('id', (d: any) => `${CHART_CONSTANTS.classes.CHART_CLIP}-${d.data.id}`)
+        .append('circle');
+      enterNodes
+        .append('text')
         .classed(CHART_CONSTANTS.classes.CHART_TEXT, true)
         .attr('clip-path', (d: any) => `url(#${CHART_CONSTANTS.classes.CHART_CLIP}-${d.data.id})`)
         .style('text-anchor', 'middle');
@@ -55,18 +67,21 @@ export class BubbleChartService {
 
       const mergeNodes = enterNodes.merge(nodes as any);
 
-      mergeNodes.select('text')
+      mergeNodes
+        .select('text')
         .style('display', 'none')
         .attr('y', '.35em')
         .text((d: any) => {
           return valueFormat ? valueFormat(d.data.value) : d.data.value;
         });
 
-      mergeNodes.transition()
+      mergeNodes
+        .transition()
         .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
         .attr('transform', (d: any) => 'translate(' + d.x + ',' + d.y + ')');
 
-      mergeNodes.select('g > circle')
+      mergeNodes
+        .select('g > circle')
         .attr('fill', (d: any) => {
           if (d.data.color) {
             return d.data.color;
@@ -83,8 +98,7 @@ export class BubbleChartService {
         .attr('id', (d: any) => `${CHART_CONSTANTS.classes.CHART_PREFIX}__node-${d.data.id}`)
         .transition()
         .call(ChartUtils.transitionsComplete as any, () => {
-          mergeNodes.select('clipPath > circle')
-            .attr('r', (d: any) => d.r > nodePadding / 2 ? d.r - nodePadding / 2 : 0);
+          mergeNodes.select('clipPath > circle').attr('r', (d: any) => (d.r > nodePadding / 2 ? d.r - nodePadding / 2 : 0));
           mergeNodes.select('text').style('display', null);
           resolve();
         })

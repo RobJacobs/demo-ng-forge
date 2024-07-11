@@ -10,11 +10,7 @@ import { AppDataService } from 'src/app/app-data.service';
 @Component({
   selector: 'app-test-parent',
   standalone: true,
-  imports: [
-    CommonModule,
-    ForgeToolbarModule,
-    ForgeButtonModule
-  ],
+  imports: [CommonModule, ForgeToolbarModule, ForgeButtonModule],
   templateUrl: './parent.component.html',
   styleUrls: ['./parent.component.scss']
 })
@@ -34,11 +30,10 @@ export class ParentComponent {
   private getLongRequest(): Observable<any> {
     return this.appDataService.getLongRequest().pipe(
       tap({
-        next: result => console.log(result),
-        error: error => console.log(error)
+        next: (result) => console.log(result),
+        error: (error) => console.log(error)
       }),
       takeUntil(this.appCache.cancelHttpRequests)
     );
   }
-
 }

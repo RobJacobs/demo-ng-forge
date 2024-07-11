@@ -1,7 +1,7 @@
 <forge-autocomplete #rangeAutocomplete [filter]="onFilter" [selectedTextBuilder]="selectedTextBuilder" [popupHeaderBuilder]="optionHeaderBuilder" multiple (forge-autocomplete-change)="onAutocompleteChange()">
   <forge-text-field>
-    <input #filterInput type="text" [attr.id]="elementId">
-    <label [attr.for]="elementId">{{label}}</label>
+    <input #filterInput type="text" [attr.id]="elementId" />
+    <label [attr.for]="elementId">{{ label }}</label>
     <forge-icon slot="end" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
   </forge-text-field>
 </forge-autocomplete>
@@ -12,28 +12,28 @@
       <span class="forge-typography--subheading2 range__input__header">Enter a search range</span>
       <div class="range__input__body">
         <forge-text-field>
-          <input type="text" placeholder="min" [attr.maxlength]="maxlength" [(ngModel)]="rangeMin">
+          <input type="text" placeholder="min" [attr.maxlength]="maxlength" [(ngModel)]="rangeMin" />
         </forge-text-field>
         <span>to</span>
         <forge-text-field>
-          <input type="text" placeholder="max" [attr.maxlength]="maxlength" [(ngModel)]="rangeMax">
+          <input type="text" placeholder="max" [attr.maxlength]="maxlength" [(ngModel)]="rangeMax" />
         </forge-text-field>
         <forge-icon-button aria-label="Add search range" (click)="onAddRangeOption()">
           <forge-icon name="add"></forge-icon>
         </forge-icon-button>
       </div>
       @if (rangeMessage) {
-      <div class="forge-typography--label1">{{rangeMessage}}</div>
+        <div class="forge-typography--label1">{{ rangeMessage }}</div>
       }
     </div>
     <forge-list class="range__options">
       @for (option of rangeOptions; track i; let i = $index) {
-      <forge-list-item>
-        <forge-icon-button slot="start" aria-label="Delete search range" (click)="onDeleteRangeOption(option)">
-          <forge-icon name="delete"></forge-icon>
-        </forge-icon-button>
-        {{option.label}}
-      </forge-list-item>
+        <forge-list-item>
+          <forge-icon-button slot="start" aria-label="Delete search range" (click)="onDeleteRangeOption(option)">
+            <forge-icon name="delete"></forge-icon>
+          </forge-icon-button>
+          {{ option.label }}
+        </forge-list-item>
       }
     </forge-list>
     <forge-divider></forge-divider>

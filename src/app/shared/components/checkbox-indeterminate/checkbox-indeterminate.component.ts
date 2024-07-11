@@ -38,8 +38,8 @@ export class CheckboxIndeterminateComponent implements OnInit, ControlValueAcces
     });
   }
 
-  public onChange = (_: any) => { };
-  public onTouched = () => { };
+  public onChange = (_: any) => {};
+  public onTouched = () => {};
 
   public writeValue(value: boolean | null) {
     this.value = value;

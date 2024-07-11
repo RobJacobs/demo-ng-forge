@@ -6,47 +6,60 @@
   <div class="body__table">
     <cdk-virtual-scroll-viewport itemSize="48">
       <table #table class="forge-table forge-table--fixed">
-        <thead [style.--table-header-offset]="tableHeaderOffset" [style.--table-header-translate-y]="(tableHeaderOffset * -48) + 'px'">
+        <thead [style.--table-header-offset]="tableHeaderOffset" [style.--table-header-translate-y]="tableHeaderOffset * -48 + 'px'">
           <tr class="forge-table-row forge-table-head__row" cdkDropList (cdkDropListDropped)="onColumnHeaderDragDrop($event)" cdkDropListOrientation="horizontal">
             <th class="forge-table-cell forge-table-head__cell forge-table-row__expander"></th>
-            @for (col of tableColumns | appCallback:$any(visibleColumns); track colIndex; let colIndex = $index) {
-            <th scope="col" class="forge-table-cell forge-table-head__cell forge-table-head__cell--sortable" cdkDrag cdkDragLockAxis="x" (cdkDragStarted)="onColumnHeaderDragStart()" (click)="columnHeaderPopup.close(); onTableSort(col)" #columnHeaderPopup="forgePopover" [forgePopover]="columnHeaderPopupTemplate" [forgePopoverPlacement]="'right-end'" (contextmenu)="onColumnHeaderRightClick($any($event))" tabindex="-1" [style.--table-column-width]="col.width">
-              <div class="forge-table-head__cell-container">
-                <span class="forge-table-head__cell-text">{{col.header}}</span>
-                @if (col.sortDirection?.length) {
-                <forge-icon [name]="col.sortDirection === 'DESC' ? 'arrow_downward' : col.sortDirection === 'ASC' ? 'arrow_upward' : ''" class="forge-table-head__cell-sort-icon" aria-hidden="true"></forge-icon>
-                }
-              </div>
-              <div class="forge-table-head__cell-actions">
-                <div class="forge-table-head__cell-dragger" cdkDragHandle></div>
-                <div class="forge-table-head__cell-resizer" (mousedown)="onColumnHeaderResize($event, colIndex + 1, col)"></div>
-              </div>
-            </th>
+            @for (col of tableColumns | appCallback: $any(visibleColumns); track colIndex; let colIndex = $index) {
+              <th
+                scope="col"
+                class="forge-table-cell forge-table-head__cell forge-table-head__cell--sortable"
+                cdkDrag
+                cdkDragLockAxis="x"
+                (cdkDragStarted)="onColumnHeaderDragStart()"
+                (click)="columnHeaderPopover.close(); onTableSort(col)"
+                #columnHeaderPopover="forgePopover"
+                [forgePopover]="columnHeaderPopoverTemplate"
+                [forgePopoverPlacement]="'right-end'"
+                (contextmenu)="onColumnHeaderRightClick($any($event))"
+                tabindex="-1"
+                [style.--table-column-width]="col.width"
+              >
+                <div class="forge-table-head__cell-container">
+                  <span class="forge-table-head__cell-text">{{ col.header }}</span>
+                  @if (col.sortDirection?.length) {
+                    <forge-icon [name]="col.sortDirection === 'DESC' ? 'arrow_downward' : col.sortDirection === 'ASC' ? 'arrow_upward' : ''" class="forge-table-head__cell-sort-icon" aria-hidden="true"></forge-icon>
+                  }
+                </div>
+                <div class="forge-table-head__cell-actions">
+                  <div class="forge-table-head__cell-dragger" cdkDragHandle></div>
+                  <div class="forge-table-head__cell-resizer" (mousedown)="onColumnHeaderResize($event, colIndex + 1, col)"></div>
+                </div>
+              </th>
             }
           </tr>
         </thead>
         <tbody>
           <ng-container *cdkVirtualFor="let record of recordset$; trackBy: recordsetTrackBy; let recordIndex = index">
-            <tr class="forge-table-row forge-table-body__row" [ngClass]="{'forge-table-row--expanded': expandedRows[recordIndex]}">
+            <tr class="forge-table-row forge-table-body__row" [ngClass]="{ 'forge-table-row--expanded': expandedRows[recordIndex] }">
               <td class="forge-table-cell forge-table-body__cell forge-table-row__expander">
                 <forge-icon-button (click)="onExpandRow(recordIndex, record)" aria-label="Toggle details">
                   <forge-icon [name]="expandedRows[recordIndex] ? 'expand_less' : 'expand_more'"></forge-icon>
                 </forge-icon-button>
               </td>
-              @for (col of tableColumns | appCallback:$any(visibleColumns); track colIndex; let colIndex = $index) {
-              <td class="forge-table-cell forge-table-body__cell">
-                <div class="forge-table-cell__container">
-                  {{$any(record)[col.property]}}
-                </div>
-              </td>
+              @for (col of tableColumns | appCallback: $any(visibleColumns); track colIndex; let colIndex = $index) {
+                <td class="forge-table-cell forge-table-body__cell">
+                  <div class="forge-table-cell__container">
+                    {{ $any(record)[col.property] }}
+                  </div>
+                </td>
               }
             </tr>
             @if (expandedRows[recordIndex]) {
-            <tr class="forge-table-row forge-table-body__row forge-table-row__expandable-content">
-              <td class="forge-table-row__expandable-content-cell" [attr.colspan]="(tableColumns | appCallback:$any(visibleColumns)).length + 1">
-                <app-table-detail [data]="expandedRows[recordIndex]" [rowIndex]="recordIndex"></app-table-detail>
-              </td>
-            </tr>
+              <tr class="forge-table-row forge-table-body__row forge-table-row__expandable-content">
+                <td class="forge-table-row__expandable-content-cell" [attr.colspan]="(tableColumns | appCallback: $any(visibleColumns)).length + 1">
+                  <app-table-detail [data]="expandedRows[recordIndex]" [rowIndex]="recordIndex"></app-table-detail>
+                </td>
+              </tr>
             }
           </ng-container>
         </tbody>
@@ -55,25 +68,25 @@
   </div>
 
   <forge-toolbar inverted="true">
-    <span slot="end" class="forge-typography--label1">Records: {{recordCount}}</span>
+    <span slot="end" class="forge-typography--label1">Records: {{ recordCount }}</span>
     <!-- <forge-paginator slot="end" [pageIndex]="filterCache.skip / filterCache.take" [pageSize]="filterCache.take" [total]="recordCount" (forge-paginator-change)="onTablePaginatorChange($event.detail)"></forge-paginator> -->
   </forge-toolbar>
 </div>
 
-<ng-template #columnHeaderPopupTemplate>
-  <forge-list class="column-popup" (forge-list-item-select)="onColumnPopupItemSelected($event.detail.value)">
+<ng-template #columnHeaderPopoverTemplate>
+  <forge-list class="column-popover" (forge-list-item-select)="onColumnPopoverItemSelected($event.detail.value)">
     @for (column of tableColumns; track i; let i = $index) {
-    <forge-list-item [value]="column">
-      <forge-checkbox slot="start" checked aria-label="Show/hide table column" [checked]="!column.hidden"></forge-checkbox>
-      <span>{{column.header}}</span>
-    </forge-list-item>
+      <forge-list-item [value]="column">
+        <forge-icon slot="start" [name]="column.hidden ? 'check_box_outline_blank' : 'check_box'"></forge-icon>
+        <button type="button">{{ column.header }}</button>
+      </forge-list-item>
     }
     <forge-divider></forge-divider>
     <forge-list-item value="reset-column-width">
-      <span>Reset column widths</span>
+      <button type="button">Reset column widths</button>
     </forge-list-item>
     <forge-list-item value="freeze-column">
-      <span>Freeze column</span>
+      <button type="button">Freeze column</button>
     </forge-list-item>
   </forge-list>
 </ng-template>

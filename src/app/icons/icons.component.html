@@ -3,9 +3,9 @@
   <forge-autocomplete slot="start" [filter]="iconOptionFilter" (forge-autocomplete-change)="onIconSelected($event.detail)">
     <forge-text-field>
       @if (selectedIcon) {
-      <forge-icon slot="start" [name]="selectedIcon"></forge-icon>
+        <forge-icon slot="start" [name]="selectedIcon"></forge-icon>
       }
-      <input type="text" aria-label="Filter icons" placeholder="Filter">
+      <input type="text" aria-label="Filter icons" placeholder="Filter" />
       <forge-icon slot="end" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
     </forge-text-field>
   </forge-autocomplete>
@@ -14,10 +14,10 @@
 <div class="body">
   <div class="body__icons">
     @for (icon of cache.iconOptions; track i; let i = $index) {
-    <div class="icon">
-      <forge-icon lazy [name]="icon.value"></forge-icon>
-      <div class="forge-typography--label1">{{icon.value}}</div>
-    </div>
+      <div class="icon">
+        <forge-icon lazy [name]="icon.value"></forge-icon>
+        <div class="forge-typography--label1">{{ icon.value }}</div>
+      </div>
     }
   </div>
 </div>

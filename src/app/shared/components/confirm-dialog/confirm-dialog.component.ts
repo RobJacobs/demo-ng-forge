@@ -15,13 +15,7 @@ export interface IConfirmDialogData {
   templateUrl: './confirm-dialog.component.html',
   styleUrls: ['./confirm-dialog.component.scss'],
   standalone: true,
-  imports: [
-    CommonModule,
-    ForgeButtonModule,
-    ForgeIconButtonModule,
-    ForgeIconModule,
-    DialogComponent
-  ]
+  imports: [CommonModule, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, DialogComponent]
 })
 export class ConfirmDialogComponent {
   public dialogConfig = inject<IConfirmDialogData>(DIALOG_DATA);

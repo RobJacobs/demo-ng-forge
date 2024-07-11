@@ -11,12 +11,7 @@ import { storageDb } from './indexed-db-storage';
 @Component({
   selector: 'app-storage',
   standalone: true,
-  imports: [
-    CommonModule,
-    ForgeButtonModule,
-    ForgeLabelValueModule,
-    ForgeToolbarModule
-  ],
+  imports: [CommonModule, ForgeButtonModule, ForgeLabelValueModule, ForgeToolbarModule],
   templateUrl: './storage.component.html',
   styleUrls: ['./storage.component.scss']
 })
@@ -29,7 +24,7 @@ export class StorageComponent {
     total: '?',
     used: '?',
     localStorage: '?'
-  }
+  };
 
   public localStorageData?: IPerson[] = [];
 
@@ -44,7 +39,7 @@ export class StorageComponent {
   }
 
   public onSaveLocal() {
-    this.appDataService.getPeople().subscribe(result => {
+    this.appDataService.getPeople().subscribe((result) => {
       this.localStorageData = result.data;
       localStorage.setItem(`${this.storageKey}:${new Date().getTime()}`, JSON.stringify(this.localStorageData));
       this.calcStorageSpace();
@@ -62,7 +57,7 @@ export class StorageComponent {
     if (localStorageResult?.length) {
       try {
         this.localStorageData = JSON.parse(localStorageResult);
-      } catch { }
+      } catch {}
     }
   }
 
@@ -74,21 +69,26 @@ export class StorageComponent {
   }
 
   public onSaveDb() {
-    this.appDataService.getPeople().subscribe(result => {
-      storageDb.people?.bulkAdd([...result.data.map(p => {
-        delete (p as any).id;
-        return p;
-      })]).finally(() => {
-        this.onLoadDb();
-        this.calcStorageSpace();
-      });
+    this.appDataService.getPeople().subscribe((result) => {
+      storageDb.people
+        ?.bulkAdd([
+          ...result.data.map((p) => {
+            delete (p as any).id;
+            return p;
+          })
+        ])
+        .finally(() => {
+          this.onLoadDb();
+          this.calcStorageSpace();
+        });
     });
   }
 
   public onLoadDb() {
-    storageDb.people?.toArray()
-      .then(result => this.indexedDbData = result)
-      .catch(error => console.log(error));
+    storageDb.people
+      ?.toArray()
+      .then((result) => (this.indexedDbData = result))
+      .catch((error) => console.log(error));
 
     // this.dexiePromiseToSubject(storageDb.people.toArray()).subscribe({
     //   next: value => console.log(value),
@@ -103,24 +103,24 @@ export class StorageComponent {
   }
 
   private calcStorageSpace() {
-    navigator.storage.estimate().then(result => {
+    navigator.storage.estimate().then((result) => {
       this.storageSpace = {
         total: `${Utils.formatNumber((result.quota ?? 0) / 1000000)}mb`,
         used: `${Utils.formatNumber((result.usage ?? 0) / 1000000)}mb`,
         localStorage: `${Utils.formatNumber((localStorage.getItem(this.storageKey)?.length ?? 0) / 1000000)}mb`
-      }
+      };
     });
   }
 
   private dexieObservableToSubject<T>(o: DexieObservable<T>): Subject<T> {
-    const subject = new Subject<T>;
+    const subject = new Subject<T>();
     const dexieSub = o.subscribe({
-      next: value => {
+      next: (value) => {
         subject.next(value);
         dexieSub.unsubscribe();
         subject.complete();
       },
-      error: error => {
+      error: (error) => {
         subject.error(error);
         dexieSub.unsubscribe();
         subject.complete();
@@ -130,11 +130,11 @@ export class StorageComponent {
   }
 
   private dexiePromiseToSubject<T>(p: Promise<T>): Subject<T> {
-    const subject = new Subject<T>;
-    p.then(value => {
+    const subject = new Subject<T>();
+    p.then((value) => {
       subject.next(value);
       subject.complete();
-    }).catch(error => {
+    }).catch((error) => {
       subject.error(error);
       subject.complete();
     });

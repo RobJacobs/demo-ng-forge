@@ -14,7 +14,7 @@ export class FormlyFieldDirective implements OnInit {
   private moduleService = inject(FormlyDemoService);
 
   @Input()
-  field?: FormlyFieldConfig
+  field?: FormlyFieldConfig;
   @Input()
   formlyFieldDirective?: FormlyField;
 
@@ -52,6 +52,5 @@ export class FormlyFieldDirective implements OnInit {
         required: `A ${this.field.props.label || 'value'} is required`
       };
     }
-
   }
 }

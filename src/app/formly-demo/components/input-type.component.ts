@@ -11,16 +11,9 @@ import { FormlyDemoService } from '../formly-demo.service';
   selector: 'app-formly-input',
   template: `
     <forge-text-field [required]="props.required" [invalid]="showError">
-      <input
-        #input
-        [id]="id"
-        [type]="inputType"
-        [placeholder]="props.placeholder"
-        [readonly]="props.readonly"
-        [formControl]="formControl"
-        [formlyAttributes]="field" />
+      <input #input [id]="id" [type]="inputType" [placeholder]="props.placeholder" [readonly]="props.readonly" [formControl]="formControl" [formlyAttributes]="field" />
       @if (props.label) {
-        <label [attr.for]="id" slot="label">{{props.label}}</label>
+        <label [attr.for]="id" slot="label">{{ props.label }}</label>
       }
       @if (showError) {
         <span slot="helper-text">
@@ -29,27 +22,24 @@ import { FormlyDemoService } from '../formly-demo.service';
       }
     </forge-text-field>
   `,
-  styles: [`
-    :host {
-      display: block;
-    }
+  styles: [
+    `
+      :host {
+        display: block;
+      }
 
-    // forge-text-field {
-    //   --forge-text-field-height: 2rem;
-    // }
+      // forge-text-field {
+      //   --forge-text-field-height: 2rem;
+      // }
 
-    input[type='number']::-webkit-outer-spin-button,
-    input[type='number']::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-  `],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormlyModule,
-    ForgeTextFieldModule
+      input[type='number']::-webkit-outer-spin-button,
+      input[type='number']::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+    `
   ],
+  imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeTextFieldModule],
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
@@ -60,9 +50,7 @@ export class InputTypeComponent extends FieldType<FieldTypeConfig> implements On
 
   public inputType = 'text';
 
-  constructor(
-    private moduleService: FormlyDemoService
-  ) {
+  constructor(private moduleService: FormlyDemoService) {
     super();
   }
 
@@ -81,7 +69,7 @@ export class InputTypeComponent extends FieldType<FieldTypeConfig> implements On
       return this.moduleService.validateField(this.field.key as string, control.value).pipe(
         // finalize(() => (this.inputElement.nativeElement as HTMLInputElement).disabled = false),
         takeUntil(this.unsubscribe),
-        map(r => {
+        map((r) => {
           return r.invalid ? { server: { message: r.message } } : null;
         })
       );

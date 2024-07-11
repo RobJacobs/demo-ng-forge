@@ -11,7 +11,7 @@ import { FormlyFieldDirective } from './formly-field.directive';
   selector: 'app-formly-container',
   template: `
     @if (props.label) {
-      <div class="label">{{props.label}}</div>
+      <div class="label">{{ props.label }}</div>
     }
 
     <div #fieldContainer>
@@ -20,49 +20,46 @@ import { FormlyFieldDirective } from './formly-field.directive';
       }
     </div>
   `,
-  styles: [`
-  :host {
-    display: inline-block;
-  }
+  styles: [
+    `
+      :host {
+        display: inline-block;
+      }
 
-  ::ng-deep {
-    .form-grid {
-      display: grid;
-      gap: 16px;
-    }
+      ::ng-deep {
+        .form-grid {
+          display: grid;
+          gap: 16px;
+        }
 
-    .form-vbox {
-      display: flex;
-      flex-direction: column;
-      row-gap: 16px;
-    }
+        .form-vbox {
+          display: flex;
+          flex-direction: column;
+          row-gap: 16px;
+        }
 
-    .form-hbox {
-      display: flex;
-      flex-direction: row;
-      column-gap: 16px;
-    }
+        .form-hbox {
+          display: flex;
+          flex-direction: row;
+          column-gap: 16px;
+        }
 
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      row-gap: 16px;
-      border: 1px solid #e6e6e6;
-      border-radius: 4px;
-      padding: 16px;
-    }
-  }
+        .form-group {
+          display: flex;
+          flex-direction: column;
+          row-gap: 16px;
+          border: 1px solid #e6e6e6;
+          border-radius: 4px;
+          padding: 16px;
+        }
+      }
 
-  .label {
-    padding: 8px;
-  }
-`],
-  imports: [
-    CommonModule,
-    FormlyModule,
-    FormlyFieldDirective,
-    FormlyFieldComponent
+      .label {
+        padding: 8px;
+      }
+    `
   ],
+  imports: [CommonModule, FormlyModule, FormlyFieldDirective, FormlyFieldComponent],
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
@@ -76,7 +73,7 @@ export class ContainerTypeComponent extends FieldType implements OnInit {
       case 'grid':
         fieldContainerElement.classList.add('form-grid');
         if (this.props.attributes!['columns']) {
-          fieldContainerElement.style.gridTemplateColumns = `repeat(${this.props.attributes!['columns']}, auto)`
+          fieldContainerElement.style.gridTemplateColumns = `repeat(${this.props.attributes!['columns']}, auto)`;
         }
         break;
       case 'vbox':

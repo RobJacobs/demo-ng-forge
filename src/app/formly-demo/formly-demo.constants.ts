@@ -36,7 +36,7 @@ const formDefinitionBasic = [
             width: 480
           }
         }
-      },
+      }
     ]
   }
 ];
@@ -417,17 +417,17 @@ const formDefinitionLayout = [
                     width: 15
                   }
                 }
-              },
+              }
             ]
           }
         ]
       }
     ]
   }
-]
+];
 
 export const formlyDemoConstants = {
   formDefinitionBasic,
   formDefinitionAll,
   formDefinitionLayout
-}
+};

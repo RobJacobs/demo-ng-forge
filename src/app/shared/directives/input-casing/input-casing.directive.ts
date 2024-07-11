@@ -8,8 +8,8 @@ import { DefaultValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     {
       provide: NG_VALUE_ACCESSOR,
       multi: true,
-      useExisting: forwardRef(() => InputCasingDirective),
-    },
+      useExisting: forwardRef(() => InputCasingDirective)
+    }
   ]
 })
 export class InputCasingDirective extends DefaultValueAccessor {

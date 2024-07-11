@@ -8,9 +8,7 @@ export const PEOPLE_ROUTES: Routes = [
   {
     path: '',
     component: PeopleComponent,
-    providers: [
-      PeopleCacheService
-    ],
+    providers: [PeopleCacheService],
     children: [
       { path: 'home', component: HomeComponent },
       { path: 'detail', component: DetailComponent },

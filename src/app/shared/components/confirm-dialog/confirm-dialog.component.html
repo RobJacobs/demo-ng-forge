@@ -1,14 +1,10 @@
 <app-dialog [dialogTitle]="dialogTitle">
-  {{message}}
+  {{ message }}
 
   @if (showFooter) {
-  <ng-container app-dialog-footer>
-    <forge-button slot="end" variant="outlined" (click)="onClose()">
-      Cancel
-    </forge-button>
-    <forge-button slot="end" variant="raised" appAutoFocus (click)="onClose(true)" autofocus>
-      Ok
-    </forge-button>
-  </ng-container>
+    <ng-container app-dialog-footer>
+      <forge-button slot="end" variant="outlined" (click)="onClose()"> Cancel </forge-button>
+      <forge-button slot="end" variant="raised" appAutoFocus (click)="onClose(true)" autofocus> Ok </forge-button>
+    </ng-container>
   }
 </app-dialog>

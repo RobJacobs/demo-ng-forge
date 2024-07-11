@@ -25,6 +25,7 @@
   @include app-border();
   cursor: move;
   overflow: hidden;
+  user-select: none;
 
   &-preview {
     @include app-container-outlined();

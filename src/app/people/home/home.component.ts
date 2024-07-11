@@ -4,7 +4,18 @@ import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
 import { isArray } from '@tylertech/forge-core';
 import { CellAlign, IColumnConfiguration, TableComponent, TextFieldComponentDelegate } from '@tylertech/forge';
-import { ForgeBadgeModule, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, ForgeOptionModule, ForgePaginatorModule, ForgeSelectDropdownModule, ForgeSkeletonModule, ForgeTableModule, ForgeToolbarModule } from '@tylertech/forge-angular';
+import {
+  ForgeBadgeModule,
+  ForgeButtonModule,
+  ForgeIconButtonModule,
+  ForgeIconModule,
+  ForgeOptionModule,
+  ForgePaginatorModule,
+  ForgeSelectDropdownModule,
+  ForgeSkeletonModule,
+  ForgeTableModule,
+  ForgeToolbarModule
+} from '@tylertech/forge-angular';
 
 import { Utils } from 'src/utils';
 import { TableUtils } from 'src/app/shared/table/utils';
@@ -76,7 +87,10 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
       }
     },
     {
-      header: 'Id', property: 'id', sortable: true, filter: true,
+      header: 'Id',
+      property: 'id',
+      sortable: true,
+      filter: true,
       filterDelegate: new TextFieldComponentDelegate()
     },
     {
@@ -111,39 +125,34 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
       align: CellAlign.Right,
       template: (rowIndex: number, cellElement: HTMLElement, data: any) => {
         this.ngZone.run(() => {
+          cellElement.appendChild(TableUtils.createExpanderRow(rowIndex, this.peopleTable as TableComponent, this.viewContainerRef, TableDetailComponent, 'Toggle table detail', data));
+
           cellElement.appendChild(
-            TableUtils.createExpanderRow(
-              rowIndex,
-              this.peopleTable as TableComponent,
-              this.viewContainerRef,
-              TableDetailComponent,
-              'Toggle table detail',
-              data
+            TableUtils.createMenuButton(
+              'more_vert',
+              (event: Event) => {
+                console.log(event);
+              },
+              [
+                { value: 1, label: 'Option 1' },
+                { value: 2, label: 'Option 2' },
+                { value: 3, label: 'Option 3' }
+              ],
+              'More options'
             )
           );
 
-          cellElement.appendChild(TableUtils.createMenuButton(
-            'more_vert',
-            (event: Event) => {
-              console.log(event);
-            },
-            [
-              { value: 1, label: 'Option 1' },
-              { value: 2, label: 'Option 2' },
-              { value: 3, label: 'Option 3' }
-            ],
-            'More options'
-          ));
-
-          cellElement.appendChild(TableUtils.createIconButton(
-            'keyboard_arrow_right',
-            (event: Event) => {
-              this.ngZone.run(() => {
-                this.router.navigate([`people/detail/${data.id}`]);
-              });
-            },
-            'View person details'
-          ));
+          cellElement.appendChild(
+            TableUtils.createIconButton(
+              'keyboard_arrow_right',
+              (event: Event) => {
+                this.ngZone.run(() => {
+                  this.router.navigate([`people/detail/${data.id}`]);
+                });
+              },
+              'View person details'
+            )
+          );
 
           // const componentRef = this.viewContainerRef.createComponent(RouterlinkButtonComponent);
           // componentRef.instance.route = '/profile';
@@ -160,7 +169,7 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
   ];
   public selectedPeople: IPerson[] = [];
   public get selectedTableColumns() {
-    return this.optionalTableColumns.filter(c => !c.hidden).map(c => c.property);
+    return this.optionalTableColumns.filter((c) => !c.hidden).map((c) => c.property);
   }
 
   constructor() {
@@ -168,9 +177,9 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
 
     const storageColumns = localStorage.getItem(this.cache.homeView.storageKey);
     if (storageColumns?.length) {
-      const columns = JSON.parse(storageColumns) as { property: string; hidden: boolean; }[];
+      const columns = JSON.parse(storageColumns) as { property: string; hidden: boolean }[];
       if (isArray(columns)) {
-        this.optionalTableColumns.forEach(c => {
+        this.optionalTableColumns.forEach((c) => {
           const storedColumn = columns.find((sc) => sc.property === c.property);
           if (storedColumn) {
             c.hidden = storedColumn.hidden;
@@ -203,7 +212,7 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
   }
 
   public onTableOptionSelected(columns: string[]) {
-    this.optionalTableColumns = this.optionalTableColumns.map(c => {
+    this.optionalTableColumns = this.optionalTableColumns.map((c) => {
       if (columns.includes(c.property as string)) {
         c.hidden = false;
       } else {
@@ -212,10 +221,7 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
       return c;
     });
     this.setTableColumnsVisibilty();
-    localStorage.setItem(
-      this.cache.homeView.storageKey,
-      JSON.stringify(this.optionalTableColumns.map((c) => ({ property: c.property, hidden: c.hidden })))
-    );
+    localStorage.setItem(this.cache.homeView.storageKey, JSON.stringify(this.optionalTableColumns.map((c) => ({ property: c.property, hidden: c.hidden }))));
   }
 
   public onTableShowFilter() {
@@ -241,9 +247,8 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
         filters: this.filterCache.filters,
         skip: this.filterCache.skip,
         take: this.filterCache.take
-      }).pipe(
-        finalize(() => this.isBusy = false)
-      )
+      })
+      .pipe(finalize(() => (this.isBusy = false)))
       .subscribe((result) => {
         this.recordset = result.data;
         this.recordCount = result.count;
@@ -251,8 +256,8 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
   }
 
   private setTableColumnsVisibilty() {
-    this.tableColumns.forEach(tc => {
-      const optionalTableColumn = this.optionalTableColumns.find(otc => otc.property === tc.property);
+    this.tableColumns.forEach((tc) => {
+      const optionalTableColumn = this.optionalTableColumns.find((otc) => otc.property === tc.property);
       if (optionalTableColumn && tc.hidden !== optionalTableColumn.hidden) {
         tc.hidden = optionalTableColumn.hidden;
         const colIndex = this.getColumnIndex(tc.property as string);

@@ -5,7 +5,20 @@ import { debounceTime } from 'rxjs';
 import { PdfViewerModule as NgPdfViewerModule } from 'ng2-pdf-viewer';
 import { PDFDocumentProxy, PDFProgressData, PDFSource, ZoomScale, PdfViewerComponent } from 'ng2-pdf-viewer';
 import { removeAllChildren, debounce } from '@tylertech/forge-core';
-import { ForgeBannerModule, ForgeButtonModule, ForgeCheckboxModule, ForgeCircularProgressModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIconModule, ForgePopoverModule, ForgeTextFieldModule, ForgeToolbarModule, ForgeTooltipModule, PopoverDirective } from '@tylertech/forge-angular';
+import {
+  ForgeBannerModule,
+  ForgeButtonModule,
+  ForgeCheckboxModule,
+  ForgeCircularProgressModule,
+  ForgeDividerModule,
+  ForgeIconButtonModule,
+  ForgeIconModule,
+  ForgePopoverModule,
+  ForgeTextFieldModule,
+  ForgeToolbarModule,
+  ForgeTooltipModule,
+  PopoverDirective
+} from '@tylertech/forge-angular';
 
 import { CallbackPipe } from 'src/app/shared/pipes/callback.pipe';
 import { pdfString } from './pdf-string';
@@ -47,13 +60,13 @@ export class PdfViewerDemoComponent {
   private pdfViewerComponent?: PdfViewerComponent;
   @ViewChild('pdfViewerLeftToolbar')
   private pdfViewerLeftToolbarRef?: ElementRef<HTMLElement>;
-  @ViewChild('searchPopup')
-  private searchPopupDirective?: PopoverDirective;
+  @ViewChild('searchPopover')
+  private searchPopoverDirective?: PopoverDirective;
   @ViewChild('searchInput')
   private searchInputElementRef?: ElementRef<HTMLInputElement>;
 
   public pdfSrc: string | Uint8Array | PDFSource = './assets/pdf-test.pdf';
-  public error?: { message: string; name?: string; };
+  public error?: { message: string; name?: string };
   public page = 1;
   public zoom = 1;
   private zoomScale: ZoomScale = 'page-width';
@@ -65,11 +78,11 @@ export class PdfViewerDemoComponent {
   public navButtonDisabled = (page: number, navButton: 'prev' | 'next') => {
     switch (navButton) {
       case 'prev':
-        return this.pdf?.numPages || 0 > 1 && page > 1 ? false : true;
+        return this.pdf?.numPages || (0 > 1 && page > 1) ? false : true;
       case 'next':
-        return this.pdf?.numPages || 0 > 1 && page < (this.pdf?.numPages || 0) ? false : true;
+        return this.pdf?.numPages || (0 > 1 && page < (this.pdf?.numPages || 0)) ? false : true;
     }
-  }
+  };
   public searchFormGroup = new FormGroup({
     query: new FormControl(),
     hightlightAll: new FormControl(false),
@@ -78,22 +91,15 @@ export class PdfViewerDemoComponent {
 
   public constructor() {
     (window as any).pdfWorkerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.3.136/legacy/build/pdf.worker.min.mjs';
-    this.searchFormGroup.controls.query.valueChanges.pipe(
-      debounceTime(300),
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe(o => {
+    this.searchFormGroup.controls.query.valueChanges.pipe(debounceTime(300), takeUntilDestroyed(this.destroyRef)).subscribe((o) => {
       this.searchDocument('');
     });
 
-    this.searchFormGroup.controls.hightlightAll.valueChanges.pipe(
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe(() => {
+    this.searchFormGroup.controls.hightlightAll.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.searchDocument('highlightallchange');
     });
 
-    this.searchFormGroup.controls.caseSensitive.valueChanges.pipe(
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe(() => {
+    this.searchFormGroup.controls.caseSensitive.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.searchDocument('casesensitivitychange');
     });
   }
@@ -106,15 +112,18 @@ export class PdfViewerDemoComponent {
 
   public afterLoadComplete(pdf: PDFDocumentProxy) {
     this.pdf = pdf;
-    this.pdfViewerComponent?.eventBus.on('updatefindmatchescount', debounce((event: { matchesCount: { current: number, total: number }, source: any }) => {
-      this.searchMatches = event.matchesCount.total;
-    }, 100));
+    this.pdfViewerComponent?.eventBus.on(
+      'updatefindmatchescount',
+      debounce((event: { matchesCount: { current: number; total: number }; source: any }) => {
+        this.searchMatches = event.matchesCount.total;
+      }, 100)
+    );
     requestAnimationFrame(() => {
       this.createThumbnails();
     });
   }
 
-  public onError(error: { message: string; name?: string; }) {
+  public onError(error: { message: string; name?: string }) {
     this.error = error;
   }
 
@@ -144,11 +153,11 @@ export class PdfViewerDemoComponent {
   public onZoom(value: 'in' | 'out' | 'fit') {
     switch (value) {
       case 'in':
-        this.zoom += .25;
+        this.zoom += 0.25;
         break;
       case 'out':
-        if (parseFloat(this.zoom.toFixed(1)) > .25) {
-          this.zoom += -.25;
+        if (parseFloat(this.zoom.toFixed(1)) > 0.25) {
+          this.zoom += -0.25;
         }
         break;
       case 'fit':
@@ -162,8 +171,8 @@ export class PdfViewerDemoComponent {
     }
   }
 
-  public onShowSearchPopup() {
-    this.searchPopupDirective?.open();
+  public onShowSearchPopover() {
+    this.searchPopoverDirective?.open();
     requestAnimationFrame(() => {
       this.searchInputElementRef?.nativeElement.focus();
       this.searchInputElementRef?.nativeElement.select();
@@ -181,9 +190,9 @@ export class PdfViewerDemoComponent {
 
     if (this.pdf?.numPages) {
       for (let index = 1; index < this.pdf?.numPages + 1; index++) {
-        this.pdf.getPage(index).then(page => {
+        this.pdf.getPage(index).then((page) => {
           const canvasElement = document.createElement('canvas') as HTMLCanvasElement;
-          const pageViewport = page.getViewport({ scale: .25 });
+          const pageViewport = page.getViewport({ scale: 0.25 });
           canvasElement.width = pageViewport.width;
           canvasElement.height = pageViewport.height;
           page.render({

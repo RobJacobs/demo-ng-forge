@@ -10,7 +10,7 @@ export const routes: Routes = [
   { path: 'pets', providers: [{ provide: PETS_SERVICE, useExisting: AppPetsService }], loadChildren: () => import('projects/pets/src/lib/pets.config').then((m) => m.PETS_ROUTES) },
   { path: 'search', loadComponent: () => import('./search/search.component').then((m) => m.SearchComponent) },
   { path: 'query-builder', loadComponent: () => import('./query-builder/query-builder.component').then((m) => m.QueryBuilderComponent) },
-  { path: 'icons', loadComponent: () => import('./icons/icons.component').then(m => m.IconsComponent) },
+  { path: 'icons', loadComponent: () => import('./icons/icons.component').then((m) => m.IconsComponent) },
   { path: 'examples', loadChildren: () => import('./examples/routes').then((m) => m.EXAMPLES_ROUTES) },
   { path: 'formly-demo', loadChildren: () => import('./formly-demo/formly-demo.module').then((m) => m.FormlyDemoModule) },
   { path: 'table-demo', loadComponent: () => import('./table-demo/table-demo.component').then((m) => m.TableDemoComponent) },

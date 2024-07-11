@@ -12,15 +12,9 @@
       <forge-option [value]="chartTypesEnum.treemap">Treemap</forge-option>
       <forge-option [value]="chartTypesEnum.tree">Tree</forge-option>
     </forge-select>
-    <forge-button variant="outlined" (click)="onAction('update')" [disabled]="((activeTab === 0 && chartType === chartTypesEnum.tree) || chartType === chartTypesEnum.gantt)">
-      Update
-    </forge-button>
-    <forge-button variant="outlined" (click)="onAction('add')" [disabled]="chartType === chartTypesEnum.donutMeter || chartType === chartTypesEnum.tree || chartType === chartTypesEnum.gantt">
-      Add
-    </forge-button>
-    <forge-button variant="outlined" (click)="onAction('delete')" [disabled]="chartType === chartTypesEnum.donutMeter || chartType === chartTypesEnum.tree || chartType === chartTypesEnum.gantt">
-      Delete
-    </forge-button>
+    <forge-button variant="outlined" (click)="onAction('update')" [disabled]="(activeTab === 0 && chartType === chartTypesEnum.tree) || chartType === chartTypesEnum.gantt">Update</forge-button>
+    <forge-button variant="outlined" (click)="onAction('add')" [disabled]="chartType === chartTypesEnum.donutMeter || chartType === chartTypesEnum.tree || chartType === chartTypesEnum.gantt">Add</forge-button>
+    <forge-button variant="outlined" (click)="onAction('delete')" [disabled]="chartType === chartTypesEnum.donutMeter || chartType === chartTypesEnum.tree || chartType === chartTypesEnum.gantt">Delete</forge-button>
   </div>
 </forge-toolbar>
 
@@ -31,8 +25,8 @@
 
 <div class="body">
   @if (activeTab === 0) {
-  <app-charts-d3-chart [chartType]="chartType"></app-charts-d3-chart>
+    <app-charts-d3-chart [chartType]="chartType"></app-charts-d3-chart>
   } @else if (activeTab === 1) {
-  <app-charts-google-chart [chartType]="chartType"></app-charts-google-chart>
+    <app-charts-google-chart [chartType]="chartType"></app-charts-google-chart>
   }
 </div>

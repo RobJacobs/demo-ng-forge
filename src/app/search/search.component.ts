@@ -2,7 +2,23 @@ import { Component, ViewChild, OnInit, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { isDefined } from '@tylertech/forge-core';
 import { AutocompleteFilterCallback, IOption } from '@tylertech/forge';
-import { PopoverDirective, DialogService, ToastService, ForgeToolbarModule, ForgeDividerModule, ForgeButtonModule, ForgeIconModule, ForgeListModule, ForgeListItemModule, ForgeIconButtonModule, ForgeAutocompleteModule, ForgeTextFieldModule, ForgeDatePickerModule, ForgeCheckboxModule, ForgePopoverModule } from '@tylertech/forge-angular';
+import {
+  PopoverDirective,
+  DialogService,
+  ToastService,
+  ForgeToolbarModule,
+  ForgeDividerModule,
+  ForgeButtonModule,
+  ForgeIconModule,
+  ForgeListModule,
+  ForgeListItemModule,
+  ForgeIconButtonModule,
+  ForgeAutocompleteModule,
+  ForgeTextFieldModule,
+  ForgeDatePickerModule,
+  ForgeCheckboxModule,
+  ForgePopoverModule
+} from '@tylertech/forge-angular';
 import { Observable, lastValueFrom, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -11,9 +27,7 @@ import { ISearch } from 'src/app/shared/interfaces/search.interface';
 import { SearchSaveComponent } from './save/search-save.component';
 import { CommonModule } from '@angular/common';
 import { AutocompleteRangeComponent } from 'src/app/shared/components/autocomplete-range/autocomplete-range.component';
-import { IndeterminateDirective } from '../shared/directives/indeterminate/indeterminate.directive';
 import { CheckboxIndeterminateComponent } from '../shared/components/checkbox-indeterminate/checkbox-indeterminate.component';
-// import { IndeterminateDirective } from 'src/app/shared/directives/indeterminate/indeterminate.directive';
 
 @Component({
   selector: 'app-search',
@@ -44,10 +58,10 @@ export class SearchComponent implements OnInit {
   private toastService = inject(ToastService);
   private dataService = inject(AppDataService);
 
-  @ViewChild('searchesPopup', { static: false })
-  private searchesPopup?: PopoverDirective;
+  @ViewChild('searchesPopover', { static: false })
+  private searchesPopover?: PopoverDirective;
   private storageKey = 'search-searches';
-  private operatorPopup?: PopoverDirective;
+  private operatorPopover?: PopoverDirective;
 
   public searchName?: string;
   public searchDescription?: string;
@@ -87,16 +101,22 @@ export class SearchComponent implements OnInit {
     { value: 8, label: 'Not contains' },
     { value: 9, label: 'Empty' }
   ];
-  public operatorPopupFormGroup?: FormGroup;
-  public nameFilter: AutocompleteFilterCallback = (filter: string) => lastValueFrom(this.dataService.getPeople().pipe(
-    map(r => r.data
-      .filter(p => p.firstName.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || p.lastName.toLocaleLowerCase().includes(filter.toLocaleLowerCase()))
-      .map(p => ({ label: `${p.firstName} ${p.lastName}`, value: p.id }))
-    )
-  ));
+  public operatorPopoverFormGroup?: FormGroup;
+  public nameFilter: AutocompleteFilterCallback = (filter: string) =>
+    lastValueFrom(
+      this.dataService
+        .getPeople()
+        .pipe(
+          map((r) =>
+            r.data
+              .filter((p) => p.firstName.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || p.lastName.toLocaleLowerCase().includes(filter.toLocaleLowerCase()))
+              .map((p) => ({ label: `${p.firstName} ${p.lastName}`, value: p.id }))
+          )
+        )
+    );
   public facetFilter = (filter: string): Observable<IOption[]> => {
     return of(this.facetOptions);
-  }
+  };
 
   public ngOnInit() {
     this.dataService.getSearches(this.storageKey).subscribe((result) => {
@@ -118,14 +138,7 @@ export class SearchComponent implements OnInit {
     // TODO implement search action
   }
 
-  public onSaveSearch(search?: {
-    id: number;
-    name: string;
-    description: string;
-    isDefault: boolean;
-    isPublic: boolean;
-    filters: { property: string; value: string }[];
-  }) {
+  public onSaveSearch(search?: { id: number; name: string; description: string; isDefault: boolean; isPublic: boolean; filters: { property: string; value: string }[] }) {
     const activeSearch = isDefined(search) ? search : this.searchCache.searches.find((s) => s.id === this.searchCache.activeSearchId);
     const record = {
       id: activeSearch?.id,
@@ -136,7 +149,7 @@ export class SearchComponent implements OnInit {
       filters: this.formGroup.value
     };
 
-    this.dialogService.open(SearchSaveComponent, { data: record, options: { persistent: true } }).afterClosed.subscribe(result => {
+    this.dialogService.open(SearchSaveComponent, { data: record, options: { persistent: true } }).afterClosed.subscribe((result) => {
       if (result) {
         if (isDefined(result.id)) {
           const searchIndex = this.searchCache.searches.findIndex((s) => s.id === result.id);
@@ -148,19 +161,17 @@ export class SearchComponent implements OnInit {
           this.searchCache.searches.push(result);
         }
 
-        this.dataService.saveSearches(this.storageKey, this.searchCache.searches).subscribe(
-          {
-            next: () => {
-              this.searchCache.activeSearchId = result.id;
-              this.searchName = result.name;
-              this.searchDescription = result.description;
-              this.toastService.show({ message: 'Search saved' });
-            },
-            error: () => this.toastService.show({ message: 'Search save failed' })
-          }
-        );
+        this.dataService.saveSearches(this.storageKey, this.searchCache.searches).subscribe({
+          next: () => {
+            this.searchCache.activeSearchId = result.id;
+            this.searchName = result.name;
+            this.searchDescription = result.description;
+            this.toastService.show({ message: 'Search saved' });
+          },
+          error: () => this.toastService.show({ message: 'Search save failed' })
+        });
       }
-    })
+    });
   }
 
   public onClearSearch() {
@@ -170,7 +181,7 @@ export class SearchComponent implements OnInit {
 
   public onSearchAction(event: CustomEvent, action: string, id: number) {
     event.stopPropagation();
-    this.searchesPopup?.close();
+    this.searchesPopover?.close();
 
     if (!isDefined(id)) {
       this.searchCache.activeSearchId = undefined;
@@ -206,7 +217,7 @@ export class SearchComponent implements OnInit {
             const searchIndex = this.searchCache.searches.findIndex((s) => s.id === search?.id);
             if (searchIndex !== -1) {
               this.searchCache.searches.splice(searchIndex, 1);
-              this.dataService.saveSearches(this.storageKey, this.searchCache.searches).subscribe((result) => { });
+              this.dataService.saveSearches(this.storageKey, this.searchCache.searches).subscribe((result) => {});
             }
 
             if (this.searchCache.activeSearchId === search?.id) {
@@ -221,17 +232,16 @@ export class SearchComponent implements OnInit {
     }
   }
 
-  public onOperatorPopupOpen(event: Event, popup: PopoverDirective, name: string) {
+  public onOperatorPopoverOpen(event: Event, popover: PopoverDirective, name: string) {
     event.stopPropagation();
-    this.operatorPopupFormGroup = this.formGroup.get(name) as FormGroup;
-    this.operatorPopup = popup;
-    this.operatorPopup.open();
+    this.operatorPopoverFormGroup = this.formGroup.get(name) as FormGroup;
+    this.operatorPopover = popover;
+    this.operatorPopover.open();
   }
 
   public onOperatorSelected(value: string | number) {
     value = parseInt(value as string, 10);
-    this.operatorPopupFormGroup?.get('operator')?.setValue(value);
-    this.operatorPopup?.close();
+    this.operatorPopoverFormGroup?.get('operator')?.setValue(value);
+    this.operatorPopover?.close();
   }
-
 }

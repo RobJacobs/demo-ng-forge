@@ -12,15 +12,9 @@ import { FormlyDemoService } from '../formly-demo.service';
   template: `
     <forge-date-picker [max]="$any(props.max)" [min]="$any(props.min)">
       <forge-text-field [required]="props.required" [invalid]="showError">
-        <input
-          [id]="id"
-          type="text"
-          [placeholder]="props.placeholder"
-          [readonly]="props.readonly"
-          [formControl]="formControl"
-          [formlyAttributes]="field" />
+        <input [id]="id" type="text" [placeholder]="props.placeholder" [readonly]="props.readonly" [formControl]="formControl" [formlyAttributes]="field" />
         @if (props.label) {
-          <label [attr.for]="id" slot="label">{{props.label}}</label>
+          <label [attr.for]="id" slot="label">{{ props.label }}</label>
         }
         @if (showError) {
           <span slot="helper-text">
@@ -30,22 +24,18 @@ import { FormlyDemoService } from '../formly-demo.service';
       </forge-text-field>
     </forge-date-picker>
   `,
-  styles: [`
-    :host {
-      display: block;
-    }
+  styles: [
+    `
+      :host {
+        display: block;
+      }
 
-    // forge-text-field {
-    //   --forge-text-field-height: 2rem;
-    // }
-  `],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormlyModule,
-    ForgeDatePickerModule,
-    ForgeTextFieldModule
+      // forge-text-field {
+      //   --forge-text-field-height: 2rem;
+      // }
+    `
   ],
+  imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeDatePickerModule, ForgeTextFieldModule],
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
@@ -72,7 +62,7 @@ export class DatePickerTypeComponent extends FieldType<FieldTypeConfig> implemen
 
       return this.moduleService.validateField(this.field.key as string, control.value).pipe(
         takeUntil(this.unsubscribe),
-        map(r => {
+        map((r) => {
           return r.invalid ? { server: { message: r.message } } : null;
         })
       );

@@ -1,7 +1,7 @@
 <form [formGroup]="formGroup" novalidate autocomplete="off" class="form-grid">
   <forge-select formControlName="select01" label="Select01 - single primitive">
     @for (option of options; track i; let i = $index) {
-    <forge-option [value]="option.value">{{option.label}}</forge-option>
+      <forge-option [value]="option.value">{{ option.label }}</forge-option>
     }
   </forge-select>
 
@@ -13,16 +13,16 @@
 
   <forge-select label="Select05 - selected text builder" [options]="options" formControlName="select05" [selectedTextBuilder]="selectedTextBuilder"></forge-select>
 
-  <p class="form-grid--col-span">{{formGroup.getRawValue() | json}}</p>
+  <p class="form-grid--col-span">{{ formGroup.getRawValue() | json }}</p>
 </form>
 
 <forge-divider></forge-divider>
 
 <div class="form-grid">
   <forge-select label="Select06 - ngModel binding" [options]="options" [(ngModel)]="select06">
-    <span slot="support-text">selected value: {{select06}}</span>
+    <span slot="support-text">selected value: {{ select06 }}</span>
   </forge-select>
   <forge-select label="Select07 - value binding" [options]="options" [value]="select07" (change)="onSelectChange($event)">
-    <span slot="support-text">selected value: {{select07}}</span>
+    <span slot="support-text">selected value: {{ select07 }}</span>
   </forge-select>
 </div>

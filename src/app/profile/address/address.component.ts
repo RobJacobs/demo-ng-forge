@@ -9,12 +9,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-profile-address',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    ForgeTextFieldModule,
-    FormControlInvalidDirective
-  ],
+  imports: [CommonModule, ReactiveFormsModule, ForgeTextFieldModule, FormControlInvalidDirective],
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.scss']
 })

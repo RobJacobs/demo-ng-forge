@@ -12,7 +12,7 @@ import { FormlyFieldDirective } from './formly-field.directive';
           @for (th of $any(props).columns; track i; let i = $index) {
             <th scope="col" class="forge-table-cell forge-table-head__cell">
               <div class="forge-table-head__cell-container">
-                <span class="forge-table-head__cell-text">{{th.label}}</span>
+                <span class="forge-table-head__cell-text">{{ th.label }}</span>
               </div>
             </th>
           }
@@ -44,46 +44,43 @@ import { FormlyFieldDirective } from './formly-field.directive';
       </tfoot>
     </table>
   `,
-  styles: [`
-    :host {
-      display: block;
-    }
-
-    .forge-table {
-      // --forge-table-theme-row-hover-background: transparent;
-
-      &-cell {
-        padding-right: 24px;
-        &:first-child {
-          padding-left: 0;
-        }
-        &:last-child {
-          padding-right: 0;
-        }
-        &__button {
-          width: 48px;
-        }
+  styles: [
+    `
+      :host {
+        display: block;
       }
 
-      &-body {
+      .forge-table {
+        // --forge-table-theme-row-hover-background: transparent;
 
-        &__cell {
-          padding-top: 8px;
-          padding-bottom: 8px;
-          vertical-align: top;
+        &-cell {
+          padding-right: 24px;
+          &:first-child {
+            padding-left: 0;
+          }
+          &:last-child {
+            padding-right: 0;
+          }
+          &__button {
+            width: 48px;
+          }
+        }
 
-          formly-field {
-            background-color: var(--forge-theme-surface);
+        &-body {
+          &__cell {
+            padding-top: 8px;
+            padding-bottom: 8px;
+            vertical-align: top;
+
+            formly-field {
+              background-color: var(--forge-theme-surface);
+            }
           }
         }
       }
-    }
-  `],
-  imports: [
-    CommonModule,
-    FormlyModule,
-    FormlyFieldDirective
+    `
   ],
+  imports: [CommonModule, FormlyModule, FormlyFieldDirective],
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

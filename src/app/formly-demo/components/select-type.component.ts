@@ -9,14 +9,7 @@ import { FormlyDemoService } from '../formly-demo.service';
 @Component({
   selector: 'app-formly-select',
   template: `
-    <forge-select
-      [id]="id"
-      [options]="$any(props.options)"
-      [label]="$any(props.label)"
-      [placeholder]="$any(props.placeholder)"
-      [invalid]="showError"
-      [formControl]="formControl"
-      [formlyAttributes]="field">
+    <forge-select [id]="id" [options]="$any(props.options)" [label]="$any(props.label)" [placeholder]="$any(props.placeholder)" [invalid]="showError" [formControl]="formControl" [formlyAttributes]="field">
       @if (showError) {
         <span slot="helper-text">
           <formly-validation-message [field]="field"></formly-validation-message>
@@ -24,21 +17,18 @@ import { FormlyDemoService } from '../formly-demo.service';
       }
     </forge-select>
   `,
-  styles: [`
-  :host {
-    display: block;
-  }
+  styles: [
+    `
+      :host {
+        display: block;
+      }
 
-  // forge-select {
-  //   --forge-select-height: 2rem;
-  // }
-`],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormlyModule,
-    ForgeSelectModule
+      // forge-select {
+      //   --forge-select-height: 2rem;
+      // }
+    `
   ],
+  imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeSelectModule],
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
@@ -58,7 +48,7 @@ export class SelectTypeComponent extends FieldType<FieldTypeConfig> implements O
 
       return this.moduleService.validateField(this.field.key as string, control.value).pipe(
         takeUntil(this.unsubscribe),
-        map(r => {
+        map((r) => {
           return r.invalid ? { server: { message: r.message } } : null;
         })
       );

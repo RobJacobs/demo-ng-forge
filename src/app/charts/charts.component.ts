@@ -21,18 +21,7 @@ export enum ChartTypes {
 @Component({
   selector: 'app-charts',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ForgeButtonModule,
-    ForgeOptionModule,
-    ForgeSelectModule,
-    ForgeTabBarModule,
-    ForgeTabModule,
-    ForgeToolbarModule,
-    D3ChartComponent,
-    GoogleChartComponent
-  ],
+  imports: [CommonModule, FormsModule, ForgeButtonModule, ForgeOptionModule, ForgeSelectModule, ForgeTabBarModule, ForgeTabModule, ForgeToolbarModule, D3ChartComponent, GoogleChartComponent],
   templateUrl: './charts.component.html',
   styleUrls: ['./charts.component.scss']
 })
@@ -57,5 +46,4 @@ export class ChartsComponent {
   public onTabSelected(index: number) {
     this.activeTab = index;
   }
-
 }

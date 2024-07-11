@@ -50,12 +50,12 @@ import {
   tylIconZoomIn,
   tylIconZoomOut,
   tylIconFitScreen,
-  tylIconAdjust
+  tylIconAdjust,
+  tylIconCheckBox,
+  tylIconCheckBoxOutlineBlank
 } from '@tylertech/tyler-icons/standard';
 
-import {
-  tylIconTylerTalkingTLogo
-} from '@tylertech/tyler-icons/custom';
+import { tylIconTylerTalkingTLogo } from '@tylertech/tyler-icons/custom';
 
 const standardIcons = [
   tylIconArrowBack,
@@ -108,12 +108,12 @@ const standardIcons = [
   tylIconZoomIn,
   tylIconZoomOut,
   tylIconFitScreen,
-  tylIconAdjust
+  tylIconAdjust,
+  tylIconCheckBox,
+  tylIconCheckBoxOutlineBlank
 ];
 
-const customIcons = [
-  tylIconTylerTalkingTLogo
-];
+const customIcons = [tylIconTylerTalkingTLogo];
 
 export const defineIcons = () => {
   IconRegistry.define([...standardIcons, ...customIcons]);

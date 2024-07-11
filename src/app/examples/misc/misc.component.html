@@ -14,19 +14,15 @@
     </div>
 
     <ng-template #variableTemplate [ngTemplateOutlet]="variableTemplate" [ngTemplateOutletContext]="{ $implicit: { cats: 1, dogs: 2 } }" let-variable>
-      <p>{{variable | json}}</p>
+      <p>{{ variable | json }}</p>
     </ng-template>
 
-    <div>{{0 | appArrayFind:data:'value':'label'}}</div>
-    <div>{{1 | appArrayFind:data:'value' | json}}</div>
+    <div>{{ 0 | appArrayFind: data : "value" : "label" }}</div>
+    <div>{{ 1 | appArrayFind: data : "value" | json }}</div>
 
     <div app-card-footer slot="end">
-      <forge-button variant="outlined">
-        Cancel
-      </forge-button>
-      <forge-button variant="raised">
-        Save
-      </forge-button>
+      <forge-button variant="outlined"> Cancel </forge-button>
+      <forge-button variant="raised"> Save </forge-button>
     </div>
   </app-card>
 </div>

@@ -7,7 +7,7 @@
 }
 
 ::ng-deep {
-  .searches-popup {
+  .searches-popover {
     min-width: 280px;
     *[slot='trailing'] {
       @include forge-flex-container(flex, row, nowrap, center);
@@ -15,7 +15,7 @@
     }
   }
 
-  .operator-popup {
+  .operator-popover {
     min-width: 200px;
     forge-list-item {
       cursor: pointer;

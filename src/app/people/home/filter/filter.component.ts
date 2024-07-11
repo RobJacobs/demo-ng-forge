@@ -12,17 +12,7 @@ import { PeopleCacheService } from '../../people-cache.service';
 @Component({
   selector: 'app-people-home-filter',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    ForgeButtonModule,
-    ForgeDividerModule,
-    ForgeDrawerModule,
-    ForgeIconButtonModule,
-    ForgeIconModule,
-    ForgeSelectModule,
-    ForgeTextFieldModule,
-    AutocompleteRangeComponent
-  ],
+  imports: [ReactiveFormsModule, ForgeButtonModule, ForgeDividerModule, ForgeDrawerModule, ForgeIconButtonModule, ForgeIconModule, ForgeSelectModule, ForgeTextFieldModule, AutocompleteRangeComponent],
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.scss']
 })
@@ -53,7 +43,7 @@ export class FilterComponent implements OnInit {
       options.push({ value: index, label: `Facet Option ${index}` });
     }
     return of(options);
-  }
+  };
 
   public ngOnInit() {
     this.loadForm(this.cache.homeView.filter.filters);
@@ -65,7 +55,7 @@ export class FilterComponent implements OnInit {
   }
 
   public onApplyFilter() {
-    this.cache.homeView.filter.filters = Object.entries(Utils.reduceObject(this.formGroup.value)).map(e => ({ property: e[0], value: e[1], label: this.propertyLabel(e[0]) })) || [];
+    this.cache.homeView.filter.filters = Object.entries(Utils.reduceObject(this.formGroup.value)).map((e) => ({ property: e[0], value: e[1], label: this.propertyLabel(e[0]) })) || [];
     this.filter.emit();
   }
 
@@ -95,5 +85,4 @@ export class FilterComponent implements OnInit {
         return '';
     }
   }
-
 }

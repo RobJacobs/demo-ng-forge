@@ -4,13 +4,9 @@ import { FormlyField, FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
 
 @Component({
   selector: 'app-formly-field',
-  template: `
-    <formly-field #formlyField [field]="$any(field)"></formly-field>
-  `,
-  imports: [
-    CommonModule,
-    FormlyModule
-  ],
+  // eslint-disable-next-line quotes
+  template: ` <formly-field #formlyField [field]="$any(field)"></formly-field> `,
+  imports: [CommonModule, FormlyModule],
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

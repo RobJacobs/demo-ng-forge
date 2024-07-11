@@ -6,12 +6,7 @@ import { ForgeIconButtonModule, ForgeIconModule, ForgeToolbarModule } from '@tyl
 @Component({
   selector: 'app-test-child',
   standalone: true,
-  imports: [
-    CommonModule,
-    ForgeIconButtonModule,
-    ForgeIconModule,
-    ForgeToolbarModule
-  ],
+  imports: [CommonModule, ForgeIconButtonModule, ForgeIconModule, ForgeToolbarModule],
   templateUrl: './child.component.html',
   styleUrls: ['./child.component.scss']
 })
@@ -21,5 +16,4 @@ export class ChildComponent {
   public onNavigate(route: string) {
     this.router.navigate([route]);
   }
-
 }

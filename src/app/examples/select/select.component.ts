@@ -9,22 +9,15 @@ import { ExamplesService } from '../examples.service';
 @Component({
   selector: 'app-examples-select',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ForgeDividerModule,
-    ForgeOptionModule,
-    ForgeSelectModule
-  ],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, ForgeDividerModule, ForgeOptionModule, ForgeSelectModule],
   templateUrl: './select.component.html',
   styleUrls: ['./select.component.scss']
 })
 export class SelectComponent {
   public moduleService = inject(ExamplesService);
 
-  public options = this.moduleService.mockData.slice(0, 20).map(d => ({ value: d.id, label: d.description }));
-  public objectOptions = this.moduleService.mockData.slice(0, 20).map(d => ({ value: d, label: d.description }));
+  public options = this.moduleService.mockData.slice(0, 20).map((d) => ({ value: d.id, label: d.description }));
+  public objectOptions = this.moduleService.mockData.slice(0, 20).map((d) => ({ value: d, label: d.description }));
   public formGroup = new FormGroup({
     select01: new FormControl(1),
     select02: new FormControl(this.objectOptions[2].value),
@@ -36,13 +29,12 @@ export class SelectComponent {
   public select07 = 7;
 
   public optionBuilder: SelectOptionBuilder = (option: IOption, parentElement: HTMLElement) => {
-    const titleSpan = document.createElement('span');
-    titleSpan.setAttribute('slot', 'title');
-    titleSpan.innerText = option.value.description;
-    parentElement.appendChild(titleSpan);
+    const defaultSpan = document.createElement('span');
+    defaultSpan.innerText = option.value.description;
+    parentElement.appendChild(defaultSpan);
 
     const subTitleSpan = document.createElement('span');
-    subTitleSpan.setAttribute('slot', 'subtitle');
+    subTitleSpan.setAttribute('slot', 'secondary-text');
     subTitleSpan.innerText = option.value.code;
     parentElement.appendChild(subTitleSpan);
 
@@ -56,5 +48,4 @@ export class SelectComponent {
   public onSelectChange(event: CustomEvent) {
     this.select07 = event.detail;
   }
-
 }

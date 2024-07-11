@@ -7,11 +7,7 @@ import { ForgeChipModule, ForgeChipSetModule } from '@tylertech/forge-angular';
   templateUrl: './filter-chips.component.html',
   styleUrls: ['./filter-chips.component.scss'],
   standalone: true,
-  imports: [
-    CommonModule,
-    ForgeChipModule,
-    ForgeChipSetModule
-  ],
+  imports: [CommonModule, ForgeChipModule, ForgeChipSetModule]
 })
 export class FilterChipsComponent {
   @Input()

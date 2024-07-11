@@ -7,15 +7,7 @@ import { isDefined } from '@tylertech/forge-core';
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [
-    CommonModule,
-    ForgeButtonModule,
-    ForgeExpansionPanelModule,
-    ForgeIconModule,
-    ForgeListItemModule,
-    ForgeListModule,
-    ForgeMenuModule
-  ],
+  imports: [CommonModule, ForgeButtonModule, ForgeExpansionPanelModule, ForgeIconModule, ForgeListItemModule, ForgeListModule, ForgeMenuModule],
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss']
 })
@@ -34,5 +26,4 @@ export class MenuComponent {
       this.router.navigate([option]);
     }
   }
-
 }

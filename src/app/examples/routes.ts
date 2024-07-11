@@ -10,10 +10,9 @@ import { MiscComponent } from './misc/misc.component';
 
 export const EXAMPLES_ROUTES: Routes = [
   {
-    path: '', component: ExamplesComponent,
-    providers: [
-      ExamplesService
-    ],
+    path: '',
+    component: ExamplesComponent,
+    providers: [ExamplesService],
     children: [
       { path: 'autocomplete', component: AutocompleteComponent },
       { path: 'drag-drop', component: DragDropComponent },

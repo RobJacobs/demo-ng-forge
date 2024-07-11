@@ -65,4 +65,3 @@ export const CHART_CONSTANTS = {
   chartPalette,
   chartTheme
 };
-

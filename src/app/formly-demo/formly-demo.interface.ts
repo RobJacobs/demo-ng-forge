@@ -10,13 +10,13 @@ export interface IFormlyFieldProps extends FormlyFieldProps {
     row?: number;
     rows?: number;
     rowSpan?: number;
-  },
+  };
   table?: {
     columns: {
       label: string;
       width: number;
     }[];
-  },
+  };
   format?: string;
 }
 

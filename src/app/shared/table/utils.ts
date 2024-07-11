@@ -22,7 +22,7 @@ export class TableUtils {
       event.stopPropagation();
       clickHandler(event);
     });
-    containerElement.appendChild(iconButtonElement)
+    containerElement.appendChild(iconButtonElement);
 
     const iconElement = document.createElement('forge-icon');
     iconElement.setAttribute('name', icon);
@@ -40,20 +40,12 @@ export class TableUtils {
     menuElement.options = options;
     menuElement.addEventListener('forge-menu-select', selectHandler);
 
-    menuElement.appendChild(this.createIconButton(icon, () => { }, title));
+    menuElement.appendChild(this.createIconButton(icon, () => {}, title));
 
     return menuElement;
   }
 
-  public static createExpanderRow<T>(
-    rowIndex: number,
-    tableElement: TableComponent,
-    viewContainerRef: ViewContainerRef,
-    component: Type<T>,
-    title: string,
-    data?: any,
-    callback?: (value?: any) => any
-  ): HTMLElement {
+  public static createExpanderRow<T>(rowIndex: number, tableElement: TableComponent, viewContainerRef: ViewContainerRef, component: Type<T>, title: string, data?: any, callback?: (value?: any) => any): HTMLElement {
     let componentRef: ComponentRef<any> | null;
 
     const expanderElement = TableUtils.createIconButton(
