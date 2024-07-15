@@ -1,4 +1,5 @@
 import { Component, ViewChild, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { isDefined } from '@tylertech/forge-core';
 import { AutocompleteFilterCallback, IOption } from '@tylertech/forge';
@@ -16,18 +17,17 @@ import {
   ForgeAutocompleteModule,
   ForgeTextFieldModule,
   ForgeDatePickerModule,
-  ForgeCheckboxModule,
-  ForgePopoverModule
+  ForgePopoverModule,
+  ForgeCheckboxProxyModule
 } from '@tylertech/forge-angular';
 import { Observable, lastValueFrom, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { AppDataService } from 'src/app/app-data.service';
 import { ISearch } from 'src/app/shared/interfaces/search.interface';
-import { SearchSaveComponent } from './save/search-save.component';
-import { CommonModule } from '@angular/common';
 import { AutocompleteRangeComponent } from 'src/app/shared/components/autocomplete-range/autocomplete-range.component';
-import { CheckboxIndeterminateComponent } from '../shared/components/checkbox-indeterminate/checkbox-indeterminate.component';
+import { CheckboxThreeStateDirective } from 'src/app/shared/directives/checkbox-three-state/checkbox-three-state.directive';
+import { SearchSaveComponent } from './save/search-save.component';
 
 @Component({
   selector: 'app-search',
@@ -37,7 +37,7 @@ import { CheckboxIndeterminateComponent } from '../shared/components/checkbox-in
     ReactiveFormsModule,
     ForgeAutocompleteModule,
     ForgeButtonModule,
-    ForgeCheckboxModule,
+    ForgeCheckboxProxyModule,
     ForgeDatePickerModule,
     ForgeDividerModule,
     ForgeIconButtonModule,
@@ -48,7 +48,7 @@ import { CheckboxIndeterminateComponent } from '../shared/components/checkbox-in
     ForgeTextFieldModule,
     ForgeToolbarModule,
     AutocompleteRangeComponent,
-    CheckboxIndeterminateComponent
+    CheckboxThreeStateDirective
   ],
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss']

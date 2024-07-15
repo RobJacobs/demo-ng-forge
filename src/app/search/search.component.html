@@ -73,9 +73,7 @@
 
     <app-autocomplete-range [optionFilter]="facetFilter" formControlName="facet" label="Facet"></app-autocomplete-range>
 
-    <app-checkbox-indeterminate formControlName="include">
-      <forge-checkbox id="search--include"> Include </forge-checkbox>
-    </app-checkbox-indeterminate>
+    <forge-checkbox threeState="true" formControlName="include">Include</forge-checkbox>
   </form>
 
   <p>{{ formGroup.getRawValue() | json }}</p>
