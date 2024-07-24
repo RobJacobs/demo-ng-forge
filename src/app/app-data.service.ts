@@ -1,8 +1,10 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, delay } from 'rxjs/operators';
 import { isDefined, isNumber } from '@tylertech/forge-core';
+
+import { SHOW_BUSY_INDICATOR } from 'src/app/shared/interceptors/busy.interceptor';
 import { IPerson, IProfile } from 'src/app/shared/interfaces/person.interface';
 import { ISearch } from 'src/app/shared/interfaces/search.interface';
 import { IFilterParameter } from 'src/app/shared/interfaces/filter.interface';
@@ -20,7 +22,7 @@ export class AppDataService {
 
   public getPeople(filter?: IFilterParameter): Observable<{ count: number; data: Array<IPerson> }> {
     return this.httpClient.get<Array<IPerson>>('mock-data/people.json').pipe(
-      // delay(2000),
+      delay(1000),
       map((r) => {
         let count = r.length;
         if (filter) {
@@ -69,6 +71,8 @@ export class AppDataService {
   }
 
   public getLongRequest(): Observable<string> {
-    return this.httpClient.get<string>('http://localhost:5000/long-request');
+    return this.httpClient.get<string>('http://localhost:5000/long-request', {
+      context: new HttpContext().set(SHOW_BUSY_INDICATOR, true)
+    });
   }
 }

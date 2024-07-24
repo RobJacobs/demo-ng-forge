@@ -94,7 +94,7 @@
             min-width: 24px;
             margin-left: auto;
             @include app-border();
-            background-color: var(--forge-theme-scrollbar-track-hover);
+            background-color: var(--forge-theme-surface-container-minimum);
           }
 
           &-dragger {

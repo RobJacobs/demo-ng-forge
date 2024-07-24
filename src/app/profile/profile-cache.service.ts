@@ -16,6 +16,7 @@ export class ProfileCacheService {
       rank: new FormControl<number>(5),
       size: new FormControl<string | null>(null),
       citizen: new FormControl<boolean>(false),
+      entryDate: new FormControl<string | Date | null>(null),
       friends: new FormArray<FormControl>([])
     }),
     addressFormGroup: new FormGroup({

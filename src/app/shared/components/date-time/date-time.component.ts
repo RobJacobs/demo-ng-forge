@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, forwardRef, ViewChild, Input, HostListener, OnInit, inject, DestroyRef } from '@angular/core';
-import { NG_VALUE_ACCESSOR, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { Component, forwardRef, ViewChild, Input, HostListener, OnInit, inject, DestroyRef, viewChild, ElementRef } from '@angular/core';
+import { NG_VALUE_ACCESSOR, FormControl, ReactiveFormsModule, ControlValueAccessor } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { isValid as dateIsValid, parse as dateParse, format as dateFormat } from 'date-fns';
 import * as IMask from 'imask';
 import { IMaskDirective } from 'angular-imask';
-import { CalendarComponent, mergeDateWithTime } from '@tylertech/forge';
+import { CALENDAR_CONSTANTS, CalendarComponent, ICalendarDateSelectEventData, IPopoverToggleEventData, mergeDateWithTime } from '@tylertech/forge';
 import { isDefined } from '@tylertech/forge-core';
-import { ForgeCalendarModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIconModule, ForgePopoverModule, ForgeTextFieldModule, ForgeTimePickerModule, PopoverDirective } from '@tylertech/forge-angular';
+import { ForgeCalendarModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIconModule, ForgePopoverModule, ForgeTextFieldModule, ForgeTimePickerModule } from '@tylertech/forge-angular';
 
 import { Utils } from 'src/utils';
 
@@ -19,15 +19,24 @@ import { Utils } from 'src/utils';
   imports: [CommonModule, ReactiveFormsModule, IMaskDirective, ForgeCalendarModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIconModule, ForgePopoverModule, ForgeTextFieldModule, ForgeTimePickerModule],
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DateTimeComponent), multi: true }]
 })
-export class DateTimeComponent implements OnInit {
-  @ViewChild('calendarPopover')
-  private calendarPopover?: PopoverDirective;
+export class DateTimeComponent implements OnInit, ControlValueAccessor {
+  @ViewChild('dateTimeInput', { static: true })
+  private dateTimeInputElementRef: ElementRef<HTMLInputElement>;
+  @ViewChild('timeInput', { static: true })
+  private timeInputElementRef: ElementRef<HTMLInputElement>;
+  @ViewChild('calendar')
+  private calendarElementRef: ElementRef<CalendarComponent>;
   private destroyRef = inject(DestroyRef);
+  private elementRef = inject(ElementRef);
   private timeFormat = 'hh:mm aa';
 
   @HostListener('focusout', ['$event'])
-  public componentBlur() {
-    this.onTouched();
+  public componentFocusout() {
+    setTimeout(() => {
+      if (!(this.elementRef.nativeElement as HTMLElement).contains(document.activeElement)) {
+        this.onTouched();
+      }
+    }, 100);
   }
 
   @Input()
@@ -59,7 +68,7 @@ export class DateTimeComponent implements OnInit {
   }
 
   public mask?: IMask.MaskedDate;
-  public id = Utils.elementId('app');
+  public id = Utils.elementId('app-');
   public time = new FormControl<string | null>(null);
   public dateTime = new FormControl<Date | null>(null);
 
@@ -85,41 +94,27 @@ export class DateTimeComponent implements OnInit {
     }
   }
 
-  public onOpenPopover(popover: PopoverDirective) {
-    if (popover.popoverElement) {
-      popover.close();
-    } else {
-      popover.open();
-
-      setTimeout(() => {
-        const timePickerInput = popover.popoverElement!.querySelector('forge-time-picker input') as HTMLInputElement;
-        timePickerInput?.focus();
-        timePickerInput?.select();
-      }, 100);
-
-      const forgeCalendar = popover.popoverElement!.querySelector('forge-calendar') as CalendarComponent;
-      if (dateIsValid(this.dateTime.value)) {
-        forgeCalendar.goToDate(this.dateTime.value as Date);
-        forgeCalendar.value = this.dateTime.value;
-        this.setTimeValue(this.dateTime.value as Date);
-      } else {
-        const date = dateParse(this.mask!.value.substring(0, 10), 'MM/dd/yyyy', new Date());
-        if (dateIsValid(date)) {
-          forgeCalendar.goToDate(date);
-          forgeCalendar.value = date;
-        }
-
-        this.setTimeValue(dateParse(this.mask!.value.substring(11), this.timeFormat, new Date()));
+  public onPopoverToggle(event: CustomEvent<IPopoverToggleEventData>) {
+    if (event.detail.newState === 'closed') {
+      if (!document.activeElement || document.activeElement === document.body) {
+        this.dateTimeInputElementRef.nativeElement.focus();
       }
     }
   }
 
-  public onDateSelected(event: CustomEvent) {
-    let selectedDate = event.detail.date as Date;
+  public onDateSelected(event: CustomEvent<ICalendarDateSelectEventData>) {
+    let selectedDate = event.detail.date;
     if (isDefined(this.time.value)) {
       selectedDate = mergeDateWithTime(selectedDate, this.time.value as string, this.timePrecision === 's');
     }
     this.dateTime.setValue(selectedDate);
+  }
+
+  public onKeyDown(event: KeyboardEvent) {
+    if (event.target === this.timeInputElementRef.nativeElement) {
+      event.preventDefault();
+      ((this.calendarElementRef.nativeElement as HTMLElement)?.shadowRoot?.querySelector(CALENDAR_CONSTANTS.selectors.PREVIOUS_BUTTON) as HTMLElement)?.focus();
+    }
   }
 
   public writeValue(value?: Date) {
@@ -135,10 +130,11 @@ export class DateTimeComponent implements OnInit {
     this.onTouched = fn;
   }
 
-  public onKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Tab' && (event.target as HTMLElement).id === `time-${this.id}`) {
-      event.preventDefault();
-      ((this.calendarPopover!.popoverElement!.querySelector('forge-calendar') as HTMLElement).shadowRoot!.querySelector('#previous-button') as HTMLElement)?.focus();
+  public setDisabledState(value: boolean) {
+    if (value) {
+      this.dateTime.disable();
+    } else {
+      this.dateTime.enable();
     }
   }
 

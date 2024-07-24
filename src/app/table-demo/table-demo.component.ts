@@ -3,15 +3,16 @@ import { CommonModule } from '@angular/common';
 import { finalize, fromEvent, tap, Subject, takeUntil, merge, BehaviorSubject } from 'rxjs';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
-import { IColumnConfiguration, SortDirection } from '@tylertech/forge';
+import { IColumnConfiguration, PopoverComponent, SortDirection } from '@tylertech/forge';
 import { isDefined } from '@tylertech/forge-core';
-import { ForgeCheckboxModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIconModule, ForgeListItemModule, ForgeListModule, ForgePopoverModule, ForgeToolbarModule, PopoverDirective } from '@tylertech/forge-angular';
+import { ForgeCheckboxModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIconModule, ForgeListItemModule, ForgeListModule, ForgePopoverModule, ForgeToolbarModule } from '@tylertech/forge-angular';
 
 import { IPerson } from 'src/app/shared/interfaces/person.interface';
 import { AppDataService } from 'src/app/app-data.service';
 import { AutoFocusDirective } from 'src/app/shared/directives/auto-focus/auto-focus.directive';
 import { CallbackPipe } from 'src/app/shared/pipes/callback.pipe';
 import { TableDetailComponent } from 'src/app/shared/components/table-detail/table-detail.component';
+import { Utils } from 'src/utils';
 
 @Component({
   selector: 'app-table-demo',
@@ -37,11 +38,10 @@ import { TableDetailComponent } from 'src/app/shared/components/table-detail/tab
 })
 export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
   private appDataService = inject(AppDataService);
-
   @ViewChild('table', { static: true })
-  private tableElementRef?: ElementRef;
-  @ViewChild('columnHeaderPopover', { read: PopoverDirective })
-  private columnHeaderPopoverDirective?: PopoverDirective;
+  private tableElementRef?: ElementRef<HTMLTableElement>;
+  @ViewChild('columnHeaderPopover')
+  private columnHeaderPopover?: ElementRef<PopoverComponent>;
   @ViewChild(CdkVirtualScrollViewport)
   public virtualScrollViewport?: CdkVirtualScrollViewport;
   private tableColumnResize$ = new Subject<void>();
@@ -69,6 +69,7 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
   ];
   public tableHeaderOffset = 0;
   public expandedRows: any[] = [];
+  public id = Utils.elementId('app-');
 
   public visibleColumns = (columns: IColumnConfiguration[]) => {
     return columns.filter((c) => c.hidden !== true);
@@ -85,7 +86,7 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
   public ngAfterViewInit() {
     this.virtualScrollViewport?.renderedRangeStream.subscribe((o) => {
       this.tableHeaderOffset = o.start;
-      if (!this.isBusy && o.start > 0 && o.end + 67 > this.recordCount) {
+      if (!this.isBusy && o.start > 0 && o.end + 20 > this.recordCount) {
         this.isBusy = true;
         this.appDataService
           .getPeople({
@@ -169,12 +170,18 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  public onColumnHeaderRightClick(event: PointerEvent) {
+  public onColumnHeaderRightClick(event: PointerEvent, columnIndex: number) {
     event.preventDefault();
-    if (this.columnHeaderPopoverDirective?.popoverElement) {
-      this.columnHeaderPopoverDirective.close();
+    if (this.columnHeaderPopover.nativeElement.open) {
+      this.columnHeaderPopover.nativeElement.open = false;
+      requestAnimationFrame(() => {
+        this.columnHeaderPopover.nativeElement.anchor = '';
+      });
     } else {
-      this.columnHeaderPopoverDirective?.open();
+      this.columnHeaderPopover.nativeElement.anchor = `th-${columnIndex}-${this.id}`;
+      requestAnimationFrame(() => {
+        this.columnHeaderPopover.nativeElement.open = true;
+      });
     }
   }
 
@@ -204,10 +211,15 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       }
     }
-    this.columnHeaderPopoverDirective?.close();
+    this.columnHeaderPopover.nativeElement.open = false;
+    this.columnHeaderPopover.nativeElement.anchor = '';
   }
 
-  public onTableSort(column: IColumnConfiguration) {
+  public onTableSort(event: MouseEvent, column: IColumnConfiguration) {
+    event.stopPropagation();
+    this.columnHeaderPopover.nativeElement.open = false;
+    this.columnHeaderPopover.nativeElement.anchor = '';
+
     if (!this.isColumnResizing) {
       this.tableColumns.filter((c) => c.property !== column.property).forEach((c) => (c.sortDirection = undefined));
       if (column.sortDirection === SortDirection.Ascending) {

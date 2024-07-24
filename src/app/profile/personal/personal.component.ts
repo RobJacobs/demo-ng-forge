@@ -21,6 +21,7 @@ import { AppDataService } from 'src/app/app-data.service';
 import { FormControlInvalidDirective } from 'src/app/shared/directives/form-control-invalid/form-control-invalid.directive';
 import { InputCasingDirective } from 'src/app/shared/directives/input-casing/input-casing.directive';
 import { ProfileCacheService } from '../profile-cache.service';
+import { DateTimeComponent } from 'src/app/shared/components/date-time/date-time.component';
 
 @Component({
   selector: 'app-profile-personal',
@@ -41,7 +42,8 @@ import { ProfileCacheService } from '../profile-cache.service';
     ForgeSwitchModule,
     ForgeTextFieldModule,
     FormControlInvalidDirective,
-    InputCasingDirective
+    InputCasingDirective,
+    DateTimeComponent
   ],
   templateUrl: './personal.component.html',
   styleUrls: ['./personal.component.scss']
@@ -78,6 +80,11 @@ export class PersonalComponent {
 
   public onAddFriend() {
     this.friendsFormArray.push(new FormControl(null, { validators: [Validators.required] }));
+    if (this.cache.formGroup.controls.personalFormGroup.controls.entryDate.disabled) {
+      this.cache.formGroup.controls.personalFormGroup.controls.entryDate.enable();
+    } else {
+      this.cache.formGroup.controls.personalFormGroup.controls.entryDate.disable();
+    }
   }
 
   public onDeleteFriend(index: number) {

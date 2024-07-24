@@ -16,13 +16,11 @@
                 cdkDrag
                 cdkDragLockAxis="x"
                 (cdkDragStarted)="onColumnHeaderDragStart()"
-                (click)="columnHeaderPopover.close(); onTableSort(col)"
-                #columnHeaderPopover="forgePopover"
-                [forgePopover]="columnHeaderPopoverTemplate"
-                [forgePopoverPlacement]="'right-end'"
-                (contextmenu)="onColumnHeaderRightClick($any($event))"
+                (click)="onTableSort($event, col)"
+                (contextmenu)="onColumnHeaderRightClick($any($event), colIndex)"
                 tabindex="-1"
                 [style.--table-column-width]="col.width"
+                [id]="'th-' + colIndex + '-' + id"
               >
                 <div class="forge-table-head__cell-container">
                   <span class="forge-table-head__cell-text">{{ col.header }}</span>
@@ -73,7 +71,7 @@
   </forge-toolbar>
 </div>
 
-<ng-template #columnHeaderPopoverTemplate>
+<forge-popover #columnHeaderPopover placement="right-end" animation-type="none">
   <forge-list class="column-popover" (forge-list-item-select)="onColumnPopoverItemSelected($event.detail.value)">
     @for (column of tableColumns; track i; let i = $index) {
       <forge-list-item [value]="column">
@@ -89,4 +87,4 @@
       <button type="button">Freeze column</button>
     </forge-list-item>
   </forge-list>
-</ng-template>
+</forge-popover>

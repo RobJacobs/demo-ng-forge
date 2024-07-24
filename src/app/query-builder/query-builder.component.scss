@@ -15,7 +15,8 @@ $form-column-gap: 16;
 
     &__condition {
       --forge-field-height: 2.5rem;
-      background-color: $forge-color-grey-200;
+      --forge-field-outline-style: none;
+      --forge-field-background: #{$forge-color-grey-200};
     }
   }
 
@@ -34,6 +35,7 @@ $form-column-gap: 16;
 
     &__action {
       @include forge-flex-container(flex, row, nowrap, center);
+      align-self: flex-end;
     }
   }
 

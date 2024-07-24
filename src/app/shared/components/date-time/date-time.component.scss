@@ -1,3 +1,13 @@
 :host {
   display: block;
 }
+
+.calendar-popover {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  padding: 16px;
+  forge-calendar {
+    --forge-calendar-width: 320px;
+  }
+}

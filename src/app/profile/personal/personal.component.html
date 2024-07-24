@@ -2,13 +2,13 @@
   <div class="form-grid">
     <forge-text-field required [appFormControlInvalid]="formGroup.controls.firstName">
       <input type="text" id="profile--personal--first-name" formControlName="firstName" [appInputCasing]="'upper'" />
-      <label for="profile--personal--first-name" slot="label">First Name</label>
+      <label for="profile--personal--first-name" slot="label">First name</label>
       <span slot="support-text" class="app-form-control-invalid">First name is required {{ formGroup.controls.firstName.invalid }} {{ formGroup.controls.firstName.touched }}</span>
     </forge-text-field>
 
     <forge-text-field required [appFormControlInvalid]="formGroup.controls.lastName">
       <input type="text" id="profile--personal--last-name" formControlName="lastName" />
-      <label for="profile--personal--last-name" slot="label">Last Name</label>
+      <label for="profile--personal--last-name" slot="label">Last name</label>
       <span slot="support-text" class="app-form-control-invalid">Last name is required</span>
     </forge-text-field>
 
@@ -62,6 +62,8 @@
         <forge-switch formControlName="citizen"></forge-switch>
       </div>
     </forge-label-value>
+
+    <app-date-time label="Entry date" formControlName="entryDate"></app-date-time>
   </div>
 
   <forge-divider></forge-divider>

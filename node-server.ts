@@ -1,12 +1,16 @@
 // https://nodejs.org/api/http.html
+// import * as http from 'node:http';
+// import * as url from 'node:url';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const http = require('http');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const url = require('url');
 
 const sleep = (ms) => {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
-const server = http.createServer((request, response, next) => {
+const server = http.createServer((request, response) => {
   const requestPath = url.parse(request.url).pathname;
 
   // request events
@@ -59,7 +63,7 @@ const server = http.createServer((request, response, next) => {
         sleep(3000).then(() => {
           response.write(`{ "invalid": true, "message": "Error from server: ${bodyObject.field}"}`);
           response.end();
-        })
+        });
       } else {
         response.end();
       }

@@ -134,9 +134,9 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
                 console.log(event);
               },
               [
-                { value: 1, label: 'Option 1' },
-                { value: 2, label: 'Option 2' },
-                { value: 3, label: 'Option 3' }
+                { value: 1, label: 'Edit', leadingIcon: 'edit', leadingIconType: 'component' },
+                { value: 2, label: 'Add', leadingIcon: 'add', leadingIconType: 'component' },
+                { value: 3, label: 'Delete', leadingIcon: 'delete', leadingIconType: 'component' }
               ],
               'More options'
             )
