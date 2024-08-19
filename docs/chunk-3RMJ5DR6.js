@@ -1,0 +1,2 @@
+function o(t){return t instanceof Date||typeof t=="object"&&Object.prototype.toString.call(t)==="[object Date]"}function r(t){let e=Object.prototype.toString.call(t);return t instanceof Date||typeof t=="object"&&e==="[object Date]"?new t.constructor(+t):typeof t=="number"||e==="[object Number]"||typeof t=="string"||e==="[object String]"?new Date(t):new Date(NaN)}function p(t){if(!o(t)&&typeof t!="number")return!1;let e=r(t);return!isNaN(Number(e))}export{r as a,p as b};
+//# sourceMappingURL=chunk-3RMJ5DR6.js.map

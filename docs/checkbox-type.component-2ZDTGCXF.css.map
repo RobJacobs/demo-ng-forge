@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["checkbox-type.component.ts"],
+  "sourcesContent": ["\n      :host {\n        display: block;\n      }\n    "],
+  "mappings": "AACM,MACE,QAAA",
+  "names": []
+}
