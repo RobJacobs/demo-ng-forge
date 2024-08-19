@@ -13,8 +13,8 @@ import { ForgeTableModule, ForgeTextFieldModule, ForgeToolbarModule } from '@tyl
   styleUrl: './css-variables.component.scss'
 })
 export class CssVariablesComponent implements OnInit {
-  private globalCssVariables: { name: string; value: string }[] = [];
-  public recordset = this.globalCssVariables;
+  private globalCssVariables = new Set<{ name: string; value: string }>([]);
+  public recordset = Array.from(this.globalCssVariables);
   public tableColumns: IColumnConfiguration[] = [
     { property: 'name', header: 'Name' },
     {
@@ -42,25 +42,24 @@ export class CssVariablesComponent implements OnInit {
         Array.from(ss.cssRules)
           .filter((ssRule) => ssRule.cssText.startsWith(':root'))
           .forEach((ssRule) => {
-            this.globalCssVariables.push(
-              ...ssRule.cssText
-                .split('{')[1]
-                .replace('}', '')
-                .split(';')
-                .map((r) => r.trim())
-                .filter((r) => r.startsWith('--forge'))
-                .map((r) => {
-                  const rule = r.split(':');
-                  return { name: rule[0].trim(), value: rule[1].trim() };
-                })
-            );
+            ssRule.cssText
+              .split('{')[1]
+              .replace('}', '')
+              .split(';')
+              .map((r) => r.trim())
+              .filter((r) => r.startsWith('--forge'))
+              .map((r) => {
+                const rule = r.split(':');
+                return { name: rule[0].trim(), value: rule[1].trim() };
+              })
+              .forEach((r) => this.globalCssVariables.add(r));
           });
       } catch {}
     });
-    this.recordset = this.globalCssVariables;
+    this.recordset = Array.from(this.globalCssVariables);
   }
 
   public onFilter = debounce(() => {
-    this.recordset = this.globalCssVariables.filter((v) => v.name.includes(this.variableFilter));
+    this.recordset = Array.from(this.globalCssVariables).filter((v) => v.name.includes(this.variableFilter));
   }, 500);
 }
