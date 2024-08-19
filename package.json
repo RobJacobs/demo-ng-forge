@@ -9,7 +9,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "server": "node node-server.ts",
-    "publish": "ng build --configuration production --output-path docs --base-href /demo-ng-forge/ && node publish.js"
+    "publish": "ng build --configuration production --base-href /demo-ng-forge/ && node publish.js"
   },
   "private": true,
   "dependencies": {

@@ -39,7 +39,8 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": {
-              "base": "dist/demo-ng-forge"
+              "base": "dist/demo-ng-forge",
+              "browser": ""
             },
             "index": "src/index.html",
             "polyfills": [
