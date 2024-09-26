@@ -17,14 +17,12 @@
       <input #input id="imask--format" type="text" formControlName="format" />
       <label for="imask--format" slot="label">Format</label>
     </forge-text-field>
-    <div style="display: flex; column-gap: 8px; align-items: center">
-      <forge-select style="flex-grow: 1" formControlName="maskType" label="Mask type">
-        @for (option of maskOptions; track i; let i = $index) {
-          <forge-option [value]="option.value">{{ option.label }}</forge-option>
-        }
-      </forge-select>
-      <forge-button variant="outlined" (click)="onApply()"> Apply </forge-button>
-    </div>
+    <forge-select formControlName="maskType" label="Mask type">
+      @for (option of maskOptions; track i; let i = $index) {
+        <forge-option [value]="option.value">{{ option.label }}</forge-option>
+      }
+    </forge-select>
+    <forge-button variant="raised" (click)="onApply()">Apply mask</forge-button>
   </form>
   <p>{{ formGroup.getRawValue() | json }}</p>
 </div>

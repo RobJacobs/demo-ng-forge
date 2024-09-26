@@ -1,7 +1,7 @@
 <ng-container [formGroup]="formGroup">
   <div class="form-grid">
     <forge-text-field required [appFormControlInvalid]="formGroup.controls.firstName">
-      <input type="text" id="profile--personal--first-name" formControlName="firstName" [appInputCasing]="'upper'" />
+      <input type="text" id="profile--personal--first-name" formControlName="firstName" [appInputCasing]="'upper'" appAutoFocus />
       <label for="profile--personal--first-name" slot="label">First name</label>
       <span slot="support-text" class="app-form-control-invalid">First name is required {{ formGroup.controls.firstName.invalid }} {{ formGroup.controls.firstName.touched }}</span>
     </forge-text-field>
@@ -26,9 +26,9 @@
       <span slot="support-text" class="app-form-control-invalid">Phone number is required</span>
     </forge-text-field>
 
-    <forge-date-picker>
+    <forge-date-picker formControlName="dateOfBirth">
       <forge-text-field>
-        <input type="text" id="profile--personal--dob" formControlName="dateOfBirth" />
+        <input type="text" id="profile--personal--dob" />
         <label for="profile--personal--dob">Date of birth</label>
       </forge-text-field>
     </forge-date-picker>

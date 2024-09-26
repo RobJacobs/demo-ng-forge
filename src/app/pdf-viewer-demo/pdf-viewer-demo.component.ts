@@ -90,7 +90,6 @@ export class PdfViewerDemoComponent {
   });
 
   public constructor() {
-    (window as any).pdfWorkerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.3.136/legacy/build/pdf.worker.min.mjs';
     this.searchFormGroup.controls.query.valueChanges.pipe(debounceTime(300), takeUntilDestroyed(this.destroyRef)).subscribe((o) => {
       this.searchDocument('');
     });

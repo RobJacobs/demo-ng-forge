@@ -20,8 +20,9 @@ import {
 import { AppDataService } from 'src/app/app-data.service';
 import { FormControlInvalidDirective } from 'src/app/shared/directives/form-control-invalid/form-control-invalid.directive';
 import { InputCasingDirective } from 'src/app/shared/directives/input-casing/input-casing.directive';
-import { ProfileCacheService } from '../profile-cache.service';
 import { DateTimeComponent } from 'src/app/shared/components/date-time/date-time.component';
+import { AutoFocusDirective } from 'src/app/shared/directives/auto-focus/auto-focus.directive';
+import { ProfileCacheService } from '../profile-cache.service';
 
 @Component({
   selector: 'app-profile-personal',
@@ -43,7 +44,8 @@ import { DateTimeComponent } from 'src/app/shared/components/date-time/date-time
     ForgeTextFieldModule,
     FormControlInvalidDirective,
     InputCasingDirective,
-    DateTimeComponent
+    DateTimeComponent,
+    AutoFocusDirective
   ],
   templateUrl: './personal.component.html',
   styleUrls: ['./personal.component.scss']
