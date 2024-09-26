@@ -1,6 +1,6 @@
 <div [formGroup]="formGroup" class="form-grid">
   <forge-text-field required [appFormControlInvalid]="formGroup.controls.name" class="form-grid--row-break">
-    <input type="text" id="profile--address--name" formControlName="name" />
+    <input type="text" id="profile--address--name" formControlName="name" appAutoFocus />
     <label for="profile--address--name" slot="label">Name</label>
     <span slot="support-text" class="app-form-control-invalid">Name is required</span>
   </forge-text-field>

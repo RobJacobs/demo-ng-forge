@@ -1,7 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { Observable } from 'rxjs';
 import { DialogService, ForgeButtonModule, ForgeIconModule, ForgeTabBarModule, ForgeTabModule, ForgeToolbarModule } from '@tylertech/forge-angular';
 
@@ -22,6 +22,7 @@ import { ProfileCacheService } from './profile-cache.service';
 })
 export class ProfileComponent {
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private appDataService = inject(AppDataService);
   private dialogService = inject(DialogService);
   private appToastService = inject(AppToastService);
@@ -41,6 +42,14 @@ export class ProfileComponent {
   constructor() {
     if (this.cache.profile) {
       this.loadForm(this.cache.profile);
+    }
+    if (
+      this.route.snapshot.children
+        .map((r) => r.url.map((cr) => cr.path))
+        .flat()
+        .includes('address')
+    ) {
+      this.activeTab = 1;
     }
   }
 

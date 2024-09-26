@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:prod": "ng serve --configuration production",
     "build": "ng build pets && ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
@@ -22,22 +23,22 @@
     "@angular/platform-browser": "^18.0.6",
     "@angular/platform-browser-dynamic": "^18.0.6",
     "@angular/router": "^18.0.6",
-    "@ngx-formly/core": "^6.3.0",
+    "@ngx-formly/core": "^6.3.7",
     "@tylertech/angular-core": "^4.0.0",
-    "@tylertech/forge": "^3.0.0",
-    "@tylertech/forge-angular": "^4.0.2",
+    "@tylertech/forge": "^3.1.2",
+    "@tylertech/forge-angular": "^4.1.0",
     "@tylertech/forge-internal": "^3.0.0",
     "@tylertech/tyler-icons": "^1.18.1",
     "ag-grid-angular": "^32.0.0",
     "ag-grid-community": "^32.0.0",
-    "angular-imask": "^7.5.0",
-    "d3": "^7.8.5",
+    "angular-imask": "^7.6.1",
+    "d3": "^7.9.0",
     "d3-interpolate-path": "^2.3.0",
-    "date-fns": "^3.3.1",
+    "date-fns": "^3.6.0",
     "dexie": "^3.2.6",
-    "imask": "^7.5.0",
-    "ng2-pdf-viewer": "^10.0.0",
-    "ngx-quill": "^26.0.1",
+    "imask": "^7.6.1",
+    "ng2-pdf-viewer": "^10.3.1",
+    "ngx-quill": "^26.0.8",
     "quill": "^2.0.2",
     "rxjs": "^7.8.0",
     "tslib": "^2.3.0",
@@ -70,10 +71,5 @@
     "ng-packagr": "^18.0.0",
     "prettier": "^3.3.2",
     "typescript": "~5.4.5"
-  },
-  "overrides": {
-    "ng2-pdf-viewer": {
-      "pdfjs-dist": "^4.3.136"
-    }
   }
 }
