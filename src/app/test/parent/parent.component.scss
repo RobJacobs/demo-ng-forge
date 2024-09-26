@@ -9,3 +9,10 @@
   overflow: auto;
   padding: 24px;
 }
+
+.form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+  padding: 16px;
+}

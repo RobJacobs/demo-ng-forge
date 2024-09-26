@@ -6,7 +6,46 @@
     <h2 class="forge-typography--subheading4">Child</h2>
   </div>
 </forge-toolbar>
+<div class="body" cdkTrapFocus>
+  <forge-button variant="raised" appAutoFocus>Focus</forge-button>
+  <forge-text-field>
+    <input type="text" id="test--child--name" />
+    <label for="test--child--name" slot="label">Name</label>
+  </forge-text-field>
+  <forge-select label="Pet">
+    <forge-option value="cat">Cat</forge-option>
+    <forge-option value="dog">Dog</forge-option>
+    <forge-option value="rock">Rock</forge-option>
+  </forge-select>
+  <forge-checkbox>Include</forge-checkbox>
+  <input type="text" />
+  <input type="text" />
 
-<div class="body">
-  <p>Child content</p>
+  <app-card border="raised">
+    <div app-card-header>Outer card</div>
+    <div style="display: flex; flex-direction: row; gap: 16px">
+      <app-card border="outlined">
+        <div app-card-header>Card A - 01</div>
+        <div style="display: flex; flex-direction: column; gap: 16px">
+          <app-card border="outlined">
+            <div app-card-header>Card A - 01 - 01</div>
+          </app-card>
+          <app-card border="outlined">
+            <div app-card-header>Card B - 01 - 02</div>
+          </app-card>
+        </div>
+      </app-card>
+      <app-card border="outlined">
+        <div app-card-header>Card B - 01</div>
+        <div style="display: flex; flex-direction: column; gap: 16px">
+          <app-card border="outlined">
+            <div app-card-header>Card B - 01 - 01</div>
+          </app-card>
+          <app-card border="outlined">
+            <div app-card-header>Card B - 01 - 02</div>
+          </app-card>
+        </div>
+      </app-card>
+    </div>
+  </app-card>
 </div>
