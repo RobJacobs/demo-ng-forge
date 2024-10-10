@@ -19,3 +19,13 @@ export class NullableNumberMask extends IMask.MaskedNumber {
     super.typedValue = value ?? ('' as any);
   }
 }
+
+export class NullableMask extends IMask.MaskedRegExp {
+  override get typedValue() {
+    return this.unmaskedValue !== '' ? super.typedValue : null;
+  }
+
+  override set typedValue(value) {
+    super.typedValue = value;
+  }
+}

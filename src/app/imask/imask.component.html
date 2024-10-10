@@ -23,6 +23,7 @@
       }
     </forge-select>
     <forge-button variant="raised" (click)="onApply()">Apply mask</forge-button>
+    <forge-button variant="outlined" (click)="onReset()">Reset value</forge-button>
   </form>
   <p>{{ formGroup.getRawValue() | json }}</p>
 </div>

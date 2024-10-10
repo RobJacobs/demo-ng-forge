@@ -40,7 +40,9 @@
   } @else {
     <forge-menu [options]="option.options" placement="right-start" (forge-menu-select)="menuItemSelected($event.detail.value)">
       <forge-list-item class="menu__item" [value]="option.value" [selected]="option.value === selectedValue?.join('/')">
-        <forge-icon *ngIf="option.icon" slot="start" [name]="option.icon"></forge-icon>
+        @if (option.icon) {
+          <forge-icon slot="start" [name]="option.icon"></forge-icon>
+        }
       </forge-list-item>
     </forge-menu>
   }
