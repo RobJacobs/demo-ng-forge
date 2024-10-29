@@ -5,7 +5,7 @@ import { DIALOG_DATA, DialogRef, ForgeButtonModule, ForgeCheckboxModule, ForgeIc
 
 import { AutoFocusDirective } from 'src/app/shared/directives/auto-focus/auto-focus.directive';
 import { FormControlInvalidDirective } from 'src/app/shared/directives/form-control-invalid/form-control-invalid.directive';
-import { DialogComponent } from 'src/app/shared/components/dialog/dialog.component';
+import { DialogTemplateComponent } from 'src/app/shared/components/dialog-template/dialog-template.component';
 
 export interface ISearchSaveDialogData {
   id: number;
@@ -18,7 +18,7 @@ export interface ISearchSaveDialogData {
 @Component({
   selector: 'app-search-save',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ForgeButtonModule, ForgeCheckboxModule, ForgeIconButtonModule, ForgeIconModule, ForgeTextFieldModule, AutoFocusDirective, FormControlInvalidDirective, DialogComponent],
+  imports: [CommonModule, ReactiveFormsModule, ForgeButtonModule, ForgeCheckboxModule, ForgeIconButtonModule, ForgeIconModule, ForgeTextFieldModule, AutoFocusDirective, FormControlInvalidDirective, DialogTemplateComponent],
   templateUrl: './search-save.component.html',
   styleUrls: ['./search-save.component.scss']
 })

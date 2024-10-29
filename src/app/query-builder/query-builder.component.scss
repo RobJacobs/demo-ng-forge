@@ -35,7 +35,7 @@ $form-column-gap: 16;
 
     &__action {
       @include forge-flex-container(flex, row, nowrap, center);
-      align-self: flex-end;
+      margin-top: 1rem;
     }
   }
 
@@ -64,5 +64,3 @@ $form-column-gap: 16;
     }
   }
 }
-
-@include app-form-control-invalid();

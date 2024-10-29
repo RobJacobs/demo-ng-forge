@@ -55,7 +55,7 @@ export class FilterComponent implements OnInit {
   }
 
   public onApplyFilter() {
-    this.cache.homeView.filter.filters = Object.entries(Utils.reduceObject(this.formGroup.value)).map((e) => ({ property: e[0], value: e[1], label: this.propertyLabel(e[0]) })) || [];
+    this.cache.homeView.filter.filters = Object.entries(Utils.objectReduce(this.formGroup.value)).map((e) => ({ property: e[0], value: e[1], label: this.propertyLabel(e[0]) })) || [];
     this.filter.emit();
   }
 

@@ -157,17 +157,3 @@
 @mixin border($border: 'border') {
   #{$border}: 1px solid var(--forge-theme-outline);
 }
-
-@mixin form-control-invalid() {
-  .app-form-control-invalid {
-    display: none;
-
-    &[invalid] {
-      display: block;
-
-      .app-form-control-invalid {
-        display: block;
-      }
-    }
-  }
-}

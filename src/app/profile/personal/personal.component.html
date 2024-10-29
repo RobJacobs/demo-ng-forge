@@ -3,13 +3,13 @@
     <forge-text-field required [appFormControlInvalid]="formGroup.controls.firstName">
       <input type="text" id="profile--personal--first-name" formControlName="firstName" [appInputCasing]="'upper'" appAutoFocus />
       <label for="profile--personal--first-name" slot="label">First name</label>
-      <span slot="support-text" class="app-form-control-invalid">First name is required {{ formGroup.controls.firstName.invalid }} {{ formGroup.controls.firstName.touched }}</span>
+      <span slot="support-text" class="app--form-control-invalid">First name is required</span>
     </forge-text-field>
 
     <forge-text-field required [appFormControlInvalid]="formGroup.controls.lastName">
       <input type="text" id="profile--personal--last-name" formControlName="lastName" />
       <label for="profile--personal--last-name" slot="label">Last name</label>
-      <span slot="support-text" class="app-form-control-invalid">Last name is required</span>
+      <span slot="support-text" class="app--form-control-invalid">Last name is required</span>
     </forge-text-field>
 
     <forge-select label="Gender" formControlName="gender" [options]="genderOptions"></forge-select>
@@ -17,13 +17,13 @@
     <forge-text-field required [appFormControlInvalid]="formGroup.controls.email">
       <input type="text" id="profile--personal--email" formControlName="email" />
       <label for="profile--personal--email" slot="label">Email</label>
-      <span slot="support-text" class="app-form-control-invalid">Email is required</span>
+      <span slot="support-text" class="app--form-control-invalid">Email is required</span>
     </forge-text-field>
 
     <forge-text-field required [appFormControlInvalid]="formGroup.controls.phone">
       <input type="text" id="profile--personal--phone" formControlName="phone" />
       <label for="profile--personal--phone" slot="label">Phone</label>
-      <span slot="support-text" class="app-form-control-invalid">Phone number is required</span>
+      <span slot="support-text" class="app--form-control-invalid">Phone number is required</span>
     </forge-text-field>
 
     <forge-date-picker formControlName="dateOfBirth">
@@ -73,7 +73,7 @@
       @for (friend of formGroup.controls.friends.controls; track i; let i = $index) {
         <div class="friend">
           <forge-select [options]="friendOptions" [formControlName]="i" label="Friend" [appFormControlInvalid]="formGroup.controls.friends.controls[i]">
-            <span slot="support-text" class="app-form-control-invalid">A friend is required</span>
+            <span slot="support-text" class="app--form-control-invalid">A friend is required</span>
           </forge-select>
           <forge-icon-button aria-label="Delete" (click)="onDeleteFriend(i)">
             <forge-icon name="delete"></forge-icon>

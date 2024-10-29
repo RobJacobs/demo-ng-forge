@@ -28,10 +28,10 @@ export class FormControlInvalidDirective implements OnInit {
       .subscribe((shouldMarkInvalid) => {
         if (shouldMarkInvalid) {
           this.renderer.setAttribute(this.elementRef.nativeElement, 'invalid', '');
-          this.renderer.addClass(this.elementRef.nativeElement, 'app-form-control-invalid');
+          this.renderer.addClass(this.elementRef.nativeElement, 'app--form-control-invalid');
         } else {
           this.renderer.removeAttribute(this.elementRef.nativeElement, 'invalid');
-          this.renderer.removeClass(this.elementRef.nativeElement, 'app-form-control-invalid');
+          this.renderer.removeClass(this.elementRef.nativeElement, 'app--form-control-invalid');
         }
       });
   }

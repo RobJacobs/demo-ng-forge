@@ -75,4 +75,8 @@ export class AppDataService {
       context: new HttpContext().set(SHOW_BUSY_INDICATOR, true)
     });
   }
+
+  public getFile(fileName: string): Observable<Blob> {
+    return this.httpClient.get(`mock-data/${fileName}`, { responseType: 'blob' });
+  }
 }
