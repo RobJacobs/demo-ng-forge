@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/components/busy-indicator/busy-indicator.component.scss"],
+  "sourcesContent": [":host {\r\n  display: block;\r\n  min-width: 320px;\r\n}\r\n\r\n.header {\r\n  padding: 24px;\r\n  padding-bottom: 0;\r\n}\r\n\r\n.body {\r\n  display: grid;\r\n  grid-template-columns: auto 1fr;\r\n  align-items: center;\r\n  gap: 24px;\r\n  padding: 24px;\r\n  color: var(--forge-theme-text-medium);\r\n  forge-linear-progress {\r\n    grid-column: 1 / span 2;\r\n  }\r\n}\r\n"],
+  "mappings": "AAAA,MACE,QAAA,MACA,UAAA,MAGF,CAAA,OALA,QAME,UACA,EAGF,CAAA,KACE,QAAA,KACA,sBAAA,KAAA,IACA,YAAA,OACA,IAAA,KAdF,QAeE,KACA,MAAA,IAAA,2BACA,CAPF,KAOE,sBACE,YAAA,CAAA,CAAA,KAAA",
+  "names": []
+}
