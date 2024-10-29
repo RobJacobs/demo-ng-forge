@@ -189,7 +189,7 @@ export class Utils {
     const queryIndex = window.location.href.indexOf('?');
     if (queryIndex !== -1) {
       const httpParams = new HttpParams({ fromString: window.location.href.substring(queryIndex) });
-      httpParams.keys().forEach(k => {
+      httpParams.keys().forEach((k) => {
         const value = httpParams.getAll(k) as string[];
         if (value.length) {
           Object.defineProperty(params, k.toLowerCase(), { value: value.length === 1 ? value[0] : value, enumerable: true, writable: true });
@@ -200,21 +200,33 @@ export class Utils {
     return params;
   }
 
-  public static reduceObject(object: any): any {
+  public static objectReduce(obj: object): object {
     const reduced: any = {};
 
-    Object.keys(object).forEach(key => {
-      if (isDefined(object[key])) {
-        if (isArray(object[key])) {
-          if (object[key].length) {
-            reduced[key] = object[key];
+    Object.keys(obj).forEach((key) => {
+      if (isDefined(obj[key])) {
+        if (isArray(obj[key])) {
+          if (obj[key].length) {
+            reduced[key] = obj[key];
           }
-        } else if ((object[key] + '').trim().length) {
-          reduced[key] = typeof object[key] === 'string' ? object[key].trim() : object[key];
+        } else if ((obj[key] + '').trim().length) {
+          reduced[key] = typeof obj[key] === 'string' ? obj[key].trim() : obj[key];
         }
       }
     });
 
     return reduced;
+  }
+
+  public static objectPropertyPaths(obj: object, parentKey?: string): object {
+    return Object.keys(obj).reduce((prev, curr) => {
+      const value = obj[curr];
+      const key = parentKey ? `${parentKey}.${curr}` : `${curr}`;
+      if (value && typeof value === 'object') {
+        return { ...prev, ...this.objectPropertyPaths(value, key) };
+      } else {
+        return { ...prev, [key]: value };
+      }
+    }, {});
   }
 }

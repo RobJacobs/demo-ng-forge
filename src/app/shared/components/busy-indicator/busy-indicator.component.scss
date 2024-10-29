@@ -1,0 +1,21 @@
+:host {
+  display: block;
+  min-width: 320px;
+}
+
+.header {
+  padding: 24px;
+  padding-bottom: 0;
+}
+
+.body {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 24px;
+  padding: 24px;
+  color: var(--forge-theme-text-medium);
+  forge-linear-progress {
+    grid-column: 1 / span 2;
+  }
+}

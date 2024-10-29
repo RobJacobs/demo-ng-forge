@@ -9,7 +9,7 @@ import { IOption } from '@tylertech/forge';
 import { ForgeButtonModule, ForgeOptionModule, ForgeSelectModule, ForgeTextFieldModule, ForgeToolbarModule } from '@tylertech/forge-angular';
 import { parse as dateParse, format as dateFormat, isValid as dateIsValid } from 'date-fns';
 
-import { NullableNumberMask } from './nullable-number-mask';
+import { NullableMask, NullableNumberMask } from './imask-extensions';
 @Component({
   selector: 'app-imask',
   standalone: true,
@@ -22,9 +22,9 @@ export class ImaskComponent implements AfterViewInit {
   public imaskRef?: IMaskDirective<any>;
 
   public formGroup = new FormGroup({
-    format: new FormControl<string | null>('000-aa-****'),
+    format: new FormControl<string | null>(''),
     input: new FormControl<string | null>(null),
-    maskType: new FormControl<string>('string')
+    maskType: new FormControl<string>('number')
   });
   public unmask: 'typed' | boolean = false;
   public mask?: IMask.FactoryArg;
@@ -39,11 +39,15 @@ export class ImaskComponent implements AfterViewInit {
   public helpText = '';
 
   constructor() {
-    this.mask = this.buildStringMask(this.formGroup.value.format as string);
+    // this.mask = this.buildStringMask(this.formGroup.value.format as string);
   }
 
   public ngAfterViewInit() {
     console.log(this.imaskRef);
+  }
+
+  public onReset() {
+    this.formGroup.controls.input.setValue(null);
   }
 
   public onApply() {
@@ -59,7 +63,11 @@ export class ImaskComponent implements AfterViewInit {
           this.mask = this.buildStringMask(this.formGroup.value.format as string);
           break;
         case 'number':
-          this.mask = this.buildNumberMask(this.formGroup.value.format as string);
+          if (this.formGroup.value?.format?.length) {
+            this.mask = this.buildNumberFormatMask(this.formGroup.value.format as string);
+          } else {
+            this.mask = this.buildNumberMask();
+          }
           break;
         case 'number-search':
           this.mask = this.buildNumberSearchMask();
@@ -96,17 +104,18 @@ export class ImaskComponent implements AfterViewInit {
     });
   }
 
-  private buildNumberMask(format?: string): IMask.MaskedNumber {
-    this.unmask = 'typed';
+  private buildNumberMask(): IMask.MaskedRegExp {
+    return {
+      mask: /^-?\d*\.{0,1}\d*\s*$/
+    } as IMask.MaskedRegExp;
+  }
 
+  private buildNumberFormatMask(format?: string): IMask.MaskedNumber | IMask.MaskedRegExp {
     if (!format?.length) {
-      return new NullableNumberMask({
-        mask: Number,
-        scale: 0,
-        signed: true
-      }) as IMask.MaskedNumber;
+      return { mask: /^-?[\d]*\.*[\d]*\s*$/ } as IMask.MaskedRegExp;
     }
 
+    this.unmask = 'typed';
     const max = parseFloat(format.replace(/[#&-]/g, '9').replace(/,/g, ''));
     const min = format.includes('&') ? (format.includes('-') ? max * -1 : 0) : NaN;
     return new NullableNumberMask({
@@ -118,7 +127,7 @@ export class ImaskComponent implements AfterViewInit {
       signed: format!.includes('-') ? true : false,
       max: isFinite(max) ? max : undefined,
       min: isFinite(min) ? min : undefined
-    }) as IMask.MaskedNumber;
+    } as any) as any;
   }
 
   private buildNumberSearchMask(): IMask.MaskedRegExp {

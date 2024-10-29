@@ -1,0 +1,18 @@
+@use 'src/global' as *;
+
+:host {
+  display: block;
+}
+
+forge-toolbar[slot='header'] {
+  forge-icon-button[slot='after-end'] {
+    margin-right: 8px;
+  }
+}
+
+forge-toolbar[slot='footer'] {
+  &::part(section-start),
+  &::part(section-end) {
+    column-gap: 16px;
+  }
+}

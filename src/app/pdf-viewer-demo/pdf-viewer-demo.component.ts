@@ -76,11 +76,14 @@ export class PdfViewerDemoComponent {
 
   public showLeftToolbar = false;
   public navButtonDisabled = (page: number, navButton: 'prev' | 'next') => {
+    if (!this.pdf?.numPages && this.pdf?.numPages <= 1) {
+      return true;
+    }
     switch (navButton) {
       case 'prev':
-        return this.pdf?.numPages || (0 > 1 && page > 1) ? false : true;
+        return page > 1 ? false : true;
       case 'next':
-        return this.pdf?.numPages || (0 > 1 && page < (this.pdf?.numPages || 0)) ? false : true;
+        return page < this.pdf?.numPages ? false : true;
     }
   };
   public searchFormGroup = new FormGroup({

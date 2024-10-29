@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { isDefined } from '@tylertech/forge-core';
 import { DIALOG_DATA, DialogRef, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule } from '@tylertech/forge-angular';
-import { DialogComponent } from '../dialog/dialog.component';
+import { DialogTemplateComponent } from 'src/app/shared/components/dialog-template/dialog-template.component';
 
 export interface IConfirmDialogData {
   title: string;
@@ -15,7 +15,7 @@ export interface IConfirmDialogData {
   templateUrl: './confirm-dialog.component.html',
   styleUrls: ['./confirm-dialog.component.scss'],
   standalone: true,
-  imports: [CommonModule, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, DialogComponent]
+  imports: [CommonModule, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, DialogTemplateComponent]
 })
 export class ConfirmDialogComponent {
   public dialogConfig = inject<IConfirmDialogData>(DIALOG_DATA);

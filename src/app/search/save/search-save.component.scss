@@ -5,7 +5,6 @@
 }
 
 .form-grid {
+  padding: 16px;
   @include app-form-grid();
 }
-
-@include app-form-control-invalid();

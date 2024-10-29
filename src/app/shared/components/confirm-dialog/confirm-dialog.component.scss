@@ -4,7 +4,8 @@
   display: contents;
 }
 
-app-dialog {
+.body {
+  padding: 16px;
   min-width: 320px;
   max-width: 600px;
 }

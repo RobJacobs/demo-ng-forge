@@ -82,11 +82,10 @@ export class PersonalComponent {
 
   public onAddFriend() {
     this.friendsFormArray.push(new FormControl(null, { validators: [Validators.required] }));
-    if (this.cache.formGroup.controls.personalFormGroup.controls.entryDate.disabled) {
-      this.cache.formGroup.controls.personalFormGroup.controls.entryDate.enable();
-    } else {
-      this.cache.formGroup.controls.personalFormGroup.controls.entryDate.disable();
-    }
+    requestAnimationFrame(() => {
+      const control = this.cache.formGroup.get('personalFormGroup.friends.0');
+      console.log(control);
+    });
   }
 
   public onDeleteFriend(index: number) {

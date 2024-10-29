@@ -17,12 +17,22 @@
       <p>{{ variable | json }}</p>
     </ng-template>
 
-    <div>{{ 0 | appArrayFind: data : "value" : "label" }}</div>
-    <div>{{ 1 | appArrayFind: data : "value" | json }}</div>
+    <p>{{ 0 | appArrayFind: arrayData : "value" : "label" }}</p>
+    <p>{{ 1 | appArrayFind: arrayData : "value" | json }}</p>
+    <p>{{ propertyPaths | json }}</p>
+    <p>
+      <forge-text-field>
+        <input type="text" id="test--parent--file-name" [(ngModel)]="fileName" autocomplete="off" />
+        <label for="test--parent--file-name" slot="label">File name</label>
+        <span slot="support-text">Must exist in src/mock-data</span>
+      </forge-text-field>
+      <forge-button style="margin-top: 16px" variant="filled" (click)="onShowFile()" [disabled]="!fileName?.length">Show file</forge-button>
+    </p>
 
     <div app-card-footer slot="end">
-      <forge-button variant="outlined"> Cancel </forge-button>
-      <forge-button variant="raised"> Save </forge-button>
+      <forge-button variant="outlined" (click)="onShowBusy()">Show busy</forge-button>
+      <forge-button variant="outlined">Cancel</forge-button>
+      <forge-button variant="raised">Save</forge-button>
     </div>
   </app-card>
 </div>

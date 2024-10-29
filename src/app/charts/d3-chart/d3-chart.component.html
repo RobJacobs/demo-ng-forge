@@ -4,11 +4,13 @@
 @if (showLegend) {
   <div class="legend-container">
     <forge-list class="chart-legend">
-      <forge-list-item *ngFor="let item of legendData">
-        <div slot="start" [style.--item-color]="item.color"></div>
-        <span>{{ item.label }}</span>
-        <span slot="secondary-text">{{ item.value }}</span>
-      </forge-list-item>
+      @for (item of legendData; track i; let i = $index) {
+        <forge-list-item>
+          <div slot="start" [style.--item-color]="item.color"></div>
+          <span>{{ item.label }}</span>
+          <span slot="secondary-text">{{ item.value }}</span>
+        </forge-list-item>
+      }
     </forge-list>
   </div>
 }

@@ -61,13 +61,27 @@ router-outlet {
   &--flex-right {
     margin-left: auto;
   }
+
+  &--form-control-invalid {
+    display: none;
+
+    &[invalid] {
+      display: block;
+
+      .app--form-control-invalid[slot='support-text'] {
+        display: block;
+        color: var(--forge-theme-error);
+      }
+    }
+  }
 }
 
-forge-dialog {
-  &::part(surface) {
-    display: flex;
-  }
-  forge-scaffold {
-    height: auto;
-  }
+.forge-hyperlink {
+  background: unset;
+  border: unset;
+  outline: unset;
+}
+
+forge-popover {
+  --forge-popover-min-width: 240px;
 }
