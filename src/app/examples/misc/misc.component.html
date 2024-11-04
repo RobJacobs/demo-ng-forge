@@ -4,35 +4,75 @@
 
 <div class="body">
   <app-card border="raised">
-    <div app-card-header slot="start">
-      <span>Card header</span>
-    </div>
-    <div app-card-header slot="end">
-      <forge-icon-button aria-label="Close">
+    <ng-container app-card-header>
+      <span slot="start">Card header</span>
+      <forge-icon-button slot="after-end" aria-label="Close">
         <forge-icon name="close"></forge-icon>
       </forge-icon-button>
+    </ng-container>
+
+    <div class="card-body">
+      <div class="card-body__section">
+        <div>File viewer</div>
+        <forge-text-field>
+          <input type="text" id="test--parent--file-name" [(ngModel)]="fileName" autocomplete="off" />
+          <label for="test--parent--file-name" slot="label">File name</label>
+          <div slot="support-text">
+            <div slot="support-text">Must exist in src/mock-data.</div>
+            <div slot="support-text">Included examples: test.docx test.jpg test.pdf test.png test.txt test.xlsx test.xml</div>
+            <div slot="support-text">Included encoded examples: test-encoded-jpg.txt test-encoded-pdf.txt</div>
+          </div>
+        </forge-text-field>
+        <div style="display: flex; column-gap: 16px">
+          <forge-checkbox [(ngModel)]="fileEncoded">File is Base64 encoded</forge-checkbox>
+          <forge-checkbox [(ngModel)]="openAsDownload">Open as download</forge-checkbox>
+        </div>
+
+        <forge-button variant="filled" (click)="onShowFile()" [disabled]="!fileName?.length">Show file</forge-button>
+      </div>
+
+      <form class="card-body__section" [formGroup]="formGroup" novalidate autocomplete="off">
+        <div>Async validation</div>
+        <forge-text-field>
+          <input type="text" id="test--parent--name" formControlName="name" />
+          <label for="test--parent--name" slot="label">Name</label>
+          <span slot="support-text">
+            status: {{ formGroup.controls.name.status }} - valid: {{ formGroup.controls.name.valid }} - pristine: {{ formGroup.controls.name.pristine }} - touched: {{ formGroup.controls.name.touched }} - dirty:
+            {{ formGroup.controls.name.dirty }}
+          </span>
+        </forge-text-field>
+        <forge-text-field>
+          <input type="text" id="test--parent--age" formControlName="age" />
+          <label for="test--parent--age" slot="label">Age</label>
+          <span slot="support-text">{{ formGroup.controls.age.status }}</span>
+        </forge-text-field>
+        <forge-text-field>
+          <input type="text" id="test--parent--location" formControlName="location" />
+          <label for="test--parent--location" slot="label">Location</label>
+          <span slot="support-text">{{ formGroup.controls.location.status }}</span>
+        </forge-text-field>
+        <div class="card-body__section__footer">
+          <forge-button variant="outlined" (click)="onResetForm()">Reset</forge-button>
+          <forge-button variant="filled" (click)="onValidate()">Validate</forge-button>
+        </div>
+      </form>
+
+      <div class="card-body__section">
+        <div>Template variable and array pipes</div>
+        <ng-template #variableTemplate [ngTemplateOutlet]="variableTemplate" [ngTemplateOutletContext]="{ $implicit: { cats: 1, dogs: 2 } }" let-variable>
+          <div>{{ variable | json }}</div>
+        </ng-template>
+
+        <div>{{ 0 | appArrayFind: arrayData : "value" : "label" }}</div>
+        <div>{{ 1 | appArrayFind: arrayData : "value" | json }}</div>
+        <div>{{ propertyPaths | json }}</div>
+      </div>
     </div>
 
-    <ng-template #variableTemplate [ngTemplateOutlet]="variableTemplate" [ngTemplateOutletContext]="{ $implicit: { cats: 1, dogs: 2 } }" let-variable>
-      <p>{{ variable | json }}</p>
-    </ng-template>
-
-    <p>{{ 0 | appArrayFind: arrayData : "value" : "label" }}</p>
-    <p>{{ 1 | appArrayFind: arrayData : "value" | json }}</p>
-    <p>{{ propertyPaths | json }}</p>
-    <p>
-      <forge-text-field>
-        <input type="text" id="test--parent--file-name" [(ngModel)]="fileName" autocomplete="off" />
-        <label for="test--parent--file-name" slot="label">File name</label>
-        <span slot="support-text">Must exist in src/mock-data</span>
-      </forge-text-field>
-      <forge-button style="margin-top: 16px" variant="filled" (click)="onShowFile()" [disabled]="!fileName?.length">Show file</forge-button>
-    </p>
-
-    <div app-card-footer slot="end">
-      <forge-button variant="outlined" (click)="onShowBusy()">Show busy</forge-button>
-      <forge-button variant="outlined">Cancel</forge-button>
-      <forge-button variant="raised">Save</forge-button>
-    </div>
+    <ng-container app-card-footer>
+      <forge-button slot="end" variant="outlined" (click)="onShowBusy()">Show busy</forge-button>
+      <forge-button slot="end" variant="outlined">Cancel</forge-button>
+      <forge-button slot="end" variant="raised">Save</forge-button>
+    </ng-container>
   </app-card>
 </div>

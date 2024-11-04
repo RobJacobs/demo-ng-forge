@@ -91,35 +91,35 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
       property: 'id',
       sortable: true,
       filter: true,
-      filterDelegate: new TextFieldComponentDelegate()
+      filterDelegate: new TextFieldComponentDelegate({ options: { label: 'Id', id: 'people--home--filter--id', attributes: { 'label-position': 'inset' } } })
     },
     {
       header: 'First',
       property: 'firstName',
       sortable: true,
       filter: true,
-      filterDelegate: new TextFieldComponentDelegate()
+      filterDelegate: new TextFieldComponentDelegate({ options: { label: 'First name', id: 'people--home--filter--first-name' } })
     },
     {
       header: 'Last',
       property: 'lastName',
       sortable: true,
       filter: true,
-      filterDelegate: new TextFieldComponentDelegate()
+      filterDelegate: new TextFieldComponentDelegate({ options: { label: 'Last name', id: 'people--home--filter--last-name' } })
     },
     {
       header: 'Gender',
       property: 'gender',
       sortable: true,
       filter: true,
-      filterDelegate: new TextFieldComponentDelegate()
+      filterDelegate: new TextFieldComponentDelegate({ options: { label: 'Gender', id: 'people--home--filter--gender' } })
     },
     {
       header: 'Occupation',
       property: 'occupation',
       sortable: true,
       filter: true,
-      filterDelegate: new TextFieldComponentDelegate()
+      filterDelegate: new TextFieldComponentDelegate({ options: { label: 'Occupation', id: 'people--home--filter--occupation' } })
     },
     {
       align: CellAlign.Right,

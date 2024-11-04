@@ -13,13 +13,6 @@
 }
 
 .header {
-  ::ng-deep {
-    [slot='end'] {
-      forge-icon-button:last-child {
-        margin-right: -8px;
-      }
-    }
-  }
   &:empty {
     display: none;
   }
@@ -32,20 +25,10 @@
 }
 
 .footer {
-  ::ng-deep {
-    [slot='start'] {
-      forge-button + forge-button {
-        margin-right: 16px;
-      }
-    }
-
-    [slot='end'] {
-      forge-button + forge-button {
-        margin-left: 16px;
-      }
-    }
+  &::part(section-start),
+  &::part(section-end) {
+    column-gap: 16px;
   }
-
   &:empty {
     display: none;
   }

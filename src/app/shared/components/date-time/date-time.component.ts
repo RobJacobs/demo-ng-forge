@@ -63,6 +63,7 @@ export class DateTimeComponent implements OnInit, ControlValueAccessor {
   }
 
   @Input()
+  /* eslint @typescript-eslint/no-unused-expressions: 0 */
   public set disabled(value: boolean) {
     value ? this.dateTime.disable() : this.dateTime.enable();
   }

@@ -3,7 +3,7 @@
   @if (label?.length) {
     <label [attr.for]="id" slot="label">{{ label }}</label>
   }
-  <forge-icon-button [id]="'popover-toggle-' + id" slot="end" tabindex="-1" aria-label="Open calendar" [disabled]="dateTime.disabled">
+  <forge-icon-button [id]="'popover-toggle-' + id" slot="end" tabindex="-1" aria-label="Open calendar" density="medium" [disabled]="dateTime.disabled">
     <forge-icon name="insert_invitation"></forge-icon>
   </forge-icon-button>
   <forge-popover [anchor]="'popover-toggle-' + id" placement="bottom-end" (forge-popover-toggle)="onPopoverToggle($event)" animationType="none">

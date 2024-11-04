@@ -1,7 +1,7 @@
 import { formatDate, formatNumber, Location } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { isArray, getPropertyValue, isDefined, isString } from '@tylertech/forge-core';
+import { isArray, getPropertyValue, isDefined, isString, isObject } from '@tylertech/forge-core';
 import { SortDirection } from '@tylertech/forge';
 
 export class Utils {
@@ -218,15 +218,28 @@ export class Utils {
     return reduced;
   }
 
-  public static objectPropertyPaths(obj: object, parentKey?: string): object {
-    return Object.keys(obj).reduce((prev, curr) => {
-      const value = obj[curr];
-      const key = parentKey ? `${parentKey}.${curr}` : `${curr}`;
-      if (value && typeof value === 'object') {
-        return { ...prev, ...this.objectPropertyPaths(value, key) };
+  public static objectPropertyPaths(obj: object, parentKey?: string): Map<string, string> {
+    // return Object.keys(obj).reduce((prev, curr) => {
+    //   const value = obj[curr];
+    //   const key = parentKey ? `${parentKey}.${curr}` : `${curr}`;
+    //   if (value && typeof value === 'object') {
+    //     return { ...prev, ...this.objectPropertyPaths(value, key) };
+    //   } else {
+    //     return { ...prev, [key]: value };
+    //   }
+    // }, {});
+
+    const result = new Map<string, string>();
+    Object.keys(obj).forEach((key) => {
+      const path = parentKey?.length ? `${parentKey}.${key}` : key;
+      const value = obj[key];
+      if (isObject(value)) {
+        Object.assign(result, this.objectPropertyPaths(obj[key], path));
       } else {
-        return { ...prev, [key]: value };
+        result[path] = value;
       }
-    }, {});
+    });
+
+    return result;
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { isDefined } from '@tylertech/forge-core';
-import { BaseComponentDelegate, FormFieldComponentDelegate, IColumnConfiguration, SortDirection } from '@tylertech/forge';
+import { FormFieldComponentDelegate, IColumnConfiguration, SortDirection } from '@tylertech/forge';
 import { IFilterParameter } from 'src/app/shared/interfaces/filter.interface';
 
 @Injectable()
@@ -19,9 +19,10 @@ export abstract class BaseTableComponent {
       .filter((c) => c.initialSort || isDefined(c.sortDirection))
       .forEach((c) => {
         c.initialSort = false;
-        c.sortDirection = undefined;
+        c.sortDirection = SortDirection.Unset;
       });
-    if (this.filterCache?.sort?.property.length) {
+
+    if (this.filterCache?.sort?.property.length && this.filterCache.sort.direction !== SortDirection.Unset) {
       const column = this.tableColumns.find((c) => c.property === this.filterCache?.sort?.property) as IColumnConfiguration;
       if (isDefined(column)) {
         column.sortDirection = this.filterCache?.sort?.direction;

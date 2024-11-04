@@ -4,6 +4,9 @@
 
 <div class="body">
   <p>Parent content</p>
-  <forge-button variant="raised" (click)="onNavigate('test/child')">View child</forge-button>
-  <forge-button style="margin: 16px" variant="raised" (click)="onMakeRequest()">Make request</forge-button>
+  <div style="display: flex; column-gap: 16px">
+    <forge-button variant="raised" (click)="onNavigate('test/child')">View child</forge-button>
+    <forge-button variant="raised" (click)="onSendMessage()">Send message</forge-button>
+    <forge-button variant="raised" (click)="onMakeRequest()">Make request</forge-button>
+  </div>
 </div>

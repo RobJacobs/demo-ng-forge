@@ -12,13 +12,13 @@
 </forge-toolbar>
 
 <forge-tab-bar secondary [activeTab]="activeTab">
-  <forge-tab (forge-tab-select)="onTabSelected('personal')">
+  <forge-tab (forge-tab-select)="onTabSelected('personal')" aria-controls="app--profile--personal">
     Personal
     @if ([personalFormGroup.invalid, personalFormGroup.touched] | appCallback: isInvalid) {
       <forge-icon slot="end" name="error"></forge-icon>
     }
   </forge-tab>
-  <forge-tab (forge-tab-select)="onTabSelected('address')">
+  <forge-tab (forge-tab-select)="onTabSelected('address')" aria-controls="app--profile--address">
     Address
     @if ([addressFormGroup.invalid, addressFormGroup.touched] | appCallback: isInvalid) {
       <forge-icon slot="end" name="error"></forge-icon>
@@ -37,7 +37,7 @@
 
 <forge-toolbar class="footer" inverted>
   <div slot="end">
-    <forge-button variant="outlined" (click)="onCancel()"> Cancel </forge-button>
+    <forge-button variant="outlined" (click)="onCancel()">Cancel</forge-button>
     <forge-button variant="raised" (click)="onSave()" [disabled]="cache.formGroup.invalid || !cache.formGroup.dirty"> Save </forge-button>
   </div>
 </forge-toolbar>

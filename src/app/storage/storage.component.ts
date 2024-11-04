@@ -7,7 +7,8 @@ import { ForgeButtonModule, ForgeLabelValueModule, ForgeToolbarModule } from '@t
 import { Utils } from 'src/utils';
 import { AppDataService } from 'src/app/app-data.service';
 import { IPerson } from 'src/app/shared/interfaces/person.interface';
-import { storageDb } from './indexed-db-storage';
+import { IndexedDBStorageService } from './indexed-db-storage.service';
+
 @Component({
   selector: 'app-storage',
   standalone: true,
@@ -17,6 +18,7 @@ import { storageDb } from './indexed-db-storage';
 })
 export class StorageComponent {
   private appDataService = inject(AppDataService);
+  private dbStorageService = inject(IndexedDBStorageService);
 
   private readonly storageKey = 'app--storage-key';
 
@@ -34,14 +36,14 @@ export class StorageComponent {
 
   constructor() {
     this.calcStorageSpace();
-    this.onLoadLocal();
-    this.onLoadDb();
+    // this.onLoadLocal();
+    // this.onLoadDb();
   }
 
   public onSaveLocal() {
     this.appDataService.getPeople().subscribe((result) => {
       this.localStorageData = result.data;
-      localStorage.setItem(`${this.storageKey}:${new Date().getTime()}`, JSON.stringify(this.localStorageData));
+      localStorage.setItem(`${this.storageKey}`, JSON.stringify(this.localStorageData));
       this.calcStorageSpace();
     });
   }
@@ -62,7 +64,7 @@ export class StorageComponent {
   }
 
   public onDeleteDb() {
-    storageDb.people?.clear().finally(() => {
+    this.dbStorageService.people?.clear().finally(() => {
       this.onLoadDb();
       this.calcStorageSpace();
     });
@@ -70,7 +72,7 @@ export class StorageComponent {
 
   public onSaveDb() {
     this.appDataService.getPeople().subscribe((result) => {
-      storageDb.people
+      this.dbStorageService.people
         ?.bulkAdd([
           ...result.data.map((p) => {
             delete (p as any).id;
@@ -85,7 +87,7 @@ export class StorageComponent {
   }
 
   public onLoadDb() {
-    storageDb.people
+    this.dbStorageService.people
       ?.toArray()
       .then((result) => (this.indexedDbData = result))
       .catch((error) => console.log(error));

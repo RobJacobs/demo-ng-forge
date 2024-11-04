@@ -12,7 +12,11 @@ import { ProfileCacheService } from '../profile-cache.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, ForgeTextFieldModule, FormControlInvalidDirective, AutoFocusDirective],
   templateUrl: './address.component.html',
-  styleUrls: ['./address.component.scss']
+  styleUrls: ['./address.component.scss'],
+  host: {
+    role: 'tabpanel',
+    id: 'app--profile--address'
+  }
 })
 export class AddressComponent {
   public cache = inject(ProfileCacheService);

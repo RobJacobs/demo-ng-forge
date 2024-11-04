@@ -48,7 +48,11 @@ import { ProfileCacheService } from '../profile-cache.service';
     AutoFocusDirective
   ],
   templateUrl: './personal.component.html',
-  styleUrls: ['./personal.component.scss']
+  styleUrls: ['./personal.component.scss'],
+  host: {
+    role: 'tabpanel',
+    id: 'app--profile--personal'
+  }
 })
 export class PersonalComponent {
   public cache = inject(ProfileCacheService);

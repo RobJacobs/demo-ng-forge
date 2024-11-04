@@ -45,6 +45,7 @@ export class TextEditorComponent {
     this.elementRef.nativeElement.querySelectorAll('.ql-toolbar [role="button"]').forEach((el: HTMLElement) => (el.tabIndex = -1));
   }
 
+  /* eslint @typescript-eslint/no-unused-expressions: 0 */
   public onToggleState() {
     this.textEditorFormControl.disabled ? this.textEditorFormControl.enable() : this.textEditorFormControl.disable();
   }
