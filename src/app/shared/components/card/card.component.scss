@@ -25,10 +25,7 @@
 }
 
 .footer {
-  &::part(section-start),
-  &::part(section-end) {
-    column-gap: 16px;
-  }
+  @include app-toolbar-gap();
   &:empty {
     display: none;
   }

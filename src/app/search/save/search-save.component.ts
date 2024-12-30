@@ -3,7 +3,6 @@ import { Component, inject } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { DIALOG_DATA, DialogRef, ForgeButtonModule, ForgeCheckboxModule, ForgeIconButtonModule, ForgeIconModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
 
-import { AutoFocusDirective } from 'src/app/shared/directives/auto-focus/auto-focus.directive';
 import { FormControlInvalidDirective } from 'src/app/shared/directives/form-control-invalid/form-control-invalid.directive';
 import { DialogTemplateComponent } from 'src/app/shared/components/dialog-template/dialog-template.component';
 
@@ -17,8 +16,7 @@ export interface ISearchSaveDialogData {
 }
 @Component({
   selector: 'app-search-save',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ForgeButtonModule, ForgeCheckboxModule, ForgeIconButtonModule, ForgeIconModule, ForgeTextFieldModule, AutoFocusDirective, FormControlInvalidDirective, DialogTemplateComponent],
+  imports: [CommonModule, ReactiveFormsModule, ForgeButtonModule, ForgeCheckboxModule, ForgeIconButtonModule, ForgeIconModule, ForgeTextFieldModule, FormControlInvalidDirective, DialogTemplateComponent],
   templateUrl: './search-save.component.html',
   styleUrls: ['./search-save.component.scss']
 })

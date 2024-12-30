@@ -1,4 +1,4 @@
-import { Component, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef, inject } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit, ViewContainerRef, inject, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
@@ -30,7 +30,6 @@ import { FilterComponent } from './filter/filter.component';
 
 @Component({
   selector: 'app-people-home',
-  standalone: true,
   imports: [
     CommonModule,
     ForgeBadgeModule,
@@ -57,10 +56,8 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
   private viewContainerRef = inject(ViewContainerRef);
   private ngZone = inject(NgZone);
 
-  @ViewChild('peopleTable', { static: true })
-  private peopleTable?: TableComponent;
-  @ViewChild(FilterComponent)
-  private peopleFilter?: FilterComponent;
+  private readonly peopleTable = viewChild<TableComponent>('peopleTable');
+  private readonly peopleFilter = viewChild(FilterComponent);
 
   public isBusy = false;
   public recordset: Array<IPerson> = [];
@@ -125,7 +122,7 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
       align: CellAlign.Right,
       template: (rowIndex: number, cellElement: HTMLElement, data: any) => {
         this.ngZone.run(() => {
-          cellElement.appendChild(TableUtils.createExpanderRow(rowIndex, this.peopleTable as TableComponent, this.viewContainerRef, TableDetailComponent, 'Toggle table detail', data));
+          cellElement.appendChild(TableUtils.createExpanderRow(rowIndex, this.peopleTable() as TableComponent, this.viewContainerRef, TableDetailComponent, 'Toggle table detail', data));
 
           cellElement.appendChild(
             TableUtils.createMenuButton(
@@ -205,9 +202,9 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
   public onPeopleSelected(clearSelection = false) {
     if (clearSelection) {
       this.selectedPeople.length = 0;
-      this.peopleTable?.clearSelections();
+      this.peopleTable()?.clearSelections();
     } else {
-      this.selectedPeople = this.peopleTable?.getSelectedRows() as IPerson[];
+      this.selectedPeople = this.peopleTable()?.getSelectedRows() as IPerson[];
     }
   }
 
@@ -234,7 +231,7 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
   public onApplyFilter(reloadFilter: boolean) {
     this.getRecords();
     if (reloadFilter) {
-      (this.peopleFilter as FilterComponent).loadForm(this.filterCache.filters);
+      (this.peopleFilter() as FilterComponent).loadForm(this.filterCache.filters);
     }
   }
 
@@ -262,9 +259,9 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
         tc.hidden = optionalTableColumn.hidden;
         const colIndex = this.getColumnIndex(tc.property as string);
         if (tc.hidden) {
-          this.peopleTable?.hideColumn(colIndex);
+          this.peopleTable()?.hideColumn(colIndex);
         } else {
-          this.peopleTable?.showColumn(colIndex);
+          this.peopleTable()?.showColumn(colIndex);
         }
       }
     });

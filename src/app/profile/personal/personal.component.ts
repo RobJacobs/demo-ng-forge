@@ -26,7 +26,6 @@ import { ProfileCacheService } from '../profile-cache.service';
 
 @Component({
   selector: 'app-profile-personal',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -86,10 +85,6 @@ export class PersonalComponent {
 
   public onAddFriend() {
     this.friendsFormArray.push(new FormControl(null, { validators: [Validators.required] }));
-    requestAnimationFrame(() => {
-      const control = this.cache.formGroup.get('personalFormGroup.friends.0');
-      console.log(control);
-    });
   }
 
   public onDeleteFriend(index: number) {

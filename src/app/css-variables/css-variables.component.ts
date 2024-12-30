@@ -6,11 +6,10 @@ import { CellAlign, IColumnConfiguration } from '@tylertech/forge';
 import { ForgeTableModule, ForgeTextFieldModule, ForgeToolbarModule } from '@tylertech/forge-angular';
 
 @Component({
-  selector: 'app-css-variables',
-  standalone: true,
-  imports: [CommonModule, FormsModule, ForgeTableModule, ForgeTextFieldModule, ForgeToolbarModule],
-  templateUrl: './css-variables.component.html',
-  styleUrl: './css-variables.component.scss'
+    selector: 'app-css-variables',
+    imports: [CommonModule, FormsModule, ForgeTableModule, ForgeTextFieldModule, ForgeToolbarModule],
+    templateUrl: './css-variables.component.html',
+    styleUrl: './css-variables.component.scss'
 })
 export class CssVariablesComponent implements OnInit {
   private globalCssVariables = new Set<{ name: string; value: string }>([]);

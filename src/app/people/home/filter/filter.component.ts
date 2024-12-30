@@ -10,11 +10,10 @@ import { AutocompleteRangeComponent } from 'src/app/shared/components/autocomple
 import { PeopleCacheService } from '../../people-cache.service';
 
 @Component({
-  selector: 'app-people-home-filter',
-  standalone: true,
-  imports: [ReactiveFormsModule, ForgeButtonModule, ForgeDividerModule, ForgeDrawerModule, ForgeIconButtonModule, ForgeIconModule, ForgeSelectModule, ForgeTextFieldModule, AutocompleteRangeComponent],
-  templateUrl: './filter.component.html',
-  styleUrls: ['./filter.component.scss']
+    selector: 'app-people-home-filter',
+    imports: [ReactiveFormsModule, ForgeButtonModule, ForgeDividerModule, ForgeDrawerModule, ForgeIconButtonModule, ForgeIconModule, ForgeSelectModule, ForgeTextFieldModule, AutocompleteRangeComponent],
+    templateUrl: './filter.component.html',
+    styleUrls: ['./filter.component.scss']
 })
 export class FilterComponent implements OnInit {
   public appCache = inject(AppCacheService);

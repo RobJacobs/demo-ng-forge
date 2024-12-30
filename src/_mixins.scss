@@ -157,3 +157,35 @@
 @mixin border($border: 'border') {
   #{$border}: 1px solid var(--forge-theme-outline);
 }
+
+@mixin toolbar($slots...) {
+  @include toolbar-gap();
+  @media (max-width: 400px) {
+    @include toolbar-stacked(end);
+  }
+}
+
+@mixin toolbar-gap($gap: 16px) {
+  &::part(section-start),
+  &::part(section-center),
+  &::part(section-end) {
+    column-gap: 16px;
+  }
+}
+
+@mixin toolbar-stacked($slots...) {
+  --forge-toolbar-height: auto;
+  &::part(inner) {
+    grid-template-columns: unset;
+    grid-auto-flow: row;
+  }
+
+  @for $i from 0 to length($slots) {
+    &::part(#{'section-' + nth($slots, $i + 1)}) {
+      flex-direction: column;
+      align-items: stretch;
+      row-gap: 8px;
+      padding: 8px 0;
+    }
+  }
+}

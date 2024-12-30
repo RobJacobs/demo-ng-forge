@@ -5,26 +5,29 @@ import { Utils } from 'src/utils';
 
 @Component({
   selector: 'app-dialog-template',
-  standalone: true,
   imports: [CommonModule, ForgeIconButtonModule, ForgeIconModule, ForgeScaffoldModule, ForgeToolbarModule],
   templateUrl: './dialog-template.component.html',
-  styleUrl: './dialog-template.component.scss'
+  styleUrl: './dialog-template.component.scss',
+  standalone: true
 })
 export class DialogTemplateComponent {
   private dialogRef = inject(DialogRef);
 
-  public id = Utils.elementId('app-');
-  @Input({ required: true })
-  public dialogTitle?: string;
   @Input()
-  showClose = true;
+  public id = `${Utils.elementId('app-')}--title`;
+  @Input()
+  public showHeader = true;
+  @Input()
+  public showClose = true;
+  @Input()
+  public dialogTitle?: string;
   @Input()
   public showFooter = true;
   @Output()
   public dialogClose = new EventEmitter();
 
-  constructor() {
-    this.dialogRef.nativeElement.setAttribute('aria-labelledby', `${this.id}--title`);
+  public ngOnInit() {
+    this.dialogRef.nativeElement.setAttribute('aria-labelledby', `${this.id}`);
   }
 
   public onClose() {

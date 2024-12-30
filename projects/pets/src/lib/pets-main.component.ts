@@ -4,14 +4,13 @@ import { CommonModule } from '@angular/common';
 import { ForgeButtonModule } from '@tylertech/forge-angular';
 
 @Component({
-  selector: 'lib-pets-main',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ForgeButtonModule
-  ],
-  templateUrl: './pets-main.component.html',
-  styleUrls: ['./pets-main.component.scss']
+    selector: 'lib-pets-main',
+    imports: [
+        CommonModule,
+        ForgeButtonModule
+    ],
+    templateUrl: './pets-main.component.html',
+    styleUrls: ['./pets-main.component.scss']
 })
 export class PetsMainComponent {
   public moduleConfig: IPetsService | null = inject(PETS_SERVICE, { optional: true });

@@ -1,4 +1,4 @@
-import { Component, DestroyRef, ElementRef, Input, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, DestroyRef, ElementRef, Input, OnInit, inject, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, fromEvent } from 'rxjs';
@@ -33,7 +33,6 @@ interface IChartItem {
 
 @Component({
   selector: 'app-charts-d3-chart',
-  standalone: true,
   imports: [CommonModule, ForgeListItemModule, ForgeListModule],
   templateUrl: './d3-chart.component.html',
   styleUrls: ['./d3-chart.component.scss']
@@ -41,19 +40,18 @@ interface IChartItem {
 export class D3ChartComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
-  @ViewChild('chartContainer', { static: true })
-  private chartContainer?: ElementRef;
+  private readonly chartContainer = viewChild<ElementRef>('chartContainer');
   private chartPalette = Object.keys(CHART_CONSTANTS.chartPalette).map((key) => CHART_CONSTANTS.chartPalette[key]);
 
   #chartType: ChartTypes = ChartTypes.bar;
-  @Input()
+  @Input({ required: true })
   public set chartType(value: ChartTypes) {
     this.#chartType = value;
     this.setChartData('create');
     this.initializeChartContainer();
-    requestAnimationFrame(() => {
+    setTimeout(() => {
       this.drawChart();
-    });
+    }, 100);
     if (this.#chartType === ChartTypes.donutMeter || this.#chartType === ChartTypes.gantt || this.#chartType === ChartTypes.treemap || this.#chartType === ChartTypes.tree) {
       this.showLegend = false;
     } else {
@@ -82,9 +80,10 @@ export class D3ChartComponent implements OnInit {
   }
 
   private initializeChartContainer() {
-    (this.chartContainer?.nativeElement as HTMLElement).querySelector('svg')?.remove();
+    const chartContainer = this.chartContainer();
+    (chartContainer?.nativeElement as HTMLElement).querySelector('svg')?.remove();
     const chartElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    (this.chartContainer?.nativeElement as HTMLElement).appendChild(chartElement);
+    (chartContainer?.nativeElement as HTMLElement).appendChild(chartElement);
   }
 
   private setChartData(action: 'create' | 'update' | 'add' | 'delete') {
@@ -186,7 +185,7 @@ export class D3ChartComponent implements OnInit {
     this.legendData = this.chartData?.map((d, i) => ({ id: d.id, label: d.label, value: d.value, color: this.chartPalette[i % this.chartPalette.length] }));
 
     const chartConfig = {
-      container: this.chartContainer?.nativeElement.querySelector('svg'),
+      container: this.chartContainer()?.nativeElement.querySelector('svg'),
       data: this.chartData?.map((d, i) => ({ ...d, color: this.chartPalette[i % this.chartPalette.length] })),
       palette: this.chartPalette,
       selectedCallback: this.selectedCallback,

@@ -1,23 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, Input, OnInit, ViewChild, inject } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, OnInit, inject, viewChild, input } from '@angular/core';
 import { FormlyField, FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
 
 @Component({
   selector: 'app-formly-field',
   // eslint-disable-next-line quotes
-  template: ` <formly-field #formlyField [field]="$any(field)"></formly-field> `,
+  template: ` <formly-field #formlyField [field]="$any(field())"></formly-field> `,
   imports: [CommonModule, FormlyModule],
-  standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class FormlyFieldComponent implements OnInit {
   private elementRef = inject(ElementRef);
 
-  @ViewChild('formlyField', { static: true })
-  private formlyField?: FormlyField;
+  private readonly formlyField = viewChild<FormlyField>('formlyField');
 
-  @Input()
-  public field?: FormlyFieldConfig;
+  public readonly field = input<FormlyFieldConfig>();
 
   public ngOnInit() {
     // console.log(this.field);

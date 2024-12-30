@@ -1,10 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { OnInit, ViewChild } from '@angular/core';
+import { OnInit, viewChild } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FieldType, FormlyModule } from '@ngx-formly/core';
 
-import { FormlyFieldComponent } from './formly-field.component';
 import { FormlyFieldDirective } from './formly-field.directive';
 
 @Component({
@@ -59,16 +58,14 @@ import { FormlyFieldDirective } from './formly-field.directive';
       }
     `
   ],
-  imports: [CommonModule, FormlyModule, FormlyFieldDirective, FormlyFieldComponent],
-  standalone: true,
+  imports: [CommonModule, FormlyModule, FormlyFieldDirective],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ContainerTypeComponent extends FieldType implements OnInit {
-  @ViewChild('fieldContainer', { static: true })
-  private fieldContainer?: ElementRef;
+  private readonly fieldContainer = viewChild<ElementRef>('fieldContainer');
 
   public ngOnInit() {
-    const fieldContainerElement = this.fieldContainer?.nativeElement as HTMLElement;
+    const fieldContainerElement = this.fieldContainer()?.nativeElement as HTMLElement;
     switch (this.field.props?.type) {
       case 'grid':
         fieldContainerElement.classList.add('form-grid');

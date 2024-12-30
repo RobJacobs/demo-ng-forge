@@ -1,7 +1,7 @@
 @use 'src/global' as *;
 
 :host {
-  display: block;
+  display: contents;
 }
 
 forge-toolbar[slot='header'] {
@@ -11,8 +11,5 @@ forge-toolbar[slot='header'] {
 }
 
 forge-toolbar[slot='footer'] {
-  &::part(section-start),
-  &::part(section-end) {
-    column-gap: 16px;
-  }
+  @include app-toolbar(end);
 }

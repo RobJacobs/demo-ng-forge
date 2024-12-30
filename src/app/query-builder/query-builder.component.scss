@@ -16,7 +16,7 @@ $form-column-gap: 16;
     &__condition {
       --forge-field-height: 2.5rem;
       --forge-field-outline-style: none;
-      --forge-field-background: #{$forge-color-grey-200};
+      --forge-field-background: var(--forge-theme-surface-container);
     }
   }
 
@@ -44,7 +44,7 @@ $form-column-gap: 16;
     padding: 16px;
 
     & .filter__group {
-      border: 1px dashed $forge-color-grey-500;
+      border: 1px dashed var(--forge-theme-outline);
       margin: 8px 0;
       padding: 8px 16px;
     }
@@ -58,9 +58,8 @@ $form-column-gap: 16;
 
     &__add {
       --forge-button-height: 3rem;
-      border: 1px dashed $forge-color-grey-500;
       border-radius: var(--forge-shape-medium);
-      background-color: $forge-color-grey-100;
+      background-color: var(--forge-theme-surface-container);
     }
   }
 }

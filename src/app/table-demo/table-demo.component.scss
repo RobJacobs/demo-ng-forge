@@ -8,7 +8,7 @@
 
   ::ng-deep {
     .forge-table {
-      $table-row-height: 48px;
+      --table-row-height: 56px;
 
       min-width: 100%;
       width: max-content;
@@ -16,7 +16,7 @@
 
       &-head {
         &__row {
-          height: $table-row-height;
+          height: var(--table-row-height);
 
           &--resizing {
             & .forge-table-head__cell:not(.forge-table-head__cell--resizing) {
@@ -33,7 +33,7 @@
           border-right: 1px solid transparent;
           width: calc(var(--table-column-width, 200) * 1px);
           // https://github.com/angular/components/issues/14833
-          top: calc(var(--table-header-offset, 0) * $table-row-height * -1);
+          top: calc(var(--table-header-offset, 0) * var(--table-row-height) * -1);
 
           // &:first-child {
           //   padding-left: 24px !important;
@@ -62,7 +62,7 @@
             width: 0;
             overflow: hidden;
             transition: width 250ms;
-            height: 40px; // forge-table-head__row: 48px
+            height: calc(var(--table-row-height) - 8)
           }
 
           &--resizing {
@@ -113,7 +113,7 @@
 
       &-body {
         &__row {
-          height: $table-row-height;
+          height: var(--table-row-height);
         }
 
         &__cell {

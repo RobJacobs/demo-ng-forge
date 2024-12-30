@@ -6,8 +6,8 @@ import { ForgeTabBarModule, ForgeTabModule } from '@tylertech/forge-angular';
 import { FormlyDemoService } from '../formly-demo.service';
 
 @Component({
-  selector: 'app-formly-tab',
-  template: `
+    selector: 'app-formly-tab',
+    template: `
     <forge-tab-bar secondary [activeTab]="activeTab">
       @for (field of $any(field.fieldGroup); track i; let i = $index) {
         <forge-tab (forge-tab-select)="onTabSelected(field)">
@@ -17,8 +17,8 @@ import { FormlyDemoService } from '../formly-demo.service';
     </forge-tab-bar>
     <formly-field [field]="$any(activeField)" #formlyField [formlyFieldDirective]="formlyField"></formly-field>
   `,
-  styles: [
-    `
+    styles: [
+        `
       :host {
         display: block;
       }
@@ -35,10 +35,9 @@ import { FormlyDemoService } from '../formly-demo.service';
         min-width: 240px;
       }
     `
-  ],
-  imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeTabBarModule, ForgeTabModule],
-  standalone: true,
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    ],
+    imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeTabBarModule, ForgeTabModule],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TabTypeComponent extends FieldType<FieldTypeConfig> implements OnInit {
   private moduleService = inject(FormlyDemoService);

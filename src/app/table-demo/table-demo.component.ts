@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, inject, signal, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { finalize, fromEvent, tap, Subject, takeUntil, merge, BehaviorSubject } from 'rxjs';
+import { finalize, fromEvent, tap, Subject, takeUntil, merge } from 'rxjs';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
 import { IColumnConfiguration, PopoverComponent, SortDirection } from '@tylertech/forge';
@@ -9,14 +9,12 @@ import { ForgeCheckboxModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIc
 
 import { IPerson } from 'src/app/shared/interfaces/person.interface';
 import { AppDataService } from 'src/app/app-data.service';
-import { AutoFocusDirective } from 'src/app/shared/directives/auto-focus/auto-focus.directive';
 import { CallbackPipe } from 'src/app/shared/pipes/callback.pipe';
 import { TableDetailComponent } from 'src/app/shared/components/table-detail/table-detail.component';
 import { Utils } from 'src/utils';
 
 @Component({
   selector: 'app-table-demo',
-  standalone: true,
   imports: [
     CommonModule,
     DragDropModule,
@@ -30,7 +28,6 @@ import { Utils } from 'src/utils';
     ForgePopoverModule,
     ForgeToolbarModule,
     TableDetailComponent,
-    AutoFocusDirective,
     CallbackPipe
   ],
   templateUrl: './table-demo.component.html',
@@ -38,12 +35,9 @@ import { Utils } from 'src/utils';
 })
 export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
   private appDataService = inject(AppDataService);
-  @ViewChild('table', { static: true })
-  private tableElementRef?: ElementRef<HTMLTableElement>;
-  @ViewChild('columnHeaderPopover')
-  private columnHeaderPopover?: ElementRef<PopoverComponent>;
-  @ViewChild(CdkVirtualScrollViewport)
-  public virtualScrollViewport?: CdkVirtualScrollViewport;
+  private readonly tableElementRef = viewChild<ElementRef<HTMLTableElement>>('table');
+  private readonly columnHeaderPopover = viewChild<ElementRef<PopoverComponent>>('columnHeaderPopover');
+  private readonly virtualScrollViewport = viewChild(CdkVirtualScrollViewport);
   private tableColumnResize$ = new Subject<void>();
   private isColumnResizing = false;
 
@@ -57,9 +51,7 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
     skip: 0,
     take: 25
   };
-  public recordset: IPerson[] = [];
-  public recordset$ = new BehaviorSubject<IPerson[]>([]);
-  public recordCount = 0;
+  public recordset = signal<IPerson[]>([]);
   public tableColumns: IColumnConfiguration[] = [
     { header: 'Id', property: 'id', width: 48 },
     { header: 'First', property: 'firstName' },
@@ -67,7 +59,8 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
     { header: 'Gender', property: 'gender' },
     { header: 'Occupation', property: 'occupation' }
   ];
-  public tableHeaderOffset = 0;
+  public tableHeaderOffset = signal(0);
+  public tableRowHeight = 56;
   public expandedRows: any[] = [];
   public id = Utils.elementId('app-');
 
@@ -81,12 +74,13 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public ngOnInit() {
     this.getRecords();
+    this.virtualScrollViewport().checkViewportSize();
   }
 
   public ngAfterViewInit() {
-    this.virtualScrollViewport?.renderedRangeStream.subscribe((o) => {
-      this.tableHeaderOffset = o.start;
-      if (!this.isBusy && o.start > 0 && o.end + 20 > this.recordCount) {
+    this.virtualScrollViewport()?.renderedRangeStream.subscribe((o) => {
+      this.tableHeaderOffset.set(o.start);
+      if (!this.isBusy && o.start > 0 && o.end + 20 > this.recordset().length) {
         this.isBusy = true;
         this.appDataService
           .getPeople({
@@ -94,16 +88,16 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
           })
           .pipe(finalize(() => (this.isBusy = false)))
           .subscribe((result) => {
-            const startId = this.recordset.length + 1;
-            this.recordset = [
-              ...this.recordset,
-              ...result.data.map((p, i) => {
-                p.id = startId + p.id;
-                return p;
-              })
-            ];
-            this.recordCount = this.recordset.length;
-            this.recordset$.next(this.recordset);
+            const startId = this.recordset().length + 1;
+            this.recordset.update((value) => {
+              return [
+                ...value,
+                ...result.data.map((p, i) => {
+                  p.id = startId + p.id;
+                  return p;
+                })
+              ];
+            });
           });
       }
     });
@@ -115,7 +109,7 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public onColumnHeaderDragStart() {
-    this.virtualScrollViewport?.scrollToOffset(0);
+    this.virtualScrollViewport()?.scrollToOffset(0);
   }
 
   public onColumnHeaderDragDrop(event: CdkDragDrop<string[]>) {
@@ -128,13 +122,14 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
     event.preventDefault();
     this.tableColumnResize$.next();
 
-    let columnHeaderElement = (this.tableElementRef?.nativeElement as HTMLTableElement).querySelectorAll('thead tr th')[columnIndex] as HTMLTableCellElement;
-    let columnElements = (this.tableElementRef?.nativeElement as HTMLTableElement).querySelectorAll(`tbody tr td:nth-child(${columnIndex + 1})`);
+    const tableElementRef = this.tableElementRef();
+    let columnHeaderElement = (tableElementRef?.nativeElement as HTMLTableElement).querySelectorAll('thead tr th')[columnIndex] as HTMLTableCellElement;
+    let columnElements = (tableElementRef?.nativeElement as HTMLTableElement).querySelectorAll(`tbody tr td:nth-child(${columnIndex + 1})`);
 
     let positionX = event.clientX;
     if (columnHeaderElement) {
       this.isColumnResizing = true;
-      this.tableElementRef?.nativeElement.querySelector('.forge-table-head__row')?.classList.add('forge-table-head__row--resizing');
+      tableElementRef?.nativeElement.querySelector('.forge-table-head__row')?.classList.add('forge-table-head__row--resizing');
       columnHeaderElement.classList.add('forge-table-head__cell--resizing');
       columnElements.forEach((c) => c.classList.add('forge-table-body__cell--resizing'));
 
@@ -148,7 +143,7 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
         )
         .subscribe();
 
-      const theadElement = this.tableElementRef?.nativeElement.querySelector('thead');
+      const theadElement = tableElementRef?.nativeElement.querySelector('thead');
       merge(fromEvent(theadElement, 'mouseup'), fromEvent(theadElement, 'mouseleave'))
         .pipe(
           finalize(() =>
@@ -161,7 +156,7 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
           takeUntil(this.tableColumnResize$),
           tap((event) => {
             this.tableColumnResize$.next();
-            this.tableElementRef?.nativeElement.querySelector('.forge-table-head__row')?.classList.remove('forge-table-head__row--resizing');
+            this.tableElementRef()?.nativeElement.querySelector('.forge-table-head__row')?.classList.remove('forge-table-head__row--resizing');
             columnHeaderElement.classList.remove('forge-table-head__cell--resizing');
             columnElements.forEach((c) => c.classList.remove('forge-table-body__cell--resizing'));
           })
@@ -172,15 +167,16 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public onColumnHeaderRightClick(event: PointerEvent, columnIndex: number) {
     event.preventDefault();
-    if (this.columnHeaderPopover.nativeElement.open) {
-      this.columnHeaderPopover.nativeElement.open = false;
+    const columnHeaderPopover = this.columnHeaderPopover();
+    if (columnHeaderPopover.nativeElement.open) {
+      columnHeaderPopover.nativeElement.open = false;
       requestAnimationFrame(() => {
-        this.columnHeaderPopover.nativeElement.anchor = '';
+        this.columnHeaderPopover().nativeElement.anchor = '';
       });
     } else {
-      this.columnHeaderPopover.nativeElement.anchor = `th-${columnIndex}-${this.id}`;
+      columnHeaderPopover.nativeElement.anchor = `th-${columnIndex}-${this.id}`;
       requestAnimationFrame(() => {
-        this.columnHeaderPopover.nativeElement.open = true;
+        this.columnHeaderPopover().nativeElement.open = true;
       });
     }
   }
@@ -191,8 +187,9 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
         this.tableColumns.forEach((c) => (c.width = undefined));
         break;
       case 'freeze-column': {
-        const columnHeaderElement = (this.tableElementRef?.nativeElement as HTMLTableElement).querySelectorAll('thead tr th')[0];
-        const columnElements = (this.tableElementRef?.nativeElement as HTMLTableElement).querySelectorAll(`tbody tr td:nth-child(${1})`);
+        const tableElementRef = this.tableElementRef();
+        const columnHeaderElement = (tableElementRef?.nativeElement as HTMLTableElement).querySelectorAll('thead tr th')[0];
+        const columnElements = (tableElementRef?.nativeElement as HTMLTableElement).querySelectorAll(`tbody tr td:nth-child(${1})`);
         columnHeaderElement.classList.add('forge-table-head__cell--frozen');
         columnElements.forEach((c) => c.classList.add('forge-table-body__cell--frozen'));
         break;
@@ -211,14 +208,16 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       }
     }
-    this.columnHeaderPopover.nativeElement.open = false;
-    this.columnHeaderPopover.nativeElement.anchor = '';
+    const columnHeaderPopover = this.columnHeaderPopover();
+    columnHeaderPopover.nativeElement.open = false;
+    columnHeaderPopover.nativeElement.anchor = '';
   }
 
   public onTableSort(event: MouseEvent, column: IColumnConfiguration) {
     event.stopPropagation();
-    this.columnHeaderPopover.nativeElement.open = false;
-    this.columnHeaderPopover.nativeElement.anchor = '';
+    const columnHeaderPopover = this.columnHeaderPopover();
+    columnHeaderPopover.nativeElement.open = false;
+    columnHeaderPopover.nativeElement.anchor = '';
 
     if (!this.isColumnResizing) {
       this.tableColumns.filter((c) => c.property !== column.property).forEach((c) => (c.sortDirection = undefined));
@@ -232,7 +231,7 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
 
       (this.filterCache as any).sort = column.sortDirection ? { property: column.property, direction: column.sortDirection } : undefined;
       this.filterCache.skip = 0;
-      this.virtualScrollViewport?.scrollToOffset(0);
+      this.virtualScrollViewport()?.scrollToOffset(0);
       this.expandedRows.length = 0;
       this.getRecords();
     }
@@ -261,9 +260,7 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
       })
       .pipe(finalize(() => (this.isBusy = false)))
       .subscribe((result) => {
-        this.recordset = result.data;
-        this.recordCount = result.count;
-        this.recordset$.next(this.recordset);
+        this.recordset.set(result.data);
       });
   }
 }

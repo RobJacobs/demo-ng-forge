@@ -3,17 +3,17 @@ import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ForgeButtonModule, ForgeTextFieldModule, ForgeToolbarModule } from '@tylertech/forge-angular';
+import { ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, ForgeTextFieldModule, ForgeToolbarModule } from '@tylertech/forge-angular';
 import { Observable, tap, takeUntil } from 'rxjs';
 
 import { AppCacheService } from 'src/app/app-cache.service';
 import { AppDataService } from 'src/app/app-data.service';
 import { AppWebSocketService } from 'src/app/app-web-socket.service';
+import { DateTimeComponent } from 'src/app/shared/components/date-time/date-time.component';
 
 @Component({
   selector: 'app-test-parent',
-  standalone: true,
-  imports: [CommonModule, FormsModule, ForgeToolbarModule, ForgeTextFieldModule, ForgeButtonModule],
+  imports: [CommonModule, FormsModule, ForgeToolbarModule, ForgeButtonModule],
   templateUrl: './parent.component.html',
   styleUrls: ['./parent.component.scss']
 })
@@ -31,7 +31,7 @@ export class ParentComponent implements OnInit {
   }
 
   public onNavigate(route: string) {
-    this.router.navigate([route]);
+    this.router.navigate([route], { state: { id: 0, name: 'name' } });
   }
 
   public onMakeRequest() {

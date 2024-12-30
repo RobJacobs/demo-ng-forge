@@ -82,6 +82,7 @@
 <ng-template #opertatorAddonTemplate let-name="name">
   <forge-icon-button
     slot="addon-end"
+    density="medium"
     class="operator__addon"
     [ngClass]="{ 'operator__addon--selected': formGroup.get(name)?.value.operator }"
     #operatorPopover="forgePopover"

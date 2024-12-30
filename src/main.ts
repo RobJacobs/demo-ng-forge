@@ -9,7 +9,6 @@ window.TylerForgeGlobalConfiguration = {
   'forge-field': {
     labelPosition: 'block-start'
   }
-}
+};
 
-bootstrapApplication(AppComponent, appConfig)
-  .catch((err) => console.error(err));
+bootstrapApplication(AppComponent, appConfig).catch((err) => console.error(err));

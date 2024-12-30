@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ForgeIconButtonModule, ForgeIconModule, ForgeTooltipModule } from '@tylertech/forge-angular';
 
@@ -7,22 +7,17 @@ import { ForgeIconButtonModule, ForgeIconModule, ForgeTooltipModule } from '@tyl
   selector: 'app-routerlink-button',
   templateUrl: './routerlink-button.component.html',
   styleUrls: ['./routerlink-button.component.scss'],
-  standalone: true,
   imports: [CommonModule, RouterModule, ForgeIconButtonModule, ForgeIconModule, ForgeTooltipModule]
 })
 export class RouterlinkButtonComponent {
-  @Input()
-  public route?: string;
+  public readonly route = input<string>();
 
-  @Input()
-  public queryParams?: any;
+  public readonly queryParams = input<any>();
 
   @Input()
   public label?: string;
 
-  @Input()
-  public icon?: string;
+  public readonly icon = input<string>();
 
-  @Input()
-  public disabled?: boolean;
+  public readonly disabled = input<boolean>();
 }

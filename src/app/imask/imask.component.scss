@@ -13,8 +13,12 @@
 
   form {
     padding: 16px;
+
     @include app-container-raised();
     @include app-form-grid();
-    grid-template-columns: #{$app-form-grid-column-width}px;
+
+    & {
+      grid-template-columns: 320px;
+    }
   }
 }

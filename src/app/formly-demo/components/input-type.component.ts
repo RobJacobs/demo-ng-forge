@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, OnDestroy, OnInit, viewChild } from '@angular/core';
 import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { finalize, map, of, Subject, takeUntil } from 'rxjs';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
@@ -40,13 +40,11 @@ import { FormlyDemoService } from '../formly-demo.service';
     `
   ],
   imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeTextFieldModule],
-  standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class InputTypeComponent extends FieldType<FieldTypeConfig> implements OnInit, OnDestroy {
   private unsubscribe = new Subject<void>();
-  @ViewChild('input', { static: true })
-  private inputElement?: ElementRef;
+  private readonly inputElement = viewChild<ElementRef>('input');
 
   public inputType = 'text';
 

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EmbeddedViewRef, Input, OnDestroy, TemplateRef, ViewChild, ViewContainerRef, forwardRef, ElementRef, Output, EventEmitter, HostListener, NgZone, inject } from '@angular/core';
+import { AfterViewInit, Component, EmbeddedViewRef, Input, OnDestroy, TemplateRef, ViewContainerRef, forwardRef, ElementRef, Output, EventEmitter, HostListener, NgZone, inject, input, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -12,7 +12,6 @@ import { Utils } from 'src/utils';
   selector: 'app-autocomplete-range',
   templateUrl: './autocomplete-range.component.html',
   styleUrls: ['./autocomplete-range.component.scss'],
-  standalone: true,
   imports: [CommonModule, FormsModule, ForgeAutocompleteModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIconModule, ForgeListItemModule, ForgeListModule, ForgeTextFieldModule],
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => AutocompleteRangeComponent), multi: true }]
 })
@@ -24,12 +23,11 @@ export class AutocompleteRangeComponent implements ControlValueAccessor, AfterVi
   public autocompleteBlur() {
     this.onTouched();
   }
-  @ViewChild('rangeAutocomplete') autocompleteRef?: ElementRef;
-  @ViewChild('rangeTemplate') rangeTemplateRef?: TemplateRef<any>;
-  @ViewChild('filterInput') filterInputRef?: ElementRef;
+  private readonly autocompleteRef = viewChild<ElementRef>('rangeAutocomplete');
+  private readonly rangeTemplateRef = viewChild<TemplateRef<any>>('rangeTemplate');
+  private readonly filterInputRef = viewChild<ElementRef>('filterInput');
 
-  @Input()
-  public optionFilter?: (filter: string) => Observable<IOption[]>;
+  public readonly optionFilter = input<(filter: string) => Observable<IOption[]>>();
 
   @Input()
   public set value(values: Array<IOption> | Array<string | string[] | number>) {
@@ -38,10 +36,8 @@ export class AutocompleteRangeComponent implements ControlValueAccessor, AfterVi
   @Output()
   public valueChange = new EventEmitter<Array<string | string[] | number>>();
 
-  @Input()
-  public label?: string;
-  @Input()
-  public maxlength: number | null = null;
+  public readonly label = input<string>();
+  public readonly maxlength = input<number | null>(null);
 
   public rangeOptions: IOption[] = [];
   public rangeMin?: string;
@@ -58,8 +54,9 @@ export class AutocompleteRangeComponent implements ControlValueAccessor, AfterVi
   public onFilter: AutocompleteFilterCallback = (filter: string): Promise<IOption[] | IAutocompleteOptionGroup[]> => {
     this.filter = filter;
     return new Promise((resolve, reject) => {
-      if (this.optionFilter) {
-        this.optionFilter(this.filter).subscribe({
+      const optionFilter = this.optionFilter();
+      if (optionFilter) {
+        optionFilter(this.filter).subscribe({
           next: (response) => {
             const options: IOption[] = [];
             response.forEach((o) => (isArray(o.value) ? this.rangeOptions.push(o) : options.push(o)));
@@ -82,7 +79,7 @@ export class AutocompleteRangeComponent implements ControlValueAccessor, AfterVi
   };
 
   public selectedTextBuilder: AutocompleteSelectedTextBuilder = (selectedOptions: IOption[]): string => {
-    if (this.autocompleteRef?.nativeElement.open && this.filter.length) {
+    if (this.autocompleteRef()?.nativeElement.open && this.filter.length) {
       return this.filter;
     }
 
@@ -114,13 +111,13 @@ export class AutocompleteRangeComponent implements ControlValueAccessor, AfterVi
       });
     }
     window.requestAnimationFrame(() => {
-      ((this.autocompleteRef as ElementRef).nativeElement as AutocompleteComponent).value = options;
+      ((this.autocompleteRef() as ElementRef).nativeElement as AutocompleteComponent).value = options;
     });
   }
 
   public ngAfterViewInit() {
     window.requestAnimationFrame(() => {
-      this.rangeRef = this.viewContainerRef.createEmbeddedView(this.rangeTemplateRef as TemplateRef<any>);
+      this.rangeRef = this.viewContainerRef.createEmbeddedView(this.rangeTemplateRef() as TemplateRef<any>);
       (this.rangeRef.rootNodes[0] as HTMLElement).remove();
     });
   }
@@ -177,7 +174,7 @@ export class AutocompleteRangeComponent implements ControlValueAccessor, AfterVi
     this.rangeMin = undefined;
     this.rangeMax = undefined;
 
-    (this.filterInputRef as ElementRef).nativeElement.value = this.selectedTextBuilder(this.autocompleteRef?.nativeElement.value);
+    (this.filterInputRef() as ElementRef).nativeElement.value = this.selectedTextBuilder(this.autocompleteRef()?.nativeElement.value);
   }
 
   public onDeleteRangeOption(option: IOption) {
@@ -185,7 +182,7 @@ export class AutocompleteRangeComponent implements ControlValueAccessor, AfterVi
     const optionIndex = this.rangeOptions.findIndex((o) => o.value === option.value);
     if (optionIndex !== -1) {
       this.rangeOptions.splice(optionIndex, 1);
-      (this.filterInputRef as ElementRef).nativeElement.value = this.selectedTextBuilder(this.autocompleteRef?.nativeElement.value);
+      (this.filterInputRef() as ElementRef).nativeElement.value = this.selectedTextBuilder(this.autocompleteRef()?.nativeElement.value);
       this.emitChangeEvents();
     }
   }
@@ -196,7 +193,7 @@ export class AutocompleteRangeComponent implements ControlValueAccessor, AfterVi
       options.push(...this.rangeOptions.map((o) => o.value));
     }
 
-    const values = this.autocompleteRef?.nativeElement.value;
+    const values = this.autocompleteRef()?.nativeElement.value;
     if (isArray(values) && values.length) {
       options.push(...values);
     }

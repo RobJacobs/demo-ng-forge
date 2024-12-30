@@ -1,12 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
 import { ForgeButtonModule, ForgeExpansionPanelModule, ForgeIconModule, ForgeListItemModule, ForgeListModule, ForgeMenuModule } from '@tylertech/forge-angular';
 import { isDefined } from '@tylertech/forge-core';
 
 @Component({
   selector: 'app-menu',
-  standalone: true,
   imports: [CommonModule, ForgeButtonModule, ForgeExpansionPanelModule, ForgeIconModule, ForgeListItemModule, ForgeListModule, ForgeMenuModule],
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss']
@@ -14,12 +13,9 @@ import { isDefined } from '@tylertech/forge-core';
 export class MenuComponent {
   private router = inject(Router);
 
-  @Input()
-  public options?: any[];
-  @Input()
-  public open = true;
-  @Input()
-  public selectedValue?: string[];
+  public readonly options = input<any[]>();
+  public readonly open = input(true);
+  public readonly selectedValue = input<string[]>();
 
   public menuItemSelected(option: string) {
     if (isDefined(option)) {

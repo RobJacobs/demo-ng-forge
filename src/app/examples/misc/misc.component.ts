@@ -12,11 +12,10 @@ import { BusyIndicatorService } from 'src/app/shared/components/busy-indicator/b
 import { ArrayFindPipe } from 'src/app/shared/pipes/array-find.pipe';
 
 @Component({
-  selector: 'app-examples-misc',
-  standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, ForgeButtonModule, ForgeCheckboxModule, ForgeIconButtonModule, ForgeIconModule, ForgeTextFieldModule, ForgeToolbarModule, CardComponent, ArrayFindPipe],
-  templateUrl: './misc.component.html',
-  styleUrls: ['./misc.component.scss']
+    selector: 'app-examples-misc',
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, ForgeButtonModule, ForgeCheckboxModule, ForgeIconButtonModule, ForgeIconModule, ForgeTextFieldModule, ForgeToolbarModule, CardComponent, ArrayFindPipe],
+    templateUrl: './misc.component.html',
+    styleUrls: ['./misc.component.scss']
 })
 export class MiscComponent implements OnInit {
   private appDataService = inject(AppDataService);

@@ -8,8 +8,8 @@ import { ForgeCheckboxModule } from '@tylertech/forge-angular';
 import { FormlyDemoService } from '../formly-demo.service';
 
 @Component({
-  selector: 'app-formly-checkbox',
-  template: `
+    selector: 'app-formly-checkbox',
+    template: `
     <forge-checkbox [id]="id" [readonly]="props.readonly" [formControl]="formControl" [formlyAttributes]="field">
       @if (props.label) {
         {{ props.label }}
@@ -19,15 +19,14 @@ import { FormlyDemoService } from '../formly-demo.service';
       }
     </forge-checkbox>
   `,
-  styles: [
-    `
+    styles: [
+        `
       :host {
         display: block;
       }
     `
-  ],
-  imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeCheckboxModule],
-  standalone: true
+    ],
+    imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeCheckboxModule]
 })
 export class CheckboxTypeComponent extends FieldType<FieldTypeConfig> implements OnInit, OnDestroy {
   private moduleService = inject(FormlyDemoService);

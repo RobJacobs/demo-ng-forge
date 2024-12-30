@@ -10,11 +10,10 @@ import { IPerson } from 'src/app/shared/interfaces/person.interface';
 import { IndexedDBStorageService } from './indexed-db-storage.service';
 
 @Component({
-  selector: 'app-storage',
-  standalone: true,
-  imports: [CommonModule, ForgeButtonModule, ForgeLabelValueModule, ForgeToolbarModule],
-  templateUrl: './storage.component.html',
-  styleUrls: ['./storage.component.scss']
+    selector: 'app-storage',
+    imports: [CommonModule, ForgeButtonModule, ForgeLabelValueModule, ForgeToolbarModule],
+    templateUrl: './storage.component.html',
+    styleUrls: ['./storage.component.scss']
 })
 export class StorageComponent {
   private appDataService = inject(AppDataService);

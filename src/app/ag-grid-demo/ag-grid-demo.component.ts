@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component, OnInit, ViewChild, inject } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, OnInit, inject, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IOption, SortDirection } from '@tylertech/forge';
 import { isDefined } from '@tylertech/forge-core';
@@ -13,7 +13,6 @@ import { AppDataService } from '../app-data.service';
 
 @Component({
   selector: 'app-ag-grid-demo',
-  standalone: true,
   imports: [CommonModule, ForgeIconButtonModule, ForgeIconModule, ForgeOptionModule, ForgePaginatorModule, ForgeSelectDropdownModule, ForgeToolbarModule, AgGridModule],
   templateUrl: './ag-grid-demo.component.html',
   styleUrls: ['./ag-grid-demo.component.scss'],
@@ -22,8 +21,7 @@ import { AppDataService } from '../app-data.service';
 export class AgGridDemoComponent implements OnInit {
   private appDataService = inject(AppDataService);
 
-  @ViewChild('agGrid', { read: AgGridAngular })
-  private agGrid?: AgGridAngular;
+  private readonly agGrid = viewChild('agGrid', { read: AgGridAngular });
   private storageKey = 'ag-grid-demo';
 
   public isBusy = false;
@@ -64,15 +62,16 @@ export class AgGridDemoComponent implements OnInit {
   }
 
   public onGridReady(event: GridReadyEvent) {
-    this.agGrid?.api.sizeColumnsToFit();
+    const agGrid = this.agGrid();
+    agGrid?.api.sizeColumnsToFit();
     const columnState = localStorage.getItem(this.storageKey);
     if (columnState?.length) {
-      this.agGrid?.api.applyColumnState({
+      agGrid?.api.applyColumnState({
         state: JSON.parse(columnState),
         applyOrder: true
       });
     }
-    this.selectedTableColumns = this.agGrid?.api.getAllDisplayedColumns().map((c) => c.getColDef().field);
+    this.selectedTableColumns = agGrid?.api.getAllDisplayedColumns().map((c) => c.getColDef().field);
   }
 
   public onTableSort(event: SortChangedEvent) {
@@ -92,8 +91,9 @@ export class AgGridDemoComponent implements OnInit {
 
   public onTableColumnOptionSelected(columnFields: string[]) {
     this.selectedTableColumns = columnFields;
-    this.agGrid?.api.setColumnsVisible(columnFields, true);
-    this.agGrid?.api.setColumnsVisible(this.columnDefs.map((c) => c.field).filter((c) => !columnFields.includes(c as string)) as string[], false);
+    const agGrid = this.agGrid();
+    agGrid?.api.setColumnsVisible(columnFields, true);
+    agGrid?.api.setColumnsVisible(this.columnDefs.map((c) => c.field).filter((c) => !columnFields.includes(c as string)) as string[], false);
   }
 
   public onTablePaginatorChange(detail: { pageIndex: number; pageSize: number }) {

@@ -14,11 +14,10 @@ export interface IConfirmDialogData {
   selector: 'app-confirm-dialog',
   templateUrl: './confirm-dialog.component.html',
   styleUrls: ['./confirm-dialog.component.scss'],
-  standalone: true,
   imports: [CommonModule, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, DialogTemplateComponent]
 })
 export class ConfirmDialogComponent {
-  public dialogConfig = inject<IConfirmDialogData>(DIALOG_DATA);
+  public dialogData = inject<IConfirmDialogData>(DIALOG_DATA);
   private dialogRef = inject(DialogRef);
 
   public dialogTitle: string;
@@ -26,9 +25,9 @@ export class ConfirmDialogComponent {
   public showFooter?: boolean;
 
   constructor() {
-    this.dialogTitle = this.dialogConfig.title;
-    this.message = this.dialogConfig.message;
-    this.showFooter = isDefined(this.dialogConfig.showFooter) ? this.dialogConfig.showFooter : true;
+    this.dialogTitle = this.dialogData.title;
+    this.message = this.dialogData.message;
+    this.showFooter = isDefined(this.dialogData.showFooter) ? this.dialogData.showFooter : true;
   }
 
   public onClose(response = false) {
