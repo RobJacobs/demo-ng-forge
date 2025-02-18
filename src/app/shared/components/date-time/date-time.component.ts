@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, forwardRef, ViewChild, Input, HostListener, OnInit, inject, DestroyRef, viewChild, ElementRef } from '@angular/core';
+import { Component, forwardRef, Input, HostListener, OnInit, inject, DestroyRef, viewChild, ElementRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR, FormControl, ReactiveFormsModule, ControlValueAccessor } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { isValid as dateIsValid, parse as dateParse, format as dateFormat } from 'date-fns';
@@ -15,17 +15,13 @@ import { Utils } from 'src/utils';
   selector: 'app-date-time',
   templateUrl: './date-time.component.html',
   styleUrls: ['./date-time.component.scss'],
-  standalone: true,
   imports: [CommonModule, ReactiveFormsModule, IMaskDirective, ForgeCalendarModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIconModule, ForgePopoverModule, ForgeTextFieldModule, ForgeTimePickerModule],
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DateTimeComponent), multi: true }]
 })
 export class DateTimeComponent implements OnInit, ControlValueAccessor {
-  @ViewChild('dateTimeInput', { static: true })
-  private dateTimeInputElementRef: ElementRef<HTMLInputElement>;
-  @ViewChild('timeInput', { static: true })
-  private timeInputElementRef: ElementRef<HTMLInputElement>;
-  @ViewChild('calendar')
-  private calendarElementRef: ElementRef<CalendarComponent>;
+  private readonly dateTimeInputElementRef = viewChild<ElementRef<HTMLInputElement>>('dateTimeInput');
+  private readonly timeInputElementRef = viewChild<ElementRef<HTMLInputElement>>('timeInput');
+  private readonly calendarElementRef = viewChild<ElementRef<CalendarComponent>>('calendar');
   private destroyRef = inject(DestroyRef);
   private elementRef = inject(ElementRef);
   private timeFormat = 'hh:mm aa';
@@ -63,6 +59,7 @@ export class DateTimeComponent implements OnInit, ControlValueAccessor {
   }
 
   @Input()
+  /* eslint @typescript-eslint/no-unused-expressions: 0 */
   public set disabled(value: boolean) {
     value ? this.dateTime.disable() : this.dateTime.enable();
   }
@@ -97,7 +94,7 @@ export class DateTimeComponent implements OnInit, ControlValueAccessor {
   public onPopoverToggle(event: CustomEvent<IPopoverToggleEventData>) {
     if (event.detail.newState === 'closed') {
       if (!document.activeElement || document.activeElement === document.body) {
-        this.dateTimeInputElementRef.nativeElement.focus();
+        this.dateTimeInputElementRef().nativeElement.focus();
       }
     }
   }
@@ -111,9 +108,9 @@ export class DateTimeComponent implements OnInit, ControlValueAccessor {
   }
 
   public onKeyDown(event: KeyboardEvent) {
-    if (event.target === this.timeInputElementRef.nativeElement) {
+    if (event.target === this.timeInputElementRef().nativeElement) {
       event.preventDefault();
-      ((this.calendarElementRef.nativeElement as HTMLElement)?.shadowRoot?.querySelector(CALENDAR_CONSTANTS.selectors.PREVIOUS_BUTTON) as HTMLElement)?.focus();
+      ((this.calendarElementRef().nativeElement as HTMLElement)?.shadowRoot?.querySelector(CALENDAR_CONSTANTS.selectors.PREVIOUS_BUTTON) as HTMLElement)?.focus();
     }
   }
 

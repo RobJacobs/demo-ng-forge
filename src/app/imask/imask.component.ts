@@ -1,6 +1,6 @@
 // https://github.com/uNmAnNeR/imaskjs/issues/876
 
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { IMaskDirective } from 'angular-imask';
@@ -12,14 +12,12 @@ import { parse as dateParse, format as dateFormat, isValid as dateIsValid } from
 import { NullableMask, NullableNumberMask } from './imask-extensions';
 @Component({
   selector: 'app-imask',
-  standalone: true,
   imports: [CommonModule, ReactiveFormsModule, IMaskDirective, ForgeButtonModule, ForgeOptionModule, ForgeSelectModule, ForgeTextFieldModule, ForgeToolbarModule],
   templateUrl: './imask.component.html',
   styleUrls: ['./imask.component.scss']
 })
 export class ImaskComponent implements AfterViewInit {
-  @ViewChild('imaskRef')
-  public imaskRef?: IMaskDirective<any>;
+  private readonly imaskRef = viewChild<IMaskDirective<any>>('imaskRef');
 
   public formGroup = new FormGroup({
     format: new FormControl<string | null>(''),
@@ -43,7 +41,7 @@ export class ImaskComponent implements AfterViewInit {
   }
 
   public ngAfterViewInit() {
-    console.log(this.imaskRef);
+    console.log(this.imaskRef());
   }
 
   public onReset() {
@@ -51,7 +49,7 @@ export class ImaskComponent implements AfterViewInit {
   }
 
   public onApply() {
-    this.imaskRef?.destroyMask();
+    this.imaskRef()?.destroyMask();
     this.formGroup.controls.input.setValue(null);
 
     requestAnimationFrame(() => {

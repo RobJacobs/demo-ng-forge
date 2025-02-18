@@ -1,12 +1,20 @@
 <forge-scaffold>
-  <forge-toolbar slot="header">
-    <h2 slot="start" class="forge-typography--heading4" [id]="id + '--title'">{{ dialogTitle }}</h2>
-    <ng-content select="[app-dialog-header]"></ng-content>
-    <forge-icon-button slot="after-end" aria-label="Close" (click)="onClose()">
-      <forge-icon name="close"></forge-icon>
-    </forge-icon-button>
-  </forge-toolbar>
-  <ng-content></ng-content>
+  @if (showHeader) {
+    <forge-toolbar slot="header">
+      @if (dialogTitle?.length) {
+        <h2 slot="start" class="forge-typography--heading4" [id]="id">{{ dialogTitle }}</h2>
+      }
+      <ng-content select="[app-dialog-header]"></ng-content>
+      @if (showClose) {
+        <forge-icon-button slot="after-end" aria-label="Close" (click)="onClose()">
+          <forge-icon name="close" aria-hidden="true"></forge-icon>
+        </forge-icon-button>
+      }
+    </forge-toolbar>
+  }
+  <div slot="body">
+    <ng-content></ng-content>
+  </div>
   @if (showFooter) {
     <forge-toolbar slot="footer" inverted="true">
       <ng-content select="[app-dialog-footer]"></ng-content>

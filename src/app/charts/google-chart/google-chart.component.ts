@@ -1,4 +1,4 @@
-import { Component, DestroyRef, ElementRef, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, DestroyRef, ElementRef, Input, OnDestroy, OnInit, inject, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, filter, fromEvent } from 'rxjs';
@@ -16,7 +16,6 @@ interface IChartItem {
 // https://developers.google.com/chart/
 @Component({
   selector: 'app-charts-google-chart',
-  standalone: true,
   imports: [CommonModule],
   providers: [GoogleChartService],
   templateUrl: './google-chart.component.html',
@@ -25,8 +24,7 @@ interface IChartItem {
 export class GoogleChartComponent implements OnInit, OnDestroy {
   private destroyRef = inject(DestroyRef);
 
-  @ViewChild('chartContainer', { static: true })
-  private chartContainer?: ElementRef;
+  private readonly chartContainer = viewChild<ElementRef>('chartContainer');
   private chartData?: google.visualization.DataTable;
   private chart?: google.visualization.ChartBase;
   private chartAnimation: google.visualization.TransitionAnimation = {
@@ -62,10 +60,10 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
       .pipe(takeUntilDestroyed(this.destroyRef), debounceTime(100))
       .subscribe(() => this.drawChart('redraw'));
 
-    fromEvent<WheelEvent>(this.chartContainer?.nativeElement, 'wheel')
+    fromEvent<WheelEvent>(this.chartContainer()?.nativeElement, 'wheel')
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((event) => {
-        const chartElement = (this.chartContainer?.nativeElement as HTMLElement).firstElementChild as HTMLElement;
+        const chartElement = (this.chartContainer()?.nativeElement as HTMLElement).firstElementChild as HTMLElement;
         if (event.deltaY > 0 && this.chartScale < 5.05) {
           this.chartScale += 0.05;
           chartElement.style.transform = `scale(${this.chartScale})`;
@@ -89,15 +87,16 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
       this.setChartData(action);
     }
 
-    const hostWidth = this.chartContainer?.nativeElement.clientWidth;
-    const hostHeight = this.chartContainer?.nativeElement.clientHeight;
+    const chartContainer = this.chartContainer();
+    const hostWidth = chartContainer?.nativeElement.clientWidth;
+    const hostHeight = chartContainer?.nativeElement.clientHeight;
 
     switch (this.chartType) {
       // https://developers.google.com/chart/interactive/docs/gallery/barchart
       case ChartTypes.bar: {
         if (action === 'create') {
           // vertical bars
-          this.chart = new google.visualization.ColumnChart(this.chartContainer?.nativeElement);
+          this.chart = new google.visualization.ColumnChart(chartContainer?.nativeElement);
           // horizontal bars
           // this.chart = new google.visualization.BarChart(this.chartContainer.nativeElement);
           this.addChartEvents();
@@ -112,7 +111,7 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
       // https://developers.google.com/chart/interactive/docs/gallery/bubblechart
       case ChartTypes.bubble: {
         if (action === 'create') {
-          this.chart = new google.visualization.BubbleChart(this.chartContainer?.nativeElement);
+          this.chart = new google.visualization.BubbleChart(chartContainer?.nativeElement);
           this.addChartEvents();
         }
         const bubbleChartOptions: google.visualization.BubbleChartOptions = {
@@ -124,7 +123,7 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
       }
       case ChartTypes.donut: {
         if (action === 'create') {
-          this.chart = new google.visualization.PieChart(this.chartContainer?.nativeElement);
+          this.chart = new google.visualization.PieChart(chartContainer?.nativeElement);
           this.addChartEvents();
         }
 
@@ -138,7 +137,7 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
       // https://developers.google.com/chart/interactive/docs/gallery/piechart
       case ChartTypes.pie: {
         if (action === 'create') {
-          this.chart = new google.visualization.PieChart(this.chartContainer?.nativeElement);
+          this.chart = new google.visualization.PieChart(chartContainer?.nativeElement);
           this.addChartEvents();
         }
 
@@ -151,7 +150,7 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
       // https://developers.google.com/chart/interactive/docs/gallery/linechart
       case ChartTypes.line: {
         if (action === 'create') {
-          this.chart = new google.visualization.LineChart(this.chartContainer?.nativeElement);
+          this.chart = new google.visualization.LineChart(chartContainer?.nativeElement);
           this.addChartEvents();
         }
 
@@ -165,7 +164,7 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
       // https://developers.google.com/chart/interactive/docs/gallery/treemap
       case ChartTypes.treemap: {
         if (action === 'create') {
-          this.chart = new google.visualization.TreeMap(this.chartContainer?.nativeElement);
+          this.chart = new google.visualization.TreeMap(chartContainer?.nativeElement);
           this.addChartEvents();
         }
 
@@ -178,7 +177,7 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
       // https://developers.google.com/chart/interactive/docs/gallery/orgchart
       case ChartTypes.tree: {
         if (action === 'create') {
-          this.chart = new google.visualization.OrgChart(this.chartContainer?.nativeElement);
+          this.chart = new google.visualization.OrgChart(chartContainer?.nativeElement);
           this.addChartEvents();
         }
 
@@ -194,7 +193,7 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
       }
       case ChartTypes.gantt: {
         if (action === 'create') {
-          this.chart = new google.visualization.Gantt(this.chartContainer?.nativeElement);
+          this.chart = new google.visualization.Gantt(chartContainer?.nativeElement);
           this.addChartEvents();
         }
 
@@ -410,12 +409,12 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
   }
 
   private addZoomPanEvents() {
-    const chartElement = (this.chartContainer?.nativeElement as HTMLElement).firstElementChild as HTMLElement;
+    const chartElement = (this.chartContainer()?.nativeElement as HTMLElement).firstElementChild as HTMLElement;
     fromEvent<MouseEvent>(chartElement, 'mousedown')
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((event) => {
         this.chartIsPanning = true;
-        (this.chartContainer?.nativeElement as HTMLElement).classList.add('app--chart--panning');
+        (this.chartContainer()?.nativeElement as HTMLElement).classList.add('app--chart--panning');
       });
     fromEvent<MouseEvent>(chartElement, 'mousemove')
       .pipe(
@@ -424,19 +423,19 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
       )
       .subscribe((event) => {
         // console.log(`X: ${event.movementX} Y: ${event.movementY}`);
-        (this.chartContainer?.nativeElement as HTMLElement).scrollBy(event.movementX * -1, event.movementY * -1);
+        (this.chartContainer()?.nativeElement as HTMLElement).scrollBy(event.movementX * -1, event.movementY * -1);
       });
     fromEvent<MouseEvent>(chartElement, 'mouseup')
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.chartIsPanning = false;
-        (this.chartContainer?.nativeElement as HTMLElement).classList.remove('app--chart--panning');
+        (this.chartContainer()?.nativeElement as HTMLElement).classList.remove('app--chart--panning');
       });
     fromEvent<MouseEvent>(chartElement, 'mouseout')
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.chartIsPanning = false;
-        (this.chartContainer?.nativeElement as HTMLElement).classList.remove('app--chart--panning');
+        (this.chartContainer()?.nativeElement as HTMLElement).classList.remove('app--chart--panning');
       });
   }
 }

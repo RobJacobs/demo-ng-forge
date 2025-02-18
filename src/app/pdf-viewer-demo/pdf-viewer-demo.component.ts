@@ -1,4 +1,4 @@
-import { Component, DestroyRef, ElementRef, ViewChild, inject } from '@angular/core';
+import { Component, DestroyRef, ElementRef, inject, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
@@ -31,7 +31,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-pdf-viewer',
-  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
@@ -56,14 +55,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class PdfViewerDemoComponent {
   private destroyRef = inject(DestroyRef);
 
-  @ViewChild('pdfViewer')
-  private pdfViewerComponent?: PdfViewerComponent;
-  @ViewChild('pdfViewerLeftToolbar')
-  private pdfViewerLeftToolbarRef?: ElementRef<HTMLElement>;
-  @ViewChild('searchPopover')
-  private searchPopoverDirective?: PopoverDirective;
-  @ViewChild('searchInput')
-  private searchInputElementRef?: ElementRef<HTMLInputElement>;
+  private readonly pdfViewerComponent = viewChild<PdfViewerComponent>('pdfViewer');
+  private readonly pdfViewerLeftToolbarRef = viewChild<ElementRef<HTMLElement>>('pdfViewerLeftToolbar');
+  private readonly searchPopoverDirective = viewChild<PopoverDirective>('searchPopover');
+  private readonly searchInputElementRef = viewChild<ElementRef<HTMLInputElement>>('searchInput');
 
   public pdfSrc: string | Uint8Array | PDFSource = './assets/pdf-test.pdf';
   public error?: { message: string; name?: string };
@@ -114,7 +109,7 @@ export class PdfViewerDemoComponent {
 
   public afterLoadComplete(pdf: PDFDocumentProxy) {
     this.pdf = pdf;
-    this.pdfViewerComponent?.eventBus.on(
+    this.pdfViewerComponent()?.eventBus.on(
       'updatefindmatchescount',
       debounce((event: { matchesCount: { current: number; total: number }; source: any }) => {
         this.searchMatches = event.matchesCount.total;
@@ -165,19 +160,20 @@ export class PdfViewerDemoComponent {
       case 'fit':
         this.zoomScale = this.zoomScale === 'page-fit' ? 'page-width' : 'page-fit';
         if (this.zoomScale === 'page-fit') {
-          this.pdfViewerComponent!.pdfViewer.currentScaleValue = 'page-fit';
+          this.pdfViewerComponent()!.pdfViewer.currentScaleValue = 'page-fit';
         } else {
-          this.pdfViewerComponent!.pdfViewer.currentScaleValue = this.zoom.toString();
+          this.pdfViewerComponent()!.pdfViewer.currentScaleValue = this.zoom.toString();
         }
         break;
     }
   }
 
   public onShowSearchPopover() {
-    this.searchPopoverDirective?.open();
+    this.searchPopoverDirective()?.open();
     requestAnimationFrame(() => {
-      this.searchInputElementRef?.nativeElement.focus();
-      this.searchInputElementRef?.nativeElement.select();
+      const searchInputElementRef = this.searchInputElementRef();
+      searchInputElementRef?.nativeElement.focus();
+      searchInputElementRef?.nativeElement.select();
     });
   }
 
@@ -186,8 +182,9 @@ export class PdfViewerDemoComponent {
   }
 
   private createThumbnails() {
-    if (this.pdfViewerLeftToolbarRef?.nativeElement?.childElementCount) {
-      removeAllChildren(this.pdfViewerLeftToolbarRef.nativeElement);
+    const pdfViewerLeftToolbarRef = this.pdfViewerLeftToolbarRef();
+    if (pdfViewerLeftToolbarRef?.nativeElement?.childElementCount) {
+      removeAllChildren(pdfViewerLeftToolbarRef.nativeElement);
     }
 
     if (this.pdf?.numPages) {
@@ -207,7 +204,7 @@ export class PdfViewerDemoComponent {
           buttonElement.addEventListener('click', () => this.onPageChange(index));
           buttonElement.appendChild(canvasElement);
 
-          this.pdfViewerLeftToolbarRef?.nativeElement.appendChild(buttonElement);
+          this.pdfViewerLeftToolbarRef()?.nativeElement.appendChild(buttonElement);
         });
       }
     }
@@ -215,8 +212,8 @@ export class PdfViewerDemoComponent {
 
   private searchDocument(type: string, findPrevious = false) {
     const query = this.searchFormGroup.controls.query.value || '';
-    this.pdfViewerComponent!.eventBus.dispatch('find', {
-      source: this.pdfViewerComponent?.pdfViewer,
+    this.pdfViewerComponent()!.eventBus.dispatch('find', {
+      source: this.pdfViewerComponent()?.pdfViewer,
       type,
       query,
       highlightAll: this.searchFormGroup.controls.hightlightAll.value ? true : false,

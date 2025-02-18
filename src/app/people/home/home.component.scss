@@ -53,9 +53,11 @@
 .table {
   @include app-table-header-footer();
 
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  height: 100%;
+  & {
+    grid-template-rows: auto 1fr auto;
+    display: grid;
+    height: 100%;
+  }
 
   &__header {
     &__filter-count {

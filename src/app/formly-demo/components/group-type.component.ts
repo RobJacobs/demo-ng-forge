@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, HostBinding, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, HostBinding, inject, OnInit, viewChild } from '@angular/core';
 import { FieldGroupTypeConfig, FieldType, FormlyModule } from '@ngx-formly/core';
 import { FormlyFieldDirective } from './formly-field.directive';
 
@@ -58,19 +58,17 @@ import { FormlyFieldDirective } from './formly-field.directive';
     `
   ],
   imports: [CommonModule, FormlyModule, FormlyFieldDirective],
-  standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class GroupTypeComponent extends FieldType<FieldGroupTypeConfig> implements OnInit {
   private elementRef = inject(ElementRef);
 
-  @ViewChild('fieldContainer', { static: true })
-  private fieldContainer?: ElementRef;
+  private readonly fieldContainer = viewChild<ElementRef>('fieldContainer');
   // @HostBinding('style.display')
   // private displayStyle = 'block';
 
   public ngOnInit() {
-    const fieldContainerElement = this.fieldContainer?.nativeElement as HTMLElement;
+    const fieldContainerElement = this.fieldContainer()?.nativeElement as HTMLElement;
     switch (this.field.props?.type) {
       case 'grid':
         fieldContainerElement.classList.add('form-grid');

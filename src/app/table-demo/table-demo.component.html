@@ -2,11 +2,29 @@
   <h2 slot="start" class="forge-typography--subheading4">Table demo</h2>
 </forge-toolbar>
 
+<forge-popover #columnHeaderPopover placement="right-end" animation-type="none" open="false">
+  <forge-list class="column-popover" (forge-list-item-select)="onColumnPopoverItemSelected($event.detail.value)">
+    @for (column of tableColumns; track i; let i = $index) {
+      <forge-list-item [value]="column">
+        <forge-icon slot="start" [name]="column.hidden ? 'check_box_outline_blank' : 'check_box'"></forge-icon>
+        <button type="button">{{ column.header }}</button>
+      </forge-list-item>
+    }
+    <forge-divider></forge-divider>
+    <forge-list-item value="reset-column-width">
+      <button type="button">Reset column widths</button>
+    </forge-list-item>
+    <forge-list-item value="freeze-column">
+      <button type="button">Freeze column</button>
+    </forge-list-item>
+  </forge-list>
+</forge-popover>
+
 <div class="body">
   <div class="body__table">
-    <cdk-virtual-scroll-viewport itemSize="48">
+    <cdk-virtual-scroll-viewport [itemSize]="tableRowHeight">
       <table #table class="forge-table forge-table--fixed">
-        <thead [style.--table-header-offset]="tableHeaderOffset" [style.--table-header-translate-y]="tableHeaderOffset * -48 + 'px'">
+        <thead [style.--table-header-offset]="tableHeaderOffset()" [style.--table-header-translate-y]="tableHeaderOffset() * -tableRowHeight + 'px'">
           <tr class="forge-table-row forge-table-head__row" cdkDropList (cdkDropListDropped)="onColumnHeaderDragDrop($event)" cdkDropListOrientation="horizontal">
             <th class="forge-table-cell forge-table-head__cell forge-table-row__expander"></th>
             @for (col of tableColumns | appCallback: $any(visibleColumns); track colIndex; let colIndex = $index) {
@@ -37,7 +55,7 @@
           </tr>
         </thead>
         <tbody>
-          <ng-container *cdkVirtualFor="let record of recordset$; trackBy: recordsetTrackBy; let recordIndex = index">
+          <ng-container *cdkVirtualFor="let record of recordset(); trackBy: recordsetTrackBy; let recordIndex = index">
             <tr class="forge-table-row forge-table-body__row" [ngClass]="{ 'forge-table-row--expanded': expandedRows[recordIndex] }">
               <td class="forge-table-cell forge-table-body__cell forge-table-row__expander">
                 <forge-icon-button (click)="onExpandRow(recordIndex, record)" aria-label="Toggle details">
@@ -66,25 +84,7 @@
   </div>
 
   <forge-toolbar inverted="true">
-    <span slot="end" class="forge-typography--label1">Records: {{ recordCount }}</span>
-    <!-- <forge-paginator slot="end" [pageIndex]="filterCache.skip / filterCache.take" [pageSize]="filterCache.take" [total]="recordCount" (forge-paginator-change)="onTablePaginatorChange($event.detail)"></forge-paginator> -->
+    <span slot="end" class="forge-typography--label1">Records: {{ recordset().length }}</span>
+    <!-- <forge-paginator slot="end" [pageIndex]="filterCache.skip / filterCache.take" [pageSize]="filterCache.take" [total]="recordset().length" (forge-paginator-change)="onTablePaginatorChange($event.detail)"></forge-paginator> -->
   </forge-toolbar>
 </div>
-
-<forge-popover #columnHeaderPopover placement="right-end" animation-type="none">
-  <forge-list class="column-popover" (forge-list-item-select)="onColumnPopoverItemSelected($event.detail.value)">
-    @for (column of tableColumns; track i; let i = $index) {
-      <forge-list-item [value]="column">
-        <forge-icon slot="start" [name]="column.hidden ? 'check_box_outline_blank' : 'check_box'"></forge-icon>
-        <button type="button">{{ column.header }}</button>
-      </forge-list-item>
-    }
-    <forge-divider></forge-divider>
-    <forge-list-item value="reset-column-width">
-      <button type="button">Reset column widths</button>
-    </forge-list-item>
-    <forge-list-item value="freeze-column">
-      <button type="button">Freeze column</button>
-    </forge-list-item>
-  </forge-list>
-</forge-popover>

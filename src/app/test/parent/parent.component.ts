@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, ForgeTextFieldModule, ForgeToolbarModule } from '@tylertech/forge-angular';
 import { Observable, tap, takeUntil } from 'rxjs';
-import { ForgeButtonModule, ForgeTextFieldModule, ForgeToolbarModule } from '@tylertech/forge-angular';
 
 import { AppCacheService } from 'src/app/app-cache.service';
 import { AppDataService } from 'src/app/app-data.service';
@@ -16,17 +18,21 @@ import { AppDataService } from 'src/app/app-data.service';
 })
 export class ParentComponent {
   private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
   private appDataService = inject(AppDataService);
+  private appWebSocketService = inject(AppWebSocketService);
   private appCache = inject(AppCacheService);
 
-  constructor() {}
-
   public onNavigate(route: string) {
-    this.router.navigate([route]);
+    this.router.navigate([route], { state: { id: 0, name: 'name' } });
   }
 
   public onMakeRequest() {
     this.getLongRequest().subscribe();
+  }
+
+  public onSendMessage() {
+    this.appWebSocketService.webSocketSubject.next({ data: 'message from front end.', date: new Date() });
   }
 
   private getLongRequest(): Observable<any> {

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, ViewChild } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, viewChild } from '@angular/core';
 import { FieldArrayType, FormlyModule } from '@ngx-formly/core';
 import { FormlyFieldDirective } from './formly-field.directive';
 
@@ -81,12 +81,10 @@ import { FormlyFieldDirective } from './formly-field.directive';
     `
   ],
   imports: [CommonModule, FormlyModule, FormlyFieldDirective],
-  standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TableTypeComponent extends FieldArrayType {
-  @ViewChild('table')
-  private tableElement?: ElementRef;
+  private readonly tableElement = viewChild<ElementRef>('table');
 
   public onAdd() {
     const model = this.props['columns'].filter((c: any) => c.key?.length).map((c: any) => [c.key, c.defaultValue]);
@@ -94,7 +92,7 @@ export class TableTypeComponent extends FieldArrayType {
     this.add(this.formControl.length, Object.fromEntries(model));
 
     requestAnimationFrame(() => {
-      const tr = Array.from(this.tableElement?.nativeElement.querySelectorAll('tbody > tr')).reverse()[0] as HTMLTableRowElement;
+      const tr = Array.from(this.tableElement()?.nativeElement.querySelectorAll('tbody > tr')).reverse()[0] as HTMLTableRowElement;
       if (tr) {
         const focusElement = tr.querySelector(`[id*="${model[0][0]}"]`) as HTMLElement;
         if (focusElement) {

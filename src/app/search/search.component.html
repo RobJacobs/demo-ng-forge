@@ -8,13 +8,13 @@
     }
   </div>
   <div slot="end">
-    <forge-button variant="outlined" (click)="onSaveSearch()"> Save search </forge-button>
+    <forge-button variant="outlined" (click)="onSaveSearch()">Save search</forge-button>
     <forge-button variant="outlined" #searchesPopover="forgePopover" [forgePopover]="searchesPopoverTemplate" [forgePopoverPlacement]="'bottom-start'" (click)="searchesPopover.open()">
       <span>Saved searches</span>
       <forge-icon name="arrow_drop_down"></forge-icon>
     </forge-button>
-    <forge-button variant="outlined" (click)="onClearSearch()"> Clear all </forge-button>
-    <forge-button variant="raised" (click)="onSearch()"> Search </forge-button>
+    <forge-button variant="outlined" (click)="onClearSearch()">Clear all</forge-button>
+    <forge-button variant="raised" (click)="onSearch()">Search</forge-button>
   </div>
 </forge-toolbar>
 
@@ -82,6 +82,7 @@
 <ng-template #opertatorAddonTemplate let-name="name">
   <forge-icon-button
     slot="addon-end"
+    density="medium"
     class="operator__addon"
     [ngClass]="{ 'operator__addon--selected': formGroup.get(name)?.value.operator }"
     #operatorPopover="forgePopover"

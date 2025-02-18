@@ -4,12 +4,11 @@ import { ForgeButtonModule, ForgeCardModule } from '@tylertech/forge-angular';
 import { defineLandingPageLayoutComponent } from '@tylertech/forge-internal';
 
 @Component({
-  selector: 'app-dashboard',
-  standalone: true,
-  imports: [CommonModule, ForgeButtonModule, ForgeCardModule],
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    selector: 'app-dashboard',
+    imports: [CommonModule, ForgeButtonModule, ForgeCardModule],
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.scss'],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class DashboardComponent {
   constructor() {

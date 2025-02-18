@@ -9,11 +9,10 @@ import { ForgeAutocompleteModule, ForgeButtonModule, ForgeDividerModule, ForgeIc
 import { ExamplesService, IRecord } from '../examples.service';
 
 @Component({
-  selector: 'app-examples-autocomplete',
-  standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, ForgeAutocompleteModule, ForgeButtonModule, ForgeDividerModule, ForgeIconModule, ForgeTextFieldModule],
-  templateUrl: './autocomplete.component.html',
-  styleUrls: ['./autocomplete.component.scss']
+    selector: 'app-examples-autocomplete',
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, ForgeAutocompleteModule, ForgeButtonModule, ForgeDividerModule, ForgeIconModule, ForgeTextFieldModule],
+    templateUrl: './autocomplete.component.html',
+    styleUrls: ['./autocomplete.component.scss']
 })
 export class AutocompleteComponent {
   public moduleService = inject(ExamplesService);

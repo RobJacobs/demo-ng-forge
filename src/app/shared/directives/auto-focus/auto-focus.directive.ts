@@ -1,4 +1,4 @@
-import { AfterViewInit, Directive, ElementRef, Input, booleanAttribute, inject } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, booleanAttribute, inject, input } from '@angular/core';
 
 @Directive({
   selector: '[appAutoFocus]',
@@ -7,11 +7,10 @@ import { AfterViewInit, Directive, ElementRef, Input, booleanAttribute, inject }
 export class AutoFocusDirective implements AfterViewInit {
   private element = inject(ElementRef);
 
-  @Input({ transform: booleanAttribute })
-  public appAutoFocus?: boolean;
+  public readonly appAutoFocus = input<boolean, unknown>(undefined, { transform: booleanAttribute });
 
   public ngAfterViewInit() {
-    if (this.appAutoFocus !== false) {
+    if (this.appAutoFocus() !== false) {
       window.requestAnimationFrame(() => {
         this.element.nativeElement.focus();
       });

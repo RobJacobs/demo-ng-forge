@@ -26,7 +26,6 @@ import { ProfileCacheService } from '../profile-cache.service';
 
 @Component({
   selector: 'app-profile-personal',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -48,7 +47,11 @@ import { ProfileCacheService } from '../profile-cache.service';
     AutoFocusDirective
   ],
   templateUrl: './personal.component.html',
-  styleUrls: ['./personal.component.scss']
+  styleUrls: ['./personal.component.scss'],
+  host: {
+    role: 'tabpanel',
+    id: 'app--profile--personal'
+  }
 })
 export class PersonalComponent {
   public cache = inject(ProfileCacheService);
@@ -82,10 +85,6 @@ export class PersonalComponent {
 
   public onAddFriend() {
     this.friendsFormArray.push(new FormControl(null, { validators: [Validators.required] }));
-    requestAnimationFrame(() => {
-      const control = this.cache.formGroup.get('personalFormGroup.friends.0');
-      console.log(control);
-    });
   }
 
   public onDeleteFriend(index: number) {

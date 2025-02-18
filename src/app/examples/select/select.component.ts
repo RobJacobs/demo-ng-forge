@@ -7,11 +7,10 @@ import { ForgeDividerModule, ForgeOptionModule, ForgeSelectModule } from '@tyler
 import { ExamplesService } from '../examples.service';
 
 @Component({
-  selector: 'app-examples-select',
-  standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, ForgeDividerModule, ForgeOptionModule, ForgeSelectModule],
-  templateUrl: './select.component.html',
-  styleUrls: ['./select.component.scss']
+    selector: 'app-examples-select',
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, ForgeDividerModule, ForgeOptionModule, ForgeSelectModule],
+    templateUrl: './select.component.html',
+    styleUrls: ['./select.component.scss']
 })
 export class SelectComponent {
   public moduleService = inject(ExamplesService);

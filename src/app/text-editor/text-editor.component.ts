@@ -8,11 +8,10 @@ import { QuillModule, QuillModules } from 'ngx-quill';
 // https://github.com/KillerCodeMonkey/ngx-quill
 
 @Component({
-  selector: 'app-text-editor',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, QuillModule, ForgeButtonModule, ForgeToolbarModule],
-  templateUrl: './text-editor.component.html',
-  styleUrls: ['./text-editor.component.scss']
+    selector: 'app-text-editor',
+    imports: [CommonModule, ReactiveFormsModule, QuillModule, ForgeButtonModule, ForgeToolbarModule],
+    templateUrl: './text-editor.component.html',
+    styleUrls: ['./text-editor.component.scss']
 })
 export class TextEditorComponent {
   public elementRef = inject(ElementRef);
@@ -45,6 +44,7 @@ export class TextEditorComponent {
     this.elementRef.nativeElement.querySelectorAll('.ql-toolbar [role="button"]').forEach((el: HTMLElement) => (el.tabIndex = -1));
   }
 
+  /* eslint @typescript-eslint/no-unused-expressions: 0 */
   public onToggleState() {
     this.textEditorFormControl.disabled ? this.textEditorFormControl.enable() : this.textEditorFormControl.disable();
   }

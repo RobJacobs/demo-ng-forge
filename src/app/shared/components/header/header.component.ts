@@ -5,11 +5,10 @@ import { ForgeAppBarModule, ForgeIconButtonModule, ForgeIconModule, ForgeLinearP
 import { AppCacheService } from 'src/app/app-cache.service';
 
 @Component({
-  selector: 'app-header',
-  standalone: true,
-  imports: [CommonModule, ForgeAppBarModule, ForgeIconModule, ForgeIconButtonModule, ForgeLinearProgressModule, ForgeTooltipModule],
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+    selector: 'app-header',
+    imports: [CommonModule, ForgeAppBarModule, ForgeIconModule, ForgeIconButtonModule, ForgeLinearProgressModule, ForgeTooltipModule],
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
   public appCache = inject(AppCacheService);

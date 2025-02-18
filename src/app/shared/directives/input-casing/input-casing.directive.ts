@@ -1,4 +1,4 @@
-import { Directive, HostListener, forwardRef, Input, Renderer2, ElementRef } from '@angular/core';
+import { Directive, HostListener, forwardRef, Renderer2, ElementRef, input } from '@angular/core';
 import { DefaultValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Directive({
@@ -18,15 +18,11 @@ export class InputCasingDirective extends DefaultValueAccessor {
     const target = event.target as HTMLInputElement;
     const start = target.selectionStart;
 
-    target.value = this.#casing === 'lower' ? target.value.toLowerCase() : target.value.toUpperCase();
+    target.value = this.appInputCasing() === 'lower' ? target.value.toLowerCase() : target.value.toUpperCase();
     target.setSelectionRange(start, start);
 
     this.onChange(target.value);
   }
 
-  #casing: 'upper' | 'lower' = 'upper';
-  @Input()
-  public set appInputCasing(value: 'upper' | 'lower') {
-    this.#casing = value;
-  }
+  public readonly appInputCasing = input<'upper' | 'lower'>('upper');
 }

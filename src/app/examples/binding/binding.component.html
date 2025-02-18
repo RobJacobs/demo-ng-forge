@@ -1,6 +1,6 @@
 <div class="two-way-binding">
   <forge-text-field>
-    <input type="text" id="examples--binding--name" [(ngModel)]="name" />
+    <input type="text" id="examples--binding--name" [(ngModel)]="name" autocomplete="off" />
     <label for="examples--binding--name" slot="label">Parent component</label>
   </forge-text-field>
   <app-examples-binding-child [(name)]="name"></app-examples-binding-child>

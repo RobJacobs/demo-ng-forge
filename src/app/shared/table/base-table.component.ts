@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { isDefined } from '@tylertech/forge-core';
-import { BaseComponentDelegate, FormFieldComponentDelegate, IColumnConfiguration, SortDirection } from '@tylertech/forge';
+import { isArray, isDefined } from '@tylertech/forge-core';
+import { FormFieldComponentDelegate, IColumnConfiguration, IPaginatorChangeEventData, ITableFilterEventData, ITableSortEventData, ITableSortMultipleEventData, SortDirection } from '@tylertech/forge';
 import { IFilterParameter } from 'src/app/shared/interfaces/filter.interface';
 
 @Injectable()
@@ -19,9 +19,10 @@ export abstract class BaseTableComponent {
       .filter((c) => c.initialSort || isDefined(c.sortDirection))
       .forEach((c) => {
         c.initialSort = false;
-        c.sortDirection = undefined;
+        c.sortDirection = SortDirection.Unset;
       });
-    if (this.filterCache?.sort?.property.length) {
+
+    if (this.filterCache?.sort?.property.length && this.filterCache.sort.direction !== SortDirection.Unset) {
       const column = this.tableColumns.find((c) => c.property === this.filterCache?.sort?.property) as IColumnConfiguration;
       if (isDefined(column)) {
         column.sortDirection = this.filterCache?.sort?.direction;
@@ -47,35 +48,41 @@ export abstract class BaseTableComponent {
     return this.tableColumns.findIndex((c) => c.property === property);
   }
 
-  public onTableSort(sort: { columnIndex: number; direction: SortDirection }) {
+  public onTableSort(event: CustomEvent<ITableSortEventData | ITableSortMultipleEventData>) {
+    let sort = {} as ITableSortEventData;
+    if (isArray(event.detail)) {
+      sort = (event.detail as ITableSortMultipleEventData)[0];
+    } else {
+      sort = event.detail as ITableSortEventData;
+    }
     const columnProperty = this.getColumnFromEventIndex(sort.columnIndex).property as string;
     this.filterCache.sort = { property: columnProperty, direction: sort.direction };
     this.filterCache.skip = 0;
     this.getRecords();
   }
 
-  public onTablePaginatorChange(detail: { pageIndex: number; pageSize: number }) {
-    this.filterCache.skip = detail.pageIndex * detail.pageSize;
-    this.filterCache.take = detail.pageSize;
+  public onTablePaginatorChange(event: CustomEvent<IPaginatorChangeEventData>) {
+    this.filterCache.skip = event.detail.pageIndex * event.detail.pageSize;
+    this.filterCache.take = event.detail.pageSize;
     this.getRecords();
   }
 
-  public onTableFilter(detail: { value: string; columnIndex: number }) {
-    detail.value = detail.value?.trim();
-    const column = this.getColumnFromEventIndex(detail.columnIndex);
+  public onTableFilter(event: CustomEvent<ITableFilterEventData>) {
+    const value = event.detail.value?.trim();
+    const column = this.getColumnFromEventIndex(event.detail.columnIndex);
     if (column?.property?.length) {
       const filterIndex = this.filterCache.filters?.findIndex((f) => f.property === column.property) as number;
       if (filterIndex !== -1) {
-        if (!detail.value?.length) {
+        if (!value?.length) {
           this.filterCache.filters?.splice(filterIndex, 1);
         } else {
-          this.filterCache.filters![filterIndex].value = detail.value;
+          this.filterCache.filters![filterIndex].value = value;
         }
-      } else if (detail.value.length) {
+      } else if (value.length) {
         if (!this.filterCache.filters?.length) {
-          this.filterCache.filters = [{ property: column.property, value: detail.value, label: column.header }];
+          this.filterCache.filters = [{ property: column.property, value: value }];
         } else {
-          this.filterCache.filters.push({ property: column.property, value: detail.value, label: column.header });
+          this.filterCache.filters.push({ property: column.property, value: value });
         }
       }
       this.getRecords();

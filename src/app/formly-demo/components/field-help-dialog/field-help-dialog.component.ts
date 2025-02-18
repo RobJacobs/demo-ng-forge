@@ -16,11 +16,10 @@ export interface IFieldHelpDialogConfig {
 }
 
 @Component({
-  selector: 'app-formly-field-help-dialog',
-  templateUrl: './field-help-dialog.component.html',
-  styleUrls: ['./field-help-dialog.component.scss'],
-  standalone: true,
-  imports: [CommonModule, ForgeIconButtonModule, ForgeIconModule, ForgePageStateModule, ForgePaginatorModule, ForgeScaffoldModule, ForgeSkeletonModule, ForgeTableModule, ForgeToolbarModule]
+    selector: 'app-formly-field-help-dialog',
+    templateUrl: './field-help-dialog.component.html',
+    styleUrls: ['./field-help-dialog.component.scss'],
+    imports: [CommonModule, ForgeIconButtonModule, ForgeIconModule, ForgePageStateModule, ForgePaginatorModule, ForgeScaffoldModule, ForgeSkeletonModule, ForgeTableModule, ForgeToolbarModule]
 })
 export class FieldHelpDialogComponent {
   public dialogConfig = inject<IFieldHelpDialogConfig>(DIALOG_DATA);

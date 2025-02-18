@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
@@ -14,11 +14,10 @@ import { IProfile } from 'src/app/shared/interfaces/person.interface';
 import { ProfileCacheService } from './profile-cache.service';
 
 @Component({
-  selector: 'app-profile',
-  standalone: true,
-  imports: [CommonModule, RouterOutlet, ReactiveFormsModule, ForgeButtonModule, ForgeIconModule, ForgeTabBarModule, ForgeTabModule, ForgeToolbarModule, CallbackPipe],
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+    selector: 'app-profile',
+    imports: [CommonModule, RouterOutlet, ReactiveFormsModule, ForgeButtonModule, ForgeIconModule, ForgeTabBarModule, ForgeTabModule, ForgeToolbarModule, CallbackPipe],
+    templateUrl: './profile.component.html',
+    styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent {
   private router = inject(Router);

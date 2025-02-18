@@ -3,11 +3,10 @@ import { RouterOutlet } from '@angular/router';
 import { CardComponent } from '../shared/components/card/card.component';
 
 @Component({
-  selector: 'app-test',
-  standalone: true,
-  imports: [RouterOutlet],
-  templateUrl: './test.component.html',
-  styleUrls: ['./test.component.scss']
+    selector: 'app-test',
+    imports: [RouterOutlet],
+    templateUrl: './test.component.html',
+    styleUrls: ['./test.component.scss']
 })
 export class TestComponent implements AfterViewInit {
   private elementRef = inject(ElementRef);

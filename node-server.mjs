@@ -1,16 +1,13 @@
 // https://nodejs.org/api/http.html
-// import * as http from 'node:http';
-// import * as url from 'node:url';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const http = require('http');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const url = require('url');
+import * as http from 'node:http';
+import * as url from 'node:url';
+import { WebSocketServer } from 'ws';
 
 const sleep = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
-const server = http.createServer((request, response) => {
+const httpServer = http.createServer((request, response) => {
   const requestPath = url.parse(request.url).pathname;
 
   // request events
@@ -71,6 +68,31 @@ const server = http.createServer((request, response) => {
   }
 });
 
-server.listen(5000);
+httpServer.listen(5000);
 
 console.log('Node.js web server at port 5000 is running...');
+
+const webSocketServer = new WebSocketServer({ port: 5001 });
+let webSockets = [];
+
+webSocketServer.on('connection', (socket) => {
+  console.log('connection opened');
+  webSockets.push(socket);
+
+  socket.on('message', (value) => {
+    console.log(JSON.parse(value));
+    sleep(3000).then(() => {
+      webSockets.forEach(s => {
+        console.log('sending message');
+        s.send(JSON.stringify({ data: 'message from backend', date: new Date() }));
+      });
+    });
+  });
+
+  socket.on('close', () => {
+    webSockets = webSockets.filter(s => s !== socket);
+    console.log('connection closed');
+  });
+});
+
+console.log('Node.js web socket server at port 5001 is running...');

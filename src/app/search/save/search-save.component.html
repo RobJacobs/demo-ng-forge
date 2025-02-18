@@ -1,5 +1,5 @@
 <app-dialog-template dialogTitle="Save search" (dialogClose)="onCancel()">
-  <form slot="body" class="form-grid" novalidate autocomplete="off" [formGroup]="formGroup">
+  <form class="form-grid" novalidate autocomplete="off" [formGroup]="formGroup">
     <forge-text-field required [appFormControlInvalid]="formGroup.controls.name">
       <input type="text" id="search-save--name" formControlName="name" autofocus />
       <label for="search-save--name" slot="label">Name</label>
@@ -16,7 +16,7 @@
   </form>
 
   <ng-container app-dialog-footer>
-    <forge-button slot="end" variant="outlined" (click)="onCancel()"> Cancel </forge-button>
-    <forge-button slot="end" variant="raised" (click)="onSave()" [disabled]="formGroup.invalid || !formGroup.dirty"> Save </forge-button>
+    <forge-button slot="end" variant="outlined" (click)="onCancel()">Cancel</forge-button>
+    <forge-button slot="end" variant="raised" (click)="onSave()" [disabled]="formGroup.invalid || !formGroup.dirty">Save</forge-button>
   </ng-container>
 </app-dialog-template>

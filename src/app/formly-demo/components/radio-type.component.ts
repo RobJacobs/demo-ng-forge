@@ -5,8 +5,8 @@ import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
 import { ForgeRadioGroupModule, ForgeRadioModule } from '@tylertech/forge-angular';
 
 @Component({
-  selector: 'app-formly-radio',
-  template: `
+    selector: 'app-formly-radio',
+    template: `
     @if (props.label) {
       <label [attr.for]="id" slot="label">{{ props.label }}</label>
     }
@@ -25,8 +25,8 @@ import { ForgeRadioGroupModule, ForgeRadioModule } from '@tylertech/forge-angula
       </div>
     }
   `,
-  styles: [
-    `
+    styles: [
+        `
       :host {
         display: block;
       }
@@ -48,10 +48,9 @@ import { ForgeRadioGroupModule, ForgeRadioModule } from '@tylertech/forge-angula
         color: var(--forge-theme-error);
       }
     `
-  ],
-  imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeRadioModule, ForgeRadioGroupModule],
-  standalone: true,
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    ],
+    imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeRadioModule, ForgeRadioGroupModule],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class RadioTypeComponent extends FieldType<FieldTypeConfig> {
   // @HostBinding('attr.role')

@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { isDefined } from '@tylertech/forge-core';
@@ -31,7 +31,6 @@ import { SearchSaveComponent } from './save/search-save.component';
 
 @Component({
   selector: 'app-search',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -58,8 +57,7 @@ export class SearchComponent implements OnInit {
   private toastService = inject(ToastService);
   private dataService = inject(AppDataService);
 
-  @ViewChild('searchesPopover', { static: false })
-  private searchesPopover?: PopoverDirective;
+  private readonly searchesPopover = viewChild<PopoverDirective>('searchesPopover');
   private storageKey = 'search-searches';
   private operatorPopover?: PopoverDirective;
 
@@ -181,7 +179,7 @@ export class SearchComponent implements OnInit {
 
   public onSearchAction(event: CustomEvent, action: string, id: number) {
     event.stopPropagation();
-    this.searchesPopover?.close();
+    this.searchesPopover()?.close();
 
     if (!isDefined(id)) {
       this.searchCache.activeSearchId = undefined;

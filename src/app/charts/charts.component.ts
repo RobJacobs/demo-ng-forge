@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ForgeButtonModule, ForgeOptionModule, ForgeSelectModule, ForgeTabBarModule, ForgeTabModule, ForgeToolbarModule } from '@tylertech/forge-angular';
@@ -20,16 +20,13 @@ export enum ChartTypes {
 
 @Component({
   selector: 'app-charts',
-  standalone: true,
   imports: [CommonModule, FormsModule, ForgeButtonModule, ForgeOptionModule, ForgeSelectModule, ForgeTabBarModule, ForgeTabModule, ForgeToolbarModule, D3ChartComponent, GoogleChartComponent],
   templateUrl: './charts.component.html',
   styleUrls: ['./charts.component.scss']
 })
 export class ChartsComponent {
-  @ViewChild(D3ChartComponent)
-  private d3Chart?: D3ChartComponent;
-  @ViewChild(GoogleChartComponent)
-  private googleChart?: GoogleChartComponent;
+  private readonly d3Chart = viewChild(D3ChartComponent);
+  private readonly googleChart = viewChild(GoogleChartComponent);
 
   public chartTypesEnum = ChartTypes;
   public chartType = ChartTypes.bar;
@@ -37,9 +34,9 @@ export class ChartsComponent {
 
   public onAction(action: 'add' | 'update' | 'delete') {
     if (this.activeTab === 0) {
-      this.d3Chart?.onAction(action);
+      this.d3Chart()?.onAction(action);
     } else if (this.activeTab === 1) {
-      this.googleChart?.onAction(action);
+      this.googleChart()?.onAction(action);
     }
   }
 

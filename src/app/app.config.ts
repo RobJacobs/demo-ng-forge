@@ -1,5 +1,5 @@
-import { APP_INITIALIZER, ApplicationConfig } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { ApplicationConfig, provideAppInitializer } from '@angular/core';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { routes } from './app.routes';
@@ -16,15 +16,5 @@ export function initializeAppFactory(): () => Promise<void> {
 }
 
 export const appConfig: ApplicationConfig = {
-  providers: [
-    provideHttpClient(withInterceptorsFromDi()),
-    provideRouter(routes),
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initializeAppFactory,
-      multi: true,
-      deps: []
-    },
-    interceptorProviders
-  ]
+  providers: [provideHttpClient(withInterceptorsFromDi()), provideRouter(routes, withComponentInputBinding()), provideAppInitializer(initializeAppFactory()), interceptorProviders]
 };

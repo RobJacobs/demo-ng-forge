@@ -6,9 +6,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { formlyDemoConstants } from './formly-demo.constants';
 
 @Component({
-  selector: 'app-formly-demo',
-  templateUrl: './formly-demo.component.html',
-  styleUrls: ['./formly-demo.component.scss']
+    selector: 'app-formly-demo',
+    templateUrl: './formly-demo.component.html',
+    styleUrls: ['./formly-demo.component.scss'],
+    standalone: false
 })
 export class FormlyDemoComponent implements OnInit {
   private changeDetectorRef = inject(ChangeDetectorRef);

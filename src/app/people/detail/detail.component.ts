@@ -11,11 +11,10 @@ import { PeopleCacheService } from '../people-cache.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-people-detail',
-  standalone: true,
-  imports: [CommonModule, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, ForgeLabelValueModule, ForgeToolbarModule],
-  templateUrl: './detail.component.html',
-  styleUrls: ['./detail.component.scss']
+    selector: 'app-people-detail',
+    imports: [CommonModule, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, ForgeLabelValueModule, ForgeToolbarModule],
+    templateUrl: './detail.component.html',
+    styleUrls: ['./detail.component.scss']
 })
 export class DetailComponent {
   private route = inject(ActivatedRoute);
