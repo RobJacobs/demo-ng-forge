@@ -1,13 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, ForgeTextFieldModule, ForgeToolbarModule } from '@tylertech/forge-angular';
+import { ForgeButtonModule, ForgeTextFieldModule, ForgeToolbarModule } from '@tylertech/forge-angular';
 import { Observable, tap, takeUntil } from 'rxjs';
 
 import { AppCacheService } from 'src/app/app-cache.service';
 import { AppDataService } from 'src/app/app-data.service';
+import { AppWebSocketService } from 'src/app/app-web-socket.service';
 
 @Component({
   selector: 'app-test-parent',
