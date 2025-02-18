@@ -1,16 +1,15 @@
 import { isDefined } from '@tylertech/forge-core';
-import { TableComponent, IMenuOption, MenuComponent } from '@tylertech/forge';
+import { TableComponent, IMenuOption, MenuComponent, ButtonVariant } from '@tylertech/forge';
 import { ViewContainerRef, ComponentRef, EmbeddedViewRef, Type } from '@angular/core';
 
 export class TableUtils {
-  public static createLinkButton(label: string | number, clickHandler: (event: Event) => void): HTMLButtonElement {
-    const linkElement = document.createElement('button');
-    linkElement.classList.add('forge-hyperlink');
-    linkElement.innerText = label.toString();
-    linkElement.type = 'button';
-    linkElement.style.minWidth = '36px';
-    linkElement.addEventListener('click', clickHandler);
-    return linkElement;
+  public static createButton(label: string, variant: ButtonVariant, clickHandler: (event: Event) => void): HTMLButtonElement {
+    const buttonElement = document.createElement('forge-button');
+    buttonElement.innerText = label;
+    buttonElement.setAttribute('variant', variant);
+    buttonElement.addEventListener('click', clickHandler);
+
+    return buttonElement as unknown as HTMLButtonElement;
   }
 
   public static createIconButton(icon: string, clickHandler: (event: Event) => void, title: string): HTMLElement {

@@ -38,18 +38,18 @@
         [ngClass]="{ 'app--hidden': !recordCount }"
         [data]="recordset"
         [columnConfigurations]="tableColumns"
-        (forge-table-sort)="onTableSort($any($event).detail)"
+        (forge-table-sort)="onTableSort($event)"
         select-key="id"
         (forge-table-select)="onPeopleSelected()"
         (forge-table-select-all)="onPeopleSelected()"
         fixed-headers="true"
         [filter]="viewCache.showFilter"
-        (forge-table-filter)="onTableFilter($event.detail)"
+        (forge-table-filter)="onTableFilter($event)"
       ></forge-table>
 
       @if (recordCount) {
         <div class="table__footer">
-          <forge-paginator class="app--flex-right" [pageIndex]="filterCache.skip / filterCache.take" [pageSize]="filterCache.take" [total]="recordCount" (forge-paginator-change)="onTablePaginatorChange($event.detail)"></forge-paginator>
+          <forge-paginator class="app--flex-right" [pageIndex]="filterCache.skip / filterCache.take" [pageSize]="filterCache.take" [total]="recordCount" (forge-paginator-change)="onTablePaginatorChange($event)"></forge-paginator>
         </div>
       }
     </div>
