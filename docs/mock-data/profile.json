@@ -1,0 +1,19 @@
+{
+  "id": 53,
+  "firstName": "Cletus",
+  "lastName": "Spuckler",
+  "gender": "M",
+  "occupation": "farmer",
+  "quote": "Hey Brandine, I done busted ma stankbone.",
+  "url": "https://simpsons.fandom.com/wiki/Cletus_Spuckler",
+  "email": "yokel@aol.com",
+  "phone": "(123) 456-7890",
+  "dateOfBirth": "1981-01-01T00:00:00.000Z",
+  "address": {
+    "name": "Cletus & Brandine Spuckler",
+    "street": "Rural Route 9",
+    "city": "Springfield",
+    "state": "NT",
+    "zip": "49007"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["input-type.component.ts"],
+  "sourcesContent": ["\n      :host {\n        display: block;\n      }\n\n      // forge-text-field {\n      //   --forge-text-field-height: 2rem;\n      // }\n\n      input[type='number']::-webkit-outer-spin-button,\n      input[type='number']::-webkit-inner-spin-button {\n        -webkit-appearance: none;\n        margin: 0;\n      }\n    "],
+  "mappings": "AACM,MACE,QAAA,MAOF,KAAA,CAAA,YAAA,4BAAA,KAAA,CAAA,YAAA,4BAEE,mBAAA,KAVF,OAWE",
+  "names": []
+}
