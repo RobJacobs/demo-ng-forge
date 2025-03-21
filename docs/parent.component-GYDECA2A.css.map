@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/test/parent/parent.component.scss"],
-  "sourcesContent": [":host {\r\n  display: grid;\r\n  grid-template-rows: auto 1fr;\r\n  overflow: hidden;\r\n  height: 100%;\r\n}\r\n\r\n.body {\r\n  overflow: auto;\r\n  padding: 24px;\r\n}\r\n"],
-  "mappings": "AAAA,MACE,QAAA,KACA,mBAAA,KAAA,IACA,SAAA,OACA,OAAA,KAGF,CAAA,KACE,SAAA,KARF,QASE",
-  "names": []
-}

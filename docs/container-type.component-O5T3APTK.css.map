@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["container-type.component.ts"],
-  "sourcesContent": ["\n      :host {\n        display: inline-block;\n      }\n\n      ::ng-deep {\n        .form-grid {\n          display: grid;\n          gap: 16px;\n        }\n\n        .form-vbox {\n          display: flex;\n          flex-direction: column;\n          row-gap: 16px;\n        }\n\n        .form-hbox {\n          display: flex;\n          flex-direction: row;\n          column-gap: 16px;\n        }\n\n        .form-group {\n          display: flex;\n          flex-direction: column;\n          row-gap: 16px;\n          border: 1px solid #e6e6e6;\n          border-radius: 4px;\n          padding: 16px;\n        }\n      }\n\n      .label {\n        padding: 8px;\n      }\n    "],
-  "mappings": "AACM,MACE,QAAA,aAIA,UAAA,CAAA,UACE,QAAA,KACA,IAAA,KAGF,UAAA,CAAA,UACE,QAAA,KACA,eAAA,OACA,QAAA,KAGF,UAAA,CAAA,UACE,QAAA,KACA,eAAA,IACA,WAAA,KAGF,UAAA,CAAA,WACE,QAAA,KACA,eAAA,OACA,QAAA,KACA,OAAA,IAAA,MAAA,QA1BJ,cA2BI,IA3BJ,QA4BI,KAIJ,CAAA,MAhCA,QAiCE",
-  "names": []
-}

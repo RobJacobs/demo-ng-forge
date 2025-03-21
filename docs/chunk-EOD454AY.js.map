@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/shared/pipes/callback.pipe.ts"],
-  "sourcesContent": ["import { Pipe, PipeTransform } from '@angular/core';\r\n\r\n@Pipe({\r\n  name: 'appCallback',\r\n  standalone: true\r\n})\r\nexport class CallbackPipe implements PipeTransform {\r\n  transform(value: any, callback: (value: any, ...args: any[]) => boolean, ...args: any[]): any {\r\n    return callback(value, ...args);\r\n  }\r\n}\r\n"],
-  "mappings": "yCAMA,IAAaA,GAAY,IAAA,CAAnB,MAAOA,CAAY,CACvBC,UAAUC,EAAYC,KAAsDC,EAAW,CACrF,OAAOD,EAASD,EAAO,GAAGE,CAAI,CAChC,iDAHWJ,EAAY,CAAA,mDAAZA,EAAYK,KAAA,GAAAC,WAAA,EAAA,CAAA,CAAA,SAAZN,CAAY,GAAA",
-  "names": ["CallbackPipe", "transform", "value", "callback", "args", "pure", "standalone"]
-}

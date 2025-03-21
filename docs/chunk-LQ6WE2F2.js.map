@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/shared/directives/auto-focus/auto-focus.directive.ts"],
-  "sourcesContent": ["import { AfterViewInit, Directive, ElementRef, booleanAttribute, inject, input } from '@angular/core';\r\n\r\n@Directive({\r\n  selector: '[appAutoFocus]',\r\n  standalone: true\r\n})\r\nexport class AutoFocusDirective implements AfterViewInit {\r\n  private element = inject(ElementRef);\r\n\r\n  public readonly appAutoFocus = input<boolean, unknown>(undefined, { transform: booleanAttribute });\r\n\r\n  public ngAfterViewInit() {\r\n    if (this.appAutoFocus() !== false) {\r\n      window.requestAnimationFrame(() => {\r\n        this.element.nativeElement.focus();\r\n      });\r\n    }\r\n  }\r\n}\r\n"],
-  "mappings": "yEAMA,IAAaA,GAAkB,IAAA,CAAzB,MAAOA,CAAkB,CAJ/BC,aAAA,CAKU,KAAAC,QAAUC,EAAOC,CAAU,EAEnB,KAAAC,aAAeC,EAAwBC,OAAW,CAAEC,UAAWC,CAAgB,CAAE,EAE1FC,iBAAe,CAChB,KAAKL,aAAY,IAAO,IAC1BM,OAAOC,sBAAsB,IAAK,CAChC,KAAKV,QAAQW,cAAcC,MAAK,CAClC,CAAC,CAEL,iDAXWd,EAAkB,CAAA,+BAAlBA,EAAkBe,UAAA,CAAA,CAAA,GAAA,eAAA,EAAA,CAAA,EAAAC,OAAA,CAAAX,aAAA,CAAA,EAAA,cAAA,CAAA,CAAA,CAAA,CAAA,SAAlBL,CAAkB,GAAA",
-  "names": ["AutoFocusDirective", "constructor", "element", "inject", "ElementRef", "appAutoFocus", "input", "undefined", "transform", "booleanAttribute", "ngAfterViewInit", "window", "requestAnimationFrame", "nativeElement", "focus", "selectors", "inputs"]
-}

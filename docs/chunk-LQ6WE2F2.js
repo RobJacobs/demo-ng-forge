@@ -1,2 +1,0 @@
-import{Da as i,Ea as o,ha as e,jb as s,yc as n}from"./chunk-5VCAQWVT.js";var f=(()=>{class t{constructor(){this.element=e(o),this.appAutoFocus=i(void 0,{transform:n})}ngAfterViewInit(){this.appAutoFocus()!==!1&&window.requestAnimationFrame(()=>{this.element.nativeElement.focus()})}static{this.\u0275fac=function(r){return new(r||t)}}static{this.\u0275dir=s({type:t,selectors:[["","appAutoFocus",""]],inputs:{appAutoFocus:[1,"appAutoFocus"]}})}}return t})();export{f as a};
-//# sourceMappingURL=chunk-LQ6WE2F2.js.map

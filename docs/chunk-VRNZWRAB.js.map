@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["projects/pets/src/lib/pets.config.ts"],
-  "sourcesContent": ["import { InjectionToken, Signal } from '@angular/core';\r\nimport { Routes } from '@angular/router';\r\n\r\nexport const PETS_SERVICE = new InjectionToken<IPetsService>('PetsService');\r\nexport const PETS_ROUTES: Routes = [\r\n  { path: '', loadComponent: () => import('./pets-main.component').then((m) => m.PetsMainComponent) }\r\n];\r\n\r\nexport interface IPetsService {\r\n  appCache: {\r\n    isBusy: Signal<boolean>;\r\n    layoutMode: 'sm' | 'md' | 'lg';\r\n    activeRoute: string[];\r\n    menu: {\r\n      open: boolean;\r\n    };\r\n  };\r\n}\r\n"],
-  "mappings": "yCAGO,IAAMA,EAAe,IAAIC,EAA6B,aAAa,EAC7DC,EAAsB,CACjC,CAAEC,KAAM,GAAIC,cAAeA,IAAM,OAAO,qBAAuB,EAAEC,KAAMC,GAAMA,EAAEC,iBAAiB,CAAC,CAAE",
-  "names": ["PETS_SERVICE", "InjectionToken", "PETS_ROUTES", "path", "loadComponent", "then", "m", "PetsMainComponent"]
-}

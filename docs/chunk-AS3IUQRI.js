@@ -1,9 +1,0 @@
-import{a as E}from"./chunk-Q65ABCTW.js";import{Rc as D,Sc as I,gc as b,k as _,nc as M,oc as y,pc as v,qc as F,qd as S,rd as T}from"./chunk-TDRYUBHM.js";import{$a as a,Gb as g,Ib as f,Jb as l,Qb as u,Rb as h,Zb as C,fa as r,ka as d,mb as p,pb as s,tb as c,xb as t,yb as o,zb as m}from"./chunk-UO34YWUS.js";var w=[[["","app-dialog-header",""]],"*",[["","app-dialog-footer",""]]],O=["[app-dialog-header]","*","[app-dialog-footer]"];function P(e,R){e&1&&(t(0,"forge-toolbar",5),l(1,2),o())}var X=(()=>{class e{constructor(){this.dialogRef=r(b),this.id=E.elementId("app-"),this.showFooter=!0,this.dialogRef.nativeElement.setAttribute("aria-labelledby",`${this.id}--title`)}onClose(){this.dialogRef.close()}static{this.\u0275fac=function(n){return new(n||e)}}static{this.\u0275cmp=d({type:e,selectors:[["app-dialog"]],inputs:{dialogTitle:"dialogTitle",showFooter:"showFooter"},standalone:!0,features:[C],ngContentSelectors:O,decls:10,vars:3,consts:[["slot","header",1,"header"],["slot","start",1,"forge-typography--heading4",3,"id"],["slot","end","aria-label","Close",1,"header__close",3,"click"],["name","close"],["slot","body",1,"body"],["slot","footer","inverted","true",1,"footer"]],template:function(n,i){n&1&&(f(w),t(0,"forge-scaffold")(1,"forge-toolbar",0)(2,"h2",1),u(3),o(),l(4),t(5,"forge-icon-button",2),g("click",function(){return i.onClose()}),m(6,"forge-icon",3),o()(),t(7,"div",4),l(8,1),o(),p(9,P,2,0,"forge-toolbar",5),o()),n&2&&(a(2),s("id",i.id+"--title"),a(),h(i.dialogTitle),a(6),c(i.showFooter?9:-1))},dependencies:[_,F,v,M,y,I,D,T,S],styles:[`[_nghost-%COMP%]{display:contents}.header__close[_ngcontent-%COMP%]{margin-right:-8px}.body[_ngcontent-%COMP%]{padding:16px}.footer[_ngcontent-%COMP%]::part(section-start), .footer[_ngcontent-%COMP%]::part(section-end){column-gap:16px}
-
-
-
-
-
-
-/*# sourceMappingURL=dialog.component-JQHL6XIL.css.map */`]})}}return e})();export{X as a};
-//# sourceMappingURL=chunk-AS3IUQRI.js.map

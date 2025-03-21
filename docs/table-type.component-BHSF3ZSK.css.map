@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["table-type.component.ts"],
-  "sourcesContent": ["\n      :host {\n        display: block;\n      }\n\n      .forge-table {\n        // --forge-table-theme-row-hover-background: transparent;\n\n        &-cell {\n          padding-right: 24px;\n          &:first-child {\n            padding-left: 0;\n          }\n          &:last-child {\n            padding-right: 0;\n          }\n          &__button {\n            width: 48px;\n          }\n        }\n\n        &-body {\n          &__cell {\n            padding-top: 8px;\n            padding-bottom: 8px;\n            vertical-align: top;\n\n            formly-field {\n              background-color: var(--forge-theme-surface);\n            }\n          }\n        }\n      }\n    "],
-  "mappings": "AACM,MACE,QAAA,MAMA,CAAA,iBACE,cAAA,KACA,CAFF,gBAEE,aACE,aAAA,EAEF,CALF,gBAKE,YACE,cAAA,EAEF,CAAA,yBACE,MAAA,KAKF,CAAA,uBACE,YAAA,IACA,eAAA,IACA,eAAA,IAEA,CALF,uBAKE,aACE,iBAAA,IAAA",
-  "names": []
-}

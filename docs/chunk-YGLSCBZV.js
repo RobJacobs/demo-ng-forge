@@ -1,9 +1,0 @@
-import{a as j}from"./chunk-DA33O62B.js";import{Qc as S,Rc as T,gc as M,k as b,mc as y,nc as v,oc as F,pc as I,pd as D,qd as E}from"./chunk-AWYXD4HD.js";import{Fb as g,Hb as u,Ib as l,Pb as h,Qb as C,Xb as _,Ya as r,ea as d,ja as s,mb as c,ob as p,sb as m,wb as n,xb as o,yb as f}from"./chunk-CFL2K3XP.js";var O=[[["","app-dialog-header",""]],"*",[["","app-dialog-footer",""]]],P=["[app-dialog-header]","*","[app-dialog-footer]"];function R(t,e){t&1&&(n(0,"forge-toolbar",5),l(1,2),o())}var X=(()=>{let e=class e{constructor(){this.dialogRef=d(M),this.id=j.elementId("app-"),this.showFooter=!0,this.dialogRef.nativeElement.setAttribute("aria-labelledby",`${this.id}--title`)}onClose(){this.dialogRef.close()}};e.\u0275fac=function(i){return new(i||e)},e.\u0275cmp=s({type:e,selectors:[["app-dialog"]],inputs:{dialogTitle:"dialogTitle",showFooter:"showFooter"},standalone:!0,features:[_],ngContentSelectors:P,decls:10,vars:3,consts:[["slot","header",1,"header"],["slot","start",1,"forge-typography--heading4",3,"id"],["slot","end","aria-label","Close",1,"header__close",3,"click"],["name","close"],["slot","body",1,"body"],["slot","footer","inverted","true",1,"footer"]],template:function(i,a){i&1&&(u(O),n(0,"forge-scaffold")(1,"forge-toolbar",0)(2,"h2",1),h(3),o(),l(4),n(5,"forge-icon-button",2),g("click",function(){return a.onClose()}),f(6,"forge-icon",3),o()(),n(7,"div",4),l(8,1),o(),c(9,R,2,0,"forge-toolbar",5),o()),i&2&&(r(2),p("id",a.id+"--title"),r(),C(a.dialogTitle),r(6),m(a.showFooter?9:-1))},dependencies:[b,I,F,y,v,T,S,E,D],styles:[`[_nghost-%COMP%]{display:contents}.header__close[_ngcontent-%COMP%]{margin-right:-8px}.body[_ngcontent-%COMP%]{padding:16px}.footer[_ngcontent-%COMP%]::part(section-start), .footer[_ngcontent-%COMP%]::part(section-end){column-gap:16px}
-
-
-
-
-
-
-/*# sourceMappingURL=dialog.component-JQHL6XIL.css.map */`]});let t=e;return t})();export{X as a};
-//# sourceMappingURL=chunk-YGLSCBZV.js.map

@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["radio-type.component.ts"],
-  "sourcesContent": ["\n      :host {\n        display: block;\n      }\n\n      [role='radiogroup'] {\n        margin-left: -8px;\n        display: flex;\n        column-gap: 16px;\n        flex-direction: column;\n      }\n\n      forge-radio {\n        &::part(container) {\n          padding: 4px;\n        }\n      }\n\n      .forge-typography--label1 {\n        color: var(--forge-theme-error);\n      }\n    "],
-  "mappings": "AACM,MACE,QAAA,MAGF,CAAA,iBACE,YAAA,KACA,QAAA,KACA,WAAA,KACA,eAAA,OAIA,WAAA,OAAA,WAZF,QAaI,IAIJ,CAAA,yBACE,MAAA,IAAA",
-  "names": []
-}
