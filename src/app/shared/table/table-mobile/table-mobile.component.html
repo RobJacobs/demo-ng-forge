@@ -1,0 +1,39 @@
+@if (columnConfigurations?.length) {
+  @for (row of data; track i; let i = $index, last = $last) {
+    @if (allowRowClick) {
+      <forge-button-area (click)="onTableRowClick(i)">
+        <button slot="button"></button>
+        <ng-container *ngTemplateOutlet="columnTemplate; context: { rowData: row, rowIndex: i }"></ng-container>
+      </forge-button-area>
+    } @else {
+      <ng-container *ngTemplateOutlet="columnTemplate; context: { rowData: row, rowIndex: i }"></ng-container>
+    }
+    @if (!last) {
+      <forge-divider></forge-divider>
+    }
+  }
+}
+
+<ng-template #columnTemplate let-rowData="rowData" let-rowIndex="rowIndex">
+  <div class="row">
+    @for (column of columnConfigurations; track ii; let ii = $index) {
+      @if (column.hidden !== true) {
+        <forge-label-value>
+          @if (column.header?.length) {
+            <div slot="label">{{ column.header }}</div>
+          }
+
+          @if (column.template) {
+            <app-table-mobile-template slot="value" [template]="column.template" [rowIndex]="rowIndex" [rowData]="rowData"></app-table-mobile-template>
+          } @else if (column.property?.length) {
+            @if (column.transform) {
+              <div slot="value">{{ column.transform(rowData[column.property]) }}</div>
+            } @else {
+              <div slot="value">{{ rowData[column.property] }}</div>
+            }
+          }
+        </forge-label-value>
+      }
+    }
+  </div>
+</ng-template>

@@ -53,8 +53,7 @@ import { FieldWrapper } from '@ngx-formly/core';
       }
     `
   ],
-  imports: [CommonModule],
-  standalone: true
+  imports: [CommonModule]
 })
 export class ContainerWrapperComponent extends FieldWrapper implements OnInit {
   private elementRef = inject(ElementRef);

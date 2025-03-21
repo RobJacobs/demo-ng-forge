@@ -7,8 +7,7 @@ import { Utils } from 'src/utils';
   selector: 'app-dialog-template',
   imports: [CommonModule, ForgeIconButtonModule, ForgeIconModule, ForgeScaffoldModule, ForgeToolbarModule],
   templateUrl: './dialog-template.component.html',
-  styleUrl: './dialog-template.component.scss',
-  standalone: true
+  styleUrl: './dialog-template.component.scss'
 })
 export class DialogTemplateComponent {
   private dialogRef = inject(DialogRef);

@@ -10,7 +10,6 @@ import { AppWebSocketService } from 'src/app/app-web-socket.service';
 
 @Component({
   selector: 'app-test-parent',
-  standalone: true,
   imports: [CommonModule, ForgeToolbarModule, ForgeTextFieldModule, ForgeButtonModule],
   templateUrl: './parent.component.html',
   styleUrls: ['./parent.component.scss']

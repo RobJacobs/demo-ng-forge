@@ -2,8 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { isDeepEqual } from '@tylertech/forge-core';
 
 @Pipe({
-  name: 'appArrayFind',
-  standalone: true
+  name: 'appArrayFind'
 })
 export class ArrayFindPipe implements PipeTransform {
   transform(value: string | number, source: any[], filterProperty: string, returnProperty?: string) {

@@ -9,10 +9,10 @@ export interface IBusyIndicatorData {
 }
 
 @Component({
-    selector: 'app-busy-indicator',
-    templateUrl: './busy-indicator.component.html',
-    styleUrl: './busy-indicator.component.scss',
-    imports: [CommonModule, ForgeLinearProgressModule, ForgeCircularProgressModule]
+  selector: 'app-busy-indicator',
+  templateUrl: './busy-indicator.component.html',
+  styleUrl: './busy-indicator.component.scss',
+  imports: [CommonModule, ForgeLinearProgressModule, ForgeCircularProgressModule]
 })
 export class BusyIndicatorComponent {
   public dialogConfig = inject<IBusyIndicatorData>(DIALOG_DATA);

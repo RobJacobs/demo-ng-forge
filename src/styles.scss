@@ -70,7 +70,6 @@ router-outlet {
 
       .app--form-control-invalid[slot='support-text'] {
         display: block;
-        color: var(--forge-theme-error);
       }
     }
   }

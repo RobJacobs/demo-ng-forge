@@ -4,8 +4,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { combineLatest, delay, distinctUntilChanged, fromEvent, map, startWith } from 'rxjs';
 
 @Directive({
-  selector: '[appFormControlInvalid]',
-  standalone: true
+  selector: '[appFormControlInvalid]'
 })
 export class FormControlInvalidDirective implements OnInit {
   private destroyRef = inject(DestroyRef);
@@ -15,6 +14,9 @@ export class FormControlInvalidDirective implements OnInit {
   public readonly control = input.required<AbstractControl>({ alias: 'appFormControlInvalid' });
 
   public ngOnInit() {
+    if (!this.elementRef.nativeElement.querySelector('*[slot="support-text"]:not(.app--form-control-invalid)')) {
+      this.elementRef.nativeElement.style.setProperty('--forge-field-support-text-margin-block', '0');
+    }
     const blur$ = fromEvent<FocusEvent>(this.elementRef.nativeElement, 'focusout').pipe(delay(0));
     const statusChanges$ = this.control().statusChanges.pipe(startWith(this.control().status));
 
@@ -28,9 +30,13 @@ export class FormControlInvalidDirective implements OnInit {
         if (shouldMarkInvalid) {
           this.renderer.setAttribute(this.elementRef.nativeElement, 'invalid', '');
           this.renderer.addClass(this.elementRef.nativeElement, 'app--form-control-invalid');
+          (this.elementRef.nativeElement as HTMLElement).style.removeProperty('--forge-field-support-text-margin-block');
         } else {
           this.renderer.removeAttribute(this.elementRef.nativeElement, 'invalid');
           this.renderer.removeClass(this.elementRef.nativeElement, 'app--form-control-invalid');
+          if (!this.elementRef.nativeElement.querySelector('*[slot="support-text"]:not(.app--form-control-invalid)')) {
+            this.elementRef.nativeElement.style.setProperty('--forge-field-support-text-margin-block', '0');
+          }
         }
       });
   }

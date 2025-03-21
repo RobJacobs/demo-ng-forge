@@ -11,7 +11,6 @@ export const CHECKBOX_THREE_STATE_VALUE_ACCESSOR: StaticProvider = {
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
   selector: 'forge-checkbox[formControlName],forge-checkbox[formControl],forge-checkbox[ngModel]',
-  standalone: true,
   providers: [CHECKBOX_THREE_STATE_VALUE_ACCESSOR]
 })
 export class CheckboxThreeStateDirective implements ControlValueAccessor {
