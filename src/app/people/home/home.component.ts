@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
 import { isArray } from '@tylertech/forge-core';
-import { CellAlign, IColumnConfiguration, TableComponent, TextFieldComponentDelegate } from '@tylertech/forge';
+import { CellAlign, DateRangeComponentDelegate, IColumnConfiguration, TableComponent, TextFieldComponentDelegate } from '@tylertech/forge';
 import {
   ForgeBadgeModule,
   ForgeButtonModule,
@@ -88,37 +88,58 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
       property: 'id',
       sortable: true,
       filter: true,
-      filterDelegate: new TextFieldComponentDelegate({ options: { label: 'Id', id: 'people--home--filter--id', attributes: { 'label-position': 'inset' } } })
+      filterDelegate: () => {
+        const delegate = new TextFieldComponentDelegate();
+        delegate.inputElement.setAttribute('aria-label', 'Dd');
+        return delegate;
+      }
     },
     {
       header: 'First',
       property: 'firstName',
       sortable: true,
       filter: true,
-      filterDelegate: new TextFieldComponentDelegate({ options: { label: 'First name', id: 'people--home--filter--first-name' } })
+      filterDelegate: () => {
+        const delegate = new TextFieldComponentDelegate();
+        delegate.inputElement.setAttribute('aria-label', 'First Nmae');
+        return delegate;
+      }
     },
     {
       header: 'Last',
       property: 'lastName',
       sortable: true,
       filter: true,
-      filterDelegate: new TextFieldComponentDelegate({ options: { label: 'Last name', id: 'people--home--filter--last-name' } })
+      filterDelegate: () => {
+        const delegate = new TextFieldComponentDelegate();
+        delegate.inputElement.setAttribute('aria-label', 'Last Nmae');
+        return delegate;
+      }
     },
     {
       header: 'Gender',
       property: 'gender',
       sortable: true,
       filter: true,
-      filterDelegate: new TextFieldComponentDelegate({ options: { label: 'Gender', id: 'people--home--filter--gender' } })
+      filterDelegate: () => {
+        const delegate = new TextFieldComponentDelegate();
+        delegate.inputElement.setAttribute('aria-label', 'Gender');
+        return delegate;
+      }
     },
     {
       header: 'Occupation',
       property: 'occupation',
       sortable: true,
       filter: true,
-      filterDelegate: new TextFieldComponentDelegate({ options: { label: 'Occupation', id: 'people--home--filter--occupation' } })
+      filterDelegate: () => {
+        const delegate = new TextFieldComponentDelegate();
+        delegate.inputElement.setAttribute('aria-label', 'Occupation');
+        return delegate;
+      }
     },
     {
+      header: 'Actions',
       align: CellAlign.Right,
       template: (rowIndex: number, cellElement: HTMLElement, data: any) => {
         this.ngZone.run(() => {

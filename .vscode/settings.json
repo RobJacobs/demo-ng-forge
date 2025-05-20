@@ -4,7 +4,8 @@
     "**/node_modules": true,
     "**/build": true,
     "**/.angular": true,
-    "**/docs": true
+    "**/docs": true,
+    "**/package-lock.json": true
   },
   "editor.formatOnSave": true,
   "editor.formatOnType": true,
