@@ -141,7 +141,7 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
     {
       header: 'Actions',
       align: CellAlign.Right,
-      template: (rowIndex: number, cellElement: HTMLElement, data: any) => {
+      template: (rowIndex: number, cellElement: HTMLElement, data: IPerson) => {
         this.ngZone.run(() => {
           cellElement.appendChild(TableUtils.createExpanderRow(rowIndex, this.peopleTable() as TableComponent, this.viewContainerRef, TableDetailComponent, 'Toggle table detail', data));
 
@@ -165,7 +165,7 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
               'keyboard_arrow_right',
               (event: Event) => {
                 this.ngZone.run(() => {
-                  this.router.navigate([`people/detail/${data.id}`]);
+                  this.router.navigate([`people/detail/${data.id}/${data.firstName}/${data.lastName}`]);
                 });
               },
               'View person details'

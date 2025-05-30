@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ForgeButtonModule, ForgeTextFieldModule, ForgeToolbarModule } from '@tylertech/forge-angular';
 import { Observable, tap, takeUntil } from 'rxjs';
@@ -14,12 +14,18 @@ import { AppWebSocketService } from 'src/app/app-web-socket.service';
   templateUrl: './parent.component.html',
   styleUrls: ['./parent.component.scss']
 })
-export class ParentComponent {
+export class ParentComponent implements OnInit {
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
   private appDataService = inject(AppDataService);
   private appWebSocketService = inject(AppWebSocketService);
   private appCache = inject(AppCacheService);
+
+  public ngOnInit() {
+    this.appDataService.pollingRequest('simpson').subscribe((r) => {
+      console.log(r);
+    });
+  }
 
   public onNavigate(route: string) {
     this.router.navigate([route], { state: { id: 0, name: 'name' } });

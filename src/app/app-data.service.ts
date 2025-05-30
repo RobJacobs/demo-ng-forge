@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpContext } from '@angular/common/http';
 import { isDefined, isNumber } from '@tylertech/forge-core';
-import { Observable } from 'rxjs';
-import { map, delay } from 'rxjs/operators';
+import { Observable, Subject, timer } from 'rxjs';
+import { map, delay, concatMap, take, timeout, filter } from 'rxjs/operators';
 
 import { SHOW_BUSY_INDICATOR } from 'src/app/shared/interceptors/busy.interceptor';
 import { IPerson, IProfile } from 'src/app/shared/interfaces/person.interface';
@@ -78,5 +78,33 @@ export class AppDataService {
 
   public getFile(fileName: string): Observable<Blob> {
     return this.httpClient.get(`mock-data/${fileName}`, { responseType: 'blob' });
+  }
+
+  public pollingRequest(name: string): Observable<IPerson> {
+    let id = 0;
+    const responseSub = new Subject<IPerson>();
+    timer(0, 100)
+      .pipe(
+        concatMap(() => {
+          id++;
+          return this.getPerson(id);
+        }),
+        filter((response) => {
+          return response.lastName?.toLowerCase() === name.toLowerCase() || response.firstName?.toLowerCase() === name.toLowerCase();
+        }),
+        take(1),
+        timeout(60000)
+      )
+      .subscribe({
+        next: (result) => {
+          responseSub.next(result);
+          responseSub.complete();
+        },
+        error: (error) => {
+          responseSub.error(error);
+          responseSub.complete();
+        }
+      });
+    return responseSub;
   }
 }

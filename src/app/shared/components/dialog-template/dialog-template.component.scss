@@ -1,7 +1,8 @@
 @use 'src/global' as *;
 
 :host {
-  display: contents;
+  display: block;
+  width: 100%;
 }
 
 forge-toolbar[slot='header'] {

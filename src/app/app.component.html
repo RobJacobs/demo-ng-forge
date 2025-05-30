@@ -16,7 +16,7 @@
 </forge-scaffold>
 
 <ng-template #menuTemplate>
-  <app-menu [options]="appCache.menu.options" [open]="appCache.menu.open" [selectedValue]="appCache.activeRoute"></app-menu>
+  <app-menu [options]="appCache.menu.options" [open]="appCache.menu.open" [selectedValue]="appCache.activeRoute | appCallback: mapRoutes"></app-menu>
   <forge-button slot="footer" class="menu-expander" [ngClass]="{ 'menu-expander--open': appCache.menu.open }" aria-label="Toggle menu" (click)="expand()">
     <forge-icon [name]="appCache.menu.open ? 'chevron_left' : 'chevron_right'"></forge-icon>
   </forge-button>

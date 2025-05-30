@@ -1,4 +1,5 @@
-import { Component, ElementRef, inject } from '@angular/core';
+import { Component, ElementRef, inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ActivatedRouteSnapshot, Router, ActivatedRoute, NavigationEnd, NavigationStart, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
@@ -6,26 +7,30 @@ import { AppCacheService } from './app-cache.service';
 import { ForgeButtonModule, ForgeDrawerModule, ForgeIconModule, ForgeMiniDrawerModule, ForgeScaffoldModule } from '@tylertech/forge-angular';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { MenuComponent } from './shared/components/menu/menu.component';
-import { CommonModule } from '@angular/common';
+import { CallbackPipe } from './shared/pipes/callback.pipe';
 
 @Component({
-    selector: 'app-root',
-    imports: [RouterOutlet, CommonModule, ForgeScaffoldModule, ForgeDrawerModule, ForgeButtonModule, ForgeIconModule, ForgeMiniDrawerModule, HeaderComponent, MenuComponent],
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss']
+  selector: 'app-root',
+  imports: [RouterOutlet, CommonModule, ForgeScaffoldModule, ForgeDrawerModule, ForgeButtonModule, ForgeIconModule, ForgeMiniDrawerModule, HeaderComponent, MenuComponent, CallbackPipe],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private elementRef = inject(ElementRef);
   public appCache = inject(AppCacheService);
 
-  constructor() {
+  public ngOnInit() {
     this.initRouteWatch();
     this.initLayoutWatch();
 
     // const param = encodeURIComponent(btoa(JSON.stringify({ property: 'value' })));
     // const decoded = JSON.parse(atob(decodeURIComponent(param)));
+  }
+
+  public mapRoutes(values: { path: string; params: any }[]): string[] {
+    return values?.map((r) => r.path) || [];
   }
 
   public expand() {
@@ -37,10 +42,13 @@ export class AppComponent {
 
   private initRouteWatch() {
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
-      const routes: string[] = [];
+      const routes: { path: string; params: any }[] = [];
       const parseRoute = (r: ActivatedRouteSnapshot) => {
         if (r.url.length) {
-          routes.push(r.url[0].path);
+          routes.push({
+            path: r.url[0].path,
+            params: Object.keys(r.params).length ? r.params : undefined
+          });
         }
         if (r.children) {
           r.children.forEach((rc) => parseRoute(rc));

@@ -8,7 +8,7 @@ export interface IAppCacheService {
     open: boolean;
     options: any[];
   };
-  activeRoute: string[];
+  activeRoute: { path: string; params: any }[];
 }
 
 @Injectable({
@@ -60,6 +60,6 @@ export class AppCacheService implements IAppCacheService {
       { label: 'PDF Viewer', value: 'pdf-viewer', icon: 'picture_as_pdf' }
     ]
   };
-  public activeRoute: string[] = [];
+  public activeRoute: { path: string; params: any }[] = [];
   public cancelHttpRequests = new Subject<void>();
 }
