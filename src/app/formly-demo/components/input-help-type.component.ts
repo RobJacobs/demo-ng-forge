@@ -9,10 +9,18 @@ import { IFilterParameter } from 'src/app/shared/interfaces/filter.interface';
 import { FormlyDemoService } from '../formly-demo.service';
 import { FieldHelpDialogComponent } from './field-help-dialog/field-help-dialog.component';
 @Component({
-    selector: 'app-formly-input-help',
-    template: `
+  selector: 'app-formly-input-help',
+  template: `
     <forge-text-field [required]="props.required" [invalid]="showError">
-      <input #input [id]="id" type="text" [placeholder]="props.placeholder" [readonly]="props.readonly" [formControl]="formControl" [formlyAttributes]="field" />
+      <input
+        #input
+        [id]="id"
+        type="text"
+        [placeholder]="props.placeholder"
+        [readonly]="props.readonly"
+        [formControl]="formControl"
+        [formlyAttributes]="field"
+      />
       @if (props.label) {
         <label [attr.for]="id" slot="label">{{ props.label }}</label>
       }
@@ -26,8 +34,8 @@ import { FieldHelpDialogComponent } from './field-help-dialog/field-help-dialog.
       }
     </forge-text-field>
   `,
-    styles: [
-        `
+  styles: [
+    `
       :host {
         display: block;
       }
@@ -36,9 +44,9 @@ import { FieldHelpDialogComponent } from './field-help-dialog/field-help-dialog.
       //   --forge-text-field-height: 2rem;
       // }
     `
-    ],
-    imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeIconButtonModule, ForgeIconModule, ForgeTextFieldModule],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  ],
+  imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeIconButtonModule, ForgeIconModule, ForgeTextFieldModule],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class InputHelpTypeComponent extends FieldType<FieldTypeConfig> implements OnInit, OnDestroy {
   private dialogService = inject(DialogService);
@@ -85,9 +93,11 @@ export class InputHelpTypeComponent extends FieldType<FieldTypeConfig> implement
           title: `Select a ${this.props.label}`
         }
       })
-      .afterClosed.subscribe((result) => {
-        if (result) {
-          this.formControl.setValue(result);
+      .afterClosed.subscribe({
+        next: (result) => {
+          if (result) {
+            this.formControl.setValue(result);
+          }
         }
       });
   }

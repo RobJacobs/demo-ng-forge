@@ -1,10 +1,37 @@
-import { AfterViewInit, Component, EmbeddedViewRef, Input, OnDestroy, TemplateRef, ViewContainerRef, forwardRef, ElementRef, Output, EventEmitter, HostListener, NgZone, inject, input, viewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EmbeddedViewRef,
+  Input,
+  OnDestroy,
+  TemplateRef,
+  ViewContainerRef,
+  forwardRef,
+  ElementRef,
+  Output,
+  EventEmitter,
+  HostListener,
+  NgZone,
+  inject,
+  input,
+  viewChild,
+  DestroyRef
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
 import { AutocompleteFilterCallback, IOption, IAutocompleteOptionGroup, AutocompleteSelectedTextBuilder, AutocompleteComponent } from '@tylertech/forge';
 import { isArray, isString, isDefined } from '@tylertech/forge-core';
-import { ForgeAutocompleteModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIconModule, ForgeListItemModule, ForgeListModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
+import {
+  ForgeAutocompleteModule,
+  ForgeDividerModule,
+  ForgeIconButtonModule,
+  ForgeIconModule,
+  ForgeListItemModule,
+  ForgeListModule,
+  ForgeTextFieldModule
+} from '@tylertech/forge-angular';
 import { ListDropdownHeaderBuilder } from '@tylertech/forge/esm/list-dropdown';
 
 import { Utils } from 'src/utils';
@@ -12,12 +39,29 @@ import { Utils } from 'src/utils';
   selector: 'app-autocomplete-range',
   templateUrl: './autocomplete-range.component.html',
   styleUrls: ['./autocomplete-range.component.scss'],
-  imports: [CommonModule, FormsModule, ForgeAutocompleteModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIconModule, ForgeListItemModule, ForgeListModule, ForgeTextFieldModule],
-  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => AutocompleteRangeComponent), multi: true }]
+  imports: [
+    CommonModule,
+    FormsModule,
+    ForgeAutocompleteModule,
+    ForgeDividerModule,
+    ForgeIconButtonModule,
+    ForgeIconModule,
+    ForgeListItemModule,
+    ForgeListModule,
+    ForgeTextFieldModule
+  ],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => AutocompleteRangeComponent),
+      multi: true
+    }
+  ]
 })
 export class AutocompleteRangeComponent implements ControlValueAccessor, AfterViewInit, OnDestroy {
   private ngZone = inject(NgZone);
   private viewContainerRef = inject(ViewContainerRef);
+  private destroyRef = inject(DestroyRef);
 
   @HostListener('focusout', ['$event'])
   public autocompleteBlur() {
@@ -56,14 +100,16 @@ export class AutocompleteRangeComponent implements ControlValueAccessor, AfterVi
     return new Promise((resolve, reject) => {
       const optionFilter = this.optionFilter();
       if (optionFilter) {
-        optionFilter(this.filter).subscribe({
-          next: (response) => {
-            const options: IOption[] = [];
-            response.forEach((o) => (isArray(o.value) ? this.rangeOptions.push(o) : options.push(o)));
-            resolve(options);
-          },
-          error: () => reject()
-        });
+        optionFilter(this.filter)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: (response) => {
+              const options: IOption[] = [];
+              response.forEach((o) => (isArray(o.value) ? this.rangeOptions.push(o) : options.push(o)));
+              resolve(options);
+            },
+            error: () => reject()
+          });
       }
     });
   };
@@ -104,7 +150,10 @@ export class AutocompleteRangeComponent implements ControlValueAccessor, AfterVi
       values.forEach((o) => {
         if (isArray(o) || isArray((o as IOption).value)) {
           const rangeOption = isDefined((o as IOption).value) ? (o as IOption).value : o;
-          this.rangeOptions.push({ label: `${rangeOption[0]} to ${rangeOption[1]}`, value: rangeOption });
+          this.rangeOptions.push({
+            label: `${rangeOption[0]} to ${rangeOption[1]}`,
+            value: rangeOption
+          });
         } else {
           options.push(o as IOption);
         }
@@ -167,7 +216,12 @@ export class AutocompleteRangeComponent implements ControlValueAccessor, AfterVi
 
     this.rangeMessage = undefined;
 
-    const label = this.rangeMin?.length && this.rangeMax?.length ? `${this.rangeMin} to ${this.rangeMax}` : this.rangeMin?.length ? `Greater than ${this.rangeMin}` : `Less than ${this.rangeMax}`;
+    const label =
+      this.rangeMin?.length && this.rangeMax?.length
+        ? `${this.rangeMin} to ${this.rangeMax}`
+        : this.rangeMin?.length
+          ? `Greater than ${this.rangeMin}`
+          : `Less than ${this.rangeMax}`;
 
     this.rangeOptions.push({ label, value: [this.rangeMin, this.rangeMax] });
     this.emitChangeEvents();

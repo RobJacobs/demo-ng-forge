@@ -8,8 +8,8 @@ import { isValid as isValidDate } from 'date-fns';
 
 import { FormlyDemoService } from '../formly-demo.service';
 @Component({
-    selector: 'app-formly-date-picker',
-    template: `
+  selector: 'app-formly-date-picker',
+  template: `
     <forge-date-picker [max]="$any(props.max)" [min]="$any(props.min)">
       <forge-text-field [required]="props.required" [invalid]="showError">
         <input [id]="id" type="text" [placeholder]="props.placeholder" [readonly]="props.readonly" [formControl]="formControl" [formlyAttributes]="field" />
@@ -24,8 +24,8 @@ import { FormlyDemoService } from '../formly-demo.service';
       </forge-text-field>
     </forge-date-picker>
   `,
-    styles: [
-        `
+  styles: [
+    `
       :host {
         display: block;
       }
@@ -34,9 +34,9 @@ import { FormlyDemoService } from '../formly-demo.service';
       //   --forge-text-field-height: 2rem;
       // }
     `
-    ],
-    imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeDatePickerModule, ForgeTextFieldModule],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  ],
+  imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeDatePickerModule, ForgeTextFieldModule],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class DatePickerTypeComponent extends FieldType<FieldTypeConfig> implements OnInit, OnDestroy {
   private moduleService = inject(FormlyDemoService);

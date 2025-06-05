@@ -7,7 +7,12 @@ export class IconsCacheService {
   public iconOptions?: IOption[];
   constructor() {
     this.iconOptions = Object.values(tylerIconsModule).map((icon: { name: string; data: string }) => {
-      return { label: icon.name, value: icon.name, leadingIcon: icon.name, leadingIconType: 'component' };
+      return {
+        label: icon.name,
+        value: icon.name,
+        leadingIcon: icon.name,
+        leadingIconType: 'component'
+      };
     });
     IconRegistry.define(Object.values(tylerIconsModule));
   }

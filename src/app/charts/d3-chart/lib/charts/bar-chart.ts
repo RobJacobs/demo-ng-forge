@@ -33,7 +33,9 @@ export class BarChartService {
           : undefined;
 
       const valueFormat = config.valueFormat ? format(config.valueFormat) : config.valueDateFormat ? timeFormat(config.valueDateFormat) : undefined;
-      const valueTickText = isArray(config.valueTickValues) ? config.valueTickValues : config.data.map((d) => (isDefined(valueFormat) ? (valueFormat as any)(d.value) : d.value.toString()));
+      const valueTickText = isArray(config.valueTickValues)
+        ? config.valueTickValues
+        : config.data.map((d) => (isDefined(valueFormat) ? (valueFormat as any)(d.value) : d.value.toString()));
       const barPadding = isDefined(config.barPadding) ? (config.barPadding as number) : 20;
       const barWidth = isDefined(config.barWidth) ? (config.barWidth as number) : 20;
       const chartMargin = {
@@ -92,7 +94,9 @@ export class BarChartService {
         .select(`g.${CHART_CONSTANTS.classes.CHART_YAXIS}`)
         .attr('transform', `translate(${chartMargin.left}, ${chartMargin.top})`)
         .call(yAxis as any); // TODO
-      container.select(`g.${CHART_CONSTANTS.classes.CHART_XAXIS}`).attr('transform', `translate(${chartMargin.left}, ${chartSize.height - chartMargin.bottom})`);
+      container
+        .select(`g.${CHART_CONSTANTS.classes.CHART_XAXIS}`)
+        .attr('transform', `translate(${chartMargin.left}, ${chartSize.height - chartMargin.bottom})`);
       if (isArray(config.categoryTickValues) && config.categoryTickValues?.length) {
         const xAxis = axisBottom(
           scaleBand()

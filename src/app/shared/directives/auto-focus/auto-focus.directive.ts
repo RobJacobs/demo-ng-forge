@@ -6,7 +6,9 @@ import { AfterViewInit, Directive, ElementRef, booleanAttribute, inject, input }
 export class AutoFocusDirective implements AfterViewInit {
   private element = inject(ElementRef);
 
-  public readonly appAutoFocus = input<boolean, unknown>(undefined, { transform: booleanAttribute });
+  public readonly appAutoFocus = input<boolean, unknown>(undefined, {
+    transform: booleanAttribute
+  });
 
   public ngAfterViewInit() {
     if (this.appAutoFocus() !== false) {

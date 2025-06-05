@@ -9,17 +9,29 @@ import { ForgeAutocompleteModule, ForgeButtonModule, ForgeDividerModule, ForgeIc
 import { ExamplesService, IRecord } from '../examples.service';
 
 @Component({
-    selector: 'app-examples-autocomplete',
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, ForgeAutocompleteModule, ForgeButtonModule, ForgeDividerModule, ForgeIconModule, ForgeTextFieldModule],
-    templateUrl: './autocomplete.component.html',
-    styleUrls: ['./autocomplete.component.scss']
+  selector: 'app-examples-autocomplete',
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ForgeAutocompleteModule,
+    ForgeButtonModule,
+    ForgeDividerModule,
+    ForgeIconModule,
+    ForgeTextFieldModule
+  ],
+  templateUrl: './autocomplete.component.html',
+  styleUrls: ['./autocomplete.component.scss']
 })
 export class AutocompleteComponent {
   public moduleService = inject(ExamplesService);
 
   public formGroup = new FormGroup({
     autocomplete01: new FormControl(1),
-    autocomplete02: new FormControl({ value: { id: 2, code: '002', description: 'Item 002' }, label: 'Item 002' }),
+    autocomplete02: new FormControl({
+      value: { id: 2, code: '002', description: 'Item 002' },
+      label: 'Item 002'
+    }),
     autocomplete03: new FormControl([3, 4, 5]),
     autocomplete04: new FormControl(),
     autocomplete05: new FormControl()
@@ -46,9 +58,13 @@ export class AutocompleteComponent {
 
   public singleSelectPrimitiveFilter: AutocompleteFilterCallback = (filterText: string, value: string) => {
     if (value) {
-      return lastValueFrom(this.moduleService.getSingleSelectOptions(undefined, value).pipe(map((result) => result.map((d) => ({ value: d.id, label: d.description })))));
+      return lastValueFrom(
+        this.moduleService.getSingleSelectOptions(undefined, value).pipe(map((result) => result.map((d) => ({ value: d.id, label: d.description }))))
+      );
     } else {
-      return lastValueFrom(this.moduleService.getSingleSelectOptions(filterText).pipe(map((result) => result.map((d) => ({ value: d.id, label: d.description })))));
+      return lastValueFrom(
+        this.moduleService.getSingleSelectOptions(filterText).pipe(map((result) => result.map((d) => ({ value: d.id, label: d.description }))))
+      );
     }
   };
 
@@ -56,7 +72,9 @@ export class AutocompleteComponent {
     if (value) {
       return [{ label: value.label, value }];
     } else {
-      return lastValueFrom(this.moduleService.getSingleSelectOptions(filterText).pipe(map((result) => result.map((d) => ({ label: d.description, value: d })))));
+      return lastValueFrom(
+        this.moduleService.getSingleSelectOptions(filterText).pipe(map((result) => result.map((d) => ({ label: d.description, value: d }))))
+      );
     }
   };
 
@@ -64,7 +82,17 @@ export class AutocompleteComponent {
     if (value) {
       return [];
     } else {
-      return lastValueFrom(this.moduleService.getMutlipleSelectOptions(filterText, this.formGroup.value.autocomplete03).pipe(map((result) => result.map((d: IRecord) => ({ value: d.id, label: d.description })) as IOption[])));
+      return lastValueFrom(
+        this.moduleService.getMutlipleSelectOptions(filterText, this.formGroup.value.autocomplete03).pipe(
+          map(
+            (result) =>
+              result.map((d: IRecord) => ({
+                value: d.id,
+                label: d.description
+              })) as IOption[]
+          )
+        )
+      );
     }
   };
 

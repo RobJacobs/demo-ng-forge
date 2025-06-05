@@ -7,7 +7,15 @@ import * as IMask from 'imask';
 import { IMaskDirective } from 'angular-imask';
 import { CALENDAR_CONSTANTS, CalendarComponent, ICalendarDateSelectEventData, IPopoverToggleEventData, mergeDateWithTime } from '@tylertech/forge';
 import { isDefined } from '@tylertech/forge-core';
-import { ForgeCalendarModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIconModule, ForgePopoverModule, ForgeTextFieldModule, ForgeTimePickerModule } from '@tylertech/forge-angular';
+import {
+  ForgeCalendarModule,
+  ForgeDividerModule,
+  ForgeIconButtonModule,
+  ForgeIconModule,
+  ForgePopoverModule,
+  ForgeTextFieldModule,
+  ForgeTimePickerModule
+} from '@tylertech/forge-angular';
 
 import { Utils } from 'src/utils';
 
@@ -15,8 +23,25 @@ import { Utils } from 'src/utils';
   selector: 'app-date-time',
   templateUrl: './date-time.component.html',
   styleUrls: ['./date-time.component.scss'],
-  imports: [CommonModule, ReactiveFormsModule, IMaskDirective, ForgeCalendarModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIconModule, ForgePopoverModule, ForgeTextFieldModule, ForgeTimePickerModule],
-  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DateTimeComponent), multi: true }]
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    IMaskDirective,
+    ForgeCalendarModule,
+    ForgeDividerModule,
+    ForgeIconButtonModule,
+    ForgeIconModule,
+    ForgePopoverModule,
+    ForgeTextFieldModule,
+    ForgeTimePickerModule
+  ],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => DateTimeComponent),
+      multi: true
+    }
+  ]
 })
 export class DateTimeComponent implements OnInit, ControlValueAccessor {
   private readonly dateTimeInputElementRef = viewChild<ElementRef<HTMLInputElement>>('dateTimeInput');
@@ -72,20 +97,21 @@ export class DateTimeComponent implements OnInit, ControlValueAccessor {
   public onChange = (fn: any) => {};
   public onTouched = () => {};
 
-  constructor() {
-    this.dateTime.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
-      this.onChange(value);
-    });
-
-    this.time.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
-      const date = dateParse(this.mask!.value.substring(0, 10), 'MM/dd/yyyy', new Date());
-      if (isDefined(value) && dateIsValid(date)) {
-        this.dateTime.setValue(mergeDateWithTime(date, value as string, this.timePrecision === 's'));
+  public ngOnInit() {
+    this.dateTime.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (value) => {
+        this.onChange(value);
       }
     });
-  }
 
-  public ngOnInit() {
+    this.time.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (value) => {
+        const date = dateParse(this.mask!.value.substring(0, 10), 'MM/dd/yyyy', new Date());
+        if (isDefined(value) && dateIsValid(date)) {
+          this.dateTime.setValue(mergeDateWithTime(date, value as string, this.timePrecision === 's'));
+        }
+      }
+    });
     if (!this.mask) {
       this.mask = this.buildDateTimeMask();
     }
@@ -110,7 +136,9 @@ export class DateTimeComponent implements OnInit, ControlValueAccessor {
   public onKeyDown(event: KeyboardEvent) {
     if (event.target === this.timeInputElementRef().nativeElement) {
       event.preventDefault();
-      ((this.calendarElementRef().nativeElement as HTMLElement)?.shadowRoot?.querySelector(CALENDAR_CONSTANTS.selectors.PREVIOUS_BUTTON) as HTMLElement)?.focus();
+      (
+        (this.calendarElementRef().nativeElement as HTMLElement)?.shadowRoot?.querySelector(CALENDAR_CONSTANTS.selectors.PREVIOUS_BUTTON) as HTMLElement
+      )?.focus();
     }
   }
 

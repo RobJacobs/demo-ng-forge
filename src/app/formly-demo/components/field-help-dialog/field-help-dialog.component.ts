@@ -3,7 +3,18 @@ import { Component, inject } from '@angular/core';
 import { finalize, Observable, Subject, takeUntil } from 'rxjs';
 import { isDefined } from '@tylertech/forge-core';
 import { IColumnConfiguration, ITableFilterEventData, ITableRowClickEventData, ITableSortEventData, SortDirection } from '@tylertech/forge';
-import { DIALOG_DATA, DialogRef, ForgeIconButtonModule, ForgeIconModule, ForgePageStateModule, ForgePaginatorModule, ForgeScaffoldModule, ForgeSkeletonModule, ForgeTableModule, ForgeToolbarModule } from '@tylertech/forge-angular';
+import {
+  DIALOG_DATA,
+  DialogRef,
+  ForgeIconButtonModule,
+  ForgeIconModule,
+  ForgePageStateModule,
+  ForgePaginatorModule,
+  ForgeScaffoldModule,
+  ForgeSkeletonModule,
+  ForgeTableModule,
+  ForgeToolbarModule
+} from '@tylertech/forge-angular';
 
 import { IFilterParameter, IFilter, IFilterResponse } from 'src/app/shared/interfaces/filter.interface';
 import { Utils } from 'src/utils';
@@ -16,10 +27,20 @@ export interface IFieldHelpDialogConfig {
 }
 
 @Component({
-    selector: 'app-formly-field-help-dialog',
-    templateUrl: './field-help-dialog.component.html',
-    styleUrls: ['./field-help-dialog.component.scss'],
-    imports: [CommonModule, ForgeIconButtonModule, ForgeIconModule, ForgePageStateModule, ForgePaginatorModule, ForgeScaffoldModule, ForgeSkeletonModule, ForgeTableModule, ForgeToolbarModule]
+  selector: 'app-formly-field-help-dialog',
+  templateUrl: './field-help-dialog.component.html',
+  styleUrls: ['./field-help-dialog.component.scss'],
+  imports: [
+    CommonModule,
+    ForgeIconButtonModule,
+    ForgeIconModule,
+    ForgePageStateModule,
+    ForgePaginatorModule,
+    ForgeScaffoldModule,
+    ForgeSkeletonModule,
+    ForgeTableModule,
+    ForgeToolbarModule
+  ]
 })
 export class FieldHelpDialogComponent {
   public dialogConfig = inject<IFieldHelpDialogConfig>(DIALOG_DATA);

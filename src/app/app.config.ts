@@ -16,5 +16,10 @@ export function initializeAppFactory(): () => Promise<void> {
 }
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideHttpClient(withInterceptorsFromDi()), provideRouter(routes, withComponentInputBinding()), provideAppInitializer(initializeAppFactory()), interceptorProviders]
+  providers: [
+    provideHttpClient(withInterceptorsFromDi()),
+    provideRouter(routes, withComponentInputBinding()),
+    provideAppInitializer(initializeAppFactory()),
+    interceptorProviders
+  ]
 };

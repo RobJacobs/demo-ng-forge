@@ -1,6 +1,7 @@
-import { Component, OnInit, inject, viewChild } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { isDefined } from '@tylertech/forge-core';
 import { AutocompleteFilterCallback, IOption } from '@tylertech/forge';
 import {
@@ -53,6 +54,7 @@ import { SearchSaveComponent } from './save/search-save.component';
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   private dialogService = inject(DialogService);
   private toastService = inject(ToastService);
   private dataService = inject(AppDataService);
@@ -102,31 +104,39 @@ export class SearchComponent implements OnInit {
   public operatorPopoverFormGroup?: FormGroup;
   public nameFilter: AutocompleteFilterCallback = (filter: string) =>
     lastValueFrom(
-      this.dataService
-        .getPeople()
-        .pipe(
-          map((r) =>
-            r.data
-              .filter((p) => p.firstName.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || p.lastName.toLocaleLowerCase().includes(filter.toLocaleLowerCase()))
-              .map((p) => ({ label: `${p.firstName} ${p.lastName}`, value: p.id }))
-          )
+      this.dataService.getPeople().pipe(
+        map((r) =>
+          r.data
+            .filter(
+              (p) => p.firstName.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || p.lastName.toLocaleLowerCase().includes(filter.toLocaleLowerCase())
+            )
+            .map((p) => ({
+              label: `${p.firstName} ${p.lastName}`,
+              value: p.id
+            }))
         )
+      )
     );
   public facetFilter = (filter: string): Observable<IOption[]> => {
     return of(this.facetOptions);
   };
 
   public ngOnInit() {
-    this.dataService.getSearches(this.storageKey).subscribe((result) => {
-      this.searchCache.searches = result || [];
+    this.dataService
+      .getSearches(this.storageKey)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (result) => {
+          this.searchCache.searches = result || [];
 
-      const activeSearch = this.searchCache.searches.find((s) => s.id === this.searchCache.activeSearchId);
-      if (isDefined(activeSearch)) {
-        this.searchName = activeSearch?.name;
-        this.searchDescription = activeSearch?.description;
-        this.formGroup.patchValue(activeSearch?.filters);
-      }
-    });
+          const activeSearch = this.searchCache.searches.find((s) => s.id === this.searchCache.activeSearchId);
+          if (isDefined(activeSearch)) {
+            this.searchName = activeSearch?.name;
+            this.searchDescription = activeSearch?.description;
+            this.formGroup.patchValue(activeSearch?.filters);
+          }
+        }
+      });
     for (let index = 0; index < 20; index++) {
       this.facetOptions.push({ value: index, label: `Facet Option ${index}` });
     }
@@ -136,7 +146,14 @@ export class SearchComponent implements OnInit {
     // TODO implement search action
   }
 
-  public onSaveSearch(search?: { id: number; name: string; description: string; isDefault: boolean; isPublic: boolean; filters: { property: string; value: string }[] }) {
+  public onSaveSearch(search?: {
+    id: number;
+    name: string;
+    description: string;
+    isDefault: boolean;
+    isPublic: boolean;
+    filters: { property: string; value: string }[];
+  }) {
     const activeSearch = isDefined(search) ? search : this.searchCache.searches.find((s) => s.id === this.searchCache.activeSearchId);
     const record = {
       id: activeSearch?.id,
@@ -147,29 +164,36 @@ export class SearchComponent implements OnInit {
       filters: this.formGroup.value
     };
 
-    this.dialogService.open(SearchSaveComponent, { data: record, options: { persistent: true } }).afterClosed.subscribe((result) => {
-      if (result) {
-        if (isDefined(result.id)) {
-          const searchIndex = this.searchCache.searches.findIndex((s) => s.id === result.id);
-          if (searchIndex !== -1) {
-            this.searchCache.searches[searchIndex] = result;
-          }
-        } else {
-          result.id = this.searchCache.searches.length ? Math.max(...this.searchCache.searches.map((s) => s.id)) + 1 : 1;
-          this.searchCache.searches.push(result);
-        }
+    this.dialogService
+      .open(SearchSaveComponent, {
+        data: record,
+        options: { persistent: true }
+      })
+      .afterClosed.subscribe({
+        next: (result) => {
+          if (result) {
+            if (isDefined(result.id)) {
+              const searchIndex = this.searchCache.searches.findIndex((s) => s.id === result.id);
+              if (searchIndex !== -1) {
+                this.searchCache.searches[searchIndex] = result;
+              }
+            } else {
+              result.id = this.searchCache.searches.length ? Math.max(...this.searchCache.searches.map((s) => s.id)) + 1 : 1;
+              this.searchCache.searches.push(result);
+            }
 
-        this.dataService.saveSearches(this.storageKey, this.searchCache.searches).subscribe({
-          next: () => {
-            this.searchCache.activeSearchId = result.id;
-            this.searchName = result.name;
-            this.searchDescription = result.description;
-            this.toastService.show({ message: 'Search saved' });
-          },
-          error: () => this.toastService.show({ message: 'Search save failed' })
-        });
-      }
-    });
+            this.dataService.saveSearches(this.storageKey, this.searchCache.searches).subscribe({
+              next: () => {
+                this.searchCache.activeSearchId = result.id;
+                this.searchName = result.name;
+                this.searchDescription = result.description;
+                this.toastService.show({ message: 'Search saved' });
+              },
+              error: () => this.toastService.show({ message: 'Search save failed' })
+            });
+          }
+        }
+      });
   }
 
   public onClearSearch() {
@@ -215,7 +239,7 @@ export class SearchComponent implements OnInit {
             const searchIndex = this.searchCache.searches.findIndex((s) => s.id === search?.id);
             if (searchIndex !== -1) {
               this.searchCache.searches.splice(searchIndex, 1);
-              this.dataService.saveSearches(this.storageKey, this.searchCache.searches).subscribe((result) => {});
+              this.dataService.saveSearches(this.storageKey, this.searchCache.searches).subscribe({ next: (result) => {} });
             }
 
             if (this.searchCache.activeSearchId === search?.id) {

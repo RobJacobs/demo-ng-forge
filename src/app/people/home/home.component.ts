@@ -1,9 +1,10 @@
-import { Component, NgZone, OnDestroy, OnInit, ViewContainerRef, inject, viewChild } from '@angular/core';
+import { Component, DestroyRef, NgZone, OnDestroy, OnInit, ViewContainerRef, inject, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
 import { isArray } from '@tylertech/forge-core';
-import { CellAlign, DateRangeComponentDelegate, IColumnConfiguration, TableComponent, TextFieldComponentDelegate } from '@tylertech/forge';
+import { CellAlign, IColumnConfiguration, TableComponent, TextFieldComponentDelegate } from '@tylertech/forge';
 import {
   ForgeBadgeModule,
   ForgeButtonModule,
@@ -50,6 +51,7 @@ import { FilterComponent } from './filter/filter.component';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent extends BaseTableComponent implements OnInit, OnDestroy {
+  private destroyRef = inject(DestroyRef);
   private router = inject(Router);
   private appDataService = inject(AppDataService);
   public cache = inject(PeopleCacheService);
@@ -143,7 +145,16 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
       align: CellAlign.Right,
       template: (rowIndex: number, cellElement: HTMLElement, data: IPerson) => {
         this.ngZone.run(() => {
-          cellElement.appendChild(TableUtils.createExpanderRow(rowIndex, this.peopleTable() as TableComponent, this.viewContainerRef, TableDetailComponent, 'Toggle table detail', data));
+          cellElement.appendChild(
+            TableUtils.createExpanderRow(
+              rowIndex,
+              this.peopleTable() as TableComponent,
+              this.viewContainerRef,
+              TableDetailComponent,
+              'Toggle table detail',
+              data
+            )
+          );
 
           cellElement.appendChild(
             TableUtils.createMenuButton(
@@ -152,9 +163,24 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
                 console.log(event);
               },
               [
-                { value: 1, label: 'Edit', leadingIcon: 'edit', leadingIconType: 'component' },
-                { value: 2, label: 'Add', leadingIcon: 'add', leadingIconType: 'component' },
-                { value: 3, label: 'Delete', leadingIcon: 'delete', leadingIconType: 'component' }
+                {
+                  value: 1,
+                  label: 'Edit',
+                  leadingIcon: 'edit',
+                  leadingIconType: 'component'
+                },
+                {
+                  value: 2,
+                  label: 'Add',
+                  leadingIcon: 'add',
+                  leadingIconType: 'component'
+                },
+                {
+                  value: 3,
+                  label: 'Delete',
+                  leadingIcon: 'delete',
+                  leadingIconType: 'component'
+                }
               ],
               'More options'
             )
@@ -190,12 +216,13 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
     return this.optionalTableColumns.filter((c) => !c.hidden).map((c) => c.property);
   }
 
-  constructor() {
-    super();
-
+  public ngOnInit() {
     const storageColumns = localStorage.getItem(this.cache.homeView.storageKey);
     if (storageColumns?.length) {
-      const columns = JSON.parse(storageColumns) as { property: string; hidden: boolean }[];
+      const columns = JSON.parse(storageColumns) as {
+        property: string;
+        hidden: boolean;
+      }[];
       if (isArray(columns)) {
         this.optionalTableColumns.forEach((c) => {
           const storedColumn = columns.find((sc) => sc.property === c.property);
@@ -206,9 +233,7 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
         this.setTableColumnsVisibilty();
       }
     }
-  }
 
-  public ngOnInit() {
     this.initializeSort();
     if (this.viewCache.showFilter) {
       this.initializeFilter();
@@ -239,7 +264,15 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
       return c;
     });
     this.setTableColumnsVisibilty();
-    localStorage.setItem(this.cache.homeView.storageKey, JSON.stringify(this.optionalTableColumns.map((c) => ({ property: c.property, hidden: c.hidden }))));
+    localStorage.setItem(
+      this.cache.homeView.storageKey,
+      JSON.stringify(
+        this.optionalTableColumns.map((c) => ({
+          property: c.property,
+          hidden: c.hidden
+        }))
+      )
+    );
   }
 
   public onTableShowFilter() {
@@ -266,10 +299,15 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
         skip: this.filterCache.skip,
         take: this.filterCache.take
       })
-      .pipe(finalize(() => (this.isBusy = false)))
-      .subscribe((result) => {
-        this.recordset = result.data;
-        this.recordCount = result.count;
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => (this.isBusy = false))
+      )
+      .subscribe({
+        next: (result) => {
+          this.recordset = result.data;
+          this.recordCount = result.count;
+        }
       });
   }
 

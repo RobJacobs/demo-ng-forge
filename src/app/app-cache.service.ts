@@ -1,5 +1,4 @@
 import { Injectable, signal } from '@angular/core';
-import { Subject } from 'rxjs';
 
 export interface IAppCacheService {
   isBusy: ReturnType<typeof signal<boolean>>;
@@ -31,8 +30,18 @@ export class AppCacheService implements IAppCacheService {
         label: 'Test',
         icon: 'child_friendly',
         options: [
-          { label: 'Parent', value: 'test/parent', icon: 'home', leadingIconType: 'component' },
-          { label: 'Child', value: 'test/child', icon: 'person', leadingIconType: 'component' }
+          {
+            label: 'Parent',
+            value: 'test/parent',
+            icon: 'home',
+            leadingIconType: 'component'
+          },
+          {
+            label: 'Child',
+            value: 'test/child',
+            icon: 'person',
+            leadingIconType: 'component'
+          }
         ]
       },
       { label: 'Search', value: 'search', icon: 'search' },
@@ -61,5 +70,4 @@ export class AppCacheService implements IAppCacheService {
     ]
   };
   public activeRoute: { path: string; params: any }[] = [];
-  public cancelHttpRequests = new Subject<void>();
 }

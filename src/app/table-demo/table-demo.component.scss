@@ -62,7 +62,7 @@
             width: 0;
             overflow: hidden;
             transition: width 250ms;
-            height: calc(var(--table-row-height) - 8)
+            height: calc(var(--table-row-height) - 8);
           }
 
           &--resizing {

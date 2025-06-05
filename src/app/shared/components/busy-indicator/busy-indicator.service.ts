@@ -13,7 +13,10 @@ export class BusyIndicatorService {
     if (this.dialogRef) {
       this.dialogRef.close();
     }
-    this.dialogRef = this.dialogService.open(BusyIndicatorComponent, { options: { persistent: true }, data });
+    this.dialogRef = this.dialogService.open(BusyIndicatorComponent, {
+      options: { persistent: true },
+      data
+    });
   }
 
   public hide() {

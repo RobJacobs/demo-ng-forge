@@ -20,7 +20,18 @@ export enum ChartTypes {
 
 @Component({
   selector: 'app-charts',
-  imports: [CommonModule, FormsModule, ForgeButtonModule, ForgeOptionModule, ForgeSelectModule, ForgeTabBarModule, ForgeTabModule, ForgeToolbarModule, D3ChartComponent, GoogleChartComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ForgeButtonModule,
+    ForgeOptionModule,
+    ForgeSelectModule,
+    ForgeTabBarModule,
+    ForgeTabModule,
+    ForgeToolbarModule,
+    D3ChartComponent,
+    GoogleChartComponent
+  ],
   templateUrl: './charts.component.html',
   styleUrls: ['./charts.component.scss']
 })

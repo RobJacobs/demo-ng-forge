@@ -44,7 +44,7 @@
 }
 
 @function form-grid-width($columns: 1, $width: app-var.$form-grid-column-width, $gap: app-var.$form-grid-gap) {
-  @return (($columns - 1) * $gap)+($columns * $width);
+  @return (($columns - 1) * $gap)+ ($columns * $width);
 }
 
 @mixin form-grid {
@@ -160,6 +160,7 @@
 
 @mixin toolbar($slots...) {
   @include toolbar-gap();
+
   @media (max-width: 400px) {
     @include toolbar-stacked(end);
   }
@@ -175,6 +176,7 @@
 
 @mixin toolbar-stacked($slots...) {
   --forge-toolbar-height: auto;
+
   &::part(inner) {
     grid-template-columns: unset;
     grid-auto-flow: row;

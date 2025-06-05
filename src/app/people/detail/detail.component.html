@@ -3,7 +3,9 @@
     <forge-icon-button (click)="onNavigate('back')" aria-label="Go back">
       <forge-icon name="arrow_back"></forge-icon>
     </forge-icon-button>
-    <h2 class="forge-typography--subheading4">{{ person?.firstName + " " + person?.lastName }}</h2>
+    <h2 class="forge-typography--subheading4">
+      {{ person?.firstName + ' ' + person?.lastName }}
+    </h2>
   </div>
   <div slot="end">
     <forge-button variant="outlined" (click)="onViewWiki()" [disabled]="!person?.url?.length">View wiki</forge-button>

@@ -2,7 +2,16 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { isDefined } from '@tylertech/forge-core';
-import { ForgeAutocompleteModule, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, ForgeMenuModule, ForgeOptionModule, ForgeSelectModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
+import {
+  ForgeAutocompleteModule,
+  ForgeButtonModule,
+  ForgeIconButtonModule,
+  ForgeIconModule,
+  ForgeMenuModule,
+  ForgeOptionModule,
+  ForgeSelectModule,
+  ForgeTextFieldModule
+} from '@tylertech/forge-angular';
 
 import { Utils } from 'src/utils';
 import { IFilter } from 'src/app/shared/interfaces/filter.interface';
@@ -10,7 +19,19 @@ import { FormControlInvalidDirective } from 'src/app/shared/directives/form-cont
 
 @Component({
   selector: 'app-query-builder',
-  imports: [CommonModule, ReactiveFormsModule, ForgeAutocompleteModule, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, ForgeMenuModule, ForgeOptionModule, ForgeSelectModule, ForgeTextFieldModule, FormControlInvalidDirective],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ForgeAutocompleteModule,
+    ForgeButtonModule,
+    ForgeIconButtonModule,
+    ForgeIconModule,
+    ForgeMenuModule,
+    ForgeOptionModule,
+    ForgeSelectModule,
+    ForgeTextFieldModule,
+    FormControlInvalidDirective
+  ],
   templateUrl: './query-builder.component.html',
   styleUrls: ['./query-builder.component.scss']
 })
@@ -79,12 +100,24 @@ export class QueryBuilderComponent {
 
   private buildFilterFormGroup(filter?: IFilter): FormGroup {
     return new FormGroup({
-      property: new FormControl(filter?.property, { validators: [Validators.required] }),
-      condition: new FormControl(filter?.condition || 'and', { validators: [Validators.required] }),
-      operator: new FormControl(filter?.operator, { validators: [Validators.required] }),
-      value: new FormControl(filter?.value, { validators: [this.validateFilterValue('value')] }),
-      minValue: new FormControl(filter?.minValue, { validators: [this.validateFilterValue('minValue')] }),
-      maxValue: new FormControl(filter?.minValue, { validators: [this.validateFilterValue('maxValue')] }),
+      property: new FormControl(filter?.property, {
+        validators: [Validators.required]
+      }),
+      condition: new FormControl(filter?.condition || 'and', {
+        validators: [Validators.required]
+      }),
+      operator: new FormControl(filter?.operator, {
+        validators: [Validators.required]
+      }),
+      value: new FormControl(filter?.value, {
+        validators: [this.validateFilterValue('value')]
+      }),
+      minValue: new FormControl(filter?.minValue, {
+        validators: [this.validateFilterValue('minValue')]
+      }),
+      maxValue: new FormControl(filter?.minValue, {
+        validators: [this.validateFilterValue('maxValue')]
+      }),
       filters: new FormArray([])
     });
   }
@@ -115,7 +148,13 @@ export class QueryBuilderComponent {
           const maxValue = formGroup.value.maxValue;
 
           if (controlName === 'minValue') {
-            if (isDefined(maxValue) && minValue.localeCompare(maxValue, navigator.language, { numeric: true, ignorePunctuation: true }) < 1) {
+            if (
+              isDefined(maxValue) &&
+              minValue.localeCompare(maxValue, navigator.language, {
+                numeric: true,
+                ignorePunctuation: true
+              }) < 1
+            ) {
               formGroup.get('maxValue')?.setErrors(null);
             }
           }
@@ -125,7 +164,12 @@ export class QueryBuilderComponent {
               return null;
             }
 
-            if (minValue.localeCompare(maxValue, navigator.language, { numeric: true, ignorePunctuation: true }) > 0) {
+            if (
+              minValue.localeCompare(maxValue, navigator.language, {
+                numeric: true,
+                ignorePunctuation: true
+              }) > 0
+            ) {
               return { range: true };
             }
           }

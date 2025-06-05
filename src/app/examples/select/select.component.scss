@@ -9,9 +9,8 @@
 }
 
 .form-grid {
-    justify-content: center;
+  justify-content: center;
   @include app-form-grid();
-
 }
 
 forge-divider {

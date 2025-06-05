@@ -17,6 +17,7 @@
 
     forge-select {
       width: 320px;
+
       &::part(label) {
         display: none;
       }
@@ -26,6 +27,7 @@
 
 forge-tab-bar {
   background-color: var(--forge-theme-surface);
+
   &::part(container) {
     justify-items: flex-start;
   }

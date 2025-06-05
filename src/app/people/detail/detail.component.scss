@@ -8,6 +8,7 @@
 
 .header {
   overflow: hidden;
+
   [slot='start'] {
     @include forge-flex-container(flex, row, nowrap, center);
   }

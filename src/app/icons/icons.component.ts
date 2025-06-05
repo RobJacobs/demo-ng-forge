@@ -5,11 +5,11 @@ import { ForgeAutocompleteModule, ForgeIconModule, ForgeTextFieldModule, ForgeTo
 import { CommonModule } from '@angular/common';
 
 @Component({
-    selector: 'app-icons',
-    imports: [CommonModule, ForgeAutocompleteModule, ForgeIconModule, ForgeTextFieldModule, ForgeToolbarModule],
-    providers: [IconsCacheService],
-    templateUrl: './icons.component.html',
-    styleUrls: ['./icons.component.scss']
+  selector: 'app-icons',
+  imports: [CommonModule, ForgeAutocompleteModule, ForgeIconModule, ForgeTextFieldModule, ForgeToolbarModule],
+  providers: [IconsCacheService],
+  templateUrl: './icons.component.html',
+  styleUrls: ['./icons.component.scss']
 })
 export class IconsComponent {
   public cache = inject(IconsCacheService);

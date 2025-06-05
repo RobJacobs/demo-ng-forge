@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
 import { DialogService, ForgeButtonModule, ForgeIconModule, ForgeTabBarModule, ForgeTabModule, ForgeToolbarModule } from '@tylertech/forge-angular';
 
@@ -15,11 +16,22 @@ import { ProfileCacheService } from './profile-cache.service';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule, RouterOutlet, ReactiveFormsModule, ForgeButtonModule, ForgeIconModule, ForgeTabBarModule, ForgeTabModule, ForgeToolbarModule, CallbackPipe],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    ReactiveFormsModule,
+    ForgeButtonModule,
+    ForgeIconModule,
+    ForgeTabBarModule,
+    ForgeTabModule,
+    ForgeToolbarModule,
+    CallbackPipe
+  ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private appDataService = inject(AppDataService);
@@ -38,7 +50,7 @@ export class ProfileComponent {
   public activeTab = 0;
   public imageUrl?: string;
 
-  constructor() {
+  public ngOnInit() {
     if (this.cache.profile) {
       this.loadForm(this.cache.profile);
     }
@@ -59,22 +71,35 @@ export class ProfileComponent {
 
     return new Observable<boolean>((s) => {
       this.dialogService
-        .open(ConfirmDialogComponent, { options: { persistent: true }, data: { title: 'Unsaved changes', message: 'You have unsaved changes which will be lost, do you want to continue?' } })
-        .afterClosed.subscribe((result) => {
-          if (result) {
-            this.cache.formGroup.reset();
+        .open(ConfirmDialogComponent, {
+          options: { persistent: true },
+          data: {
+            title: 'Unsaved changes',
+            message: 'You have unsaved changes which will be lost, do you want to continue?'
           }
-          s.next(result);
+        })
+        .afterClosed.subscribe({
+          next: (result) => {
+            if (result) {
+              this.cache.formGroup.reset();
+            }
+            s.next(result);
+          }
         });
     });
   }
 
   public onLoadProfile() {
-    this.appDataService.getProfile().subscribe((result: IProfile) => {
-      this.cache.formGroup.reset();
-      this.cache.profile = result;
-      this.loadForm(this.cache.profile);
-    });
+    this.appDataService
+      .getProfile()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (result: IProfile) => {
+          this.cache.formGroup.reset();
+          this.cache.profile = result;
+          this.loadForm(this.cache.profile);
+        }
+      });
   }
 
   public onTabSelected(route: string) {

@@ -1,6 +1,14 @@
 import { Injectable } from '@angular/core';
 import { isArray, isDefined } from '@tylertech/forge-core';
-import { FormFieldComponentDelegate, IColumnConfiguration, IPaginatorChangeEventData, ITableFilterEventData, ITableSortEventData, ITableSortMultipleEventData, SortDirection } from '@tylertech/forge';
+import {
+  FormFieldComponentDelegate,
+  IColumnConfiguration,
+  IPaginatorChangeEventData,
+  ITableFilterEventData,
+  ITableSortEventData,
+  ITableSortMultipleEventData,
+  SortDirection
+} from '@tylertech/forge';
 import { IFilterParameter } from 'src/app/shared/interfaces/filter.interface';
 
 @Injectable()
@@ -11,8 +19,6 @@ export abstract class BaseTableComponent {
   private setTableFiltersAF?: number;
 
   public abstract filterCache: IFilterParameter;
-
-  constructor() {}
 
   public initializeSort() {
     this.tableColumns
@@ -56,7 +62,10 @@ export abstract class BaseTableComponent {
       sort = event.detail as ITableSortEventData;
     }
     const columnProperty = this.getColumnFromEventIndex(sort.columnIndex).property as string;
-    this.filterCache.sort = { property: columnProperty, direction: sort.direction };
+    this.filterCache.sort = {
+      property: columnProperty,
+      direction: sort.direction
+    };
     this.filterCache.skip = 0;
     this.getRecords();
   }
@@ -82,7 +91,10 @@ export abstract class BaseTableComponent {
         if (!this.filterCache.filters?.length) {
           this.filterCache.filters = [{ property: column.property, value: value }];
         } else {
-          this.filterCache.filters.push({ property: column.property, value: value });
+          this.filterCache.filters.push({
+            property: column.property,
+            value: value
+          });
         }
       }
       this.getRecords();

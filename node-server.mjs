@@ -82,7 +82,7 @@ webSocketServer.on('connection', (socket) => {
   socket.on('message', (value) => {
     console.log(JSON.parse(value));
     sleep(3000).then(() => {
-      webSockets.forEach(s => {
+      webSockets.forEach((s) => {
         console.log('sending message');
         s.send(JSON.stringify({ data: 'message from backend', date: new Date() }));
       });
@@ -90,7 +90,7 @@ webSocketServer.on('connection', (socket) => {
   });
 
   socket.on('close', () => {
-    webSockets = webSockets.filter(s => s !== socket);
+    webSockets = webSockets.filter((s) => s !== socket);
     console.log('connection closed');
   });
 });

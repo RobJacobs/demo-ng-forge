@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { Observable as DexieObservable } from 'dexie';
@@ -10,12 +10,12 @@ import { IPerson } from 'src/app/shared/interfaces/person.interface';
 import { IndexedDBStorageService } from './indexed-db-storage.service';
 
 @Component({
-    selector: 'app-storage',
-    imports: [CommonModule, ForgeButtonModule, ForgeLabelValueModule, ForgeToolbarModule],
-    templateUrl: './storage.component.html',
-    styleUrls: ['./storage.component.scss']
+  selector: 'app-storage',
+  imports: [CommonModule, ForgeButtonModule, ForgeLabelValueModule, ForgeToolbarModule],
+  templateUrl: './storage.component.html',
+  styleUrls: ['./storage.component.scss']
 })
-export class StorageComponent {
+export class StorageComponent implements OnInit {
   private appDataService = inject(AppDataService);
   private dbStorageService = inject(IndexedDBStorageService);
 
@@ -33,17 +33,19 @@ export class StorageComponent {
   // public indexedDbData$ = from(liveQuery(() => storageDb.people.toArray()));
   public indexedDbData?: IPerson[];
 
-  constructor() {
+  public ngOnInit() {
     this.calcStorageSpace();
     // this.onLoadLocal();
     // this.onLoadDb();
   }
 
   public onSaveLocal() {
-    this.appDataService.getPeople().subscribe((result) => {
-      this.localStorageData = result.data;
-      localStorage.setItem(`${this.storageKey}`, JSON.stringify(this.localStorageData));
-      this.calcStorageSpace();
+    this.appDataService.getPeople().subscribe({
+      next: (result) => {
+        this.localStorageData = result.data;
+        localStorage.setItem(`${this.storageKey}`, JSON.stringify(this.localStorageData));
+        this.calcStorageSpace();
+      }
     });
   }
 
@@ -70,18 +72,20 @@ export class StorageComponent {
   }
 
   public onSaveDb() {
-    this.appDataService.getPeople().subscribe((result) => {
-      this.dbStorageService.people
-        ?.bulkAdd([
-          ...result.data.map((p) => {
-            delete (p as any).id;
-            return p;
-          })
-        ])
-        .finally(() => {
-          this.onLoadDb();
-          this.calcStorageSpace();
-        });
+    this.appDataService.getPeople().subscribe({
+      next: (result) => {
+        this.dbStorageService.people
+          ?.bulkAdd([
+            ...result.data.map((p) => {
+              delete (p as any).id;
+              return p;
+            })
+          ])
+          .finally(() => {
+            this.onLoadDb();
+            this.calcStorageSpace();
+          });
+      }
     });
   }
 

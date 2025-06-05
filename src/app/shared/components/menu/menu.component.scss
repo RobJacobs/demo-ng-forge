@@ -1,7 +1,23 @@
 @use 'src/global' as *;
+@use '@tylertech/forge/sass/core/styles/tokens/drawer/mini/tokens' as drawer-mini-tokens;
 
 :host {
   display: block;
+}
+
+forge-mini-drawer {
+  .menu {
+    width: drawer-mini-tokens.get('width');
+
+    forge-list-item {
+      button {
+        &:has(forge-icon) {
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+  }
 }
 
 .menu {

@@ -1,18 +1,27 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, inject, signal, viewChild } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, ElementRef, OnDestroy, OnInit, inject, signal, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { finalize, fromEvent, tap, Subject, takeUntil, merge } from 'rxjs';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { finalize, fromEvent, tap, Subject, takeUntil, merge } from 'rxjs';
 import { IColumnConfiguration, PopoverComponent, SortDirection } from '@tylertech/forge';
 import { isDefined } from '@tylertech/forge-core';
-import { ForgeCheckboxModule, ForgeDividerModule, ForgeIconButtonModule, ForgeIconModule, ForgeListItemModule, ForgeListModule, ForgePopoverModule, ForgeToolbarModule } from '@tylertech/forge-angular';
+import {
+  ForgeCheckboxModule,
+  ForgeDividerModule,
+  ForgeIconButtonModule,
+  ForgeIconModule,
+  ForgeListItemModule,
+  ForgeListModule,
+  ForgePopoverModule,
+  ForgeToolbarModule
+} from '@tylertech/forge-angular';
 
 import { IPerson } from 'src/app/shared/interfaces/person.interface';
 import { AppDataService } from 'src/app/app-data.service';
 import { CallbackPipe } from 'src/app/shared/pipes/callback.pipe';
 import { TableDetailComponent } from 'src/app/shared/components/table-detail/table-detail.component';
 import { Utils } from 'src/utils';
-
 @Component({
   selector: 'app-table-demo',
   imports: [
@@ -34,6 +43,7 @@ import { Utils } from 'src/utils';
   styleUrls: ['./table-demo.component.scss']
 })
 export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
+  private destroyRef = inject(DestroyRef);
   private appDataService = inject(AppDataService);
   private readonly tableElementRef = viewChild<ElementRef<HTMLTableElement>>('table');
   private readonly columnHeaderPopover = viewChild<ElementRef<PopoverComponent>>('columnHeaderPopover');
@@ -78,29 +88,38 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public ngAfterViewInit() {
-    this.virtualScrollViewport()?.renderedRangeStream.subscribe((o) => {
-      this.tableHeaderOffset.set(o.start);
-      if (!this.isBusy && o.start > 0 && o.end + 20 > this.recordset().length) {
-        this.isBusy = true;
-        this.appDataService
-          .getPeople({
-            sort: this.filterCache.sort
-          })
-          .pipe(finalize(() => (this.isBusy = false)))
-          .subscribe((result) => {
-            const startId = this.recordset().length + 1;
-            this.recordset.update((value) => {
-              return [
-                ...value,
-                ...result.data.map((p, i) => {
-                  p.id = startId + p.id;
-                  return p;
-                })
-              ];
-            });
-          });
-      }
-    });
+    this.virtualScrollViewport()
+      ?.renderedRangeStream.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (o) => {
+          this.tableHeaderOffset.set(o.start);
+          if (!this.isBusy && o.start > 0 && o.end + 20 > this.recordset().length) {
+            this.isBusy = true;
+            this.appDataService
+              .getPeople({
+                sort: this.filterCache.sort
+              })
+              .pipe(
+                takeUntilDestroyed(this.destroyRef),
+                finalize(() => (this.isBusy = false))
+              )
+              .subscribe({
+                next: (result) => {
+                  const startId = this.recordset().length + 1;
+                  this.recordset.update((value) => {
+                    return [
+                      ...value,
+                      ...result.data.map((p, i) => {
+                        p.id = startId + p.id;
+                        return p;
+                      })
+                    ];
+                  });
+                }
+              });
+          }
+        }
+      });
   }
 
   public ngOnDestroy() {
@@ -258,9 +277,14 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
       .getPeople({
         sort: this.filterCache.sort
       })
-      .pipe(finalize(() => (this.isBusy = false)))
-      .subscribe((result) => {
-        this.recordset.set(result.data);
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => (this.isBusy = false))
+      )
+      .subscribe({
+        next: (result) => {
+          this.recordset.set(result.data);
+        }
       });
   }
 }

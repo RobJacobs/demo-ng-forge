@@ -29,7 +29,11 @@ export class AppDataService {
           if (filter.filters?.length) {
             r = Utils.filterData(
               r,
-              filter.filters.map((f) => ({ key: f.property, value: f.value, strict: f.property === 'gender' || f.property === 'id' }))
+              filter.filters.map((f) => ({
+                key: f.property,
+                value: f.value,
+                strict: f.property === 'gender' || f.property === 'id'
+              }))
             );
             count = r.length;
           }
@@ -70,14 +74,16 @@ export class AppDataService {
     });
   }
 
-  public getLongRequest(): Observable<string> {
+  public getLongRequest(): Observable<unknown> {
     return this.httpClient.get<string>('http://localhost:5000/long-request', {
       context: new HttpContext().set(SHOW_BUSY_INDICATOR, true)
     });
   }
 
   public getFile(fileName: string): Observable<Blob> {
-    return this.httpClient.get(`mock-data/${fileName}`, { responseType: 'blob' });
+    return this.httpClient.get(`mock-data/${fileName}`, {
+      responseType: 'blob'
+    });
   }
 
   public pollingRequest(name: string): Observable<IPerson> {

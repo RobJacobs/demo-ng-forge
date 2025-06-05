@@ -2,7 +2,9 @@
   @if (showHeader) {
     <forge-toolbar slot="header">
       @if (dialogTitle?.length) {
-        <h2 slot="start" class="forge-typography--heading4" [id]="id">{{ dialogTitle }}</h2>
+        <h2 slot="start" class="forge-typography--heading4" [id]="id">
+          {{ dialogTitle }}
+        </h2>
       }
       <ng-content select="[app-dialog-header]"></ng-content>
       @if (showClose) {

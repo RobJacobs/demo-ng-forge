@@ -8,14 +8,14 @@ import { AutoFocusDirective } from 'src/app/shared/directives/auto-focus/auto-fo
 import { ProfileCacheService } from '../profile-cache.service';
 
 @Component({
-    selector: 'app-profile-address',
-    imports: [CommonModule, ReactiveFormsModule, ForgeTextFieldModule, FormControlInvalidDirective, AutoFocusDirective],
-    templateUrl: './address.component.html',
-    styleUrls: ['./address.component.scss'],
-    host: {
-        role: 'tabpanel',
-        id: 'app--profile--address'
-    }
+  selector: 'app-profile-address',
+  imports: [CommonModule, ReactiveFormsModule, ForgeTextFieldModule, FormControlInvalidDirective, AutoFocusDirective],
+  templateUrl: './address.component.html',
+  styleUrls: ['./address.component.scss'],
+  host: {
+    role: 'tabpanel',
+    id: 'app--profile--address'
+  }
 })
 export class AddressComponent {
   public cache = inject(ProfileCacheService);

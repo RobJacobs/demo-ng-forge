@@ -49,7 +49,7 @@
             <input type="text" id="{{ 'query-builder--filter-max-' + index }}" formControlName="maxValue" />
             <label for="{{ 'query-builder--filter-max-' + index }}" slot="label">Maximum</label>
             <span slot="support-text" class="app--form-control-invalid">
-              {{ formGroup.controls.maxValue.errors.required ? "A maximum value is required" : formGroup.controls.maxValue.errors.range ? "Max value must be greater or equal to min value" : "" }}
+              {{ formGroup.controls.maxValue.errors.required ? 'A maximum value is required' : formGroup.controls.maxValue.errors.range ? 'Max value must be greater or equal to min value' : '' }}
             </span>
           </forge-text-field>
         </div>

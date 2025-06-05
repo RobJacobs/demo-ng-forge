@@ -8,10 +8,11 @@ import { ForgeTextFieldModule } from '@tylertech/forge-angular';
 import { FormlyDemoService } from '../formly-demo.service';
 
 @Component({
-    selector: 'app-formly-textarea',
-    template: `
+  selector: 'app-formly-textarea',
+  template: `
     <forge-text-field [required]="props.required" [invalid]="showError">
-      <textarea [id]="id" [cols]="props.cols" [rows]="props.rows" [readonly]="props.readonly" [formControl]="formControl" [formlyAttributes]="field"> </textarea>
+      <textarea [id]="id" [cols]="props.cols" [rows]="props.rows" [readonly]="props.readonly" [formControl]="formControl" [formlyAttributes]="field">
+      </textarea>
       @if (props.label) {
         <label [attr.for]="id" slot="label">{{ props.label }}</label>
       }
@@ -22,8 +23,8 @@ import { FormlyDemoService } from '../formly-demo.service';
       }
     </forge-text-field>
   `,
-    styles: [
-        `
+  styles: [
+    `
       :host {
         display: block;
       }
@@ -32,9 +33,9 @@ import { FormlyDemoService } from '../formly-demo.service';
         resize: none;
       }
     `
-    ],
-    imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeTextFieldModule],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  ],
+  imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeTextFieldModule],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TextareaTypeComponent extends FieldType<FieldTypeConfig> implements OnInit, OnDestroy {
   private moduleService = inject(FormlyDemoService);

@@ -43,7 +43,15 @@ export class Utils {
     }, {});
   }
 
-  public static filterData(data: any[], filters: { key: string; value: string; type?: 'string' | 'number' | 'boolean' | 'date'; strict?: boolean }[]): any[] {
+  public static filterData(
+    data: any[],
+    filters: {
+      key: string;
+      value: string;
+      type?: 'string' | 'number' | 'boolean' | 'date';
+      strict?: boolean;
+    }[]
+  ): any[] {
     if (!isArray(data) || !data.length || !isArray(filters) || !filters.length) {
       return data;
     }
@@ -143,9 +151,13 @@ export class Utils {
         break;
       default:
         if (!isNaN(parseFloat(a)) && !isNaN(parseFloat(b))) {
-          return ('' + a).localeCompare('' + b, navigator.language, { numeric: true });
+          return ('' + a).localeCompare('' + b, navigator.language, {
+            numeric: true
+          });
         } else {
-          return ('' + a).localeCompare('' + b, navigator.language, { sensitivity: 'base' });
+          return ('' + a).localeCompare('' + b, navigator.language, {
+            sensitivity: 'base'
+          });
         }
     }
 
@@ -188,11 +200,17 @@ export class Utils {
     const params = {};
     const queryIndex = window.location.href.indexOf('?');
     if (queryIndex !== -1) {
-      const httpParams = new HttpParams({ fromString: window.location.href.substring(queryIndex) });
+      const httpParams = new HttpParams({
+        fromString: window.location.href.substring(queryIndex)
+      });
       httpParams.keys().forEach((k) => {
         const value = httpParams.getAll(k) as string[];
         if (value.length) {
-          Object.defineProperty(params, k.toLowerCase(), { value: value.length === 1 ? value[0] : value, enumerable: true, writable: true });
+          Object.defineProperty(params, k.toLowerCase(), {
+            value: value.length === 1 ? value[0] : value,
+            enumerable: true,
+            writable: true
+          });
         }
       });
     }

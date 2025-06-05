@@ -1,4 +1,4 @@
-import { Component, DestroyRef, ElementRef, inject, viewChild } from '@angular/core';
+import { Component, DestroyRef, ElementRef, inject, OnInit, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
@@ -52,7 +52,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   templateUrl: './pdf-viewer-demo.component.html',
   styleUrls: ['./pdf-viewer-demo.component.scss']
 })
-export class PdfViewerDemoComponent {
+export class PdfViewerDemoComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   private readonly pdfViewerComponent = viewChild<PdfViewerComponent>('pdfViewer');
@@ -87,17 +87,23 @@ export class PdfViewerDemoComponent {
     caseSensitive: new FormControl(false)
   });
 
-  public constructor() {
-    this.searchFormGroup.controls.query.valueChanges.pipe(debounceTime(300), takeUntilDestroyed(this.destroyRef)).subscribe((o) => {
-      this.searchDocument('');
+  public ngOnInit() {
+    this.searchFormGroup.controls.query.valueChanges.pipe(debounceTime(300), takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (o) => {
+        this.searchDocument('');
+      }
     });
 
-    this.searchFormGroup.controls.hightlightAll.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      this.searchDocument('highlightallchange');
+    this.searchFormGroup.controls.hightlightAll.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: () => {
+        this.searchDocument('highlightallchange');
+      }
     });
 
-    this.searchFormGroup.controls.caseSensitive.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      this.searchDocument('casesensitivitychange');
+    this.searchFormGroup.controls.caseSensitive.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: () => {
+        this.searchDocument('casesensitivitychange');
+      }
     });
   }
 

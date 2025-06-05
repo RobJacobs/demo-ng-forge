@@ -12,7 +12,16 @@ import { parse as dateParse, format as dateFormat, isValid as dateIsValid } from
 import { NullableMask, NullableNumberMask } from './imask-extensions';
 @Component({
   selector: 'app-imask',
-  imports: [CommonModule, ReactiveFormsModule, IMaskDirective, ForgeButtonModule, ForgeOptionModule, ForgeSelectModule, ForgeTextFieldModule, ForgeToolbarModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    IMaskDirective,
+    ForgeButtonModule,
+    ForgeOptionModule,
+    ForgeSelectModule,
+    ForgeTextFieldModule,
+    ForgeToolbarModule
+  ],
   templateUrl: './imask.component.html',
   styleUrls: ['./imask.component.scss']
 })

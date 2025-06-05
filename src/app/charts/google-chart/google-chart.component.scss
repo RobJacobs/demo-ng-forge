@@ -29,6 +29,7 @@
   margin: 24px;
   height: calc(100% - 48px);
   @include app-container-raised();
+
   .chart-container {
     position: relative;
     height: 100%;

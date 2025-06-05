@@ -6,11 +6,19 @@ import { IProfile } from 'src/app/shared/interfaces/person.interface';
 export class ProfileCacheService {
   public formGroup = new FormGroup({
     personalFormGroup: new FormGroup({
-      firstName: new FormControl<string | null>(null, { validators: [Validators.required] }),
-      lastName: new FormControl<string | null>(null, { validators: [Validators.required] }),
+      firstName: new FormControl<string | null>(null, {
+        validators: [Validators.required]
+      }),
+      lastName: new FormControl<string | null>(null, {
+        validators: [Validators.required]
+      }),
       gender: new FormControl<string | null>(null),
-      email: new FormControl<string | null>(null, { validators: [Validators.required] }),
-      phone: new FormControl<string | null>(null, { validators: [Validators.required] }),
+      email: new FormControl<string | null>(null, {
+        validators: [Validators.required]
+      }),
+      phone: new FormControl<string | null>(null, {
+        validators: [Validators.required]
+      }),
       dateOfBirth: new FormControl<string | Date | null>(null),
       comment: new FormControl<string | null>(null),
       rank: new FormControl<number>(5),
@@ -20,11 +28,21 @@ export class ProfileCacheService {
       friends: new FormArray<FormControl>([])
     }),
     addressFormGroup: new FormGroup({
-      name: new FormControl<string | null>(null, { validators: [Validators.required] }),
-      street: new FormControl<string | null>(null, { validators: [Validators.required] }),
-      city: new FormControl<string | null>(null, { validators: [Validators.required] }),
-      state: new FormControl<string | null>(null, { validators: [Validators.required] }),
-      zip: new FormControl<string | null>(null, { validators: [Validators.required] })
+      name: new FormControl<string | null>(null, {
+        validators: [Validators.required]
+      }),
+      street: new FormControl<string | null>(null, {
+        validators: [Validators.required]
+      }),
+      city: new FormControl<string | null>(null, {
+        validators: [Validators.required]
+      }),
+      state: new FormControl<string | null>(null, {
+        validators: [Validators.required]
+      }),
+      zip: new FormControl<string | null>(null, {
+        validators: [Validators.required]
+      })
     })
   });
   public profile?: IProfile;

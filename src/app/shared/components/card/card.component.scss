@@ -4,9 +4,11 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+
   &.app-card--raised {
     @include app-container-raised();
   }
+
   &.app-card--outlined {
     @include app-container-outlined();
   }
@@ -26,6 +28,7 @@
 
 .footer {
   @include app-toolbar-gap();
+
   &:empty {
     display: none;
   }

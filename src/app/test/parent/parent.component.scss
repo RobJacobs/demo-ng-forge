@@ -10,9 +10,6 @@
   padding: 24px;
 }
 
-.form {
-  display: flex;
-  flex-direction: column;
-  row-gap: 16px;
-  padding: 16px;
+forge-button {
+  --forge-circular-progress-size: 1rem;
 }

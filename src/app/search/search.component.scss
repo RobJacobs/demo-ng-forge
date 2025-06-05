@@ -9,6 +9,7 @@
 ::ng-deep {
   .searches-popover {
     min-width: 280px;
+
     *[slot='trailing'] {
       @include forge-flex-container(flex, row, nowrap, center);
       margin-right: -16px;
@@ -17,6 +18,7 @@
 
   .operator-popover {
     min-width: 200px;
+
     forge-list-item {
       cursor: pointer;
     }
@@ -27,14 +29,18 @@
   forge-button {
     margin-left: 16px;
   }
+
   overflow: hidden;
   white-space: nowrap;
+
   [slot='start'] {
     @include forge-flex-container(flex, row, nowrap, center);
+
     forge-divider {
       margin: 0 16px;
       height: 32px;
     }
+
     span + span {
       margin-left: 16px;
     }
@@ -44,6 +50,7 @@
 .body {
   overflow: auto;
   padding: 24px;
+
   .form {
     @include app-container-raised();
     padding: 16px;

@@ -1,8 +1,6 @@
 @use 'src/global' as *;
 
 ::ng-deep {
-  @import 'quill/dist/quill.snow';
-
   quill-editor {
     width: 100%;
     @include app-container-raised();
