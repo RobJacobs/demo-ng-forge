@@ -27,13 +27,13 @@
 
   .app-chart__xaxis--align-boundry-ticks {
     .tick:first-of-type {
-      & > text {
+      &>text {
         text-anchor: start;
       }
     }
 
     .tick:last-of-type {
-      & > text {
+      &>text {
         text-anchor: end;
       }
     }

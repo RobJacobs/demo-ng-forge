@@ -44,7 +44,15 @@ export class TableUtils {
     return menuElement;
   }
 
-  public static createExpanderRow<T>(rowIndex: number, tableElement: TableComponent, viewContainerRef: ViewContainerRef, component: Type<T>, title: string, data?: any, callback?: (value?: any) => any): HTMLElement {
+  public static createExpanderRow<T>(
+    rowIndex: number,
+    tableElement: TableComponent,
+    viewContainerRef: ViewContainerRef,
+    component: Type<T>,
+    title: string,
+    data?: any,
+    callback?: (value?: any) => any
+  ): HTMLElement {
     let componentRef: ComponentRef<any> | null;
 
     const expanderElement = TableUtils.createIconButton(

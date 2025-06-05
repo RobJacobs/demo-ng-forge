@@ -2,7 +2,15 @@ import { Component, OnInit, Output, EventEmitter, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { IOption } from '@tylertech/forge';
-import { ForgeButtonModule, ForgeDividerModule, ForgeDrawerModule, ForgeIconButtonModule, ForgeIconModule, ForgeSelectModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
+import {
+  ForgeButtonModule,
+  ForgeDividerModule,
+  ForgeDrawerModule,
+  ForgeIconButtonModule,
+  ForgeIconModule,
+  ForgeSelectModule,
+  ForgeTextFieldModule
+} from '@tylertech/forge-angular';
 
 import { Utils } from 'src/utils';
 import { AppCacheService } from 'src/app/app-cache.service';
@@ -10,10 +18,20 @@ import { AutocompleteRangeComponent } from 'src/app/shared/components/autocomple
 import { PeopleCacheService } from '../../people-cache.service';
 
 @Component({
-    selector: 'app-people-home-filter',
-    imports: [ReactiveFormsModule, ForgeButtonModule, ForgeDividerModule, ForgeDrawerModule, ForgeIconButtonModule, ForgeIconModule, ForgeSelectModule, ForgeTextFieldModule, AutocompleteRangeComponent],
-    templateUrl: './filter.component.html',
-    styleUrls: ['./filter.component.scss']
+  selector: 'app-people-home-filter',
+  imports: [
+    ReactiveFormsModule,
+    ForgeButtonModule,
+    ForgeDividerModule,
+    ForgeDrawerModule,
+    ForgeIconButtonModule,
+    ForgeIconModule,
+    ForgeSelectModule,
+    ForgeTextFieldModule,
+    AutocompleteRangeComponent
+  ],
+  templateUrl: './filter.component.html',
+  styleUrls: ['./filter.component.scss']
 })
 export class FilterComponent implements OnInit {
   public appCache = inject(AppCacheService);
@@ -54,7 +72,12 @@ export class FilterComponent implements OnInit {
   }
 
   public onApplyFilter() {
-    this.cache.homeView.filter.filters = Object.entries(Utils.objectReduce(this.formGroup.value)).map((e) => ({ property: e[0], value: e[1], label: this.propertyLabel(e[0]) })) || [];
+    this.cache.homeView.filter.filters =
+      Object.entries(Utils.objectReduce(this.formGroup.value)).map((e) => ({
+        property: e[0],
+        value: e[1],
+        label: this.propertyLabel(e[0])
+      })) || [];
     this.filter.emit();
   }
 

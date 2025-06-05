@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { isDefined } from '@tylertech/forge-core';
 import { DIALOG_DATA, DialogRef, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule } from '@tylertech/forge-angular';
 import { DialogTemplateComponent } from 'src/app/shared/components/dialog-template/dialog-template.component';
@@ -16,7 +16,7 @@ export interface IConfirmDialogData {
   styleUrls: ['./confirm-dialog.component.scss'],
   imports: [CommonModule, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, DialogTemplateComponent]
 })
-export class ConfirmDialogComponent {
+export class ConfirmDialogComponent implements OnInit {
   public dialogData = inject<IConfirmDialogData>(DIALOG_DATA);
   private dialogRef = inject(DialogRef);
 
@@ -24,7 +24,7 @@ export class ConfirmDialogComponent {
   public message: string;
   public showFooter?: boolean;
 
-  constructor() {
+  public ngOnInit() {
     this.dialogTitle = this.dialogData.title;
     this.message = this.dialogData.message;
     this.showFooter = isDefined(this.dialogData.showFooter) ? this.dialogData.showFooter : true;

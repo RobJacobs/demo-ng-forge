@@ -1,6 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IOption } from '@tylertech/forge';
 import {
   ForgeButtonModule,
@@ -53,7 +54,8 @@ import { ProfileCacheService } from '../profile-cache.service';
     id: 'app--profile--personal'
   }
 })
-export class PersonalComponent {
+export class PersonalComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   public cache = inject(ProfileCacheService);
   private appDataService = inject(AppDataService);
 
@@ -77,10 +79,18 @@ export class PersonalComponent {
     { label: 'Large', value: 'lg' }
   ];
 
-  constructor() {
-    this.appDataService.getPeople().subscribe((result) => {
-      this.friendOptions = result.data.map((p) => ({ label: `${p.firstName} ${p.lastName}`, value: p.id }));
-    });
+  public ngOnInit() {
+    this.appDataService
+      .getPeople()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (result) => {
+          this.friendOptions = result.data.map((p) => ({
+            label: `${p.firstName} ${p.lastName}`,
+            value: p.id
+          }));
+        }
+      });
   }
 
   public onAddFriend() {

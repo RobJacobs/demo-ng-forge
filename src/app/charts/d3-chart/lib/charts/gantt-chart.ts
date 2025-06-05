@@ -199,7 +199,10 @@ export class GanttChartService {
 
       const mergeNodes = enterNodes.merge(nodes as any);
 
-      mergeNodes.attr('transform', (d: IGanttChartData, i: number) => `translate(${xScale(d.startDate)}, ${i * (barHeight + barPadding) + chartMargin.top + barPadding / 2})`);
+      mergeNodes.attr(
+        'transform',
+        (d: IGanttChartData, i: number) => `translate(${xScale(d.startDate)}, ${i * (barHeight + barPadding) + chartMargin.top + barPadding / 2})`
+      );
 
       mergeNodes
         .select(`g > .${CHART_CONSTANTS.classes.CHART_NODE}`)

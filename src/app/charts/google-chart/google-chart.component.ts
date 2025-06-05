@@ -49,27 +49,37 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    GoogleChartService.loadGoogleChartService().subscribe(() => {
-      google.charts.load('current', { packages: ['corechart', 'treemap', 'orgchart', 'gantt'] }).then(() => {
-        this.googleChartsLoaded = true;
-        this.drawChart('create');
+    GoogleChartService.loadGoogleChartService()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          google.charts
+            .load('current', {
+              packages: ['corechart', 'treemap', 'orgchart', 'gantt']
+            })
+            .then(() => {
+              this.googleChartsLoaded = true;
+              this.drawChart('create');
+            });
+        }
       });
-    });
 
     fromEvent(window, 'resize')
       .pipe(takeUntilDestroyed(this.destroyRef), debounceTime(100))
-      .subscribe(() => this.drawChart('redraw'));
+      .subscribe({ next: () => this.drawChart('redraw') });
 
     fromEvent<WheelEvent>(this.chartContainer()?.nativeElement, 'wheel')
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((event) => {
-        const chartElement = (this.chartContainer()?.nativeElement as HTMLElement).firstElementChild as HTMLElement;
-        if (event.deltaY > 0 && this.chartScale < 5.05) {
-          this.chartScale += 0.05;
-          chartElement.style.transform = `scale(${this.chartScale})`;
-        } else if (event.deltaY < 0 && this.chartScale > 0.1) {
-          this.chartScale -= 0.05;
-          chartElement.style.transform = `scale(${this.chartScale})`;
+      .subscribe({
+        next: (event) => {
+          const chartElement = (this.chartContainer()?.nativeElement as HTMLElement).firstElementChild as HTMLElement;
+          if (event.deltaY > 0 && this.chartScale < 5.05) {
+            this.chartScale += 0.05;
+            chartElement.style.transform = `scale(${this.chartScale})`;
+          } else if (event.deltaY < 0 && this.chartScale > 0.1) {
+            this.chartScale -= 0.05;
+            chartElement.style.transform = `scale(${this.chartScale})`;
+          }
         }
       });
   }
@@ -329,7 +339,13 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
             break;
           }
           case ChartTypes.bubble: {
-            this.chartData?.addRow([chartRows.toString(), this.randomNumber(0, 1000), this.randomNumber(0, 1000), `Item ${chartRows}`, this.randomNumber(0, 1000)]);
+            this.chartData?.addRow([
+              chartRows.toString(),
+              this.randomNumber(0, 1000),
+              this.randomNumber(0, 1000),
+              `Item ${chartRows}`,
+              this.randomNumber(0, 1000)
+            ]);
             break;
           }
           case ChartTypes.line: {
@@ -371,7 +387,12 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
   private getData(length: number, startId = 0): IChartItem[] {
     const data: IChartItem[] = [];
     for (let i = 0; i < length; i++) {
-      data.push({ id: i + startId, value: this.randomNumber(0, 1000), label: `Item ${i + startId}`, category: this.randomNumber(0, 100) });
+      data.push({
+        id: i + startId,
+        value: this.randomNumber(0, 1000),
+        label: `Item ${i + startId}`,
+        category: this.randomNumber(0, 100)
+      });
     }
     return data;
   }
@@ -412,30 +433,38 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
     const chartElement = (this.chartContainer()?.nativeElement as HTMLElement).firstElementChild as HTMLElement;
     fromEvent<MouseEvent>(chartElement, 'mousedown')
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((event) => {
-        this.chartIsPanning = true;
-        (this.chartContainer()?.nativeElement as HTMLElement).classList.add('app--chart--panning');
+      .subscribe({
+        next: (event) => {
+          this.chartIsPanning = true;
+          (this.chartContainer()?.nativeElement as HTMLElement).classList.add('app--chart--panning');
+        }
       });
     fromEvent<MouseEvent>(chartElement, 'mousemove')
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         filter(() => this.chartIsPanning)
       )
-      .subscribe((event) => {
-        // console.log(`X: ${event.movementX} Y: ${event.movementY}`);
-        (this.chartContainer()?.nativeElement as HTMLElement).scrollBy(event.movementX * -1, event.movementY * -1);
+      .subscribe({
+        next: (event) => {
+          // console.log(`X: ${event.movementX} Y: ${event.movementY}`);
+          (this.chartContainer()?.nativeElement as HTMLElement).scrollBy(event.movementX * -1, event.movementY * -1);
+        }
       });
     fromEvent<MouseEvent>(chartElement, 'mouseup')
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        this.chartIsPanning = false;
-        (this.chartContainer()?.nativeElement as HTMLElement).classList.remove('app--chart--panning');
+      .subscribe({
+        next: () => {
+          this.chartIsPanning = false;
+          (this.chartContainer()?.nativeElement as HTMLElement).classList.remove('app--chart--panning');
+        }
       });
     fromEvent<MouseEvent>(chartElement, 'mouseout')
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        this.chartIsPanning = false;
-        (this.chartContainer()?.nativeElement as HTMLElement).classList.remove('app--chart--panning');
+      .subscribe({
+        next: () => {
+          this.chartIsPanning = false;
+          (this.chartContainer()?.nativeElement as HTMLElement).classList.remove('app--chart--panning');
+        }
       });
   }
 }

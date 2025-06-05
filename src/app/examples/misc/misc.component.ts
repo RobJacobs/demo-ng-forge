@@ -1,7 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
-import { ForgeButtonModule, ForgeCheckboxModule, ForgeIconButtonModule, ForgeIconModule, ForgeTextFieldModule, ForgeToolbarModule, ToastService } from '@tylertech/forge-angular';
+import {
+  ForgeButtonModule,
+  ForgeCheckboxModule,
+  ForgeIconButtonModule,
+  ForgeIconModule,
+  ForgeTextFieldModule,
+  ForgeToolbarModule,
+  ToastService
+} from '@tylertech/forge-angular';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { of, Subject } from 'rxjs';
 import { fileTypeFromStream } from 'file-type';
 
@@ -12,12 +21,25 @@ import { BusyIndicatorService } from 'src/app/shared/components/busy-indicator/b
 import { ArrayFindPipe } from 'src/app/shared/pipes/array-find.pipe';
 
 @Component({
-    selector: 'app-examples-misc',
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, ForgeButtonModule, ForgeCheckboxModule, ForgeIconButtonModule, ForgeIconModule, ForgeTextFieldModule, ForgeToolbarModule, CardComponent, ArrayFindPipe],
-    templateUrl: './misc.component.html',
-    styleUrls: ['./misc.component.scss']
+  selector: 'app-examples-misc',
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ForgeButtonModule,
+    ForgeCheckboxModule,
+    ForgeIconButtonModule,
+    ForgeIconModule,
+    ForgeTextFieldModule,
+    ForgeToolbarModule,
+    CardComponent,
+    ArrayFindPipe
+  ],
+  templateUrl: './misc.component.html',
+  styleUrls: ['./misc.component.scss']
 })
 export class MiscComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   private appDataService = inject(AppDataService);
   private busyIndicatorService = inject(BusyIndicatorService);
   private toastService = inject(ToastService);
@@ -30,14 +52,25 @@ export class MiscComponent implements OnInit {
       city: 'ctiy value',
       state: 'state value',
       districts: [
-        { name: 'district 1', location: 'district 1 location', pets: ['rock', 'dog', 'cat'] },
+        {
+          name: 'district 1',
+          location: 'district 1 location',
+          pets: ['rock', 'dog', 'cat']
+        },
         { name: 'district 2', location: 'district 2 location' },
         { name: 'district 3', location: 'district 3 location' }
       ]
     },
     friends: ['Homer', 'Marge', 'Bart', 'Lisa', 'Maggie']
   };
-  private asyncValidators = new Map<string, { value: any; control: AbstractControl; response: Subject<ValidationErrors | null> }>();
+  private asyncValidators = new Map<
+    string,
+    {
+      value: any;
+      control: AbstractControl;
+      response: Subject<ValidationErrors | null>;
+    }
+  >();
 
   public arrayData = [
     { value: 0, label: 'Item 0' },
@@ -56,9 +89,13 @@ export class MiscComponent implements OnInit {
   public fileEncoded = false;
   public openAsDownload = false;
   public formGroup = new FormGroup({
-    name: new FormControl('', { asyncValidators: [this.asyncValidator('name')] }),
+    name: new FormControl('', {
+      asyncValidators: [this.asyncValidator('name')]
+    }),
     age: new FormControl('', { asyncValidators: [this.asyncValidator('age')] }),
-    location: new FormControl('', { asyncValidators: [this.asyncValidator('location')] })
+    location: new FormControl('', {
+      asyncValidators: [this.asyncValidator('location')]
+    })
   });
 
   public ngOnInit() {
@@ -66,39 +103,46 @@ export class MiscComponent implements OnInit {
   }
 
   public onShowFile() {
-    this.appDataService.getFile(this.fileName).subscribe({
-      next: (result) => {
-        if (result?.size && result.type !== 'text/html') {
-          if (this.fileEncoded) {
-            result.text().then((value) => {
-              const encodedBlob = this.base64toBlob(value);
-              if (encodedBlob) {
-                this.openFile(encodedBlob);
-              }
-            });
+    this.appDataService
+      .getFile(this.fileName)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (result) => {
+          if (result?.size && result.type !== 'text/html') {
+            if (this.fileEncoded) {
+              result.text().then((value) => {
+                const encodedBlob = this.base64toBlob(value);
+                if (encodedBlob) {
+                  this.openFile(encodedBlob);
+                }
+              });
+            } else {
+              this.openFile(result);
+            }
           } else {
-            this.openFile(result);
+            this.toastService.show({
+              message: 'An error occurred downloading the file',
+              duration: Infinity,
+              dismissible: true
+            });
           }
-        } else {
+        },
+        error: (err) => {
           this.toastService.show({
             message: 'An error occurred downloading the file',
             duration: Infinity,
             dismissible: true
           });
         }
-      },
-      error: (err) => {
-        this.toastService.show({
-          message: 'An error occurred downloading the file',
-          duration: Infinity,
-          dismissible: true
-        });
-      }
-    });
+      });
   }
 
   public onShowBusy() {
-    const config = { message: 'Processing request...', progress: 'circular' as const, title: 'Processing title' };
+    const config = {
+      message: 'Processing request...',
+      progress: 'circular' as const,
+      title: 'Processing title'
+    };
     this.busyIndicatorService.show(config);
     window.setTimeout(() => {
       this.busyIndicatorService.hide();
@@ -134,7 +178,11 @@ export class MiscComponent implements OnInit {
       }
 
       if (!this.asyncValidators.has(name)) {
-        this.asyncValidators.set(name, { value: control.value, control, response: new Subject<ValidationErrors | null>() });
+        this.asyncValidators.set(name, {
+          value: control.value,
+          control,
+          response: new Subject<ValidationErrors | null>()
+        });
       }
 
       return this.asyncValidators.get(name).response;
@@ -165,7 +213,9 @@ export class MiscComponent implements OnInit {
 
   private openFile(value: Blob) {
     fileTypeFromStream(value.stream()).then((fileTypeResult) => {
-      const resultBlob = new Blob([value], { type: fileTypeResult?.mime?.length ? fileTypeResult.mime : 'application/octet-stream' });
+      const resultBlob = new Blob([value], {
+        type: fileTypeResult?.mime?.length ? fileTypeResult.mime : 'application/octet-stream'
+      });
       const resultBlobUrl = URL.createObjectURL(resultBlob);
 
       if (this.openAsDownload) {

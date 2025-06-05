@@ -4,10 +4,10 @@ import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from 
 import { ForgeListItemModule, ForgeListModule } from '@tylertech/forge-angular';
 
 @Component({
-    selector: 'app-examples-drag-drop',
-    imports: [CommonModule, DragDropModule, ForgeListItemModule, ForgeListModule],
-    templateUrl: './drag-drop.component.html',
-    styleUrls: ['./drag-drop.component.scss']
+  selector: 'app-examples-drag-drop',
+  imports: [CommonModule, DragDropModule, ForgeListItemModule, ForgeListModule],
+  templateUrl: './drag-drop.component.html',
+  styleUrls: ['./drag-drop.component.scss']
 })
 export class DragDropComponent {
   public items01 = ['List 1 - item 01', 'List 1 - item 02', 'List 1 - item 03', 'List 1 - item 04'];

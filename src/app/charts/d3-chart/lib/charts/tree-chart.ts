@@ -263,7 +263,11 @@ export class TreeChartService {
           }
 
           const parentNode = (
-            enterNodes.nodes().length ? (enterNodes.data()[0] as any).parent : exitNodes.nodes().length ? (exitNodes.data().sort((a: any, b: any) => ((a.depth as any) < b.depth) as any)[0] as any).parent : null
+            enterNodes.nodes().length
+              ? (enterNodes.data()[0] as any).parent
+              : exitNodes.nodes().length
+                ? (exitNodes.data().sort((a: any, b: any) => ((a.depth as any) < b.depth) as any)[0] as any).parent
+                : null
           ) as HierarchyPointNode<ITreeChartData>;
 
           if (isDefined(parentNode) && parentNode.depth > 0) {
@@ -299,7 +303,16 @@ export class TreeChartService {
         .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
         .attrTween('d', (d: any, i, element) => {
           const current = (element[i] as SVGPathElement).getAttribute('d') as string;
-          const next = nodePath({ x: Math.round(d.parent.x), y: Math.round(d.parent.y + config.node.size.height) }, { x: Math.round(d.parent.x), y: Math.round(d.parent.y + config.node.size.height) }) as string;
+          const next = nodePath(
+            {
+              x: Math.round(d.parent.x),
+              y: Math.round(d.parent.y + config.node.size.height)
+            },
+            {
+              x: Math.round(d.parent.x),
+              y: Math.round(d.parent.y + config.node.size.height)
+            }
+          ) as string;
           return interpolatePath(current, next);
         })
         .remove();
@@ -323,7 +336,13 @@ export class TreeChartService {
         .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
         .attrTween('d', (d: any, i, element) => {
           const current = (element[i] as SVGPathElement).getAttribute('d') as string;
-          const next = nodePath({ x: Math.round(d.parent.x), y: Math.round(d.parent.y + config.node.size.height) }, { x: Math.round(d.x), y: Math.round(d.y) }) as string;
+          const next = nodePath(
+            {
+              x: Math.round(d.parent.x),
+              y: Math.round(d.parent.y + config.node.size.height)
+            },
+            { x: Math.round(d.x), y: Math.round(d.y) }
+          ) as string;
           return interpolatePath(current, next);
         });
 
@@ -339,7 +358,10 @@ export class TreeChartService {
           .insert('g')
           .classed(`${CHART_CONSTANTS.classes.CHART_PREFIX}__tree__path-label`, true)
           .attr('visibility', 'hidden')
-          .attr('transform', (d: any) => `translate(${this.nodeCenterHorizontal(d, config.node.size.width)}, ${d.y + config.node.size.height + config.node.padding})`);
+          .attr(
+            'transform',
+            (d: any) => `translate(${this.nodeCenterHorizontal(d, config.node.size.width)}, ${d.y + config.node.size.height + config.node.padding})`
+          );
 
         enterlinkLabelNodes
           .append('rect')
@@ -383,7 +405,11 @@ export class TreeChartService {
             resolve();
           })
           .duration(CHART_CONSTANTS.numbers.TRANSITION_DURATION)
-          .attr('transform', (d: any) => `translate(${this.nodeCenterHorizontal(d, config.node.size.width)}, ${d.y + config.node.size.height + (config.node.margin - linkLabelNodeHeight) / 2})`);
+          .attr(
+            'transform',
+            (d: any) =>
+              `translate(${this.nodeCenterHorizontal(d, config.node.size.width)}, ${d.y + config.node.size.height + (config.node.margin - linkLabelNodeHeight) / 2})`
+          );
       }
 
       mergeNodes.each((d: any, i: number) => {

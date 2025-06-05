@@ -8,17 +8,24 @@
     "**/package-lock.json": true
   },
   "editor.formatOnSave": true,
-  "editor.formatOnType": true,
   "editor.detectIndentation": false,
   "editor.tabSize": 2,
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "html.format.wrapLineLength": 0,
+  "html.suggest.html5": true,
+  "files.trimTrailingWhitespace": true,
+  "prettier.printWidth": 160,
+  "prettier.singleAttributePerLine": false,
+  "prettier.singleQuote": true,
+  "prettier.tabWidth": 2,
+  "prettier.trailingComma": "none",
+  "[html]": {
+    "prettier.printWidth": 240
+  },
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "vscode.css-language-features"
   }
 }

@@ -52,7 +52,12 @@ export class D3ChartComponent implements OnInit {
     setTimeout(() => {
       this.drawChart();
     }, 100);
-    if (this.#chartType === ChartTypes.donutMeter || this.#chartType === ChartTypes.gantt || this.#chartType === ChartTypes.treemap || this.#chartType === ChartTypes.tree) {
+    if (
+      this.#chartType === ChartTypes.donutMeter ||
+      this.#chartType === ChartTypes.gantt ||
+      this.#chartType === ChartTypes.treemap ||
+      this.#chartType === ChartTypes.tree
+    ) {
       this.showLegend = false;
     } else {
       this.showLegend = true;
@@ -65,13 +70,18 @@ export class D3ChartComponent implements OnInit {
   public lineChartData?: IChartItem[][];
   public donutMeterChartData = 0;
   public treeChartData?: ITreeChartData;
-  public legendData?: { id: number; value: unknown; label: string; color: string }[];
+  public legendData?: {
+    id: number;
+    value: unknown;
+    label: string;
+    color: string;
+  }[];
   public showLegend = false;
 
   public ngOnInit() {
     fromEvent(window, 'resize')
       .pipe(takeUntilDestroyed(this.destroyRef), debounceTime(100))
-      .subscribe(() => this.drawChart());
+      .subscribe({ next: () => this.drawChart() });
   }
 
   public onAction(action: 'add' | 'update' | 'delete') {
@@ -153,7 +163,12 @@ export class D3ChartComponent implements OnInit {
       }
     }
 
-    if (this.chartType === ChartTypes.bubble || this.chartType === ChartTypes.donut || this.chartType === ChartTypes.pie || this.chartType === ChartTypes.treemap) {
+    if (
+      this.chartType === ChartTypes.bubble ||
+      this.chartType === ChartTypes.donut ||
+      this.chartType === ChartTypes.pie ||
+      this.chartType === ChartTypes.treemap
+    ) {
       this.chartData = this.chartData?.sort((a, b) => {
         return (a.category as number) - (b.category as number);
       });
@@ -165,7 +180,12 @@ export class D3ChartComponent implements OnInit {
     const date = Date.now();
     for (let i = 0; i < length; i++) {
       // data.push({id: i + startId, value: randomNumber(1, 100), label: 'Item ' + (i + startId), category: randomDate()});
-      data.push({ id: i + startId, value: this.randomNumber(0, 1000), label: `Item ${i + startId}`, category: this.randomNumber(0, 100) });
+      data.push({
+        id: i + startId,
+        value: this.randomNumber(0, 1000),
+        label: `Item ${i + startId}`,
+        category: this.randomNumber(0, 100)
+      });
       // const category = date - this.randomNumber(1, 1000000000000);
       // data.push({ id: i + startId, value: this.randomNumber(0, 10000), label: 'Item ' + (i + startId), category: category });
       // data.push({id: i + startId, value: randomNumber(1, 2000), label: 'Item ' + (i + startId), category: categories[randomNumber(0, 9)]});
@@ -182,11 +202,19 @@ export class D3ChartComponent implements OnInit {
   }
 
   private drawChart() {
-    this.legendData = this.chartData?.map((d, i) => ({ id: d.id, label: d.label, value: d.value, color: this.chartPalette[i % this.chartPalette.length] }));
+    this.legendData = this.chartData?.map((d, i) => ({
+      id: d.id,
+      label: d.label,
+      value: d.value,
+      color: this.chartPalette[i % this.chartPalette.length]
+    }));
 
     const chartConfig = {
       container: this.chartContainer()?.nativeElement.querySelector('svg'),
-      data: this.chartData?.map((d, i) => ({ ...d, color: this.chartPalette[i % this.chartPalette.length] })),
+      data: this.chartData?.map((d, i) => ({
+        ...d,
+        color: this.chartPalette[i % this.chartPalette.length]
+      })),
       palette: this.chartPalette,
       selectedCallback: this.selectedCallback,
       hoverCallback: this.hoverCallback
@@ -226,8 +254,17 @@ export class D3ChartComponent implements OnInit {
           ...chartConfig,
           type: 'donut-meter',
           data: [
-            { id: 0, value: this.donutMeterChartData, label: 'percent', color: CHART_CONSTANTS.chartPalette.indigoA200 },
-            { id: 1, value: 100 - this.donutMeterChartData, color: CHART_CONSTANTS.chartPalette.grey400 }
+            {
+              id: 0,
+              value: this.donutMeterChartData,
+              label: 'percent',
+              color: CHART_CONSTANTS.chartPalette.indigoA200
+            },
+            {
+              id: 1,
+              value: 100 - this.donutMeterChartData,
+              color: CHART_CONSTANTS.chartPalette.grey400
+            }
           ]
         } as IPieChartConfig;
         PieChartService.buildPieChart(donutMeterConfig);
@@ -247,7 +284,12 @@ export class D3ChartComponent implements OnInit {
           data: lineChartData
         } as ILineChartConfig;
         LineChartService.buildLineChart(lineConfig);
-        this.legendData = lineChartData?.map((d, i) => ({ id: d.id, color: d.color, value: null, label: d.data[0].label })) as any[];
+        this.legendData = lineChartData?.map((d, i) => ({
+          id: d.id,
+          color: d.color,
+          value: null,
+          label: d.data[0].label
+        })) as any[];
         break;
       }
       case ChartTypes.pie: {
@@ -283,7 +325,11 @@ export class D3ChartComponent implements OnInit {
                 const childCount = this.randomNumber(5, 10);
                 data.children = [];
                 for (let i = 0; i < childCount; i++) {
-                  data.children.push({ id: `${parentIds.length + 1}-${i}`, label: `Item ${parentIds.length + 1} - ${i}`, children: this.randomNumber(0, 10) ? true : false });
+                  data.children.push({
+                    id: `${parentIds.length + 1}-${i}`,
+                    label: `Item ${parentIds.length + 1} - ${i}`,
+                    children: this.randomNumber(0, 10) ? true : false
+                  });
                 }
               }
               this.drawChart();

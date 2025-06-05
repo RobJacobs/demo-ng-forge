@@ -58,7 +58,10 @@ export class PieChartService {
         .selectAll('g')
         .select('path')
         .each((d: any) => {
-          lastAngles[d.data.id] = { startAngle: d.startAngle, endAngle: d.endAngle };
+          lastAngles[d.data.id] = {
+            startAngle: d.startAngle,
+            endAngle: d.endAngle
+          };
         });
 
       const nodes = chartNode.selectAll('g').data(chart(config.data as any), (d: any) => d.data.id);
@@ -109,7 +112,11 @@ export class PieChartService {
               if (!config.hideLabel) {
                 let meterTextNode = chartNode.select('.' + CHART_CONSTANTS.classes.CHART_TEXT);
                 if (!meterTextNode.node()) {
-                  meterTextNode = chartNode.append('text').style('fill', CHART_CONSTANTS.chartTheme.textHigh).style('text-anchor', 'middle').classed(CHART_CONSTANTS.classes.CHART_TEXT, true) as any;
+                  meterTextNode = chartNode
+                    .append('text')
+                    .style('fill', CHART_CONSTANTS.chartTheme.textHigh)
+                    .style('text-anchor', 'middle')
+                    .classed(CHART_CONSTANTS.classes.CHART_TEXT, true) as any;
                   meterTextNode.append('tspan').style('font-size', '2rem').classed(CHART_CONSTANTS.classes.CHART_TEXT_VALUE, true);
                   meterTextNode.append('tspan').attr('x', 0).attr('y', 0).attr('dy', '1.25em').classed(CHART_CONSTANTS.classes.CHART_TEXT_LABEL, true);
                 }
@@ -125,7 +132,9 @@ export class PieChartService {
                   }
                 }
                 meterTextNode.select(`tspan.${CHART_CONSTANTS.classes.CHART_TEXT_VALUE}`).text(centerValue);
-                meterTextNode.select(`tspan.${CHART_CONSTANTS.classes.CHART_TEXT_LABEL}`).text(isDefined(config.data[0].label) ? (config.data[0].label as string) : '');
+                meterTextNode
+                  .select(`tspan.${CHART_CONSTANTS.classes.CHART_TEXT_LABEL}`)
+                  .text(isDefined(config.data[0].label) ? (config.data[0].label as string) : '');
                 break;
               }
           }

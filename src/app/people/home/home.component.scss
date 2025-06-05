@@ -1,4 +1,4 @@
-@use 'src/global' as *;
+@use "src/global" as *;
 
 :host {
   display: grid;
@@ -14,7 +14,7 @@
           @include app-border(border-bottom);
         }
 
-        & > .forge-table-cell:last-child {
+        &>.forge-table-cell:last-child {
           padding-right: 0px;
           width: 1px;
         }

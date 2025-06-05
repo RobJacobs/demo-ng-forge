@@ -1,10 +1,28 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component, OnInit, inject, viewChild } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, DestroyRef, OnInit, inject, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IOption, SortDirection } from '@tylertech/forge';
 import { isDefined } from '@tylertech/forge-core';
-import { ForgeIconButtonModule, ForgeIconModule, ForgeOptionModule, ForgePaginatorModule, ForgeSelectDropdownModule, ForgeToolbarModule } from '@tylertech/forge-angular';
+import {
+  ForgeIconButtonModule,
+  ForgeIconModule,
+  ForgeOptionModule,
+  ForgePaginatorModule,
+  ForgeSelectDropdownModule,
+  ForgeToolbarModule
+} from '@tylertech/forge-angular';
 import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
-import { ColDef, ColumnMovedEvent, ColumnResizedEvent, ColumnVisibleEvent, GridOptions, GridReadyEvent, ICellRendererComp, ICellRendererParams, SortChangedEvent } from 'ag-grid-community';
+import {
+  ColDef,
+  ColumnMovedEvent,
+  ColumnResizedEvent,
+  ColumnVisibleEvent,
+  GridOptions,
+  GridReadyEvent,
+  ICellRendererComp,
+  ICellRendererParams,
+  SortChangedEvent
+} from 'ag-grid-community';
 import { finalize } from 'rxjs';
 
 import { IPerson } from 'src/app/shared/interfaces/person.interface';
@@ -13,12 +31,22 @@ import { AppDataService } from '../app-data.service';
 
 @Component({
   selector: 'app-ag-grid-demo',
-  imports: [CommonModule, ForgeIconButtonModule, ForgeIconModule, ForgeOptionModule, ForgePaginatorModule, ForgeSelectDropdownModule, ForgeToolbarModule, AgGridModule],
+  imports: [
+    CommonModule,
+    ForgeIconButtonModule,
+    ForgeIconModule,
+    ForgeOptionModule,
+    ForgePaginatorModule,
+    ForgeSelectDropdownModule,
+    ForgeToolbarModule,
+    AgGridModule
+  ],
   templateUrl: './ag-grid-demo.component.html',
   styleUrls: ['./ag-grid-demo.component.scss'],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AgGridDemoComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   private appDataService = inject(AppDataService);
 
   private readonly agGrid = viewChild('agGrid', { read: AgGridAngular });
@@ -45,7 +73,16 @@ export class AgGridDemoComponent implements OnInit {
     resizable: true
   };
   public columnDefs: ColDef[] = [
-    { field: 'image', headerName: '', cellRenderer: ImageCellRendererComponent, sortable: false, width: 80, suppressSizeToFit: true, suppressAutoSize: false, resizable: false },
+    {
+      field: 'image',
+      headerName: '',
+      cellRenderer: ImageCellRendererComponent,
+      sortable: false,
+      width: 80,
+      suppressSizeToFit: true,
+      suppressAutoSize: false,
+      resizable: false
+    },
     { field: 'firstName', headerName: 'First', filter: true },
     { field: 'lastName', headerName: 'Last' },
     { field: 'gender', headerName: 'Gender' },
@@ -53,7 +90,12 @@ export class AgGridDemoComponent implements OnInit {
   ];
 
   public get optionalTableColumns(): IOption[] {
-    return this.columnDefs.filter((c) => c.field).map((c) => ({ value: c.field, label: c.headerName || c.field })) as IOption[];
+    return this.columnDefs
+      .filter((c) => c.field)
+      .map((c) => ({
+        value: c.field,
+        label: c.headerName || c.field
+      })) as IOption[];
   }
   public selectedTableColumns?: (string | undefined)[];
 
@@ -111,10 +153,15 @@ export class AgGridDemoComponent implements OnInit {
         skip: this.filterCache.skip,
         take: this.filterCache.take
       })
-      .pipe(finalize(() => (this.isBusy = false)))
-      .subscribe((result) => {
-        this.recordset = result.data;
-        this.recordCount = result.count;
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => (this.isBusy = false))
+      )
+      .subscribe({
+        next: (result) => {
+          this.recordset = result.data;
+          this.recordCount = result.count;
+        }
       });
   }
 }

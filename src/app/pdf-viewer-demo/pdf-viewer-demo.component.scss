@@ -1,4 +1,4 @@
-@use 'src/global' as *;
+@use "src/global" as *;
 
 :host {
   display: grid;
@@ -44,7 +44,7 @@
 .header {
   overflow: hidden;
 
-  [slot='end'] {
+  [slot="end"] {
     display: flex;
     column-gap: 16px;
   }
@@ -66,8 +66,8 @@
       min-height: 40px;
     }
 
-    [slot='center'],
-    [slot='end'] {
+    [slot="center"],
+    [slot="end"] {
       display: flex;
       align-items: center;
 
@@ -101,7 +101,7 @@
       margin: 0;
     }
 
-    input[type='number'] {
+    input[type="number"] {
       -moz-appearance: textfield;
       appearance: textfield;
     }

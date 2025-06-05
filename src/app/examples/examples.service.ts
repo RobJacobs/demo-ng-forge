@@ -14,7 +14,11 @@ export class ExamplesService {
 
   constructor() {
     for (let index = 0; index < 300; index++) {
-      this.mockData.push({ id: index, code: Utils.formatNumber(index, '3.0'), description: `Item ${Utils.formatNumber(index, '3.0')}` });
+      this.mockData.push({
+        id: index,
+        code: Utils.formatNumber(index, '3.0'),
+        description: `Item ${Utils.formatNumber(index, '3.0')}`
+      });
     }
   }
 
@@ -51,7 +55,9 @@ export class ExamplesService {
           records = this.mockData.filter((d) => d.description.toLocaleLowerCase().includes(filterText.toLocaleLowerCase())).slice(0, take);
         } else {
           if (values?.length) {
-            records = [...new Set([...this.mockData.filter((d) => values.map((v) => v.toString()).includes(d.id.toString())), ...this.mockData.slice(0, take)])];
+            records = [
+              ...new Set([...this.mockData.filter((d) => values.map((v) => v.toString()).includes(d.id.toString())), ...this.mockData.slice(0, take)])
+            ];
           } else {
             records = this.mockData.slice(0, take);
           }

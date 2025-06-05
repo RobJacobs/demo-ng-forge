@@ -1,6 +1,6 @@
-@use '@tylertech/forge/sass/core/styles/tokens/color-palette' as forge-color;
-@use '@tylertech/forge/sass/utils/mixins-flex' as forge-flex;
-@use 'src/variables' as app-var;
+@use "@tylertech/forge/sass/core/styles/tokens/color-palette" as forge-color;
+@use "@tylertech/forge/sass/utils/mixins-flex" as forge-flex;
+@use "src/variables" as app-var;
 
 @mixin container-outlined {
   background-color: var(--forge-theme-surface);
@@ -88,10 +88,10 @@
     }
   }
 
-  [slot='value'] {
+  [slot="value"] {
     &:empty {
       &::before {
-        content: 'n/a';
+        content: "n/a";
         color: var(--forge-theme-text-medium);
         font-style: italic;
       }
@@ -142,10 +142,10 @@
 
 @mixin empty-placeholder {
   forge-label-value {
-    [slot='value'] {
+    [slot="value"] {
       &:empty {
         &::before {
-          content: 'n/a';
+          content: "n/a";
           color: var(--forge-theme-text-medium);
           font-style: italic;
         }
@@ -154,18 +154,20 @@
   }
 }
 
-@mixin border($border: 'border') {
+@mixin border($border: "border") {
   #{$border}: 1px solid var(--forge-theme-outline);
 }
 
 @mixin toolbar($slots...) {
   @include toolbar-gap();
+
   @media (max-width: 400px) {
     @include toolbar-stacked(end);
   }
 }
 
 @mixin toolbar-gap($gap: 16px) {
+
   &::part(section-start),
   &::part(section-center),
   &::part(section-end) {
@@ -175,13 +177,14 @@
 
 @mixin toolbar-stacked($slots...) {
   --forge-toolbar-height: auto;
+
   &::part(inner) {
     grid-template-columns: unset;
     grid-auto-flow: row;
   }
 
   @for $i from 0 to length($slots) {
-    &::part(#{'section-' + nth($slots, $i + 1)}) {
+    &::part(#{"section-" + nth($slots, $i + 1)}) {
       flex-direction: column;
       align-items: stretch;
       row-gap: 8px;

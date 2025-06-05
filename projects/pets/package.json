@@ -2,19 +2,18 @@
   "name": "@demo-ng-forge/pets",
   "version": "0.0.1",
   "peerDependencies": {
-    "@angular/animations": "^16.0.2",
-    "@angular/common": "^16.0.2",
-    "@angular/compiler": "^16.0.2",
-    "@angular/core": "^16.0.2",
-    "@angular/forms": "^16.0.2",
-    "@angular/platform-browser": "^16.0.2",
-    "@angular/platform-browser-dynamic": "^16.0.2",
-    "@angular/router": "^16.0.2",
-    "@tylertech/forge": "^2.16.3",
-    "@tylertech/forge-angular": "^3.2.0",
-    "@tylertech/tyler-icons": "^1.17.0"
+    "@angular/animations": "^20.0.0",
+    "@angular/common": "^20.0.0",
+    "@angular/compiler": "^20.0.0",
+    "@angular/core": "^20.0.0",
+    "@angular/forms": "^20.0.0",
+    "@angular/router": "^20.0.0",
+    "@tylertech/forge": "^3.8.1",
+    "@tylertech/forge-angular": "^5.5.0",
+    "@tylertech/tyler-icons": "^1.18.1"
   },
   "dependencies": {
     "tslib": "^2.3.0"
-  }
+  },
+  "sideEffects": false
 }

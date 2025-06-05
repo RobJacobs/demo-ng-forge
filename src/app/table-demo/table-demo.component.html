@@ -56,7 +56,12 @@
         </thead>
         <tbody>
           <ng-container *cdkVirtualFor="let record of recordset(); trackBy: recordsetTrackBy; let recordIndex = index">
-            <tr class="forge-table-row forge-table-body__row" [ngClass]="{ 'forge-table-row--expanded': expandedRows[recordIndex] }">
+            <tr
+              class="forge-table-row forge-table-body__row"
+              [ngClass]="{
+                'forge-table-row--expanded': expandedRows[recordIndex]
+              }"
+            >
               <td class="forge-table-cell forge-table-body__cell forge-table-row__expander">
                 <forge-icon-button (click)="onExpandRow(recordIndex, record)" aria-label="Toggle details">
                   <forge-icon [name]="expandedRows[recordIndex] ? 'expand_less' : 'expand_more'"></forge-icon>

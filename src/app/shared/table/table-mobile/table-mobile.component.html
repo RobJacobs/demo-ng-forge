@@ -27,7 +27,9 @@
             <app-table-mobile-template slot="value" [template]="column.template" [rowIndex]="rowIndex" [rowData]="rowData"></app-table-mobile-template>
           } @else if (column.property?.length) {
             @if (column.transform) {
-              <div slot="value">{{ column.transform(rowData[column.property]) }}</div>
+              <div slot="value">
+                {{ column.transform(rowData[column.property]) }}
+              </div>
             } @else {
               <div slot="value">{{ rowData[column.property] }}</div>
             }

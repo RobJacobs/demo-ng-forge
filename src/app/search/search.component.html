@@ -84,7 +84,9 @@
     slot="addon-end"
     density="medium"
     class="operator__addon"
-    [ngClass]="{ 'operator__addon--selected': formGroup.get(name)?.value.operator }"
+    [ngClass]="{
+      'operator__addon--selected': formGroup.get(name)?.value.operator
+    }"
     #operatorPopover="forgePopover"
     [forgePopover]="operatorPopoverTemplate"
     (click)="onOperatorPopoverOpen($event, operatorPopover, name)"

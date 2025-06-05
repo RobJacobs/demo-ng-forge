@@ -40,10 +40,16 @@ export class FormlyFieldDirective implements OnInit {
 
     if (this.field?.props?.description?.length) {
       element.addEventListener('focusin', () => {
-        this.moduleService.formMessage.next({ id: this.field?.id as string, message: this.field?.props?.description as string });
+        this.moduleService.formMessage.next({
+          id: this.field?.id as string,
+          message: this.field?.props?.description as string
+        });
       });
       element.addEventListener('focusout', () => {
-        this.moduleService.formMessage.next({ id: this.field?.id as string, message: '' });
+        this.moduleService.formMessage.next({
+          id: this.field?.id as string,
+          message: ''
+        });
       });
     }
 

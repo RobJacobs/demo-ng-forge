@@ -1,14 +1,14 @@
-@use '@tylertech/forge/dist/forge-core';
+@use "@tylertech/forge/dist/forge-core";
 
-@use '@tylertech/forge/dist/forge';
-@use '@tylertech/forge/dist/table/forge-table.css';
+@use "@tylertech/forge/dist/forge";
+@use "@tylertech/forge/dist/table/forge-table.css";
 
-@use 'src/global' as *;
+@use "src/global" as *;
 
-@use '@tylertech/forge/sass/theme/theme-dark';
+@use "@tylertech/forge/sass/theme/theme-dark";
 
-@use 'ag-grid-community/styles/ag-grid.css';
-@use 'ag-grid-community/styles/ag-theme-material.css';
+@use "ag-grid-community/styles/ag-grid.css";
+@use "ag-grid-community/styles/ag-theme-material.css";
 
 *,
 *::before,
@@ -68,7 +68,7 @@ router-outlet {
     &[invalid] {
       display: block;
 
-      .app--form-control-invalid[slot='support-text'] {
+      .app--form-control-invalid[slot="support-text"] {
         display: block;
       }
     }
@@ -78,21 +78,27 @@ router-outlet {
     &--primary {
       color: var(--forge-theme-primary);
     }
+
     &--secondary {
       color: var(--forge-theme-secondary);
     }
+
     &--tertiary {
       color: var(--forge-theme-tertiary);
     }
+
     &--success {
       color: var(--forge-theme-success);
     }
+
     &--error {
       color: var(--forge-theme-error);
     }
+
     &--warning {
       color: var(--froge-theme-warning);
     }
+
     &--info {
       color: var(--forge-theme-info);
     }
@@ -102,21 +108,27 @@ router-outlet {
     &--primary {
       background-color: var(--forge-theme-primary-container);
     }
+
     &--secondary {
       background-color: var(--forge-theme-secondary-container);
     }
+
     &--tertiary {
       background-color: var(--forge-theme-tertiary-container);
     }
+
     &--success {
       background-color: var(--forge-theme-success-container);
     }
+
     &--error {
       background-color: var(--forge-theme-error-container);
     }
+
     &--warning {
       background-color: var(--froge-theme-warning-container);
     }
+
     &--info {
       background-color: var(--forge-theme-info-container);
     }
@@ -125,4 +137,8 @@ router-outlet {
 
 forge-popover {
   --forge-popover-min-width: 240px;
+}
+
+forge-button {
+  min-width: fit-content;
 }

@@ -9,8 +9,6 @@ export abstract class BaseValueAccessorComponent implements ControlValueAccessor
     this.#value = value;
   }
 
-  constructor() {}
-
   public onChange = (fn: any) => {};
   public onTouched = () => {};
 

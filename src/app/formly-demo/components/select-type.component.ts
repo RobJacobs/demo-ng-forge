@@ -7,9 +7,17 @@ import { finalize, map, of, Subject, takeUntil } from 'rxjs';
 import { FormlyDemoService } from '../formly-demo.service';
 
 @Component({
-    selector: 'app-formly-select',
-    template: `
-    <forge-select [id]="id" [options]="$any(props.options)" [label]="$any(props.label)" [placeholder]="$any(props.placeholder)" [invalid]="showError" [formControl]="formControl" [formlyAttributes]="field">
+  selector: 'app-formly-select',
+  template: `
+    <forge-select
+      [id]="id"
+      [options]="$any(props.options)"
+      [label]="$any(props.label)"
+      [placeholder]="$any(props.placeholder)"
+      [invalid]="showError"
+      [formControl]="formControl"
+      [formlyAttributes]="field"
+    >
       @if (showError) {
         <span slot="helper-text">
           <formly-validation-message [field]="field"></formly-validation-message>
@@ -17,8 +25,8 @@ import { FormlyDemoService } from '../formly-demo.service';
       }
     </forge-select>
   `,
-    styles: [
-        `
+  styles: [
+    `
       :host {
         display: block;
       }
@@ -27,9 +35,9 @@ import { FormlyDemoService } from '../formly-demo.service';
       //   --forge-select-height: 2rem;
       // }
     `
-    ],
-    imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeSelectModule],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  ],
+  imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeSelectModule],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class SelectTypeComponent extends FieldType<FieldTypeConfig> implements OnInit, OnDestroy {
   private moduleService = inject(FormlyDemoService);

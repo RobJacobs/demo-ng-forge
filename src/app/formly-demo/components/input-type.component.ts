@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, OnDestroy, OnInit, viewChild } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, OnDestroy, OnInit, inject, viewChild } from '@angular/core';
 import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { finalize, map, of, Subject, takeUntil } from 'rxjs';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
@@ -11,7 +11,15 @@ import { FormlyDemoService } from '../formly-demo.service';
   selector: 'app-formly-input',
   template: `
     <forge-text-field [required]="props.required" [invalid]="showError">
-      <input #input [id]="id" [type]="inputType" [placeholder]="props.placeholder" [readonly]="props.readonly" [formControl]="formControl" [formlyAttributes]="field" />
+      <input
+        #input
+        [id]="id"
+        [type]="inputType"
+        [placeholder]="props.placeholder"
+        [readonly]="props.readonly"
+        [formControl]="formControl"
+        [formlyAttributes]="field"
+      />
       @if (props.label) {
         <label [attr.for]="id" slot="label">{{ props.label }}</label>
       }
@@ -44,13 +52,10 @@ import { FormlyDemoService } from '../formly-demo.service';
 })
 export class InputTypeComponent extends FieldType<FieldTypeConfig> implements OnInit, OnDestroy {
   private unsubscribe = new Subject<void>();
+  private moduleService = inject(FormlyDemoService);
   private readonly inputElement = viewChild<ElementRef>('input');
 
   public inputType = 'text';
-
-  constructor(private moduleService: FormlyDemoService) {
-    super();
-  }
 
   public ngOnInit() {
     this.inputType = this.props?.type || 'text';

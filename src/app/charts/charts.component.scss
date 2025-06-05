@@ -1,4 +1,4 @@
-@use 'src/global' as *;
+@use "src/global" as *;
 
 :host {
   overflow: hidden;
@@ -10,13 +10,14 @@
 .header {
   overflow: hidden;
 
-  [slot='start'] {
+  [slot="start"] {
     display: flex;
     align-items: center;
     column-gap: 16px;
 
     forge-select {
       width: 320px;
+
       &::part(label) {
         display: none;
       }
@@ -26,6 +27,7 @@
 
 forge-tab-bar {
   background-color: var(--forge-theme-surface);
+
   &::part(container) {
     justify-items: flex-start;
   }

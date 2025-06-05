@@ -33,7 +33,10 @@ export class ChartUtils {
     return this._bodyFont;
   }
 
-  public static chartSize(chart: SVGElement): { width: number; height: number } {
+  public static chartSize(chart: SVGElement): {
+    width: number;
+    height: number;
+  } {
     if (!chart) {
       return { width: 0, height: 0 };
     }
@@ -118,7 +121,12 @@ export class ChartUtils {
 
   public static convertData(data: any[], mapping: IChartData): IChartData[] {
     return data.map((d) => {
-      const value = typeof d[mapping.value.toString()] === 'number' ? d[mapping.value.toString()] : d[mapping.value.toString()] instanceof Date ? d[mapping.value.toString()].valueOf() : parseInt(d[mapping.value.toString()], 10);
+      const value =
+        typeof d[mapping.value.toString()] === 'number'
+          ? d[mapping.value.toString()]
+          : d[mapping.value.toString()] instanceof Date
+            ? d[mapping.value.toString()].valueOf()
+            : parseInt(d[mapping.value.toString()], 10);
       return {
         id: d[mapping.id],
         value,

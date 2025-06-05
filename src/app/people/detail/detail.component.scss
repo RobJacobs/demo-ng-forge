@@ -1,4 +1,4 @@
-@use 'src/global' as *;
+@use "src/global" as *;
 
 :host {
   display: grid;
@@ -8,7 +8,8 @@
 
 .header {
   overflow: hidden;
-  [slot='start'] {
+
+  [slot="start"] {
     @include forge-flex-container(flex, row, nowrap, center);
   }
 }

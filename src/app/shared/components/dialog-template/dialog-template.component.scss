@@ -1,16 +1,16 @@
-@use 'src/global' as *;
+@use "src/global" as *;
 
 :host {
   display: block;
   width: 100%;
 }
 
-forge-toolbar[slot='header'] {
-  forge-icon-button[slot='after-end'] {
+forge-toolbar[slot="header"] {
+  forge-icon-button[slot="after-end"] {
     margin-right: 8px;
   }
 }
 
-forge-toolbar[slot='footer'] {
+forge-toolbar[slot="footer"] {
   @include app-toolbar(end);
 }

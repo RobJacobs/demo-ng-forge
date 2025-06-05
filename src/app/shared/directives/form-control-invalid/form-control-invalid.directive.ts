@@ -11,7 +11,9 @@ export class FormControlInvalidDirective implements OnInit {
   private elementRef = inject(ElementRef<HTMLElement>);
   private renderer = inject(Renderer2);
 
-  public readonly control = input.required<AbstractControl>({ alias: 'appFormControlInvalid' });
+  public readonly control = input.required<AbstractControl>({
+    alias: 'appFormControlInvalid'
+  });
 
   public ngOnInit() {
     if (!this.elementRef.nativeElement.querySelector('*[slot="support-text"]:not(.app--form-control-invalid)')) {
@@ -26,16 +28,18 @@ export class FormControlInvalidDirective implements OnInit {
         distinctUntilChanged(),
         takeUntilDestroyed(this.destroyRef)
       )
-      .subscribe((shouldMarkInvalid) => {
-        if (shouldMarkInvalid) {
-          this.renderer.setAttribute(this.elementRef.nativeElement, 'invalid', '');
-          this.renderer.addClass(this.elementRef.nativeElement, 'app--form-control-invalid');
-          (this.elementRef.nativeElement as HTMLElement).style.removeProperty('--forge-field-support-text-margin-block');
-        } else {
-          this.renderer.removeAttribute(this.elementRef.nativeElement, 'invalid');
-          this.renderer.removeClass(this.elementRef.nativeElement, 'app--form-control-invalid');
-          if (!this.elementRef.nativeElement.querySelector('*[slot="support-text"]:not(.app--form-control-invalid)')) {
-            this.elementRef.nativeElement.style.setProperty('--forge-field-support-text-margin-block', '0');
+      .subscribe({
+        next: (shouldMarkInvalid) => {
+          if (shouldMarkInvalid) {
+            this.renderer.setAttribute(this.elementRef.nativeElement, 'invalid', '');
+            this.renderer.addClass(this.elementRef.nativeElement, 'app--form-control-invalid');
+            (this.elementRef.nativeElement as HTMLElement).style.removeProperty('--forge-field-support-text-margin-block');
+          } else {
+            this.renderer.removeAttribute(this.elementRef.nativeElement, 'invalid');
+            this.renderer.removeClass(this.elementRef.nativeElement, 'app--form-control-invalid');
+            if (!this.elementRef.nativeElement.querySelector('*[slot="support-text"]:not(.app--form-control-invalid)')) {
+              this.elementRef.nativeElement.style.setProperty('--forge-field-support-text-margin-block', '0');
+            }
           }
         }
       });

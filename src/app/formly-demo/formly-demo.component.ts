@@ -6,10 +6,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { formlyDemoConstants } from './formly-demo.constants';
 
 @Component({
-    selector: 'app-formly-demo',
-    templateUrl: './formly-demo.component.html',
-    styleUrls: ['./formly-demo.component.scss'],
-    standalone: false
+  selector: 'app-formly-demo',
+  templateUrl: './formly-demo.component.html',
+  styleUrls: ['./formly-demo.component.scss'],
+  standalone: false
 })
 export class FormlyDemoComponent implements OnInit {
   private changeDetectorRef = inject(ChangeDetectorRef);
@@ -38,8 +38,10 @@ export class FormlyDemoComponent implements OnInit {
   public formMessage?: { id: string; message: string };
 
   constructor() {
-    this.moduleService.formMessage.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result) => {
-      this.formMessage = result;
+    this.moduleService.formMessage.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (result) => {
+        this.formMessage = result;
+      }
     });
   }
 

@@ -1,6 +1,8 @@
 <forge-scaffold>
   <forge-toolbar slot="header">
-    <h2 slot="start" class="forge-typography--heading4" [id]="id + '--title'">{{ dialogTitle }}</h2>
+    <h2 slot="start" class="forge-typography--heading4" [id]="id + '--title'">
+      {{ dialogTitle }}
+    </h2>
     <forge-icon-button class="header__close" slot="end" aria-label="Close" (click)="onClose()">
       <forge-icon name="close"></forge-icon>
     </forge-icon-button>
