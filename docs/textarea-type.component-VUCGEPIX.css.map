@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/formly-demo/components/textarea-type.component.ts"],
+  "sourcesContent": ["\n      :host {\n        display: block;\n      }\n\n      textarea {\n        resize: none;\n      }\n    "],
+  "mappings": "AACM,MACE,QAAA,MAGF,SACE,OAAA",
+  "names": []
+}
