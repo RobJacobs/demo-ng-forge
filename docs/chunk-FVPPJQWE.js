@@ -1,0 +1,9 @@
+import{i as m,td as f,ud as g}from"./chunk-LAD3HRCK.js";import{Eb as r,Fb as t,Pb as p,Qb as n,Zb as c,gb as s,wc as l}from"./chunk-BPFPFXGP.js";var u=[[["","app-card-header",""]],"*",[["","app-card-footer",""]]],h=["[app-card-header]","*","[app-card-footer]"],_=(()=>{let e=class e{constructor(){this.border=l("raised")}get raisedClass(){return this.border()==="raised"}get outlinedClass(){return this.border()==="outlined"}};e.\u0275fac=function(o){return new(o||e)},e.\u0275cmp=s({type:e,selectors:[["app-card"]],hostVars:4,hostBindings:function(o,i){o&2&&c("app-card--raised",i.raisedClass)("app-card--outlined",i.outlinedClass)},inputs:{border:[1,"border"]},ngContentSelectors:h,decls:6,vars:0,consts:[[1,"header"],[1,"body"],["inverted","true",1,"footer"]],template:function(o,i){o&1&&(p(u),r(0,"forge-toolbar",0),n(1),t(),r(2,"div",1),n(3,1),t(),r(4,"forge-toolbar",2),n(5,2),t())},dependencies:[m,g,f],styles:[`[_nghost-%COMP%]{display:flex;flex-direction:column;overflow:hidden}.app-card--raised[_nghost-%COMP%]{background-color:var(--forge-theme-surface);border-radius:var(--forge-shape-medium);border-color:var(--forge-theme-outline);box-shadow:var(--forge-elevation-1)}.app-card--outlined[_nghost-%COMP%]{background-color:var(--forge-theme-surface);border-radius:var(--forge-shape-medium);border:1px solid var(--forge-theme-outline)}.header[_ngcontent-%COMP%]:empty{display:none}.body[_ngcontent-%COMP%]{padding:16px;overflow:auto;flex-grow:1}.footer[_ngcontent-%COMP%]::part(section-start), .footer[_ngcontent-%COMP%]::part(section-center), .footer[_ngcontent-%COMP%]::part(section-end){column-gap:16px}.footer[_ngcontent-%COMP%]:empty{display:none}
+
+
+
+
+
+
+/*# sourceMappingURL=card.component-2H7J5OTW.css.map */`]});let a=e;return a})();export{_ as a};
+//# sourceMappingURL=chunk-FVPPJQWE.js.map
