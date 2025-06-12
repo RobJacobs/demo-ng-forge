@@ -38,6 +38,6 @@
 <forge-toolbar class="footer" inverted>
   <div slot="end">
     <forge-button variant="outlined" (click)="onCancel()">Cancel</forge-button>
-    <forge-button variant="raised" (click)="onSave()" [disabled]="cache.formGroup.invalid || !cache.formGroup.dirty"> Save </forge-button>
+    <forge-button variant="filled" (click)="onSave()" [disabled]="cache.formGroup.invalid || !cache.formGroup.dirty"> Save </forge-button>
   </div>
 </forge-toolbar>

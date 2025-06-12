@@ -9,7 +9,7 @@ import {
   ITableSortMultipleEventData,
   SortDirection
 } from '@tylertech/forge';
-import { IFilterParameter } from 'src/app/shared/interfaces/filter.interface';
+import { IFilterParameter } from 'src/app/shared/interfaces';
 
 @Injectable()
 export abstract class BaseTableComponent {

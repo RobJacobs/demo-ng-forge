@@ -6,7 +6,7 @@ import { ForgeButtonModule, ForgeLabelValueModule, ForgeToolbarModule } from '@t
 
 import { Utils } from 'src/utils';
 import { AppDataService } from 'src/app/app-data.service';
-import { IPerson } from 'src/app/shared/interfaces/person.interface';
+import { IPerson } from 'src/app/shared/interfaces';
 import { IndexedDBStorageService } from './indexed-db-storage.service';
 
 @Component({
@@ -60,6 +60,7 @@ export class StorageComponent implements OnInit {
     if (localStorageResult?.length) {
       try {
         this.localStorageData = JSON.parse(localStorageResult);
+        // eslint-disable-next-line no-empty
       } catch {}
     }
   }

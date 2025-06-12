@@ -25,9 +25,9 @@ import { Observable, lastValueFrom, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { AppDataService } from 'src/app/app-data.service';
-import { ISearch } from 'src/app/shared/interfaces/search.interface';
-import { AutocompleteRangeComponent } from 'src/app/shared/components/autocomplete-range/autocomplete-range.component';
-import { CheckboxThreeStateDirective } from 'src/app/shared/directives/checkbox-three-state/checkbox-three-state.directive';
+import { ISearch } from 'src/app/shared/interfaces';
+import { AutocompleteRangeComponent } from 'src/app/shared/components';
+import { CheckboxThreeStateDirective } from 'src/app/shared/directives';
 import { SearchSaveComponent } from './save/search-save.component';
 
 @Component({

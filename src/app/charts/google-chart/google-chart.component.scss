@@ -28,7 +28,7 @@
 .chart-card {
   margin: 24px;
   height: calc(100% - 48px);
-  @include app-container-raised();
+  @include app-container-outlined();
 
   .chart-container {
     position: relative;

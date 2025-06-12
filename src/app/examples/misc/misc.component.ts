@@ -16,9 +16,8 @@ import { fileTypeFromStream } from 'file-type';
 
 import { Utils } from 'src/utils';
 import { AppDataService } from 'src/app/app-data.service';
-import { CardComponent } from 'src/app/shared/components/card/card.component';
-import { BusyIndicatorService } from 'src/app/shared/components/busy-indicator/busy-indicator.service';
-import { ArrayFindPipe } from 'src/app/shared/pipes/array-find.pipe';
+import { BusyIndicatorService, CardComponent } from 'src/app/shared/components';
+import { ArrayFindPipe } from 'src/app/shared/pipes';
 
 @Component({
   selector: 'app-examples-misc',
@@ -85,7 +84,7 @@ export class MiscComponent implements OnInit {
     { value: 9, label: 'Item 9' }
   ];
   public propertyPaths: object;
-  public fileName: string = '';
+  public fileName = '';
   public fileEncoded = false;
   public openAsDownload = false;
   public formGroup = new FormGroup({
@@ -127,7 +126,7 @@ export class MiscComponent implements OnInit {
             });
           }
         },
-        error: (err) => {
+        error: () => {
           this.toastService.show({
             message: 'An error occurred downloading the file',
             duration: Infinity,

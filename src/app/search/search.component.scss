@@ -41,7 +41,7 @@
       height: 32px;
     }
 
-    span + span {
+    span+span {
       margin-left: 16px;
     }
   }
@@ -52,7 +52,7 @@
   padding: 24px;
 
   .form {
-    @include app-container-raised();
+    @include app-container-outlined();
     padding: 16px;
     @include app-form-grid();
   }

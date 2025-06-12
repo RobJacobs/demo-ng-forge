@@ -19,10 +19,8 @@ import {
 } from '@tylertech/forge-angular';
 
 import { AppDataService } from 'src/app/app-data.service';
-import { FormControlInvalidDirective } from 'src/app/shared/directives/form-control-invalid/form-control-invalid.directive';
-import { InputCasingDirective } from 'src/app/shared/directives/input-casing/input-casing.directive';
-import { DateTimeComponent } from 'src/app/shared/components/date-time/date-time.component';
-import { AutoFocusDirective } from 'src/app/shared/directives/auto-focus/auto-focus.directive';
+import { AutoFocusDirective, FormControlInvalidDirective, InputCasingDirective } from 'src/app/shared/directives';
+import { DateTimeComponent } from 'src/app/shared/components';
 import { ProfileCacheService } from '../profile-cache.service';
 
 @Component({

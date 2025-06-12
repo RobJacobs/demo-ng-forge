@@ -8,7 +8,7 @@ import { ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, ForgeLabelVa
 import { Utils } from 'src/utils';
 import { AppCacheService } from 'src/app/app-cache.service';
 import { AppDataService } from 'src/app/app-data.service';
-import { IPerson } from 'src/app/shared/interfaces/person.interface';
+import { IPerson } from 'src/app/shared/interfaces';
 import { PeopleCacheService } from '../people-cache.service';
 
 @Component({

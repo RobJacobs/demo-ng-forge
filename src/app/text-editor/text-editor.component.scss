@@ -5,7 +5,7 @@
 
   quill-editor {
     width: 100%;
-    @include app-container-raised();
+    @include app-container-outlined();
 
     &[disabled] {
       .ql-toolbar {

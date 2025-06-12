@@ -19,13 +19,9 @@ import {
 } from '@tylertech/forge-angular';
 
 import { Utils } from 'src/utils';
-import { TableUtils } from 'src/app/shared/table/utils';
+import { TableUtils, BaseTableComponent, TableDetailComponent, FilterChipsComponent, RouterlinkButtonComponent } from 'src/app/shared/components';
 import { AppDataService } from 'src/app/app-data.service';
-import { IPerson } from 'src/app/shared/interfaces/person.interface';
-import { BaseTableComponent } from 'src/app/shared/table/base-table.component';
-import { RouterlinkButtonComponent } from 'src/app/shared/components/routerlink-button/routerlink-button.component';
-import { FilterChipsComponent } from 'src/app/shared/components/filter-chips/filter-chips.component';
-import { TableDetailComponent } from 'src/app/shared/components/table-detail/table-detail.component';
+import { IPerson } from 'src/app/shared/interfaces';
 import { PeopleCacheService } from '../people-cache.service';
 import { FilterComponent } from './filter/filter.component';
 
@@ -62,7 +58,7 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
   private readonly peopleFilter = viewChild(FilterComponent);
 
   public isBusy = false;
-  public recordset: Array<IPerson> = [];
+  public recordset: IPerson[] = [];
   public filterCache = this.cache.homeView.filter;
   public viewCache = this.cache.homeView;
   public optionalTableColumns = [

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IconRegistry, IOption } from '@tylertech/forge';
-import * as tylerIconsModule from '@tylertech/tyler-icons/standard';
+import * as tylerIconsModule from '@tylertech/tyler-icons';
 
 @Injectable()
 export class IconsCacheService {

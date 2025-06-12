@@ -5,7 +5,7 @@ import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
 import { TextFieldComponentDelegate } from '@tylertech/forge';
 import { DialogService, ForgeIconButtonModule, ForgeIconModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
 import { finalize, map, of, Subject, takeUntil } from 'rxjs';
-import { IFilterParameter } from 'src/app/shared/interfaces/filter.interface';
+import { IFilterParameter } from 'src/app/shared/interfaces';
 import { FormlyDemoService } from '../formly-demo.service';
 import { FieldHelpDialogComponent } from './field-help-dialog/field-help-dialog.component';
 @Component({

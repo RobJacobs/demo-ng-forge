@@ -1,4 +1,5 @@
 import { Component, DestroyRef, ElementRef, inject, OnInit, viewChild } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
@@ -20,9 +21,8 @@ import {
   PopoverDirective
 } from '@tylertech/forge-angular';
 
-import { CallbackPipe } from 'src/app/shared/pipes/callback.pipe';
+import { CallbackPipe } from 'src/app/shared/pipes';
 import { pdfString } from './pdf-string';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 // https://github.com/VadimDez/ng2-pdf-viewer
 // https://github.com/mozilla/pdf.js/tree/master/web

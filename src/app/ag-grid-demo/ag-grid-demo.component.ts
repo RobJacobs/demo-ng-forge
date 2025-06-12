@@ -25,7 +25,7 @@ import {
 } from 'ag-grid-community';
 import { finalize } from 'rxjs';
 
-import { IPerson } from 'src/app/shared/interfaces/person.interface';
+import { IPerson } from 'src/app/shared/interfaces';
 import { Utils } from 'src/utils';
 import { AppDataService } from '../app-data.service';
 

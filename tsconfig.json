@@ -18,6 +18,7 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": false,
+    "noUnusedLocals": false,
     "strictNullChecks": false,
     "skipLibCheck": true,
     "esModuleInterop": true,

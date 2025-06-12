@@ -5,9 +5,7 @@ import { Observable, Subject, timer } from 'rxjs';
 import { map, delay, concatMap, take, timeout, filter } from 'rxjs/operators';
 
 import { SHOW_BUSY_INDICATOR } from 'src/app/shared/interceptors/busy.interceptor';
-import { IPerson, IProfile } from 'src/app/shared/interfaces/person.interface';
-import { ISearch } from 'src/app/shared/interfaces/search.interface';
-import { IFilterParameter } from 'src/app/shared/interfaces/filter.interface';
+import { IFilterParameter, IPerson, IProfile, ISearch } from 'src/app/shared/interfaces';
 import { Utils } from 'src/utils';
 
 @Injectable({
@@ -20,8 +18,8 @@ export class AppDataService {
     return this.httpClient.get<IProfile>('mock-data/profile.json');
   }
 
-  public getPeople(filter?: IFilterParameter): Observable<{ count: number; data: Array<IPerson> }> {
-    return this.httpClient.get<Array<IPerson>>('mock-data/people.json').pipe(
+  public getPeople(filter?: IFilterParameter): Observable<{ count: number; data: IPerson[] }> {
+    return this.httpClient.get<IPerson[]>('mock-data/people.json').pipe(
       delay(1000),
       map((r) => {
         let count = r.length;

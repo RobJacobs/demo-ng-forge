@@ -52,10 +52,9 @@ import {
   tylIconFitScreen,
   tylIconAdjust,
   tylIconCheckBox,
-  tylIconCheckBoxOutlineBlank
-} from '@tylertech/tyler-icons/standard';
-
-import { tylIconTylerTalkingTLogo } from '@tylertech/tyler-icons/custom';
+  tylIconCheckBoxOutlineBlank,
+  tylIconTylerTalkingTLogo
+} from '@tylertech/tyler-icons';
 
 const standardIcons = [
   tylIconArrowBack,

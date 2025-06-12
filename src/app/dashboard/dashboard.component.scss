@@ -13,9 +13,9 @@ $card-width: 320;
 .body {
   justify-content: center;
   @include forge-flex-container(flex, row, wrap);
+  gap: 16px;
 
   forge-card {
-    margin: 12px;
     width: #{$card-width}px;
 
     &::part(root) {
@@ -24,7 +24,6 @@ $card-width: 320;
     }
 
     img {
-      margin: 16px 16px 0px 16px;
       height: 120px;
       width: 120px;
     }

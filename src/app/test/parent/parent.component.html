@@ -6,7 +6,7 @@
   <div>Parent content</div>
 
   <div style="display: flex; flex-wrap: wrap; gap: 8px 16px; padding-block: 16px">
-    <forge-button variant="raised" (click)="onNavigate('test/child')">View child</forge-button>
+    <forge-button variant="filled" (click)="onNavigate('test/child')">View child</forge-button>
     <forge-button variant="outlined" (click)="onSendMessage()" [disabled]="isMessaging">
       <span>Send message</span>
       @if (isMessaging) {

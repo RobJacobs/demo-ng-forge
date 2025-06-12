@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { IProfile } from 'src/app/shared/interfaces/person.interface';
+import { IProfile } from 'src/app/shared/interfaces';
 
 @Injectable()
 export class ProfileCacheService {

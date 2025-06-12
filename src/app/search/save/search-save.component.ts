@@ -11,8 +11,8 @@ import {
   ForgeTextFieldModule
 } from '@tylertech/forge-angular';
 
-import { FormControlInvalidDirective } from 'src/app/shared/directives/form-control-invalid/form-control-invalid.directive';
-import { DialogTemplateComponent } from 'src/app/shared/components/dialog-template/dialog-template.component';
+import { AutoFocusDirective, FormControlInvalidDirective } from 'src/app/shared/directives';
+import { DialogTemplateComponent } from 'src/app/shared/components';
 
 export interface ISearchSaveDialogData {
   id: number;
@@ -33,7 +33,8 @@ export interface ISearchSaveDialogData {
     ForgeIconModule,
     ForgeTextFieldModule,
     FormControlInvalidDirective,
-    DialogTemplateComponent
+    DialogTemplateComponent,
+    AutoFocusDirective
   ],
   templateUrl: './search-save.component.html',
   styleUrls: ['./search-save.component.scss']

@@ -8,6 +8,7 @@
 
 ::ng-deep {
   formly {
+
     &-form,
     &-group,
     &-field {
@@ -22,7 +23,7 @@
 }
 
 .form {
-  @include app-container-raised();
+  @include app-container-outlined();
   padding: 16px;
 
   min-width: 680px;

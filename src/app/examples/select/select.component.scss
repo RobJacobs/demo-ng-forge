@@ -5,7 +5,7 @@
   margin: 24px;
   padding: 16px;
 
-  @include app-container-raised();
+  @include app-container-outlined();
 }
 
 .form-grid {

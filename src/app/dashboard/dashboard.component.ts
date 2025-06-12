@@ -1,19 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { ForgeButtonModule, ForgeCardModule } from '@tylertech/forge-angular';
-import { defineLandingPageLayoutComponent } from '@tylertech/forge-internal';
+import { ForgeLandingPageLayoutModule } from '@tylertech/forge-angular-internal';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, ForgeButtonModule, ForgeCardModule],
+  imports: [CommonModule, ForgeButtonModule, ForgeCardModule, ForgeLandingPageLayoutModule],
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
-  constructor() {
-    defineLandingPageLayoutComponent();
-  }
-
   public onNavigate(route: string) {}
 }

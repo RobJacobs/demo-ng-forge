@@ -23,6 +23,6 @@
   padding: 24px;
 
   &__table {
-    @include app-container-raised();
+    @include app-container-outlined();
   }
 }

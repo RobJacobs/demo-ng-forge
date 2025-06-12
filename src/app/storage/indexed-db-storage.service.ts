@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import Dexie, { Table } from 'dexie';
 
-import { IPerson } from 'src/app/shared/interfaces/person.interface';
+import { IPerson } from 'src/app/shared/interfaces';
 
 @Injectable({
   providedIn: 'root'

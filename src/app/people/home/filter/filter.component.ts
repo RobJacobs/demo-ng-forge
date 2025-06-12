@@ -14,7 +14,7 @@ import {
 
 import { Utils } from 'src/utils';
 import { AppCacheService } from 'src/app/app-cache.service';
-import { AutocompleteRangeComponent } from 'src/app/shared/components/autocomplete-range/autocomplete-range.component';
+import { AutocompleteRangeComponent } from 'src/app/shared/components';
 import { PeopleCacheService } from '../../people-cache.service';
 
 @Component({

@@ -17,11 +17,12 @@ import {
   ForgeToolbarModule
 } from '@tylertech/forge-angular';
 
-import { IPerson } from 'src/app/shared/interfaces/person.interface';
-import { AppDataService } from 'src/app/app-data.service';
-import { CallbackPipe } from 'src/app/shared/pipes/callback.pipe';
-import { TableDetailComponent } from 'src/app/shared/components/table-detail/table-detail.component';
 import { Utils } from 'src/utils';
+import { AppDataService } from 'src/app/app-data.service';
+import { IPerson } from 'src/app/shared/interfaces';
+import { CallbackPipe } from 'src/app/shared/pipes';
+import { TableDetailComponent } from 'src/app/shared/components';
+
 @Component({
   selector: 'app-table-demo',
   imports: [

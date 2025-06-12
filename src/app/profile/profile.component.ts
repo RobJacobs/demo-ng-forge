@@ -9,9 +9,9 @@ import { DialogService, ForgeButtonModule, ForgeIconModule, ForgeTabBarModule, F
 import { Utils } from 'src/utils';
 import { AppDataService } from 'src/app/app-data.service';
 import { AppToastService } from 'src/app/app-toast.service';
-import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
-import { CallbackPipe } from 'src/app/shared/pipes/callback.pipe';
-import { IProfile } from 'src/app/shared/interfaces/person.interface';
+import { ConfirmDialogComponent } from 'src/app/shared/components';
+import { CallbackPipe } from 'src/app/shared/pipes';
+import { IProfile } from 'src/app/shared/interfaces';
 import { ProfileCacheService } from './profile-cache.service';
 
 @Component({

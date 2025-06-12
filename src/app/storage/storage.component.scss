@@ -20,7 +20,7 @@
 }
 
 .card {
-  @include app-container-raised();
+  @include app-container-outlined();
   padding: 16px;
   margin: 16px;
 

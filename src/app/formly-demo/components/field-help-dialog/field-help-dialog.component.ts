@@ -16,7 +16,7 @@ import {
   ForgeToolbarModule
 } from '@tylertech/forge-angular';
 
-import { IFilterParameter, IFilter, IFilterResponse } from 'src/app/shared/interfaces/filter.interface';
+import { IFilterParameter, IFilter, IFilterResponse } from 'src/app/shared/interfaces';
 import { Utils } from 'src/utils';
 
 export interface IFieldHelpDialogConfig {

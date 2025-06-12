@@ -74,11 +74,11 @@ export class AutocompleteRangeComponent implements ControlValueAccessor, AfterVi
   public readonly optionFilter = input<(filter: string) => Observable<IOption[]>>();
 
   @Input()
-  public set value(values: Array<IOption> | Array<string | string[] | number>) {
+  public set value(values: IOption[] | string[] | string[][] | number[]) {
     this.writeValue(values);
   }
   @Output()
-  public valueChange = new EventEmitter<Array<string | string[] | number>>();
+  public valueChange = new EventEmitter<string[] | string[][] | number[]>();
 
   public readonly label = input<string>();
   public readonly maxlength = input<number | null>(null);
@@ -143,7 +143,7 @@ export class AutocompleteRangeComponent implements ControlValueAccessor, AfterVi
     return '';
   };
 
-  public writeValue(values: Array<IOption> | Array<string | string[] | number>) {
+  public writeValue(values: IOption[] | string[] | string[][] | number[]) {
     const options: IOption[] = [];
     this.rangeOptions.length = 0;
     if (isArray(values)) {

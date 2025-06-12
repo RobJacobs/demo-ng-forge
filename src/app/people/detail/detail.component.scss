@@ -23,7 +23,7 @@
   padding: 24px;
 
   &__left {
-    @include app-container-raised();
+    @include app-container-outlined();
     display: flex;
     flex-direction: column;
     row-gap: 16px;

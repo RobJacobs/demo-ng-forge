@@ -14,8 +14,8 @@ import {
 } from '@tylertech/forge-angular';
 
 import { Utils } from 'src/utils';
-import { IFilter } from 'src/app/shared/interfaces/filter.interface';
-import { FormControlInvalidDirective } from 'src/app/shared/directives/form-control-invalid/form-control-invalid.directive';
+import { IFilter } from 'src/app/shared/interfaces';
+import { FormControlInvalidDirective } from 'src/app/shared/directives';
 
 @Component({
   selector: 'app-query-builder',
