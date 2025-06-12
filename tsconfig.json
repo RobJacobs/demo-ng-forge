@@ -4,12 +4,8 @@
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "paths": {
-      "@demo-ng-forge/pets": [
-        "./projects/pets/src/public-api"
-      ],
-      "@demo-ng-forge-dist/pets": [
-        "./dist/pets"
-      ]
+      "@demo-ng-forge/pets": ["./projects/pets/src/public-api"],
+      "@demo-ng-forge-dist/pets": ["./dist/pets"]
     },
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -29,15 +25,8 @@
     "target": "ES2022",
     "module": "ES2022",
     "useDefineForClassFields": false,
-    "lib": [
-      "ES2023",
-      "dom"
-    ],
-    "types": [
-      "jasmine",
-      "node",
-      "google.visualization"
-    ]
+    "lib": ["ES2023", "dom"],
+    "types": ["jasmine", "node", "google.visualization"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

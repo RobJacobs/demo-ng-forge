@@ -3,9 +3,6 @@
   "dest": "../../dist/pets",
   "lib": {
     "entryFile": "src/public-api.ts",
-    "styleIncludePaths": [
-      "../../node_modules",
-      "./src/lib"
-    ]
+    "styleIncludePaths": ["../../node_modules", "./src/lib"]
   }
 }
