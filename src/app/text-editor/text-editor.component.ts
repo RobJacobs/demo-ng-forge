@@ -3,7 +3,6 @@ import { Component, ElementRef, inject } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ForgeButtonModule, ForgeToolbarModule } from '@tylertech/forge-angular';
 import { QuillModule, QuillModules } from 'ngx-quill';
-import 'quill/dist/quill.snow.css';
 
 // https://quilljs.com/docs/
 // https://github.com/KillerCodeMonkey/ngx-quill
