@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { DialogRef, ForgeIconButtonModule, ForgeIconModule, ForgeScaffoldModule, ForgeToolbarModule } from '@tylertech/forge-angular';
 import { Utils } from 'src/utils';
 
@@ -9,11 +9,13 @@ import { Utils } from 'src/utils';
   templateUrl: './dialog-template.component.html',
   styleUrl: './dialog-template.component.scss'
 })
-export class DialogTemplateComponent {
+export class DialogTemplateComponent implements OnInit {
   private dialogRef = inject(DialogRef);
 
+  @Input({ required: true })
+  public label: string;
   @Input()
-  public id = `${Utils.elementId('app-')}--title`;
+  public description: string;
   @Input()
   public showHeader = true;
   @Input()
@@ -26,7 +28,10 @@ export class DialogTemplateComponent {
   public dialogClose = new EventEmitter();
 
   public ngOnInit() {
-    this.dialogRef.nativeElement.setAttribute('aria-labelledby', `${this.id}`);
+    this.dialogRef.nativeElement.setAttribute('label', this.label);
+    if (this.description?.length) {
+      this.dialogRef.nativeElement.setAttribute('description', this.description);
+    }
   }
 
   public onClose() {

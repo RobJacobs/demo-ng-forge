@@ -2,10 +2,22 @@
 
 :host {
   display: contents;
+
+  ::ng-deep {
+    forge-toolbar {
+      --forge-toolbar-divider-width: 0;
+    }
+  }
 }
 
 .body {
-  padding: 16px;
+  padding: 8px 24px;
   min-width: 320px;
   max-width: 600px;
+  text-align: center;
+  word-break: break-word;
+
+  &--padding-top {
+    padding-top: 24px;
+  }
 }

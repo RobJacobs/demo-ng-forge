@@ -1,12 +1,12 @@
-<app-dialog-template [dialogTitle]="dialogTitle" (dialogClose)="onClose()">
-  <div class="body">
-    {{ message }}
+<app-dialog-template [dialogTitle]="dialogData.title" [showHeader]="dialogData.title?.length ? true : false" [showClose]="false" [label]="dialogData.label" [description]="dialogData.description">
+  <div class="body" [ngClass]="{ 'body--padding-top': !dialogData.title?.length }">
+    {{ dialogData.message }}
   </div>
 
-  @if (showFooter) {
+  @if (dialogData.showFooter !== false) {
     <ng-container app-dialog-footer>
-      <forge-button slot="end" variant="outlined" (click)="onClose()">Cancel</forge-button>
-      <forge-button slot="end" variant="filled" autofocus (click)="onClose(true)">Ok</forge-button>
+      <forge-button slot="end" variant="outlined" (click)="onClose()">{{ dialogData.cancelText }}</forge-button>
+      <forge-button slot="end" variant="filled" appAutoFocus (click)="onClose(true)">{{ dialogData.confirmText }}</forge-button>
     </ng-container>
   }
 </app-dialog-template>

@@ -1,4 +1,4 @@
-<app-dialog-template dialogTitle="Save search" (dialogClose)="onCancel()">
+<app-dialog-template dialogTitle="Save search" label="Save search" (dialogClose)="onCancel()">
   <form class="form-grid" novalidate autocomplete="off" [formGroup]="formGroup">
     <forge-text-field required [appFormControlInvalid]="formGroup.controls.name">
       <input type="text" id="search-save--name" formControlName="name" appAutoFocus />

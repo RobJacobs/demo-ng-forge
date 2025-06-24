@@ -1,33 +1,37 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { isDefined } from '@tylertech/forge-core';
 import { DIALOG_DATA, DialogRef, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule } from '@tylertech/forge-angular';
 import { DialogTemplateComponent } from 'src/app/shared/components/dialog-template/dialog-template.component';
+import { AutoFocusDirective } from '../../directives';
 
 export interface IConfirmDialogData {
-  title: string;
+  title?: string;
   message: string;
+  label: string;
+  description?: string;
   showFooter?: boolean;
+  confirmText?: string;
+  cancelText: string;
+  showCancel?: boolean;
 }
 
 @Component({
   selector: 'app-confirm-dialog',
   templateUrl: './confirm-dialog.component.html',
   styleUrls: ['./confirm-dialog.component.scss'],
-  imports: [CommonModule, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, DialogTemplateComponent]
+  imports: [CommonModule, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, DialogTemplateComponent, AutoFocusDirective]
 })
 export class ConfirmDialogComponent implements OnInit {
   public dialogData = inject<IConfirmDialogData>(DIALOG_DATA);
   private dialogRef = inject(DialogRef);
 
-  public dialogTitle: string;
-  public message: string;
-  public showFooter?: boolean;
-
   public ngOnInit() {
-    this.dialogTitle = this.dialogData.title;
-    this.message = this.dialogData.message;
-    this.showFooter = isDefined(this.dialogData.showFooter) ? this.dialogData.showFooter : true;
+    if (!this.dialogData.confirmText?.length) {
+      this.dialogData.confirmText = 'Ok';
+    }
+    if (!this.dialogData.cancelText?.length) {
+      this.dialogData.cancelText = 'Cancel';
+    }
   }
 
   public onClose(response = false) {
