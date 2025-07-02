@@ -19,7 +19,15 @@ import {
 } from '@tylertech/forge-angular';
 
 import { Utils } from 'src/utils';
-import { TableUtils, BaseTableComponent, TableDetailComponent, FilterChipsComponent, RouterlinkButtonComponent } from 'src/app/shared/components';
+import {
+  TableUtils,
+  BaseTableComponent,
+  TableDetailComponent,
+  TableMobileComponent,
+  FilterChipsComponent,
+  RouterlinkButtonComponent
+} from 'src/app/shared/components';
+import { AppCacheService } from 'src/app/app-cache.service';
 import { AppDataService } from 'src/app/app-data.service';
 import { IPerson } from 'src/app/shared/interfaces';
 import { PeopleCacheService } from '../people-cache.service';
@@ -41,7 +49,8 @@ import { FilterComponent } from './filter/filter.component';
     ForgeToolbarModule,
     RouterlinkButtonComponent,
     FilterChipsComponent,
-    FilterComponent
+    FilterComponent,
+    TableMobileComponent
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
@@ -50,9 +59,10 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
   private destroyRef = inject(DestroyRef);
   private router = inject(Router);
   private appDataService = inject(AppDataService);
-  public cache = inject(PeopleCacheService);
   private viewContainerRef = inject(ViewContainerRef);
   private ngZone = inject(NgZone);
+  public appCache = inject(AppCacheService);
+  public cache = inject(PeopleCacheService);
 
   private readonly peopleTable = viewChild<TableComponent>('peopleTable');
   private readonly peopleFilter = viewChild(FilterComponent);

@@ -13,11 +13,6 @@
           background-color: $forge-color-indigo-50 !important;
           @include app-border(border-bottom);
         }
-
-        & > .forge-table-cell:last-child {
-          padding-right: 0px;
-          width: 1px;
-        }
       }
 
       &-cell {
@@ -54,9 +49,8 @@
   @include app-table-header-footer();
 
   & {
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: auto 1fr;
     display: grid;
-    height: 100%;
   }
 
   &__header {
@@ -71,6 +65,10 @@
 
   &__body {
     overflow: auto;
+  }
+
+  &__footer {
+    padding-right: 24px;
   }
 }
 

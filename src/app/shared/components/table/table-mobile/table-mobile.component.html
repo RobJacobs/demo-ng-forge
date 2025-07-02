@@ -2,6 +2,7 @@
   @for (row of data; track i; let i = $index, last = $last) {
     @if (allowRowClick) {
       <forge-button-area (click)="onTableRowClick(i)">
+        <!-- eslint-disable-next-line @angular-eslint/template/elements-content -->
         <button slot="button"></button>
         <ng-container *ngTemplateOutlet="columnTemplate; context: { rowData: row, rowIndex: i }"></ng-container>
       </forge-button-area>

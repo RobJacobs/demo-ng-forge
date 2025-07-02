@@ -15,12 +15,14 @@
 }
 
 .body {
-  display: grid;
-  grid-template-columns: minmax(auto, 480px) 1fr;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   align-items: flex-start;
-  column-gap: 48px;
-  overflow: auto;
+  justify-content: center;
+  gap: 24px;
   padding: 24px;
+  overflow: auto;
 
   &__left {
     @include app-container-outlined();
@@ -28,11 +30,13 @@
     flex-direction: column;
     row-gap: 16px;
     padding: 16px;
+    width: 320px;
   }
 
   &__right {
     img {
-      height: 480px;
+      max-width: 320px;
+      max-height: 320px;
     }
   }
 }

@@ -17,7 +17,6 @@
 
 @mixin table-header-footer {
   &__header {
-    margin: 0 16px;
     min-height: 48px;
     @include forge-flex.container(flex, row, nowrap, center);
 
@@ -28,12 +27,7 @@
     }
   }
 
-  &__body {
-    padding: 0 16px;
-  }
-
   &__footer {
-    padding: 0 16px;
     @include forge-flex.container(flex, row, nowrap, center);
     @include border(border-top);
 
@@ -44,7 +38,7 @@
 }
 
 @function form-grid-width($columns: 1, $width: app-var.$form-grid-column-width, $gap: app-var.$form-grid-gap) {
-  @return (($columns - 1) * $gap)+ ($columns * $width);
+  @return (($columns - 1) * $gap)+($columns * $width);
 }
 
 @mixin form-grid {
@@ -167,6 +161,7 @@
 }
 
 @mixin toolbar-gap($gap: 16px) {
+
   &::part(section-start),
   &::part(section-center),
   &::part(section-end) {

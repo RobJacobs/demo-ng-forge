@@ -5,59 +5,52 @@
 
 <div class="body">
   <div class="body__left">
-    <div [ngClass]="{ 'app--hidden': isBusy }" class="table">
-      <div class="table__header" [ngClass]="{ 'table__header-action': selectedPeople.length }">
-        @if (!selectedPeople.length) {
-          <app-filter-chips [filters]="filterCache.filters" (filter)="onApplyFilter(true)"></app-filter-chips>
-          <forge-button class="app--flex-right" variant="outlined" (click)="onTableShowFilter()">
-            @if (filterCache.filters.length) {
-              <forge-badge class="table__header__filter-count" theme="info-primary">{{ filterCache.filters.length }}</forge-badge>
-            } @else {
-              <forge-icon name="filter_list"></forge-icon>
-            }
-            <span>Filter</span>
-          </forge-button>
-          <forge-icon-button id="people--home--column-select" class="table__header__columns" aria-label="Choose table columns">
-            <forge-icon name="view_column"></forge-icon>
-          </forge-icon-button>
-          <forge-select-dropdown target="#people--home--column-select" multiple [value]="selectedTableColumns" (change)="onTableOptionSelected($event.detail)">
-            @for (column of optionalTableColumns; track i; let i = $index) {
-              <forge-option [value]="column.property">
-                {{ column.header }}
-              </forge-option>
-            }
-          </forge-select-dropdown>
-        } @else {
-          <span>{{ selectedPeople.length }} people selected</span>
-        }
-      </div>
-
-      <forge-table
-        #peopleTable
-        class="table__body"
-        [ngClass]="{ 'app--hidden': !recordCount }"
-        [data]="recordset"
-        [columnConfigurations]="tableColumns"
-        (forge-table-sort)="onTableSort($event)"
-        select-key="id"
-        (forge-table-select)="onPeopleSelected()"
-        (forge-table-select-all)="onPeopleSelected()"
-        fixed-headers="true"
-        [filter]="viewCache.showFilter"
-        (forge-table-filter)="onTableFilter($event)"
-      ></forge-table>
-
-      @if (recordCount) {
-        <div class="table__footer">
-          <forge-paginator class="app--flex-right" [pageIndex]="filterCache.skip / filterCache.take" [pageSize]="filterCache.take" [total]="recordCount" (forge-paginator-change)="onTablePaginatorChange($event)"></forge-paginator>
-        </div>
+    @if (appCache.layoutMode === 'sm') {
+      @if (!isBusy) {
+        <app-table-mobile [data]="recordset" [columnConfigurations]="tableColumns"></app-table-mobile>
       }
-    </div>
+    } @else {
+      <div [ngClass]="{ 'app--hidden': isBusy }" class="table">
+        <div class="table__header" [ngClass]="{ 'table__header-action': selectedPeople.length }">
+          @if (!selectedPeople.length) {
+            <app-filter-chips [filters]="filterCache.filters" (filter)="onApplyFilter(true)"></app-filter-chips>
+            <forge-button class="app--flex-right" variant="outlined" (click)="onTableShowFilter()">
+              @if (filterCache.filters.length) {
+                <forge-badge class="table__header__filter-count" theme="info-primary">{{ filterCache.filters.length }}</forge-badge>
+              } @else {
+                <forge-icon name="filter_list"></forge-icon>
+              }
+              <span>Filter</span>
+            </forge-button>
+            <forge-icon-button id="people--home--column-select" class="table__header__columns" aria-label="Choose table columns">
+              <forge-icon name="view_column"></forge-icon>
+            </forge-icon-button>
+            <forge-select-dropdown target="#people--home--column-select" multiple [value]="selectedTableColumns" (change)="onTableOptionSelected($event.detail)">
+              @for (column of optionalTableColumns; track i; let i = $index) {
+                <forge-option [value]="column.property">
+                  {{ column.header }}
+                </forge-option>
+              }
+            </forge-select-dropdown>
+          } @else {
+            <span>{{ selectedPeople.length }} people selected</span>
+          }
+        </div>
 
-    @if (!isBusy && !recordCount) {
-      <div class="empty-state">
-        <img src="https://cdn.forge.tylertech.com/v1/images/spot-hero/general-empty-state-spot-hero.svg" alt />
-        <div>No people found.</div>
+        <forge-table
+          #peopleTable
+          class="table__body"
+          [ngClass]="{ 'app--hidden': !recordCount }"
+          [data]="recordset"
+          [columnConfigurations]="tableColumns"
+          (forge-table-sort)="onTableSort($event)"
+          select-key="id"
+          (forge-table-select)="onPeopleSelected()"
+          (forge-table-select-all)="onPeopleSelected()"
+          fixed-headers="true"
+          [filter]="viewCache.showFilter"
+          (forge-table-filter)="onTableFilter($event)"
+        ></forge-table>
       </div>
     }
 
@@ -67,6 +60,17 @@
         <forge-skeleton list-item></forge-skeleton>
         <forge-skeleton list-item></forge-skeleton>
       </div>
+    } @else {
+      @if (recordCount) {
+        <div class="table__footer">
+          <forge-paginator class="app--flex-right" [pageIndex]="filterCache.skip / filterCache.take" [pageSize]="filterCache.take" [total]="recordCount" (forge-paginator-change)="onTablePaginatorChange($event)"></forge-paginator>
+        </div>
+      } @else {
+        <div class="empty-state">
+          <img src="https://cdn.forge.tylertech.com/v1/images/spot-hero/general-empty-state-spot-hero.svg" alt />
+          <div>No people found.</div>
+        </div>
+      }
     }
   </div>
 
