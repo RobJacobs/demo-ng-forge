@@ -11,13 +11,16 @@ $card-width: 320;
 }
 
 .body {
-  justify-content: center;
-  @include forge-flex-container(flex, row, wrap);
+  @include forge-flex-container(flex, column, nowrap, center);
   gap: 16px;
+  width: fit-content;
+  margin-inline: auto;
+
+  @media (max-width: $app-width-breakpoint--sm) {
+    width: 100%;
+  }
 
   forge-card {
-    width: #{$card-width}px;
-
     &::part(root) {
       @include forge-flex-container(flex, column, nowrap, center);
       row-gap: 16px;
@@ -27,6 +30,30 @@ $card-width: 320;
       height: 120px;
       width: 120px;
     }
+  }
+
+  &__top {
+    @include forge-flex-container(flex, row, wrap);
+    justify-content: center;
+    gap: 16px;
+
+    forge-card {
+      width: #{$card-width}px;
+    }
+  }
+
+  &__bottom {
+    width: 100%;
+
+    forge-card {
+      width: 100%;
+      min-width: $app-width-breakpoint--sm;
+
+      @media (max-width: $app-width-breakpoint--sm) {
+        min-width: 100%;
+      }
+    }
+
   }
 }
 

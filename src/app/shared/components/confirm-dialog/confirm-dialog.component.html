@@ -1,4 +1,4 @@
-<app-dialog-template [dialogTitle]="dialogData.title" [showHeader]="dialogData.title?.length ? true : false" [showClose]="false" [label]="dialogData.label" [description]="dialogData.description">
+<app-dialog-template [dialogTitle]="dialogData.title" [showHeader]="dialogData.title?.length ? true : false" [dialogLabel]="dialogData.label" [dialogDescription]="dialogData.description" [showClose]="false">
   <div class="body" [ngClass]="{ 'body--padding-top': !dialogData.title?.length }">
     {{ dialogData.message }}
   </div>

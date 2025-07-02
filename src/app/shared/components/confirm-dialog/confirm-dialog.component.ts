@@ -1,17 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { DIALOG_DATA, DialogRef, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule } from '@tylertech/forge-angular';
+
 import { DialogTemplateComponent } from 'src/app/shared/components/dialog-template/dialog-template.component';
-import { AutoFocusDirective } from '../../directives';
+import { AutoFocusDirective } from 'src/app/shared/directives';
 
 export interface IConfirmDialogData {
   title?: string;
-  message: string;
-  label: string;
+  label?: string;
   description?: string;
+  message: string;
   showFooter?: boolean;
   confirmText?: string;
-  cancelText: string;
+  cancelText?: string;
   showCancel?: boolean;
 }
 

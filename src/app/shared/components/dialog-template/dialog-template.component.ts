@@ -12,10 +12,6 @@ import { Utils } from 'src/utils';
 export class DialogTemplateComponent implements OnInit {
   private dialogRef = inject(DialogRef);
 
-  @Input({ required: true })
-  public label: string;
-  @Input()
-  public description: string;
   @Input()
   public showHeader = true;
   @Input()
@@ -23,14 +19,21 @@ export class DialogTemplateComponent implements OnInit {
   @Input()
   public dialogTitle?: string;
   @Input()
+  public dialogLabel?: string;
+  @Input()
+  public dialogDescription?: string;
+  @Input()
   public showFooter = true;
   @Output()
   public dialogClose = new EventEmitter();
 
   public ngOnInit() {
-    this.dialogRef.nativeElement.setAttribute('label', this.label);
-    if (this.description?.length) {
-      this.dialogRef.nativeElement.setAttribute('description', this.description);
+    if (!this.dialogLabel?.length) {
+      this.dialogLabel = this.dialogTitle;
+    }
+    this.dialogRef.nativeElement.setAttribute('label', this.dialogLabel);
+    if (this.dialogDescription?.length) {
+      this.dialogRef.nativeElement.setAttribute('description', this.dialogDescription);
     }
   }
 
