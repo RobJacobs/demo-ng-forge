@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/components/date-time/date-time.component.scss"],
+  "sourcesContent": [":host {\n  display: block;\n}\n\n.calendar-popover {\n  display: flex;\n  flex-direction: column;\n  row-gap: 8px;\n  padding: 16px;\n\n  forge-calendar {\n    --forge-calendar-width: 320px;\n  }\n}\n"],
+  "mappings": "AAAA,MACE,QAAA,MAGF,CAAA,iBACE,QAAA,KACA,eAAA,OACA,QAAA,IAPF,QAQE,KAEA,CANF,iBAME,eACE,wBAAA",
+  "names": []
+}
