@@ -1,0 +1,16 @@
+@if (showHeaderBanner) {
+  <div class="header-banner">
+    <ng-content select="[app-dashboard-header-banner]"></ng-content>
+  </div>
+}
+
+<div class="body">
+  <ng-content select="[app-dashboard-header]"></ng-content>
+  <ng-content></ng-content>
+  <ng-content select="[app-dashboard-footer]"></ng-content>
+  @if (showFooterBanner) {
+    <div class="footer-banner">
+      <ng-content select="[app-dashboard-footer-banner]"></ng-content>
+    </div>
+  }
+</div>

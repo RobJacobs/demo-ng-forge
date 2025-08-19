@@ -1,6 +1,6 @@
 <form [formGroup]="formGroup" novalidate autocomplete="off" class="form-grid">
   <div>
-    <forge-autocomplete [filter]="singleSelectPrimitiveFilter" formControlName="autocomplete01">
+    <forge-autocomplete [filter]="singleSelectPrimitiveFilter" formControlName="autocomplete01" popupClasses="app--forge--popup--center">
       <forge-text-field>
         <input id="examples--autocomplete--01" type="text" [disabled]="formGroup.controls.autocomplete01.disabled" />
         <label for="examples--autocomplete--01">Autocomplete01 - single primitive</label>

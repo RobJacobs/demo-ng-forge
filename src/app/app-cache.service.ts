@@ -19,7 +19,6 @@ export class AppCacheService implements IAppCacheService {
   public theme: 'dark' | 'light' = 'light';
   public layoutMode: 'sm' | 'md' | 'lg' = 'lg';
   public menu = {
-    // type: 'dismissible' as 'dismissible' | 'mini',
     open: true,
     options: [
       { label: 'Dashboard', value: 'dashboard', icon: 'home' },
@@ -56,7 +55,8 @@ export class AppCacheService implements IAppCacheService {
           { label: 'Drag Drop', value: 'examples/drag-drop' },
           { label: 'Select', value: 'examples/select' },
           { label: 'Binding', value: 'examples/binding' },
-          { label: 'Misc', value: 'examples/misc' }
+          { label: 'Misc', value: 'examples/misc' },
+          { label: 'Dashboard template', value: 'examples/dashboard' }
         ]
       },
       { label: 'Formly', value: 'formly-demo', icon: 'article' },

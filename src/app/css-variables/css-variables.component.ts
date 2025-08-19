@@ -33,7 +33,7 @@ export class CssVariablesComponent implements OnInit {
     },
     { property: 'value', header: 'Value' }
   ];
-  public variableFilter: string = '';
+  public variableFilter = '';
 
   public ngOnInit() {
     Array.from(document.styleSheets).forEach((ss) => {

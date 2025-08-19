@@ -2,6 +2,8 @@ export * from './autocomplete-range/autocomplete-range.component';
 export * from './busy-indicator/busy-indicator.service';
 export * from './card/card.component';
 export * from './confirm-dialog/confirm-dialog.component';
+export * from './dashboard-template/dashboard-template.component';
+export * from './dashboard-template/dashboard-title/dashboard-title.component';
 export * from './date-time/date-time.component';
 export * from './dialog-template/dialog-template.component';
 export * from './filter-chips/filter-chips.component';

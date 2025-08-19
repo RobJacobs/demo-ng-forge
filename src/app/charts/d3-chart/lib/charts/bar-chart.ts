@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { select, format, timeFormat, axisBottom, scaleLinear, axisLeft, scaleBand } from 'd3';
 import { isArray, isDefined } from '@tylertech/forge-core';
 import { ChartUtils, IChartData, IChartConfig, CHART_CONSTANTS } from '../index';

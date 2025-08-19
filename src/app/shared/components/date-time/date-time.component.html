@@ -7,12 +7,12 @@
     <forge-icon name="insert_invitation"></forge-icon>
   </forge-icon-button>
   <forge-popover [anchor]="'popover-toggle-' + id" placement="bottom-end" (forge-popover-toggle)="onPopoverToggle($event)" animationType="none">
-    <div class="calendar-popover" (keydown.tab)="onKeyDown($any($event))">
+    <div class="calendar-popover" (keydown.tab)="onKeyDown($any($event))" tabindex="0">
       <forge-calendar #calendar [id]="'calendar-' + id" prevent-focus="true" (forge-calendar-date-select)="onDateSelected($event)"></forge-calendar>
       <forge-divider></forge-divider>
       <forge-time-picker [formControl]="time">
         <forge-text-field>
-          <input #timeInput type="text" [id]="'time-' + id" placeholder="hh:mm:ss aa" autofocus />
+          <input #timeInput type="text" [id]="'time-' + id" placeholder="hh:mm:ss aa" appAutoFocus />
           <label [attr.for]="'time-' + id" slot="label">Time</label>
         </forge-text-field>
       </forge-time-picker>

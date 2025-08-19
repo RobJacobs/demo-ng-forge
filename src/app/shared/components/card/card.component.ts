@@ -13,5 +13,5 @@ import { ForgeToolbarModule } from '@tylertech/forge-angular';
   imports: [CommonModule, ForgeToolbarModule]
 })
 export class CardComponent {
-  public readonly border = input<'raised' | 'outlined'>('raised');
+  public readonly border = input<'raised' | 'outlined'>('outlined');
 }

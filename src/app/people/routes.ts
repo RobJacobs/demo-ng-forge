@@ -12,7 +12,7 @@ export const PEOPLE_ROUTES: Routes = [
     children: [
       { path: 'home', component: HomeComponent },
       { path: 'detail', component: DetailComponent },
-      { path: 'detail/:id/:firstName/:lastName', component: DetailComponent },
+      { path: 'detail/:id', component: DetailComponent },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   },

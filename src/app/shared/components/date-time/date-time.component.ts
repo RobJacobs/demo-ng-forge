@@ -18,6 +18,7 @@ import {
 } from '@tylertech/forge-angular';
 
 import { Utils } from 'src/utils';
+import { AutoFocusDirective } from '../../directives';
 
 @Component({
   selector: 'app-date-time',
@@ -33,7 +34,8 @@ import { Utils } from 'src/utils';
     ForgeIconModule,
     ForgePopoverModule,
     ForgeTextFieldModule,
-    ForgeTimePickerModule
+    ForgeTimePickerModule,
+    AutoFocusDirective
   ],
   providers: [
     {

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { select, format, timeFormat, hierarchy, pack } from 'd3';
 import { ChartUtils, IChartConfig, CHART_CONSTANTS } from '../index';
 

@@ -7,24 +7,5 @@
 
   <div style="display: flex; flex-wrap: wrap; gap: 8px 16px; padding-block: 16px">
     <forge-button variant="filled" (click)="onNavigate('test/child')">View child</forge-button>
-    <forge-button variant="outlined" (click)="onSendMessage()" [disabled]="isMessaging">
-      <span>Send message</span>
-      @if (isMessaging) {
-        <forge-circular-progress></forge-circular-progress>
-      }
-    </forge-button>
-    <forge-button variant="outlined" (click)="onMakeLongRequest()" [disabled]="isRequesting">
-      <span>Make long request</span>
-      @if (isRequesting) {
-        <forge-circular-progress></forge-circular-progress>
-      }
-    </forge-button>
-    <forge-button variant="outlined" (click)="onMakePollingRequest()" [disabled]="isPolling">
-      <span>Make polling request</span>
-      @if (isPolling) {
-        <forge-circular-progress></forge-circular-progress>
-      }
-    </forge-button>
   </div>
-  <div style="overflow-wrap: break-word">{{ response }}</div>
 </div>

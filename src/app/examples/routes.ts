@@ -7,6 +7,7 @@ import { DragDropComponent } from './drag-drop/drag-drop.component';
 import { SelectComponent } from './select/select.component';
 import { BindingComponent } from './binding/binding.component';
 import { MiscComponent } from './misc/misc.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 export const EXAMPLES_ROUTES: Routes = [
   {
@@ -19,6 +20,7 @@ export const EXAMPLES_ROUTES: Routes = [
       { path: 'select', component: SelectComponent },
       { path: 'binding', component: BindingComponent },
       { path: 'misc', component: MiscComponent },
+      { path: 'dashboard', component: DashboardComponent },
       { path: '', redirectTo: 'autocomplete', pathMatch: 'full' }
     ]
   }

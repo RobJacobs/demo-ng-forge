@@ -197,7 +197,7 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
               'keyboard_arrow_right',
               (event: Event) => {
                 this.ngZone.run(() => {
-                  this.router.navigate([`people/detail/${data.id}/${data.firstName}/${data.lastName}`]);
+                  this.router.navigate([`people/detail/${data.id}`]);
                 });
               },
               'View person details'

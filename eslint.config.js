@@ -9,9 +9,12 @@ module.exports = tseslint.config(
     extends: [eslint.configs.recommended, ...tseslint.configs.recommended, ...tseslint.configs.stylistic, ...angular.configs.tsRecommended],
     processor: angular.processInlineTemplates,
     rules: {
+      'no-empty': ['off'],
       '@typescript-eslint/no-explicit-any': ['off'],
       '@typescript-eslint/no-unused-vars': ['off'],
+      '@typescript-eslint/no-empty': ['off'],
       '@typescript-eslint/no-empty-function': ['off'],
+      '@angular-eslint/no-empty-lifecycle-method': ['off'],
       '@angular-eslint/directive-selector': [
         'error',
         {

@@ -20,11 +20,11 @@ forge-divider {
 
 .friends {
   .friend {
-    @include forge-flex-container(flex, row, nowrap, flex-end);
+
     padding-bottom: 16px;
 
     forge-select {
-      min-width: 320px;
+      width: 320px;
     }
   }
 }

@@ -1,0 +1,19 @@
+@use 'src/global' as *;
+@use 'src/app/shared/components/dashboard-template/mixins' as *;
+
+@include dashboard-template();
+
+.card {
+  @include app-container-outlined();
+  padding: 1rem;
+  overflow: auto;
+  max-height: 100%;
+
+  &__body {
+    width: 100%;
+    min-width: 400px;
+    height: 400px;
+    background-color: red;
+    padding: 1rem;
+  }
+}

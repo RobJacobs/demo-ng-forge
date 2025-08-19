@@ -1,0 +1,35 @@
+:host {
+  display: block;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.body {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+  overflow: auto;
+}
+
+.header-banner {
+  position: absolute;
+  width: 100%;
+  min-height: 240px;
+  background: linear-gradient(180deg, var(--forge-theme-primary), transparent);
+
+  ::ng-deep {
+    img {
+      height: auto;
+      width: 100%;
+      filter: brightness(0.5);
+    }
+  }
+}
+
+.footer-banner {
+  position: sticky;
+  bottom: -100%;
+  width: 100%;
+}

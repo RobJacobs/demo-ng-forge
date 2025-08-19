@@ -115,7 +115,6 @@ export class Utils {
   }
 
   public static comparator(a: any, b: any, type: 'string' | 'number' | 'boolean' | 'date' = 'string'): number {
-    // eslint-disable-next-line
     if (a == b) {
       return 0;
     }

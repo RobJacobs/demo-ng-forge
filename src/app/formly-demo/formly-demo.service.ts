@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -22,7 +21,7 @@ export class FormlyDemoService {
       return of({ count: 0, data: [] }).pipe(delay(1000));
     } else {
       const result = [];
-      for (let index = param.skip as number; index < <number>param.skip + <number>param.take; index++) {
+      for (let index = param.skip as number; index < param.skip + param.take; index++) {
         result.push({
           id: index,
           address: `${index} street`,

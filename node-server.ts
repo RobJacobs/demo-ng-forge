@@ -1,6 +1,5 @@
-// https://nodejs.org/api/http.html
-import * as http from 'node:http';
-import * as url from 'node:url';
+import * as http from 'http';
+import * as url from 'url';
 import { WebSocketServer } from 'ws';
 
 const sleep = (ms) => {
@@ -27,23 +26,21 @@ const httpServer = http.createServer((request, response) => {
   response.setHeader('Access-Control-Allow-Methods', 'GET, POST');
   response.setHeader('Content-Type', 'application/json');
 
-  const data = `{ "data": "response from server ${new Date().toISOString()}" }`;
-
   if (requestPath === '/') {
-    response.write(data);
+    response.write(JSON.stringify({ data: `response from server ${new Date().toISOString()}` }));
     response.end();
   }
 
   if (requestPath === '/long-request') {
     sleep(3000).then(() => {
-      response.write(data);
+      response.write(JSON.stringify({ data: new Date() }));
       response.end();
     });
   }
 
   if (requestPath === '/validate-get') {
     sleep(3000).then(() => {
-      response.write('{ "invalid": true, "message": "Error from server"}');
+      response.write(JSON.stringify({ invalid: true, message: 'Error from server' }));
       response.end();
     });
   }
@@ -58,7 +55,7 @@ const httpServer = http.createServer((request, response) => {
       if (body?.length) {
         const bodyObject = JSON.parse(body);
         sleep(3000).then(() => {
-          response.write(`{ "invalid": true, "message": "Error from server: ${bodyObject.field}"}`);
+          response.write(JSON.stringify({ invalid: true, message: `Error from server: ${bodyObject.field}` }));
           response.end();
         });
       } else {
@@ -69,8 +66,7 @@ const httpServer = http.createServer((request, response) => {
 });
 
 httpServer.listen(5000);
-
-console.log('Node.js web server at port 5000 is running...');
+console.log('Node http server at port 5000 is running...');
 
 const webSocketServer = new WebSocketServer({ port: 5001 });
 let webSockets = [];
@@ -95,4 +91,4 @@ webSocketServer.on('connection', (socket) => {
   });
 });
 
-console.log('Node.js web socket server at port 5001 is running...');
+console.log('Node web socket server at port 5001 is running...');

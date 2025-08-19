@@ -4,6 +4,7 @@ import { IColumnConfiguration, ITableRowClickEventData } from '@tylertech/forge'
 import { ForgeButtonAreaModule, ForgeDividerModule, ForgeLabelValueModule } from '@tylertech/forge-angular';
 import { TableMobileTemplateComponent } from './table-mobile-template.component';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ITableMobileColumnConfiguration extends IColumnConfiguration {}
 
 @Component({

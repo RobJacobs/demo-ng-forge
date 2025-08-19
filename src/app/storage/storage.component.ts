@@ -60,7 +60,6 @@ export class StorageComponent implements OnInit {
     if (localStorageResult?.length) {
       try {
         this.localStorageData = JSON.parse(localStorageResult);
-        // eslint-disable-next-line no-empty
       } catch {}
     }
   }

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { select, format, timeFormat, axisBottom, scaleLinear, axisLeft, line } from 'd3';
 import { interpolatePath } from 'd3-interpolate-path';
 import { isArray } from '@tylertech/forge-core';

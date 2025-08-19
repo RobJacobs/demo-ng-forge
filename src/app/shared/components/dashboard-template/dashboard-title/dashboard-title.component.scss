@@ -1,0 +1,34 @@
+@use 'src/global' as *;
+
+@mixin title-text() {
+  color: var(--forge-theme-text-high-inverse);
+
+  @media (max-width: $app-width-breakpoint--sm) {
+    --forge-typography-font-size: .75rem;
+  }
+}
+
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-items: center;
+  gap: .5rem;
+
+  @media (max-width: $app-width-breakpoint--sm) {
+    align-items: center;
+  }
+}
+
+.dashboard-title {
+  &__middle {
+    @include forge-typography-style(display6);
+    @include title-text();
+  }
+
+  &__top,
+  &__bottom {
+    @include forge-typography-style(subheading7);
+    @include title-text();
+  }
+}

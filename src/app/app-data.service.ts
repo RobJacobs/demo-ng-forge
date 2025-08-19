@@ -72,36 +72,38 @@ export class AppDataService {
     });
   }
 
-  public getLongRequest(): Observable<unknown> {
-    return this.httpClient.get<string>('http://localhost:5000/long-request', {
+  public getLongRequest(): Observable<{ data: Date }> {
+    return this.httpClient.get<{ data: Date }>('http://localhost:5000/long-request', {
       context: new HttpContext().set(SHOW_BUSY_INDICATOR, true)
     });
   }
 
   public getFile(fileName: string): Observable<Blob> {
     return this.httpClient.get(`mock-data/${fileName}`, {
+      context: new HttpContext().set(SHOW_BUSY_INDICATOR, true),
       responseType: 'blob'
     });
   }
 
-  public pollingRequest(name: string): Observable<IPerson> {
-    let id = 0;
-    const responseSub = new Subject<IPerson>();
+  public pollingRequest(timespan: number): Observable<Date> {
+    const responseSub = new Subject<Date>();
+    const startDate = new Date();
+    startDate.setSeconds(startDate.getSeconds() + timespan);
     timer(0, 100)
       .pipe(
         concatMap(() => {
-          id++;
-          return this.getPerson(id);
+          return this.getLongRequest();
         }),
         filter((response) => {
-          return response.lastName?.toLowerCase() === name.toLowerCase() || response.firstName?.toLowerCase() === name.toLowerCase();
+          const responseDate = new Date(response.data);
+          return responseDate > startDate;
         }),
         take(1),
         timeout(60000)
       )
       .subscribe({
         next: (result) => {
-          responseSub.next(result);
+          responseSub.next(result.data);
           responseSub.complete();
         },
         error: (error) => {

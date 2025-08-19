@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
 import {
   ForgeButtonModule,
   ForgeCheckboxModule,
+  ForgeCircularProgressModule,
   ForgeIconButtonModule,
   ForgeIconModule,
   ForgeTextFieldModule,
@@ -11,13 +12,15 @@ import {
   ToastService
 } from '@tylertech/forge-angular';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { of, Subject } from 'rxjs';
+import { finalize, of, Subject } from 'rxjs';
 import { fileTypeFromStream } from 'file-type';
 
 import { Utils } from 'src/utils';
 import { AppDataService } from 'src/app/app-data.service';
 import { BusyIndicatorService, CardComponent } from 'src/app/shared/components';
 import { ArrayFindPipe } from 'src/app/shared/pipes';
+import { AppWebSocketService } from 'src/app/app-web-socket.service';
+import { AppCacheService } from 'src/app/app-cache.service';
 
 @Component({
   selector: 'app-examples-misc',
@@ -27,6 +30,7 @@ import { ArrayFindPipe } from 'src/app/shared/pipes';
     ReactiveFormsModule,
     ForgeButtonModule,
     ForgeCheckboxModule,
+    ForgeCircularProgressModule,
     ForgeIconButtonModule,
     ForgeIconModule,
     ForgeTextFieldModule,
@@ -37,9 +41,11 @@ import { ArrayFindPipe } from 'src/app/shared/pipes';
   templateUrl: './misc.component.html',
   styleUrls: ['./misc.component.scss']
 })
-export class MiscComponent implements OnInit {
+export class MiscComponent implements OnInit, OnDestroy {
   private destroyRef = inject(DestroyRef);
+  private appCacheService = inject(AppCacheService);
   private appDataService = inject(AppDataService);
+  private appWebSocketService = inject(AppWebSocketService);
   private busyIndicatorService = inject(BusyIndicatorService);
   private toastService = inject(ToastService);
   private propertyPathsData = {
@@ -96,9 +102,25 @@ export class MiscComponent implements OnInit {
       asyncValidators: [this.asyncValidator('location')]
     })
   });
+  public isRequesting = false;
+  public isPolling = false;
+  public isMessaging = false;
+  public response: string;
 
   public ngOnInit() {
     this.propertyPaths = Utils.objectPropertyPaths(this.propertyPathsData);
+    this.appWebSocketService.webSocketSubject.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (result) => {
+        this.isMessaging = false;
+        console.log(result);
+        this.response = JSON.stringify(result);
+        this.appCacheService.isBusy.set(false);
+      }
+    });
+  }
+
+  public ngOnDestroy(): void {
+    this.appWebSocketService.webSocketSubject.complete();
   }
 
   public onShowFile() {
@@ -235,6 +257,51 @@ export class MiscComponent implements OnInit {
       }
 
       URL.revokeObjectURL(resultBlobUrl);
+    });
+  }
+
+  public onMakeLongRequest() {
+    this.isRequesting = true;
+    this.response = undefined;
+    this.appDataService
+      .getLongRequest()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => (this.isRequesting = false))
+      )
+      .subscribe({
+        next: (result) => {
+          console.log(result);
+          this.response = JSON.stringify(result);
+        },
+        error: (error) => console.log(error)
+      });
+  }
+
+  public onMakePollingRequest() {
+    this.isPolling = true;
+    this.response = undefined;
+    this.appDataService
+      .pollingRequest(10)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => (this.isPolling = false))
+      )
+      .subscribe({
+        next: (r) => {
+          console.log(r);
+          this.response = JSON.stringify(r);
+        }
+      });
+  }
+
+  public onSendMessage() {
+    this.isMessaging = true;
+    this.response = undefined;
+    this.appCacheService.isBusy.set(true);
+    this.appWebSocketService.webSocketSubject.next({
+      data: 'message from front end.',
+      date: new Date()
     });
   }
 }

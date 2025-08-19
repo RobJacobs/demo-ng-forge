@@ -41,7 +41,7 @@
     <forge-label-value style="--forge-label-value-align: stretch">
       <span slot="label">Rank {{ formGroup.value.rank }}</span>
       <div slot="value">
-        <forge-slider min="0" max="10" formControlName="rank"></forge-slider>
+        <forge-slider data-aria-label="Rank" min="0" max="10" formControlName="rank"></forge-slider>
       </div>
     </forge-label-value>
 
@@ -59,7 +59,7 @@
     <forge-label-value>
       <span slot="label">Citizen</span>
       <div slot="value">
-        <forge-switch formControlName="citizen"></forge-switch>
+        <forge-switch formControlName="citizen" aria-label="Is a citizen"></forge-switch>
       </div>
     </forge-label-value>
 
@@ -74,10 +74,10 @@
         <div class="friend">
           <forge-select [options]="friendOptions" [formControlName]="i" label="Friend" [appFormControlInvalid]="formGroup.controls.friends.controls[i]">
             <span slot="support-text" class="app--form-control-invalid">A friend is required</span>
+            <forge-icon-button slot="accessory" density="medium" aria-label="Delete" (click)="onDeleteFriend(i)">
+              <forge-icon name="delete"></forge-icon>
+            </forge-icon-button>
           </forge-select>
-          <forge-icon-button aria-label="Delete" (click)="onDeleteFriend(i)">
-            <forge-icon name="delete"></forge-icon>
-          </forge-icon-button>
         </div>
       }
       <forge-button variant="filled" (click)="onAddFriend()"> Add friend</forge-button>

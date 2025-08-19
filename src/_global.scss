@@ -1,3 +1,4 @@
+@forward '@tylertech/forge/sass/core/styles/typography' as forge-typography-*;
 @forward '@tylertech/forge/sass/core/styles/tokens/color-palette' as forge-color-*;
 @forward '@tylertech/forge/sass/utils/mixins-flex' as forge-flex-*;
 @forward 'src/mixins' as app-*;

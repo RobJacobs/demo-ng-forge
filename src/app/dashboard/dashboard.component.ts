@@ -10,5 +10,6 @@ import { ForgeLandingPageLayoutModule } from '@tylertech/forge-angular-internal'
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
+  public mainTitle = 'Dashboard component';
   public onNavigate(route: string) {}
 }

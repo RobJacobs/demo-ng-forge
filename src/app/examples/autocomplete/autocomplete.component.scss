@@ -7,6 +7,13 @@
   @include app-container-outlined();
 }
 
+::ng-deep {
+  app--forge--popup--center {
+    display: block;
+    margin-inline: auto;
+  }
+}
+
 .form-grid {
   justify-content: center;
   @include app-form-grid();
