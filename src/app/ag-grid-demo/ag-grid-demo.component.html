@@ -14,23 +14,31 @@
   </div>
 </forge-toolbar>
 <div class="body">
-  <ag-grid-angular
-    #agGrid
-    class="ag-theme-material"
-    [columnDefs]="columnDefs"
-    [gridOptions]="gridOptions"
-    [defaultColDef]="defaultColDef"
-    [rowData]="recordset"
-    (gridReady)="onGridReady($event)"
-    (sortChanged)="onTableSort($event)"
-    (columnResized)="onTableStateChange($event)"
-    (columnMoved)="onTableStateChange($event)"
-    (columnVisible)="onTableStateChange($event)"
-  ></ag-grid-angular>
+  @if (isBusy) {
+    <div class="busy-state">
+      <forge-skeleton list-item></forge-skeleton>
+      <forge-skeleton list-item></forge-skeleton>
+      <forge-skeleton list-item></forge-skeleton>
+    </div>
+  } @else {
+    <ag-grid-angular
+      #agGrid
+      [theme]="gridTheme"
+      [columnDefs]="columnDefs"
+      [gridOptions]="gridOptions"
+      [defaultColDef]="defaultColDef"
+      [rowData]="recordset"
+      (gridReady)="onGridReady($event)"
+      (sortChanged)="onTableSort($event)"
+      (columnResized)="onTableStateChange($event)"
+      (columnMoved)="onTableStateChange($event)"
+      (columnVisible)="onTableStateChange($event)"
+    ></ag-grid-angular>
 
-  @if (recordCount) {
-    <forge-toolbar inverted="true">
-      <forge-paginator slot="end" [pageIndex]="filterCache.skip / filterCache.take" [pageSize]="filterCache.take" [total]="recordCount" (forge-paginator-change)="onTablePaginatorChange($event.detail)"></forge-paginator>
-    </forge-toolbar>
+    @if (recordCount) {
+      <forge-toolbar inverted="true">
+        <forge-paginator slot="end" [pageIndex]="filterCache.skip / filterCache.take" [pageSize]="filterCache.take" [total]="recordCount" (forge-paginator-change)="onTablePaginatorChange($event.detail)"></forge-paginator>
+      </forge-toolbar>
+    }
   }
 </div>

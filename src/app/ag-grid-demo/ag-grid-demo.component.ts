@@ -23,7 +23,8 @@ import {
   ICellRendererComp,
   ICellRendererParams,
   ModuleRegistry,
-  SortChangedEvent
+  SortChangedEvent,
+  themeMaterial
 } from 'ag-grid-community';
 import { finalize } from 'rxjs';
 
@@ -70,6 +71,7 @@ export class AgGridDemoComponent implements OnInit {
   public gridOptions: GridOptions = {
     domLayout: 'normal'
   };
+  public gridTheme = themeMaterial.withParams({ accentColor: 'var(--forge-theme-primary)' });
   public defaultColDef: ColDef = {
     sortable: true,
     resizable: true
@@ -179,7 +181,7 @@ class ImageCellRendererComponent implements ICellRendererComp {
   init?(params: ICellRendererParams<any, any, any>) {
     this.cellElement = document.createElement('img');
     this.cellElement.src = `mock-data/${Utils.formatNumber(params.data.id, '2.0-0')}-small.png`;
-    this.cellElement.classList.add('table-cell__image');
+    this.cellElement.classList.add('ag-cell-image');
   }
 
   refresh(params: ICellRendererParams<any, any, any>): boolean {

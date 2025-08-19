@@ -8,9 +8,15 @@
 }
 
 ::ng-deep {
-  .table {
+  .ag {
     &-cell {
-      &__image {
+      &:has(.ag-cell-image) {
+        text-overflow: unset;
+        display: flex;
+        align-items: center;
+      }
+
+      &-image {
         width: 48px;
         height: 48px;
         border-radius: 50%;
@@ -31,6 +37,6 @@
   ag-grid-angular {
     width: 100%;
     height: 100%;
-    --ag-row-height: 48px;
+    --ag-row-height: 56px;
   }
 }
