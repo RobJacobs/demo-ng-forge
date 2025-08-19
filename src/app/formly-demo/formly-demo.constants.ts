@@ -55,7 +55,6 @@ const formDefinitionAll = [
       {
         key: 'firstName',
         type: 'input',
-        defaultValue: 0,
         props: {
           label: 'First name',
           required: true,

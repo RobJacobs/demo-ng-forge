@@ -31,10 +31,7 @@ export class FormlyDemoComponent implements OnInit {
     //   return field;
     // }
   };
-  public model = {
-    name: '',
-    age: 10
-  };
+  public model = {};
   public record: any;
   public formMessage?: { id: string; message: string };
 
