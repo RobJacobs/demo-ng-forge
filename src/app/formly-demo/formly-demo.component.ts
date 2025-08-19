@@ -9,6 +9,7 @@ import { formlyDemoConstants } from './formly-demo.constants';
   selector: 'app-formly-demo',
   templateUrl: './formly-demo.component.html',
   styleUrls: ['./formly-demo.component.scss'],
+  // eslint-disable-next-line @angular-eslint/prefer-standalone
   standalone: false
 })
 export class FormlyDemoComponent implements OnInit {

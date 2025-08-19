@@ -11,8 +11,9 @@ import {
   ForgeSelectDropdownModule,
   ForgeToolbarModule
 } from '@tylertech/forge-angular';
-import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
+import { AgGridAngular } from 'ag-grid-angular';
 import {
+  AllCommunityModule,
   ColDef,
   ColumnMovedEvent,
   ColumnResizedEvent,
@@ -21,6 +22,7 @@ import {
   GridReadyEvent,
   ICellRendererComp,
   ICellRendererParams,
+  ModuleRegistry,
   SortChangedEvent
 } from 'ag-grid-community';
 import { finalize } from 'rxjs';
@@ -39,7 +41,7 @@ import { AppDataService } from '../app-data.service';
     ForgePaginatorModule,
     ForgeSelectDropdownModule,
     ForgeToolbarModule,
-    AgGridModule
+    AgGridAngular
   ],
   templateUrl: './ag-grid-demo.component.html',
   styleUrls: ['./ag-grid-demo.component.scss'],
@@ -100,6 +102,7 @@ export class AgGridDemoComponent implements OnInit {
   public selectedTableColumns?: (string | undefined)[];
 
   public ngOnInit() {
+    ModuleRegistry.registerModules([AllCommunityModule]);
     this.getRecords();
   }
 

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, inject, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, inject } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ForgeButtonModule, ForgeToolbarModule } from '@tylertech/forge-angular';
 import { QuillModule, QuillModules } from 'ngx-quill';
