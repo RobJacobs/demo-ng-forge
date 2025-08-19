@@ -1,0 +1,2 @@
+import{G as a}from"./chunk-VBRQHIHF.js";import{kb as f}from"./chunk-MOKV6GK3.js";var c=(()=>{let t=class t{transform(i,r,o,p){if(!i?.toString().length||!r.length||!o.length)return;let n=r.find(m=>a(m[o],i));if(n)return p?n[p]:n}};t.\u0275fac=function(r){return new(r||t)},t.\u0275pipe=f({name:"appArrayFind",type:t,pure:!0});let e=t;return e})();export{c as a};
+//# sourceMappingURL=chunk-ETWBA36E.js.map
