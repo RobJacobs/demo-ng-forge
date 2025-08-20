@@ -187,9 +187,9 @@ export class SearchComponent implements OnInit {
                 this.searchCache.activeSearchId = result.id;
                 this.searchName = result.name;
                 this.searchDescription = result.description;
-                this.toastService.show({ message: 'Search saved' });
+                this.toastService.show({ message: 'Search saved', theme: 'success' });
               },
-              error: () => this.toastService.show({ message: 'Search save failed' })
+              error: () => this.toastService.show({ message: 'Search save failed', theme: 'error' })
             });
           }
         }

@@ -4,11 +4,18 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
-import { DialogService, ForgeButtonModule, ForgeIconModule, ForgeTabBarModule, ForgeTabModule, ForgeToolbarModule } from '@tylertech/forge-angular';
+import {
+  DialogService,
+  ForgeButtonModule,
+  ForgeIconModule,
+  ForgeTabBarModule,
+  ForgeTabModule,
+  ForgeToolbarModule,
+  ToastService
+} from '@tylertech/forge-angular';
 
 import { Utils } from 'src/utils';
 import { AppDataService } from 'src/app/app-data.service';
-import { AppToastService } from 'src/app/app-toast.service';
 import { ConfirmDialogComponent } from 'src/app/shared/components';
 import { CallbackPipe } from 'src/app/shared/pipes';
 import { IProfile } from 'src/app/shared/interfaces';
@@ -36,7 +43,7 @@ export class ProfileComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private appDataService = inject(AppDataService);
   private dialogService = inject(DialogService);
-  private appToastService = inject(AppToastService);
+  private toastService = inject(ToastService);
   public cache = inject(ProfileCacheService);
 
   private noImageUrl = 'mock-data/no-image.png';
@@ -98,6 +105,12 @@ export class ProfileComponent implements OnInit {
           this.cache.formGroup.reset();
           this.cache.profile = result;
           this.loadForm(this.cache.profile);
+        },
+        error: () => {
+          this.toastService.show({
+            message: 'Error loading profile',
+            theme: 'error'
+          });
         }
       });
   }
@@ -130,7 +143,10 @@ export class ProfileComponent implements OnInit {
 
     this.cache.profile = this.parseForm(this.cache.profile?.id);
     this.cache.formGroup.markAsPristine();
-    this.appToastService.show('Profile saved.');
+    this.toastService.show({
+      message: 'Profile saved',
+      theme: 'success'
+    });
   }
 
   public onCancel() {
