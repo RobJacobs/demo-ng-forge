@@ -1,4 +1,5 @@
 import { Injectable, signal } from '@angular/core';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 export interface IAppCacheService {
   isBusy: ReturnType<typeof signal<boolean>>;
@@ -47,6 +48,7 @@ export class AppCacheService implements IAppCacheService {
       { label: 'Query Builder', value: 'query-builder', icon: 'category' },
       { label: 'Icons', value: 'icons', icon: 'star' },
       { label: 'CSS Variables', value: 'css-variables', icon: 'adjust' },
+      { label: 'Typography', value: 'typography', icon: 'format_letter_case' },
       {
         label: 'Examples',
         icon: 'directions',
@@ -66,8 +68,34 @@ export class AppCacheService implements IAppCacheService {
       { label: 'IMask', value: 'imask', icon: 'masks' },
       { label: 'Charts', value: 'charts', icon: 'bar_chart' },
       { label: 'Text Edit', value: 'text-edit', icon: 'auto_stories' },
-      { label: 'PDF Viewer', value: 'pdf-viewer', icon: 'picture_as_pdf' }
+      { label: 'PDF Viewer', value: 'pdf-viewer', icon: 'picture_as_pdf' },
+      { label: 'Dynamic component', value: 'dynamic-component', icon: 'dynamic_form' }
     ]
   };
   public activeRoute: { path: string; params: any }[] = [];
+  public currentRoute: string;
+  public previousRoute: string;
+
+  public static getResolvedUrl(route: ActivatedRouteSnapshot, routeConfig = false): string {
+    let url = '';
+    const parseRoute = (r: ActivatedRouteSnapshot) => {
+      if (routeConfig) {
+        if (r.routeConfig?.path?.length) {
+          url += `${r.routeConfig?.path}/`;
+        }
+      } else {
+        if (r.url.length) {
+          url += `${r.url.map((u) => u.path).join('/')}/`;
+        }
+      }
+
+      if (r.children) {
+        r.children.forEach((rc) => parseRoute(rc));
+      }
+    };
+
+    parseRoute(route);
+
+    return url.replace('//', '/').replace(/\/+$/, '');
+  }
 }

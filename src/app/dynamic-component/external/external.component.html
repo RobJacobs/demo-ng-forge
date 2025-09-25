@@ -1,0 +1,13 @@
+<div class="forge-typography--heading3">External component</div>
+
+<forge-label-value>
+  <span slot="label">One way binding</span>
+  <span slot="value">{{ oneWayBinding() }}</span>
+</forge-label-value>
+
+<forge-text-field>
+  <label for="external--two-way-binding" slot="label">Two way binding</label>
+  <input type="text" id="external--two-way-binding" [(ngModel)]="twoWayBinding" autocomplete="off" />
+</forge-text-field>
+
+<forge-button variant="filled" (click)="onEmit()">Emit callback</forge-button>

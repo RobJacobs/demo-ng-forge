@@ -1,0 +1,10 @@
+@use 'src/global' as *;
+
+:host {
+  @include app-container-outlined();
+
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+  padding: 1rem;
+}

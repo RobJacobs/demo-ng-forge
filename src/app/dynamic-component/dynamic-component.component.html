@@ -1,0 +1,43 @@
+<forge-toolbar class="header">
+  <h2 slot="start" class="forge-typography--subheading4">Dynamic component</h2>
+  <forge-button slot="end" variant="outlined" (click)="onLoadExternal()">Load external component</forge-button>
+  <forge-button slot="end" variant="outlined" (click)="onLoadTemplate()">Load template component</forge-button>
+</forge-toolbar>
+
+<div class="body">
+  <div class="card">
+    <forge-text-field>
+      <label for="dynamic--one-way-binding" slot="label">One way binding</label>
+      <input type="text" id="dynamic--one-way-binding" [(ngModel)]="oneWayBinding" autocomplete="off" />
+    </forge-text-field>
+    <forge-text-field>
+      <label for="dynamic--two-way-binding" slot="label">Two way binding</label>
+      <input type="text" id="dynamic--two-way-binding" [(ngModel)]="twoWayBinding" autocomplete="off" />
+    </forge-text-field>
+    <forge-label-value>
+      <span slot="label">Callback message</span>
+      <span slot="value">{{ callbackMessage() }}</span>
+    </forge-label-value>
+  </div>
+
+  <ng-container #externalContainer></ng-container>
+
+  <ng-container #componentTemplateContainer></ng-container>
+
+  <ng-template #componentTemplate>
+    <div class="template-card">
+      <div class="forge-typography--heading3">Template component</div>
+      <forge-label-value>
+        <span slot="label">One way binding</span>
+        <span slot="value">{{ oneWayBinding() }}</span>
+      </forge-label-value>
+
+      <forge-text-field>
+        <label for="template--two-way-binding" slot="label">Two way binding</label>
+        <input type="text" id="template--two-way-binding" [(ngModel)]="twoWayBinding" autocomplete="off" />
+      </forge-text-field>
+
+      <forge-button variant="filled" (click)="onEmit()">Emit callback</forge-button>
+    </div>
+  </ng-template>
+</div>

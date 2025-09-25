@@ -8,6 +8,14 @@
 .body {
   overflow: auto;
   padding: 24px;
+
+  &__container {
+    display: flex;
+    align-items: center;
+    gap: 8px 16px;
+    flex-wrap: wrap;
+    padding-block: 8px;
+  }
 }
 
 forge-button {

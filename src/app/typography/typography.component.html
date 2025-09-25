@@ -1,0 +1,31 @@
+<forge-toolbar class="header">
+  <h2 slot="start" class="forge-typography--subheading4">Forge Typography classes</h2>
+</forge-toolbar>
+
+<div class="body">
+  <app-card class="forge-typography">
+    @for (index of [1, 2, 3, 4, 5, 6, 7, 8]; track i; let i = $index) {
+      <div [ngClass]="'forge-typography--display' + index">{{ 'forge-typography--display' + index }}</div>
+    }
+    <forge-divider></forge-divider>
+    @for (index of [1, 2, 3, 4, 5, 6, 7, 8]; track i; let i = $index) {
+      <div [ngClass]="'forge-typography--heading' + index">{{ 'forge-typography--heading' + index }}</div>
+    }
+    <forge-divider></forge-divider>
+    @for (index of [1, 2, 3, 4, 5, 6, 7, 8]; track i; let i = $index) {
+      <div [ngClass]="'forge-typography--subheading' + index">{{ 'forge-typography--heading' + index }}</div>
+    }
+    <forge-divider></forge-divider>
+    @for (index of [1, 2, 3, 4]; track i; let i = $index) {
+      <div [ngClass]="'forge-typography--body' + index">{{ 'forge-typography--body' + index }}</div>
+    }
+    <forge-divider></forge-divider>
+    @for (index of [1, 2, 3]; track i; let i = $index) {
+      <div [ngClass]="'forge-typography--label' + index">{{ 'forge-typography--label' + index }}</div>
+    }
+    <forge-divider></forge-divider>
+    <div class="forge-typography--button">forge-typography--button</div>
+    <div class="forge-typography--link">forge-typography--link</div>
+    <div class="forge-typography--overline">forge-typography--overline</div>
+  </app-card>
+</div>

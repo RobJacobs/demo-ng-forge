@@ -1,0 +1,32 @@
+@use 'src/global' as *;
+
+:host {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+  height: 100%;
+}
+
+.body {
+  overflow: auto;
+  padding: 24px;
+}
+
+.forge-typography {
+  forge-divider {
+    padding-block: 16px;
+  }
+}
+
+@mixin typography-mix($variant, $last) {
+  @for $i from 1 through $last {
+    .typography-#{$variant}-#{$i} {
+      @include forge-typography-style(#{$variant}#{$i});
+    }
+  }
+}
+
+@include typography-mix(display, 8);
+@include typography-mix(heading, 8);
+@include typography-mix(body, 4);
+@include typography-mix(label, 3);

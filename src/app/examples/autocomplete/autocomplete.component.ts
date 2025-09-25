@@ -4,6 +4,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { lastValueFrom } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AutocompleteFilterCallback, AutocompleteOptionBuilder, AutocompleteSelectedTextBuilder, IOption } from '@tylertech/forge';
+import { isDefined } from '@tylertech/forge-core';
 import { ForgeAutocompleteModule, ForgeButtonModule, ForgeDividerModule, ForgeIconModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
 
 import { ExamplesService, IRecord } from '../examples.service';
@@ -32,7 +33,7 @@ export class AutocompleteComponent {
       value: { id: 2, code: '002', description: 'Item 002' },
       label: 'Item 002'
     }),
-    autocomplete03: new FormControl([3, 4, 5]),
+    autocomplete03: new FormControl([3]),
     autocomplete04: new FormControl(),
     autocomplete05: new FormControl()
   });
@@ -57,7 +58,7 @@ export class AutocompleteComponent {
   };
 
   public singleSelectPrimitiveFilter: AutocompleteFilterCallback = (filterText: string, value: string) => {
-    if (value) {
+    if (isDefined(value)) {
       return lastValueFrom(
         this.moduleService.getSingleSelectOptions(undefined, value).pipe(map((result) => result.map((d) => ({ value: d.id, label: d.description }))))
       );
@@ -69,7 +70,7 @@ export class AutocompleteComponent {
   };
 
   public singleSelectObjectFilter: AutocompleteFilterCallback = (filterText: string, value: IOption) => {
-    if (value) {
+    if (isDefined(value)) {
       return [{ label: value.label, value }];
     } else {
       return lastValueFrom(
@@ -78,9 +79,25 @@ export class AutocompleteComponent {
     }
   };
 
-  public multipleSelectFilter: AutocompleteFilterCallback = (filterText: string, value: string) => {
-    if (value) {
-      return [];
+  public multipleSelectFilter: AutocompleteFilterCallback = (filterText: string, values: string[]) => {
+    if (isDefined(values)) {
+      // if only 1 option is selected, the autocomplete component will try to display the label from the selected option
+      if (values.length === 1 && values[0]?.toString().length) {
+        // return [{ label: '1 option selected', value: values[0] }];
+        return lastValueFrom(
+          this.moduleService.getMutlipleSelectOptions(filterText, values).pipe(
+            map(
+              (result) =>
+                result.map((d: IRecord) => ({
+                  value: d.id,
+                  label: d.description
+                })) as IOption[]
+            )
+          )
+        );
+      } else {
+        return [];
+      }
     } else {
       return lastValueFrom(
         this.moduleService.getMutlipleSelectOptions(filterText, this.formGroup.value.autocomplete03).pipe(
