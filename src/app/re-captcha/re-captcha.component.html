@@ -1,0 +1,59 @@
+<forge-toolbar class="header">
+  <h2 slot="start" class="forge-typography--subheading4">Google reCaptcha</h2>
+</forge-toolbar>
+
+<div class="body">
+  <form novalidate autocomplete="off" [formGroup]="formGroup" class="form-grid">
+    <div class="form-grid--col-span form-grid__resources">
+      <forge-label-value>
+        <span slot="label">Resources</span>
+        <div slot="value" class="form-grid__resources--stacked">
+          <a href="https://cloud.google.com/recaptcha/docs/setup-overview-web" target="_blank">reCaptcha website setup</a>
+          <a href="https://cloud.google.com/recaptcha/docs/apis" target="_blank">reCaptcha API reference</a>
+        </div>
+      </forge-label-value>
+    </div>
+
+    <forge-text-field>
+      <input type="text" id="re-captcha--action" formControlName="recaptchaAction" />
+      <label for="re-captcha--action" slot="label">Action</label>
+    </forge-text-field>
+    <forge-text-field class="form-grid--col-span2">
+      <input type="text" id="re-captcha--site-key" formControlName="recaptchaSiteKey" />
+      <label for="re-captcha--site-key" slot="label">Site key</label>
+      <span slot="helper-text" class="forge-typography--label2">Site key can only be set once, refresh the page to change site key.</span>
+      <span slot="helper-text" class="forge-typography--label2">reCaptcha must be Intialized after setting site key.</span>
+      <span slot="helper-text" class="forge-typography--label2">Execute will generate a new token.</span>
+    </forge-text-field>
+    <forge-text-field class="form-grid--col-span2">
+      <input type="text" id="re-captcha--google-api-key" formControlName="googleAPIKey" />
+      <label for="re-captcha--google-api-key" slot="label">Google API key</label>
+      <span slot="helper-text" class="forge-typography--label2">Google API key is required to Assess a token.</span>
+      <span slot="helper-text" class="forge-typography--label2">Token may only be assessed once, then it will become invalid.</span>
+    </forge-text-field>
+    <div class="form-grid--col-span2 form-grid__actions">
+      <forge-button variant="outlined" (click)="onInitialize()" [disabled]="formGroup.controls.recaptchaSiteKey.invalid || isInitialized">Initialize</forge-button>
+      <forge-button variant="outlined" class="form-grid--row-break" (click)="onExecute()" [disabled]="formGroup.controls.recaptchaAction.invalid || formGroup.controls.recaptchaSiteKey.invalid || !isInitialized || isBusy">
+        Execute
+      </forge-button>
+      <forge-button variant="outlined" (click)="onAssess()" [disabled]="!token?.length || formGroup.invalid || isBusy">Assess</forge-button>
+    </div>
+
+    <div class="form-grid--col-span">
+      @if (isBusy) {
+        <forge-linear-progress class="form-grid--col-span"></forge-linear-progress>
+      } @else {
+        <forge-divider></forge-divider>
+      }
+    </div>
+
+    <forge-label-value class="form-grid--col-span">
+      <span slot="label">Assessment</span>
+      <pre slot="value" style="margin: 0">{{ assessment | json }}</pre>
+    </forge-label-value>
+    <forge-label-value class="form-grid--col-span">
+      <span slot="label">Token</span>
+      <span slot="value">{{ token }}</span>
+    </forge-label-value>
+  </form>
+</div>

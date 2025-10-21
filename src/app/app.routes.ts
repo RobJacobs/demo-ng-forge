@@ -12,6 +12,7 @@ import {
 import { PETS_SERVICE } from '@demo-ng-forge/pets';
 import { AppPetsService } from './app-pets.service';
 import { AppCacheService } from './app-cache.service';
+import { ReCaptchaService } from './re-captcha/re-captcha.service';
 
 @Injectable()
 export class RootRouteGuard implements CanActivate, CanDeactivate<Component> {
@@ -148,6 +149,12 @@ export const routes: Routes = [
         path: 'dynamic-component',
         title: 'Dynamic component',
         loadComponent: () => import('./dynamic-component/dynamic-component.component').then((m) => m.DynamicComponentComponent)
+      },
+      {
+        path: 're-captcha',
+        title: 'Re-Captcha',
+        providers: [ReCaptchaService],
+        loadComponent: () => import('./re-captcha/re-captcha.component').then((m) => m.ReCaptchaComponent)
       },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: '**', redirectTo: 'dashboard', pathMatch: 'full' }

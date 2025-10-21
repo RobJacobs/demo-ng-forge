@@ -69,7 +69,8 @@ export class AppCacheService implements IAppCacheService {
       { label: 'Charts', value: 'charts', icon: 'bar_chart' },
       { label: 'Text Edit', value: 'text-edit', icon: 'auto_stories' },
       { label: 'PDF Viewer', value: 'pdf-viewer', icon: 'picture_as_pdf' },
-      { label: 'Dynamic component', value: 'dynamic-component', icon: 'dynamic_form' }
+      { label: 'Dynamic component', value: 'dynamic-component', icon: 'dynamic_form' },
+      { label: 'Re-Captcha', value: 're-captcha', icon: 'security' }
     ]
   };
   public activeRoute: { path: string; params: any }[] = [];

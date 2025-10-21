@@ -1,0 +1,36 @@
+@use 'src/global' as *;
+
+:host {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+  height: 100%;
+}
+
+.body {
+  overflow: auto;
+  padding: 24px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.form-grid {
+  @include app-container-outlined();
+  padding: 16px;
+  @include app-form-grid();
+
+  &__resources {
+    &--stacked {
+      font-size: .85rem;
+      display: flex;
+      flex-direction: column;
+      row-gap: 4px;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    column-gap: 8px;
+  }
+}
