@@ -1,9 +1,9 @@
-@use 'src/global' as *;
+@use 'src/global';
 
 @mixin title-text() {
   color: var(--forge-theme-text-high-inverse);
 
-  @media (max-width: $app-width-breakpoint--sm) {
+  @media (max-width: global.$app-width-breakpoint--sm) {
     --forge-typography-font-size: .75rem;
   }
 }
@@ -15,20 +15,20 @@
   justify-items: center;
   gap: .5rem;
 
-  @media (max-width: $app-width-breakpoint--sm) {
+  @media (max-width: global.$app-width-breakpoint--sm) {
     align-items: center;
   }
 }
 
 .dashboard-title {
   &__middle {
-    @include forge-typography-style(display6);
+    @include global.forge-typography-style(display6);
     @include title-text();
   }
 
   &__top,
   &__bottom {
-    @include forge-typography-style(subheading7);
+    @include global.forge-typography-style(subheading7);
     @include title-text();
   }
 }

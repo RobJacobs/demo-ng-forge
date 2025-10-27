@@ -1,10 +1,10 @@
-@use 'src/global' as *;
-@use 'src/app/shared/components/dashboard-template/mixins' as *;
+@use 'src/global';
+@use 'src/app/shared/components/dashboard-template/mixins' as dashboard;
 
-@include dashboard-template();
+@include dashboard.dashboard-template();
 
 .card {
-  @include app-container-outlined();
+  @include global.app-container-outlined();
   padding: 1rem;
   overflow: auto;
   max-height: 100%;

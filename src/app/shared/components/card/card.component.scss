@@ -1,4 +1,4 @@
-@use 'src/global' as *;
+@use 'src/global';
 
 :host {
   display: flex;
@@ -6,11 +6,11 @@
   overflow: hidden;
 
   &.app-card--raised {
-    @include app-container-raised();
+    @include global.app-container-raised();
   }
 
   &.app-card--outlined {
-    @include app-container-outlined();
+    @include global.app-container-outlined();
   }
 }
 
@@ -27,7 +27,7 @@
 }
 
 .footer {
-  @include app-toolbar-gap();
+  @include global.app-toolbar-gap();
 
   &:empty {
     display: none;

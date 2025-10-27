@@ -1,4 +1,4 @@
-@use 'src/global' as *;
+@use 'src/global';
 
 :host {
   display: grid;
@@ -17,7 +17,7 @@
       background-color: transparent;
 
       canvas {
-        @include app-border();
+        @include global.app-border();
         cursor: pointer;
       }
     }
@@ -35,7 +35,7 @@
 
     .page {
       canvas {
-        @include app-border();
+        @include global.app-border();
       }
     }
   }
@@ -84,7 +84,7 @@
 
     input {
       border: none;
-      @include app-border(border-bottom);
+      @include global.app-border(border-bottom);
       color: var(--forge-theme-text-high);
       background-color: transparent;
       outline: none;

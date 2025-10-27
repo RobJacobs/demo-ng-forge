@@ -1,4 +1,4 @@
-@use 'src/global' as *;
+@use 'src/global';
 
 :host {
   display: block;
@@ -12,8 +12,8 @@ forge-drawer {
 
 .header {
   overflow: hidden;
-  @include forge-flex-container(flex, row, nowrap, center);
-  @include app-border(border-bottom);
+  @include global.forge-flex-container(flex, row, nowrap, center);
+  @include global.app-border(border-bottom);
 
   &__title {
     margin-left: 16px;
@@ -22,7 +22,7 @@ forge-drawer {
 
 .body {
   padding: 8px 16px;
-  @include app-form-grid();
+  @include global.app-form-grid();
 }
 
 .footer {
@@ -30,7 +30,7 @@ forge-drawer {
   flex-direction: row;
   justify-content: flex-end;
   padding: 8px 16px;
-  @include app-border(border-top);
+  @include global.app-border(border-top);
 
   forge-button {
     margin-left: 8px;

@@ -1,4 +1,4 @@
-@use 'src/global' as *;
+@use 'src/global';
 
 :host {
   display: block;
@@ -9,12 +9,12 @@
 ::ng-deep {
   .app--chart {
     &--tree-node {
-      @include app-border();
+      @include global.app-border();
       white-space: nowrap;
-      background-color: $forge-color-indigo-50;
+      background-color: global.$forge-color-indigo-50;
 
       &--selected {
-        background-color: $forge-color-indigo-500;
+        background-color: global.$forge-color-indigo-500;
         color: white;
       }
     }
@@ -28,7 +28,7 @@
 .chart-card {
   margin: 24px;
   height: calc(100% - 48px);
-  @include app-container-outlined();
+  @include global.app-container-outlined();
 
   .chart-container {
     position: relative;

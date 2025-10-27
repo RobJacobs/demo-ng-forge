@@ -1,4 +1,4 @@
-@use 'src/global' as *;
+@use 'src/global';
 
 :host {
   display: grid;
@@ -23,6 +23,6 @@
   padding: 24px;
 
   &__table {
-    @include app-container-outlined();
+    @include global.app-container-outlined();
   }
 }

@@ -1,4 +1,4 @@
-@use 'src/global' as *;
+@use 'src/global';
 
 $form-cell-width: 192;
 $form-column-gap: 16;
@@ -10,7 +10,7 @@ $form-column-gap: 16;
 
 .filter {
   &__header {
-    @include forge-flex-container(flex, row, nowrap, center);
+    @include global.forge-flex-container(flex, row, nowrap, center);
     margin: 8px 0;
 
     &__condition {
@@ -34,13 +34,13 @@ $form-column-gap: 16;
     }
 
     &__action {
-      @include forge-flex-container(flex, row, nowrap, center);
+      @include global.forge-flex-container(flex, row, nowrap, center);
       margin-top: 1rem;
     }
   }
 
   &__group {
-    @include app-container-outlined();
+    @include global.app-container-outlined();
     padding: 16px;
 
     & .filter__group {

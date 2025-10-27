@@ -1,4 +1,4 @@
-@use 'src/global' as *;
+@use 'src/global';
 
 :host {
   display: block;
@@ -22,14 +22,14 @@
 .drag-item,
 .cdk-drag {
   background-color: var(--forge-theme-surface);
-  @include app-border();
+  @include global.app-border();
   cursor: move;
   overflow: hidden;
   user-select: none;
 
   &-preview {
-    @include app-container-outlined();
-    border: solid 2px $forge-color-indigo-500;
+    @include global.app-container-outlined();
+    border: solid 2px global.$forge-color-indigo-500;
   }
 
   &-placeholder {
@@ -37,8 +37,8 @@
       visibility: hidden;
     }
 
-    background-color: $forge-color-indigo-50;
-    border: dashed 1px $forge-color-indigo-500;
+    background-color: global.$forge-color-indigo-50;
+    border: dashed 1px global.$forge-color-indigo-500;
   }
 
   &-animating {

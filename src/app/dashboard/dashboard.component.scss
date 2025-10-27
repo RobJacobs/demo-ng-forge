@@ -1,4 +1,4 @@
-@use 'src/global' as *;
+@use 'src/global';
 
 $card-width: 320;
 
@@ -11,18 +11,18 @@ $card-width: 320;
 }
 
 .body {
-  @include forge-flex-container(flex, column, nowrap, center);
+  @include global.forge-flex-container(flex, column, nowrap, center);
   gap: 16px;
   width: fit-content;
   margin-inline: auto;
 
-  @media (max-width: $app-width-breakpoint--sm) {
+  @media (max-width: global.$app-width-breakpoint--sm) {
     width: 100%;
   }
 
   forge-card {
     &::part(root) {
-      @include forge-flex-container(flex, column, nowrap, center);
+      @include global.forge-flex-container(flex, column, nowrap, center);
       row-gap: 16px;
     }
 
@@ -33,7 +33,7 @@ $card-width: 320;
   }
 
   &__top {
-    @include forge-flex-container(flex, row, wrap);
+    @include global.forge-flex-container(flex, row, wrap);
     justify-content: center;
     gap: 16px;
 
@@ -47,9 +47,9 @@ $card-width: 320;
 
     forge-card {
       width: 100%;
-      min-width: $app-width-breakpoint--sm;
+      min-width: global.$app-width-breakpoint--sm;
 
-      @media (max-width: $app-width-breakpoint--sm) {
+      @media (max-width: global.$app-width-breakpoint--sm) {
         min-width: 100%;
       }
     }
@@ -59,7 +59,7 @@ $card-width: 320;
 
 .footer {
   min-height: 3rem;
-  @include forge-flex-container(flex, row, nowrap, center);
+  @include global.forge-flex-container(flex, row, nowrap, center);
   padding: 0 16px;
   justify-content: flex-end;
 }

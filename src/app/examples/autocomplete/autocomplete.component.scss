@@ -1,10 +1,10 @@
-@use 'src/global' as *;
+@use 'src/global';
 
 :host {
   display: block;
   margin: 24px;
   padding: 16px;
-  @include app-container-outlined();
+  @include global.app-container-outlined();
 }
 
 ::ng-deep {
@@ -16,7 +16,7 @@
 
 .form-grid {
   justify-content: center;
-  @include app-form-grid();
+  @include global.app-form-grid();
 }
 
 forge-divider {

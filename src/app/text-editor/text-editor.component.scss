@@ -1,11 +1,11 @@
-@use 'src/global' as *;
+@use 'src/global';
 
 ::ng-deep {
   @import 'quill/dist/quill.snow';
 
   quill-editor {
     width: 100%;
-    @include app-container-outlined();
+    @include global.app-container-outlined();
 
     &[disabled] {
       .ql-toolbar {

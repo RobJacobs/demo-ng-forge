@@ -1,4 +1,4 @@
-@use 'src/global' as *;
+@use 'src/global';
 
 :host {
   display: grid;
@@ -10,8 +10,8 @@
     .forge-table {
       &-row {
         &__expandable-content {
-          background-color: $forge-color-indigo-50 !important;
-          @include app-border(border-bottom);
+          background-color: global.$forge-color-indigo-50 !important;
+          @include global.app-border(border-bottom);
         }
       }
 
@@ -46,7 +46,7 @@
 }
 
 .table {
-  @include app-table-header-footer();
+  @include global.app-table-header-footer();
 
   & {
     grid-template-rows: auto 1fr;
@@ -77,7 +77,7 @@
 }
 
 .empty-state {
-  @include forge-flex-container(flex, column, nowrap, center);
+  @include global.forge-flex-container(flex, column, nowrap, center);
   padding: 24px;
 
   img {

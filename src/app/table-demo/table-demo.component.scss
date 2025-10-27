@@ -1,4 +1,4 @@
-@use 'src/global' as *;
+@use 'src/global';
 
 :host {
   display: grid;
@@ -93,7 +93,7 @@
             height: 100%;
             min-width: 24px;
             margin-left: auto;
-            @include app-border();
+            @include global.app-border();
             background-color: var(--forge-theme-surface-container-minimum);
           }
 
@@ -148,8 +148,8 @@
         }
 
         &__expandable-content {
-          background-color: $forge-color-indigo-50 !important;
-          @include app-border(border-bottom);
+          background-color: global.$forge-color-indigo-50 !important;
+          @include global.app-border(border-bottom);
         }
       }
     }
@@ -184,8 +184,8 @@
 
 .cdk-drag {
   &-preview {
-    @include app-container-outlined();
-    border: solid 2px $forge-color-indigo-500;
+    @include global.app-container-outlined();
+    border: solid 2px global.$forge-color-indigo-500;
     display: flex;
     padding: 0 24px;
 
@@ -199,7 +199,7 @@
       visibility: hidden;
     }
 
-    background-color: $forge-color-indigo-50;
+    background-color: global.$forge-color-indigo-50;
   }
 
   &-animating {

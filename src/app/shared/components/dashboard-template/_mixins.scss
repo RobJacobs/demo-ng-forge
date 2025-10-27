@@ -1,4 +1,4 @@
-@use 'src/global' as *;
+@use 'src/global';
 
 @mixin dashboard-template() {
   :host {
@@ -13,7 +13,7 @@
     gap: 1rem;
     padding: 1.5rem;
 
-    @media (max-width: $app-width-breakpoint--sm) {
+    @media (max-width: global.$app-width-breakpoint--sm) {
       flex-direction: column;
       align-items: center;
       gap: .75rem;
@@ -34,7 +34,7 @@
         --forge-button-justify: flex-start;
         background-color: var(--forge-theme-surface);
         border-radius: var(--forge-shape-medium);
-        @include app-border();
+        @include global.app-border();
         border-left: 8px solid var(--forge-theme-secondary);
 
         img {
@@ -44,7 +44,7 @@
         }
       }
 
-      @media (max-width: $app-width-breakpoint--sm) {
+      @media (max-width:global.$app-width-breakpoint--sm) {
         margin-left: unset;
         width: 100%;
 
@@ -59,7 +59,7 @@
     padding: 1.5rem;
     overflow: hidden;
 
-    @media (max-width: $app-width-breakpoint--sm) {
+    @media (max-width: global.$app-width-breakpoint--sm) {
       padding: 1rem;
     }
   }
