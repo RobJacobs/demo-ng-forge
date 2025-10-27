@@ -5,7 +5,8 @@
     "outDir": "./out-tsc/app",
     "types": [
       "node",
-      "google.visualization"
+      "google.visualization",
+      "grecaptcha"
     ]
   },
   "files": [

@@ -37,7 +37,8 @@
     "types": [
       "jasmine",
       "node",
-      "google.visualization"
+      "google.visualization",
+      "grecaptcha"
     ]
   },
   "angularCompilerOptions": {

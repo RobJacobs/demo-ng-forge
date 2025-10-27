@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, NgZone } from '@angular/core';
-import { finalize, Observable, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
-declare global {
-  interface Window {
-    grecaptcha: {
-      enterprise: any;
-    };
-  }
-}
+// declare global {
+//   interface Window {
+//     grecaptcha: {
+//       enterprise: any;
+//     };
+//   }
+// }
 
 @Injectable()
 export class ReCaptchaService {
@@ -49,14 +49,14 @@ export class ReCaptchaService {
   public executeChallenge(action: string): Observable<string> {
     this.ngZone.runOutsideAngular(() => {
       // need to clear any cached token
-      window.grecaptcha.enterprise.reset(this.reCaptchaSiteKey);
+      window.grecaptcha.enterprise.reset(this.reCaptchaSiteKey as any);
     });
 
     const sub = new Subject<string>();
 
     window.grecaptcha.enterprise.ready(() => {
       try {
-        window.grecaptcha.enterprise
+        (window.grecaptcha.enterprise as any)
           .execute(this.reCaptchaSiteKey, { action })
           .then((token) => {
             sub.next(token);
