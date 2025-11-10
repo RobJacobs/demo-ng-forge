@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/components/header/header.component.scss"],
+  "sourcesContent": [":host {\n  display: block;\n  position: relative;\n}\n\nforge-linear-progress {\n  position: absolute;\n  top: 100%;\n  left: 0;\n  right: 0;\n  z-index: 10;\n}\n"],
+  "mappings": "AAAA,MACE,QAAA,MACA,SAAA,SAGF,sBACE,SAAA,SACA,IAAA,KACA,KAAA,EACA,MAAA,EACA,QAAA",
+  "names": []
+}

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/components/dashboard-template/dashboard-template.component.scss"],
+  "sourcesContent": [":host {\r\n  display: block;\r\n  height: 100%;\r\n  position: relative;\r\n  overflow: hidden;\r\n}\r\n\r\n.body {\r\n  position: relative;\r\n  display: grid;\r\n  grid-template-rows: auto 1fr auto;\r\n  height: 100%;\r\n  overflow: auto;\r\n}\r\n\r\n.header-banner {\r\n  position: absolute;\r\n  width: 100%;\r\n  min-height: 240px;\r\n  background: linear-gradient(180deg, var(--forge-theme-primary), transparent);\r\n\r\n  ::ng-deep {\r\n    img {\r\n      height: auto;\r\n      width: 100%;\r\n      filter: brightness(0.5);\r\n    }\r\n  }\r\n}\r\n\r\n.footer-banner {\r\n  position: sticky;\r\n  bottom: -100%;\r\n  width: 100%;\r\n}"],
+  "mappings": "AAAA,MACE,QAAA,MACA,OAAA,KACA,SAAA,SACA,SAAA,OAGF,CAAA,KACE,SAAA,SACA,QAAA,KACA,mBAAA,KAAA,IAAA,KACA,OAAA,KACA,SAAA,KAGF,CAAA,cACE,SAAA,SACA,MAAA,KACA,WAAA,MACA,WAAA,gBAAA,MAAA,CAAA,IAAA,sBAAA,CAAA,aAGE,CAPJ,cAOI,UAAA,IACE,OAAA,KACA,MAAA,KACA,OAAA,WAAA,IAKN,CAAA,cACE,SAAA,OACA,OAAA,MACA,MAAA",
+  "names": []
+}
