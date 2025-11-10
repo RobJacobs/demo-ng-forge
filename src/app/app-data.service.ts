@@ -30,7 +30,7 @@ export class AppDataService {
               filter.filters.map((f) => ({
                 key: f.property,
                 value: f.value,
-                strict: f.property === 'gender' || f.property === 'id'
+                strict: f.strict
               }))
             );
             count = r.length;

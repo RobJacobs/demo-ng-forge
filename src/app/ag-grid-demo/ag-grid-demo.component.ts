@@ -74,7 +74,9 @@ export class AgGridDemoComponent implements OnInit {
   public gridTheme = themeMaterial.withParams({ accentColor: 'var(--forge-theme-primary)' });
   public defaultColDef: ColDef = {
     sortable: true,
-    resizable: true
+    resizable: true,
+    filter: true,
+    editable: true
   };
   public columnDefs: ColDef[] = [
     {
@@ -82,6 +84,8 @@ export class AgGridDemoComponent implements OnInit {
       headerName: '',
       cellRenderer: ImageCellRendererComponent,
       sortable: false,
+      filter: false,
+      editable: false,
       width: 80,
       suppressSizeToFit: true,
       suppressAutoSize: false,
@@ -181,6 +185,7 @@ class ImageCellRendererComponent implements ICellRendererComp {
   init?(params: ICellRendererParams<any, any, any>) {
     this.cellElement = document.createElement('img');
     this.cellElement.src = `mock-data/${Utils.formatNumber(params.data.id, '2.0-0')}-small.png`;
+    this.cellElement.alt = '';
     this.cellElement.classList.add('ag-cell-image');
   }
 

@@ -1,126 +1,209 @@
-import { AfterViewInit, Component, DestroyRef, ElementRef, OnDestroy, OnInit, inject, signal, viewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
-import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
+import { Component, DestroyRef, ElementRef, NgZone, OnDestroy, OnInit, ViewChild, inject, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { finalize, fromEvent, tap, Subject, takeUntil, merge } from 'rxjs';
-import { IColumnConfiguration, PopoverComponent, SortDirection } from '@tylertech/forge';
-import { isDefined } from '@tylertech/forge-core';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CdkDragDrop, CdkDropList, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import {
+  DialogService,
+  ForgeButtonModule,
   ForgeCheckboxModule,
   ForgeDividerModule,
   ForgeIconButtonModule,
   ForgeIconModule,
   ForgeListItemModule,
   ForgeListModule,
+  ForgePaginatorModule,
   ForgePopoverModule,
-  ForgeToolbarModule
+  ForgeSkeletonModule,
+  ForgeTextFieldModule,
+  ForgeToolbarModule,
+  ForgeTooltipModule
 } from '@tylertech/forge-angular';
+import { CellAlign, PopoverComponent, SortDirection } from '@tylertech/forge';
+import { isDefined } from '@tylertech/forge-core';
+import { finalize, fromEvent, merge, Subject, takeUntil, tap } from 'rxjs';
 
 import { Utils } from 'src/utils';
 import { AppDataService } from 'src/app/app-data.service';
+import { AppCacheService } from 'src/app/app-cache.service';
 import { IPerson } from 'src/app/shared/interfaces';
+import {
+  BusyIndicatorService,
+  ConfirmDialogComponent,
+  IBusyIndicatorData,
+  ITableColumnConfiguration,
+  TableDetailComponent,
+  TableMobileComponent,
+  TableUtils
+} from 'src/app/shared/components';
+import { FormControlInvalidDirective, OnLoadDirective } from 'src/app/shared/directives';
 import { CallbackPipe } from 'src/app/shared/pipes';
-import { TableDetailComponent } from 'src/app/shared/components';
+import { ITableState, TableDemoService } from './table-demo.service';
+import { FilterDialogComponent, ITableDemoFilterDialogData } from './filter-dialog/filter-dialog.component';
+
+interface IRecordsetForm {
+  id: FormControl<string>;
+  firstName: FormControl<string>;
+  lastName: FormControl<string>;
+  gender: FormControl<string>;
+  occupation: FormControl<string>;
+  quote: FormControl<string>;
+  url: FormControl<string>;
+}
 
 @Component({
   selector: 'app-table-demo',
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     DragDropModule,
-    ScrollingModule,
+    ForgeButtonModule,
     ForgeCheckboxModule,
     ForgeDividerModule,
     ForgeIconButtonModule,
     ForgeIconModule,
     ForgeListItemModule,
     ForgeListModule,
+    ForgePaginatorModule,
     ForgePopoverModule,
+    ForgeSkeletonModule,
+    ForgeTextFieldModule,
     ForgeToolbarModule,
+    ForgeTooltipModule,
     TableDetailComponent,
-    CallbackPipe
+    TableMobileComponent,
+    FormControlInvalidDirective,
+    CallbackPipe,
+    OnLoadDirective
   ],
   templateUrl: './table-demo.component.html',
-  styleUrls: ['./table-demo.component.scss']
+  styleUrl: './table-demo.component.scss'
 })
-export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
+export class TableDemoComponent implements OnInit, OnDestroy {
+  @ViewChild(CdkDropList)
+  private cdkDropList: CdkDropList;
   private destroyRef = inject(DestroyRef);
+  private ngZone = inject(NgZone);
+  private router = inject(Router);
+  private dialogService = inject(DialogService);
   private appDataService = inject(AppDataService);
+  private busyIndicatorService = inject(BusyIndicatorService);
+  public appCache = inject(AppCacheService);
+  public cache = inject(TableDemoService);
+  private readonly bodyTableElementRef = viewChild<ElementRef<HTMLDivElement>>('bodyTable');
   private readonly tableElementRef = viewChild<ElementRef<HTMLTableElement>>('table');
-  private readonly columnHeaderPopover = viewChild<ElementRef<PopoverComponent>>('columnHeaderPopover');
-  private readonly virtualScrollViewport = viewChild(CdkVirtualScrollViewport);
+  private readonly columnsEditPopover = viewChild<ElementRef<PopoverComponent>>('columnsEditPopover');
   private tableColumnResize$ = new Subject<void>();
   private isColumnResizing = false;
 
+  private tableStateStorageKey = 'app--table-demo--table-state';
+  private filtersStateStorageKey = 'app--table-demo--filters-state';
+  private tableColumnDefaultWidths: (string | number)[];
   public isBusy = false;
-  public filterCache = {
-    sort: {
-      property: 'lastName',
-      direction: SortDirection.Ascending
+  public isFiltering = false;
+  public isEditing = false;
+  public cellAlignEnum = CellAlign;
+
+  public tableColumns: ITableColumnConfiguration[] = [
+    {
+      property: 'image',
+      editable: false,
+      sortable: false,
+      resizable: false,
+      moveable: false,
+      optional: false,
+      align: CellAlign.Center,
+      width: 48,
+      template: (rowIndex: number, cellElement: HTMLElement, data: any) => {
+        const imgElement = document.createElement('img') as HTMLImageElement;
+        imgElement.src = `mock-data/${Utils.formatNumber(data.id, '2.0-0')}-small.png`;
+        imgElement.setAttribute('alt', '');
+        imgElement.classList.add('forge-table-cell__image');
+        cellElement.appendChild(imgElement);
+        return null;
+      }
     },
-    filters: [] as any[],
-    skip: 0,
-    take: 25
-  };
-  public recordset = signal<IPerson[]>([]);
-  public tableColumns: IColumnConfiguration[] = [
     { header: 'Id', property: 'id', width: 48 },
-    { header: 'First', property: 'firstName' },
-    { header: 'Last', property: 'lastName' },
+    { header: 'First', property: 'firstName', moveable: false },
+    { header: 'Last', property: 'lastName', resizable: false },
     { header: 'Gender', property: 'gender' },
-    { header: 'Occupation', property: 'occupation' }
-  ];
-  public tableHeaderOffset = signal(0);
-  public tableRowHeight = 56;
-  public expandedRows: any[] = [];
-  public id = Utils.elementId('app-');
+    { header: 'Occupation', property: 'occupation' },
+    {
+      header: 'Actions',
+      property: 'actions',
+      editable: false,
+      sortable: false,
+      resizable: false,
+      moveable: false,
+      optional: false,
+      align: CellAlign.Center,
+      width: 120,
+      frozen: 'right',
+      template: (rowIndex: number, cellElement: HTMLElement, data: any) => {
+        this.ngZone.run(() => {
+          cellElement.classList.add('forge-table-body__cell__actions');
+          cellElement.appendChild(
+            TableUtils.createIconButton(
+              'delete',
+              (event: Event) => {
+                this.dialogService
+                  .open(ConfirmDialogComponent, {
+                    options: { persistent: true },
+                    data: { title: 'Delete record', message: 'Are you sure you want to delete this record?' }
+                  })
+                  .afterClosed.subscribe({
+                    next: (result) => {
+                      if (result) {
+                        const busyData: IBusyIndicatorData = {
+                          message: 'Deleting...',
+                          progress: 'circular'
+                        };
+                        this.busyIndicatorService.show(busyData);
+                        setTimeout(() => {
+                          this.busyIndicatorService.hide();
+                          this.cache.recordsetFormGroup.controls.recordsetFormArray.removeAt(rowIndex);
+                        }, 2000);
+                      }
+                    }
+                  });
+              },
+              'Delete person'
+            )
+          );
+          cellElement.appendChild(
+            TableUtils.createIconButton(
+              'keyboard_arrow_right',
+              (event: Event) => {
+                this.router.navigate([`people/detail/${data.id}`]);
+              },
+              'View person details'
+            )
+          );
+        });
 
-  public visibleColumns = (columns: IColumnConfiguration[]) => {
-    return columns.filter((c) => c.hidden !== true);
+        return null;
+      }
+    }
+  ];
+
+  public visibleColumns = (columns: ITableColumnConfiguration[]) => {
+    return Utils.sortData(
+      columns.filter((c) => c.hidden !== true),
+      'order',
+      'number',
+      'ASC'
+    );
   };
 
-  public recordsetTrackBy = (index: number, person: IPerson) => {
-    return person.id;
+  public optionalColumns = (columns: ITableColumnConfiguration[]) => {
+    return columns.filter((c) => c.optional !== false);
   };
 
   public ngOnInit() {
+    this.loadTableState();
+    this.loadFiltersState();
     this.getRecords();
-    this.virtualScrollViewport().checkViewportSize();
-  }
-
-  public ngAfterViewInit() {
-    this.virtualScrollViewport()
-      ?.renderedRangeStream.pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (o) => {
-          this.tableHeaderOffset.set(o.start);
-          if (!this.isBusy && o.start > 0 && o.end + 20 > this.recordset().length) {
-            this.isBusy = true;
-            this.appDataService
-              .getPeople({
-                sort: this.filterCache.sort
-              })
-              .pipe(
-                takeUntilDestroyed(this.destroyRef),
-                finalize(() => (this.isBusy = false))
-              )
-              .subscribe({
-                next: (result) => {
-                  const startId = this.recordset().length + 1;
-                  this.recordset.update((value) => {
-                    return [
-                      ...value,
-                      ...result.data.map((p, i) => {
-                        p.id = startId + p.id;
-                        return p;
-                      })
-                    ];
-                  });
-                }
-              });
-          }
-        }
-      });
   }
 
   public ngOnDestroy() {
@@ -128,16 +211,66 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
     this.tableColumnResize$.complete();
   }
 
-  public onColumnHeaderDragStart() {
-    this.virtualScrollViewport()?.scrollToOffset(0);
+  public onFilter(event) {
+    event.preventDefault();
+    this.isFiltering = !this.isFiltering;
+
+    const dialogData: ITableDemoFilterDialogData = {
+      cache: this.cache,
+      saveCallback: () => this.saveFiltersState()
+    };
+    this.dialogService.open(FilterDialogComponent, { data: dialogData, options: { preset: 'right-sheet' } }).afterClosed.subscribe({
+      next: (result) => {
+        if (result) {
+          this.cache.filter.skip = 0;
+          this.cache.expandedRows.length = 0;
+          this.cache.filter.filters = this.cache.convertRecordsetFilterFormGroup();
+          this.getRecords();
+        }
+
+        if (!this.cache.filter.filters.length) {
+          this.cache.recordsetFilterFormGroup.markAsPristine();
+        }
+      }
+    });
   }
 
-  public onColumnHeaderDragDrop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.tableColumns, event.previousIndex, event.currentIndex);
+  public onEdit(event, isEditing) {
+    event.preventDefault();
+    this.isEditing = isEditing;
+    this.cdkDropList.disabled = this.isEditing;
+    this.tableColumns.find((tc) => tc.header === 'Actions').hidden = this.isEditing;
     this.tableColumns = [...this.tableColumns];
   }
 
-  public onColumnHeaderResize(event: MouseEvent, columnIndex: number, column: IColumnConfiguration) {
+  public onSubmit(event) {
+    event.preventDefault();
+    const busyData: IBusyIndicatorData = {
+      message: 'Submitting...',
+      progress: 'circular'
+    };
+    this.busyIndicatorService.show(busyData);
+    setTimeout(() => {
+      this.busyIndicatorService.hide();
+      this.isEditing = false;
+    }, 2000);
+  }
+
+  public onColumnHeaderDragStart() {
+    this.bodyTableElementRef().nativeElement.scrollTo(0, 0);
+  }
+
+  public onColumnHeaderDragDrop(event: CdkDragDrop<string[]>) {
+    if (this.tableColumns[event.currentIndex]?.moveable === false) {
+      return;
+    }
+    moveItemInArray(this.tableColumns, event.previousIndex, event.currentIndex);
+    this.saveTableState();
+    this.tableColumns.forEach((tc, index) => (tc.order = index));
+    this.tableColumns = [...this.tableColumns];
+  }
+
+  public onColumnHeaderResize(event: MouseEvent, columnIndex: number, column: ITableColumnConfiguration) {
     event.stopPropagation();
     event.preventDefault();
     this.tableColumnResize$.next();
@@ -149,9 +282,9 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
     let positionX = event.clientX;
     if (columnHeaderElement) {
       this.isColumnResizing = true;
-      tableElementRef?.nativeElement.querySelector('.forge-table-head__row')?.classList.add('forge-table-head__row--resizing');
-      columnHeaderElement.classList.add('forge-table-head__cell--resizing');
-      columnElements.forEach((c) => c.classList.add('forge-table-body__cell--resizing'));
+      tableElementRef?.nativeElement.querySelector('.forge-table-head__row')?.classList.add('forge-table-row--resizing');
+      columnHeaderElement.classList.add('forge-table-cell--resizing');
+      columnElements.forEach((c) => c.classList.add('forge-table-cell--resizing'));
 
       fromEvent<MouseEvent>(document.body, 'mousemove')
         .pipe(
@@ -171,50 +304,40 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
               this.isColumnResizing = false;
               (columnHeaderElement as any) = undefined;
               (columnElements as any) = undefined;
+              this.saveTableState();
             })
           ),
           takeUntil(this.tableColumnResize$),
           tap((event) => {
             this.tableColumnResize$.next();
-            this.tableElementRef()?.nativeElement.querySelector('.forge-table-head__row')?.classList.remove('forge-table-head__row--resizing');
-            columnHeaderElement.classList.remove('forge-table-head__cell--resizing');
-            columnElements.forEach((c) => c.classList.remove('forge-table-body__cell--resizing'));
+
+            this.tableElementRef()
+              ?.nativeElement.querySelectorAll('.forge-table-row--resizing')
+              .forEach((el) => el.classList.remove('forge-table-row--resizing'));
+            this.tableElementRef()
+              ?.nativeElement.querySelectorAll('.forge-table-cell--resizing')
+              .forEach((el) => el.classList.remove('forge-table-cell--resizing'));
           })
         )
         .subscribe();
     }
   }
 
-  public onColumnHeaderRightClick(event: PointerEvent, columnIndex: number) {
+  public onColumnsEdit(event) {
     event.preventDefault();
-    const columnHeaderPopover = this.columnHeaderPopover();
-    if (columnHeaderPopover.nativeElement.open) {
-      columnHeaderPopover.nativeElement.open = false;
-      requestAnimationFrame(() => {
-        this.columnHeaderPopover().nativeElement.anchor = '';
-      });
-    } else {
-      columnHeaderPopover.nativeElement.anchor = `th-${columnIndex}-${this.id}`;
-      requestAnimationFrame(() => {
-        this.columnHeaderPopover().nativeElement.open = true;
-      });
-    }
   }
 
-  public onColumnPopoverItemSelected(value: any) {
+  public onColumnsEditPopoverSelected(value: any) {
     switch (value) {
       case 'reset-column-width':
-        this.tableColumns.forEach((c) => (c.width = undefined));
+        this.tableColumnDefaultWidths.forEach((width, i) => {
+          this.tableColumns[i].width = width;
+        });
+        this.saveTableState();
         break;
-      case 'freeze-column': {
-        const tableElementRef = this.tableElementRef();
-        const columnHeaderElement = (tableElementRef?.nativeElement as HTMLTableElement).querySelectorAll('thead tr th')[0];
-        const columnElements = (tableElementRef?.nativeElement as HTMLTableElement).querySelectorAll(`tbody tr td:nth-child(${1})`);
-        columnHeaderElement.classList.add('forge-table-head__cell--frozen');
-        columnElements.forEach((c) => c.classList.add('forge-table-body__cell--frozen'));
+      case 'delete-table-cache':
+        this.deleteTableState();
         break;
-      }
-
       default: {
         const tableColumn = this.tableColumns.find((c) => c.property === value.property);
         if (tableColumn) {
@@ -224,59 +347,76 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
             tableColumn.sortDirection = undefined;
             this.tableColumns = [...this.tableColumns];
           }
+          this.saveTableState();
         }
         break;
       }
     }
-    const columnHeaderPopover = this.columnHeaderPopover();
+    const columnHeaderPopover = this.columnsEditPopover();
     columnHeaderPopover.nativeElement.open = false;
     columnHeaderPopover.nativeElement.anchor = '';
   }
 
-  public onTableSort(event: MouseEvent, column: IColumnConfiguration) {
+  public onColumnSort(event: MouseEvent, column: ITableColumnConfiguration) {
     event.stopPropagation();
-    const columnHeaderPopover = this.columnHeaderPopover();
-    columnHeaderPopover.nativeElement.open = false;
-    columnHeaderPopover.nativeElement.anchor = '';
 
-    if (!this.isColumnResizing) {
-      this.tableColumns.filter((c) => c.property !== column.property).forEach((c) => (c.sortDirection = undefined));
-      if (column.sortDirection === SortDirection.Ascending) {
-        column.sortDirection = SortDirection.Descending;
-      } else if (column.sortDirection === SortDirection.Descending) {
-        column.sortDirection = undefined;
-      } else {
-        column.sortDirection = SortDirection.Ascending;
-      }
-
-      (this.filterCache as any).sort = column.sortDirection ? { property: column.property, direction: column.sortDirection } : undefined;
-      this.filterCache.skip = 0;
-      this.virtualScrollViewport()?.scrollToOffset(0);
-      this.expandedRows.length = 0;
-      this.getRecords();
+    if (
+      (event.target as HTMLElement).classList.contains('forge-table-head__cell-dragger') ||
+      (event.target as HTMLElement).classList.contains('forge-table-head__cell-resizer') ||
+      this.isColumnResizing ||
+      this.isBusy ||
+      this.isEditing ||
+      column.sortable === false
+    ) {
+      return;
     }
-  }
 
-  public onTablePaginatorChange(detail: { pageIndex: number; pageSize: number }) {
-    this.filterCache.skip = detail.pageIndex * detail.pageSize;
-    this.filterCache.take = detail.pageSize;
-    this.expandedRows.length = 0;
+    this.tableColumns.filter((c) => c.property !== column.property).forEach((c) => (c.sortDirection = undefined));
+    if (column.sortDirection === SortDirection.Ascending) {
+      column.sortDirection = SortDirection.Descending;
+    } else if (column.sortDirection === SortDirection.Descending) {
+      column.sortDirection = undefined;
+    } else {
+      column.sortDirection = SortDirection.Ascending;
+    }
+
+    (this.cache.filter as any).sort = column.sortDirection ? { property: column.property, direction: column.sortDirection } : undefined;
+    this.cache.filter.skip = 0;
+    this.cache.expandedRows.length = 0;
+    this.saveTableState();
     this.getRecords();
   }
 
-  public onExpandRow(index: number, value: any) {
-    if (this.expandedRows[index]) {
-      this.expandedRows[index] = undefined;
+  public onPaginatorChange(detail: { pageIndex: number; pageSize: number }) {
+    this.cache.filter.skip = detail.pageIndex * detail.pageSize;
+    this.cache.filter.take = detail.pageSize;
+    this.cache.expandedRows.length = 0;
+    this.getRecords();
+  }
+
+  public onExpandRow(index: number) {
+    if (this.cache.expandedRows[index]) {
+      this.cache.expandedRows[index] = undefined;
     } else {
-      this.expandedRows[index] = value;
+      this.cache.expandedRows[index] = this.cache.recordsetFormGroup.controls.recordsetFormArray.at(index).getRawValue();
     }
   }
 
   private getRecords() {
+    if (this.isBusy) {
+      // TODO cancel request
+      return;
+    }
+
     this.isBusy = true;
+    this.cache.recordsetFormGroup.controls.recordsetFormArray.clear();
+    this.cache.expandedRows = [];
     this.appDataService
       .getPeople({
-        sort: this.filterCache.sort
+        sort: this.cache.filter.sort,
+        skip: this.cache.filter.skip,
+        take: this.cache.filter.take,
+        filters: this.cache.filter.filters
       })
       .pipe(
         takeUntilDestroyed(this.destroyRef),
@@ -284,8 +424,83 @@ export class TableDemoComponent implements OnInit, AfterViewInit, OnDestroy {
       )
       .subscribe({
         next: (result) => {
-          this.recordset.set(result.data);
+          this.cache.totalRecords = result.count;
+          result.data.forEach((person) => {
+            this.cache.recordsetFormGroup.controls.recordsetFormArray.push(this.buildRecordForm(person), { emitEvent: false });
+          });
         }
       });
+  }
+
+  private buildRecordForm(person: IPerson): FormGroup<IRecordsetForm> {
+    return new FormGroup<IRecordsetForm>({
+      id: new FormControl<string | null>(person.id, { validators: [Validators.required] }),
+      firstName: new FormControl<string | null>(person.firstName, { validators: [Validators.required] }),
+      lastName: new FormControl<string | null>(person.lastName, { validators: [Validators.required] }),
+      gender: new FormControl<string | null>(person.gender),
+      occupation: new FormControl<string | null>(person.occupation),
+      quote: new FormControl<string | null>(person.quote),
+      url: new FormControl<string | null>(person.url)
+    });
+  }
+
+  private loadTableState() {
+    this.tableColumnDefaultWidths = this.tableColumns.map((tc) => tc.width);
+    const stateRaw = localStorage.getItem(this.tableStateStorageKey);
+    if (stateRaw?.length) {
+      const tableState = JSON.parse(stateRaw) as ITableState;
+      tableState.columns.forEach((tcs) => {
+        const column = this.tableColumns.find((tc) => tc.property === tcs.property);
+        if (column) {
+          column.order = tcs.order;
+          column.width = tcs.width;
+          column.hidden = tcs.hidden;
+          if (tableState.sort?.property === column.property) {
+            column.sortDirection = tableState.sort.direction;
+          }
+        }
+      });
+      this.tableColumns = [...this.tableColumns];
+      this.cache.filter.sort = tableState.sort;
+      this.cache.filter.take = tableState.take;
+    }
+  }
+
+  private saveTableState() {
+    localStorage.setItem(
+      this.tableStateStorageKey,
+      JSON.stringify({
+        columns: this.tableColumns.map((tc, index) => ({
+          property: tc.property,
+          order: index,
+          width: tc.width,
+          hidden: tc.hidden
+        })),
+        sort: this.cache.filter.sort,
+        take: this.cache.filter.take
+      })
+    );
+  }
+
+  private deleteTableState() {
+    localStorage.removeItem(this.tableStateStorageKey);
+  }
+
+  private loadFiltersState() {
+    const stateRaw = localStorage.getItem(this.filtersStateStorageKey);
+    if (stateRaw?.length) {
+      this.cache.userFilters = JSON.parse(stateRaw);
+      const defaultFilter = this.cache.userFilters?.find((f) => f.isDefault);
+      if (defaultFilter) {
+        this.cache.recordsetFilterFormGroup.patchValue(defaultFilter.filters);
+        this.cache.recordsetFilterFormGroup.markAsDirty();
+        this.cache.filter.filters = this.cache.convertRecordsetFilterFormGroup();
+        this.cache.activeUserFilter = defaultFilter;
+      }
+    }
+  }
+
+  private saveFiltersState() {
+    localStorage.setItem(this.filtersStateStorageKey, JSON.stringify(this.cache.userFilters));
   }
 }

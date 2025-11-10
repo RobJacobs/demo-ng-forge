@@ -76,7 +76,8 @@ export class FilterComponent implements OnInit {
       Object.entries(Utils.objectReduce(this.formGroup.value)).map((e) => ({
         property: e[0],
         value: e[1],
-        label: this.propertyLabel(e[0])
+        label: this.propertyLabel(e[0]),
+        strict: e[0] === 'gender'
       })) || [];
     this.filter.emit();
   }

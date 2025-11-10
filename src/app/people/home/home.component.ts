@@ -25,7 +25,8 @@ import {
   TableDetailComponent,
   TableMobileComponent,
   FilterChipsComponent,
-  RouterlinkButtonComponent
+  RouterlinkButtonComponent,
+  ITableColumnConfiguration
 } from 'src/app/shared/components';
 import { AppCacheService } from 'src/app/app-cache.service';
 import { AppDataService } from 'src/app/app-data.service';
@@ -78,7 +79,7 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
     { property: 'gender', header: 'Gender', hidden: false },
     { property: 'occupation', header: 'Occupation', hidden: false }
   ];
-  public tableColumns: IColumnConfiguration[] = [
+  public tableColumns: ITableColumnConfiguration[] = [
     {
       property: 'image',
       width: 48,
@@ -196,21 +197,11 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
             TableUtils.createIconButton(
               'keyboard_arrow_right',
               (event: Event) => {
-                this.ngZone.run(() => {
-                  this.router.navigate([`people/detail/${data.id}`]);
-                });
+                this.router.navigate([`people/detail/${data.id}`]);
               },
               'View person details'
             )
           );
-
-          // const componentRef = this.viewContainerRef.createComponent(RouterlinkButtonComponent);
-          // componentRef.instance.route = '/profile';
-          // componentRef.instance.queryParams = { id: data.id };
-          // componentRef.instance.icon = 'person';
-          // componentRef.instance.tooltip = 'Show profile';
-          // const linkButtonNode = (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
-          // cellElement.appendChild(linkButtonNode);
         });
 
         return '';

@@ -13,6 +13,7 @@ import { PETS_SERVICE } from '@demo-ng-forge/pets';
 import { AppPetsService } from './app-pets.service';
 import { AppCacheService } from './app-cache.service';
 import { ReCaptchaService } from './re-captcha/re-captcha.service';
+import { TableDemoService } from './table-demo/table-demo.service';
 
 @Injectable()
 export class RootRouteGuard implements CanActivate, CanDeactivate<Component> {
@@ -103,7 +104,8 @@ export const routes: Routes = [
       {
         path: 'table-demo',
         title: 'Table demo',
-        loadComponent: () => import('./table-demo/table-demo.component').then((m) => m.TableDemoComponent)
+        loadComponent: () => import('./table-demo/table-demo.component').then((m) => m.TableDemoComponent),
+        providers: [TableDemoService]
       },
       {
         path: 'ag-grid-demo',

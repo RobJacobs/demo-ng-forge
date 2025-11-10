@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ForgeTextFieldModule } from '@tylertech/forge-angular';
 
 import { AutoFocusDirective, FormControlInvalidDirective } from 'src/app/shared/directives';
-import { ProfileCacheService } from '../profile-cache.service';
+import { ProfileService } from '../profile.service';
 
 @Component({
   selector: 'app-profile-address',
@@ -17,7 +17,7 @@ import { ProfileCacheService } from '../profile-cache.service';
   }
 })
 export class AddressComponent {
-  public cache = inject(ProfileCacheService);
+  public cache = inject(ProfileService);
 
   public get formGroup() {
     return this.cache.formGroup.controls.addressFormGroup;

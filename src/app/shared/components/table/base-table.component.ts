@@ -11,10 +11,19 @@ import {
 } from '@tylertech/forge';
 import { IFilterParameter } from 'src/app/shared/interfaces';
 
+export interface ITableColumnConfiguration extends IColumnConfiguration {
+  order?: string | number;
+  editable?: boolean;
+  frozen?: 'left' | 'right';
+  moveable?: boolean;
+  optional?: boolean;
+  resizable?: boolean;
+}
+
 @Injectable()
 export abstract class BaseTableComponent {
   public recordCount = 0;
-  public abstract tableColumns: IColumnConfiguration[];
+  public abstract tableColumns: ITableColumnConfiguration[];
 
   private setTableFiltersAF?: number;
 
@@ -29,7 +38,7 @@ export abstract class BaseTableComponent {
       });
 
     if (this.filterCache?.sort?.property.length && this.filterCache.sort.direction !== SortDirection.Unset) {
-      const column = this.tableColumns.find((c) => c.property === this.filterCache?.sort?.property) as IColumnConfiguration;
+      const column = this.tableColumns.find((c) => c.property === this.filterCache?.sort?.property) as ITableColumnConfiguration;
       if (isDefined(column)) {
         column.sortDirection = this.filterCache?.sort?.direction;
         column.initialSort = true;
@@ -112,7 +121,7 @@ export abstract class BaseTableComponent {
     this.filterCache.skip = 0;
   }
 
-  private getColumnFromEventIndex(index: number): IColumnConfiguration {
+  private getColumnFromEventIndex(index: number): ITableColumnConfiguration {
     return this.tableColumns.filter((c) => !c.hidden)[index];
   }
 

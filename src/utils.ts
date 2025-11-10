@@ -78,9 +78,9 @@ export class Utils {
         if (operator) {
           Object.defineProperty(f, 'operator', { value: operator });
         }
+        f.value = ('' + f.value).toLowerCase();
       }
 
-      f.value = ('' + f.value).toLowerCase();
       return f;
     });
 
@@ -93,6 +93,22 @@ export class Utils {
         const value = ('' + getPropertyValue(rec, f.key)).toLowerCase();
         if (!value.length) {
           return false;
+        }
+
+        if (isArray(f.value)) {
+          if (f.strict) {
+            return (
+              (f.value as unknown as any[]).findIndex((v) => {
+                return v.toLowerCase() === value;
+              }) > -1
+            );
+          } else {
+            return (
+              (f.value as unknown as any[]).findIndex((v) => {
+                return v.toLowerCase().includes(value);
+              }) > -1
+            );
+          }
         }
 
         if (f.strict) {

@@ -12,8 +12,8 @@ export class FilterChipsComponent {
   public readonly filters = input<
     {
       property: string;
-      value: string;
-      label: string;
+      value?: string;
+      label?: string;
     }[]
   >([]);
 

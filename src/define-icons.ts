@@ -56,7 +56,8 @@ import {
   tylIconTylerTalkingTLogo,
   tylIconFormatLetterCase,
   tylIconDynamicForm,
-  tylIconSecurity
+  tylIconSecurity,
+  tylIconCancel
 } from '@tylertech/tyler-icons';
 
 const standardIcons = [
@@ -115,7 +116,8 @@ const standardIcons = [
   tylIconCheckBoxOutlineBlank,
   tylIconFormatLetterCase,
   tylIconDynamicForm,
-  tylIconSecurity
+  tylIconSecurity,
+  tylIconCancel
 ];
 
 const customIcons = [tylIconTylerTalkingTLogo];

@@ -21,7 +21,7 @@ import {
 import { AppDataService } from 'src/app/app-data.service';
 import { AutoFocusDirective, FormControlInvalidDirective, InputCasingDirective } from 'src/app/shared/directives';
 import { DateTimeComponent } from 'src/app/shared/components';
-import { ProfileCacheService } from '../profile-cache.service';
+import { ProfileService } from '../profile.service';
 
 @Component({
   selector: 'app-profile-personal',
@@ -54,7 +54,7 @@ import { ProfileCacheService } from '../profile-cache.service';
 })
 export class PersonalComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
-  public cache = inject(ProfileCacheService);
+  public cache = inject(ProfileService);
   private appDataService = inject(AppDataService);
 
   public get formGroup() {

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { isNumber, isString } from '@tylertech/forge-core';
+import { isDefined, isNumber, isString } from '@tylertech/forge-core';
 import { ITableTemplateBuilderResult, TableTemplateBuilder } from '@tylertech/forge';
 @Component({
   selector: 'app-table-mobile-template',
@@ -32,6 +32,10 @@ export class TableMobileTemplateComponent implements AfterViewInit {
   }
 
   private appendContent(result: string | HTMLElement | ITableTemplateBuilderResult) {
+    if (!isDefined(result)) {
+      return;
+    }
+
     if (result instanceof HTMLElement) {
       this.contentRef.nativeElement.appendChild(result);
       // eslint-disable-next-line no-prototype-builtins

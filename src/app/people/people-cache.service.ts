@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SortDirection } from '@tylertech/forge';
-import { IPerson } from 'src/app/shared/interfaces';
+import { IFilter, IPerson } from 'src/app/shared/interfaces';
 
 @Injectable()
 export class PeopleCacheService {
@@ -13,7 +13,7 @@ export class PeopleCacheService {
         property: 'lastName',
         direction: SortDirection.Ascending
       },
-      filters: [] as any[],
+      filters: [] as IFilter[],
       skip: 0,
       take: 25
     }

@@ -40,7 +40,7 @@ export class DetailComponent {
         .subscribe({
           next: (r) => {
             this.person = r;
-            this.imageUrl = `mock-data/${Utils.formatNumber(this.person?.id as number, '2.0-0')}.png`;
+            this.imageUrl = `mock-data/${Utils.formatNumber(parseInt(this.person?.id, 10), '2.0-0')}.png`;
           }
         });
     } else {
@@ -51,7 +51,7 @@ export class DetailComponent {
   public onNavigate(route: string) {
     switch (route) {
       case 'back':
-        this.router.navigate(['people/home']);
+        this.router.navigate([this.appCache.previousRoute]);
         break;
     }
   }

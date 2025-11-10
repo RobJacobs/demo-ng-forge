@@ -24,11 +24,11 @@ import {
 import { Observable, lastValueFrom, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { Utils } from 'src/utils';
 import { AppDataService } from 'src/app/app-data.service';
 import { ISearch } from 'src/app/shared/interfaces';
-import { AutocompleteRangeComponent } from 'src/app/shared/components';
+import { AutocompleteRangeComponent, FilterSaveDialogComponent, IFilterSaveDialogData } from 'src/app/shared/components';
 import { CheckboxThreeStateDirective } from 'src/app/shared/directives';
-import { SearchSaveComponent } from './save/search-save.component';
 
 @Component({
   selector: 'app-search',
@@ -66,7 +66,7 @@ export class SearchComponent implements OnInit {
   public searchName?: string;
   public searchDescription?: string;
   // TODO consider moving to a cache service
-  public searchCache: { activeSearchId?: number; searches: ISearch[] } = {
+  public searchCache: { activeSearchId?: string; searches: ISearch[] } = {
     activeSearchId: undefined,
     searches: []
   };
@@ -146,39 +146,42 @@ export class SearchComponent implements OnInit {
     // TODO implement search action
   }
 
-  public onSaveSearch(search?: {
-    id: number;
-    name: string;
-    description: string;
-    isDefault: boolean;
-    isPublic: boolean;
-    filters: { property: string; value: string }[];
-  }) {
-    const activeSearch = isDefined(search) ? search : this.searchCache.searches.find((s) => s.id === this.searchCache.activeSearchId);
-    const record = {
-      id: activeSearch?.id,
+  public onSaveSearch(search?: { id: number; name: string; description: string; isDefault: boolean; filters: { property: string; value: string }[] }) {
+    const activeSearch = isDefined(search) ? search : (this.searchCache.searches.find((s) => s.id === this.searchCache.activeSearchId) as ISearch);
+    const record: IFilterSaveDialogData = {
+      title: 'Save search',
       name: activeSearch?.name,
       description: activeSearch?.description,
-      isDefault: activeSearch?.isDefault,
-      isPublic: activeSearch?.isPublic,
-      filters: this.formGroup.value
+      isDefault: activeSearch?.isDefault
     };
 
     this.dialogService
-      .open(SearchSaveComponent, {
+      .open(FilterSaveDialogComponent, {
         data: record,
         options: { persistent: true }
       })
       .afterClosed.subscribe({
         next: (result) => {
           if (result) {
+            if (isDefined(activeSearch)) {
+              const searchIndex = this.searchCache.searches.findIndex((s) => s.id === activeSearch.id);
+              if (searchIndex !== -1) {
+                this.searchCache.searches[searchIndex] = result;
+              }
+            } else {
+              const s: ISearch = {
+                ...result,
+                id: Utils.uniqueId(),
+                filters: this.formGroup.value
+              };
+            }
             if (isDefined(result.id)) {
               const searchIndex = this.searchCache.searches.findIndex((s) => s.id === result.id);
               if (searchIndex !== -1) {
                 this.searchCache.searches[searchIndex] = result;
               }
             } else {
-              result.id = this.searchCache.searches.length ? Math.max(...this.searchCache.searches.map((s) => s.id)) + 1 : 1;
+              result.id = Utils.uniqueId();
               this.searchCache.searches.push(result);
             }
 
@@ -201,7 +204,7 @@ export class SearchComponent implements OnInit {
     this.formGroup.reset();
   }
 
-  public onSearchAction(event: CustomEvent, action: string, id: number) {
+  public onSearchAction(event: CustomEvent, action: string, id: string) {
     event.stopPropagation();
     this.searchesPopover()?.close();
 

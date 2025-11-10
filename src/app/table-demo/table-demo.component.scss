@@ -1,52 +1,80 @@
 @use 'src/global';
+@use '@tylertech/forge/sass/table' as forge-table;
+
+@mixin sticky($direction: top, $z-index: 0, $important: false) {
+  position: sticky;
+  #{$direction}: 0;
+  background-color: var(--forge-theme-surface);
+
+  @if ($important) {
+    z-index: calc(var(--forge-z-index-surface) + $z-index) !important;
+  }
+
+  @else {
+    z-index: calc(var(--forge-z-index-surface) + $z-index);
+  }
+}
+
+@mixin cell-padding($type: head) {
+  padding-left: var(--table-#{$type}-cell-inline-padding);
+  padding-right: var(--table-#{$type}-cell-inline-padding);
+
+  &:first-child,
+  &:last-child {
+    padding-left: var(--table-#{$type}-cell-inline-padding) !important;
+    padding-right: var(--table-#{$type}-cell-inline-padding) !important;
+  }
+}
 
 :host {
   display: grid;
   grid-template-rows: auto 1fr;
   overflow: hidden;
+  height: 100%;
   background-color: var(--forge-theme-surface);
 
   ::ng-deep {
     .forge-table {
-      --table-row-height: 56px;
+      --table-row-height: 48px;
+      --table-head-cell-inline-padding: 8px;
+      --table-body-cell-inline-padding: 8px;
 
       min-width: 100%;
       width: max-content;
       position: relative;
 
+      thead,
+      tfoot {
+        position: sticky;
+        background-color: var(--forge-theme-surface);
+        z-index: calc(var(--forge-z-index-surface) + 2);
+      }
+
+      thead {
+        inset-block-start: 0;
+      }
+
+      tfoot {
+        inset-block-end: 0;
+      }
+
       &-head {
-        &__row {
-          height: var(--table-row-height);
-
-          &--resizing {
-            & .forge-table-head__cell:not(.forge-table-head__cell--resizing) {
-              .forge-table-head__cell-actions {
-                display: none;
-              }
-            }
-          }
-        }
-
         &__cell {
-          padding-left: 12px;
-          padding-right: 12px;
-          border-right: 1px solid transparent;
-          width: calc(var(--table-column-width, 200) * 1px);
-          // https://github.com/angular/components/issues/14833
-          top: calc(var(--table-header-offset, 0) * var(--table-row-height) * -1);
-
-          // &:first-child {
-          //   padding-left: 24px !important;
-          //   padding-right: 12px !important;
-          // }
+          @include cell-padding();
+          min-width: calc(var(--table-column-width, 200) * 1px);
+          max-width: calc(var(--table-column-width, 200) * 1px);
 
           &:hover {
             .forge-table-head__cell {
               &-actions {
                 transition-delay: 500ms;
-                width: 48px;
+                max-width: 72px;
               }
             }
+          }
+
+          &-container {
+            position: relative;
           }
 
           &-sort-icon {
@@ -55,101 +83,91 @@
 
           &-actions {
             position: absolute;
-            top: 4px;
-            bottom: 4px;
-            right: 8px;
-            display: flex;
-            width: 0;
+            right: 4px;
+            margin-block: auto;
             overflow: hidden;
-            transition: width 250ms;
-            height: calc(var(--table-row-height) - 8);
-          }
-
-          &--resizing {
-            border-right-color: var(--forge-theme-primary);
-
-            .forge-table-head__cell {
-              &-actions {
-                transition-delay: 0;
-                width: 24px;
-              }
-
-              &-dragger {
-                display: none;
-              }
-            }
-          }
-
-          &--frozen {
-            position: sticky;
-            left: 0;
-            z-index: 2 !important;
-            background-color: var(--forge-theme-surface);
-            border-right-color: var(--forge-theme-primary);
-          }
-
-          &-dragger,
-          &-resizer {
-            height: 100%;
-            min-width: 24px;
-            margin-left: auto;
-            @include global.app-border();
-            background-color: var(--forge-theme-surface-container-minimum);
-          }
-
-          &-dragger {
-            background-image: url('data:image/svg+xml,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%3Csvg%20width%3D%2216px%22%20height%3D%2216px%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20id%3D%22Edit%20%2F%20Move%22%3E%3Cpath%20id%3D%22Vector%22%20d%3D%22M12%2021V12M12%2021L15%2018M12%2021L9%2018M12%2012V3M12%2012H3M12%2012H21M12%203L9%206M12%203L15%206M3%2012L6%2015M3%2012L6%209M21%2012L18%209M21%2012L18%2015%22%20stroke%3D%22%23000000%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E');
-            background-repeat: no-repeat;
-            background-position: center;
-          }
-
-          &-resizer {
-            background-image: url(('data:image/svg+xml,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%3Csvg%20width%3D%2216px%22%20height%3D%2216px%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20id%3D%22Edit%20%2F%20Move_Horizontal%22%3E%3Cpath%20id%3D%22Vector%22%20d%3D%22M3%2012H21M3%2012L6%2015M3%2012L6%209M21%2012L18%209M21%2012L18%2015%22%20stroke%3D%22%23000000%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E'));
-            background-repeat: no-repeat;
-            background-position: center;
+            display: flex;
+            align-items: center;
+            max-width: 0;
+            transition: max-width 250ms;
           }
         }
       }
 
       &-body {
+        &__cell {
+          @include cell-padding(body);
+
+          forge-text-field {
+            width: 100%;
+            --forge-field-background: var(--forge-theme-surface);
+
+            &::part(label) {
+              display: none;
+            }
+          }
+
+          forge-skeleton {
+            margin: 4px 0;
+          }
+
+          &__actions {
+            display: flex;
+            flex-direction: row;
+          }
+        }
+      }
+
+      &-foot {
         &__row {
-          height: var(--table-row-height);
+          @include forge-table.head-row();
         }
 
         &__cell {
-          padding-left: 12px;
-          padding-right: 12px;
-          border-right: 1px solid transparent;
+          @include forge-table.head-cell();
+          @include cell-padding();
 
-          // &:first-child {
-          //   padding-left: 24px !important;
-          //   padding-right: 12px !important;
-          // }
-
-          &--resizing {
-            border-right-color: var(--forge-theme-primary);
-          }
-
-          &--frozen {
-            position: sticky;
-            left: 0;
-            z-index: 2 !important;
-            background-color: var(--forge-theme-surface);
-            border-right-color: var(--forge-theme-primary);
-          }
+          border-top: var(--forge-border-thin) solid var(--forge-theme-outline);
         }
       }
 
       &-row {
         &__expander {
-          width: 48px;
-          padding-left: 0 !important;
-          padding-right: 0 !important;
+          min-width: 48px;
+          max-width: 48px;
+          --table-body-cell-inline-padding: 0;
+          text-align: center;
         }
 
         &__expandable-content {
           background-color: global.$forge-color-indigo-50 !important;
           @include global.app-border(border-bottom);
+        }
+      }
+
+      &-cell {
+        &--frozen-left {
+          @include sticky(left);
+          border-right: var(--forge-border-medium) solid var(--forge-theme-primary);
+        }
+
+        &--frozen-right {
+          @include sticky(right);
+          border-left: var(--forge-border-medium) solid var(--forge-theme-primary);
+        }
+
+        &--resizing {
+          .forge-table-head__cell {
+            &-dragger {
+              display: none;
+            }
+          }
+        }
+
+        &__image {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
         }
       }
     }
@@ -167,19 +185,23 @@
   }
 }
 
+.header {
+  @include global.app-toolbar-gap();
+}
+
 .body {
   display: grid;
   grid-template-rows: 1fr auto;
   overflow: hidden;
   height: 100%;
 
-  // &__table {
-  //   overflow: auto;
-  // }
-
-  cdk-virtual-scroll-viewport {
-    height: 100%;
+  &__table {
+    overflow: auto;
   }
+}
+
+.footer {
+  @include global.app-toolbar-gap();
 }
 
 .cdk-drag {
@@ -189,8 +211,8 @@
     display: flex;
     padding: 0 24px;
 
-    forge-button {
-      visibility: hidden;
+    .forge-table-head__cell-actions {
+      display: none;
     }
   }
 
@@ -212,5 +234,14 @@
     .cdk-drag:not(.cdk-drag-placeholder) {
       transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
     }
+  }
+}
+
+.empty-state {
+  @include global.forge-flex-container(flex, column, nowrap, center);
+  padding: 24px;
+
+  img {
+    width: 256px;
   }
 }

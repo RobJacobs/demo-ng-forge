@@ -1,15 +1,25 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { IColumnConfiguration, ITableRowClickEventData } from '@tylertech/forge';
-import { ForgeButtonAreaModule, ForgeDividerModule, ForgeLabelValueModule } from '@tylertech/forge-angular';
-import { TableMobileTemplateComponent } from './table-mobile-template.component';
+import { ITableRowClickEventData } from '@tylertech/forge';
+import { FormArray, ReactiveFormsModule } from '@angular/forms';
+import { ForgeButtonAreaModule, ForgeDividerModule, ForgeLabelValueModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface ITableMobileColumnConfiguration extends IColumnConfiguration {}
+import { FormControlInvalidDirective } from 'src/app/shared/directives';
+import { TableMobileTemplateComponent } from './table-mobile-template.component';
+import { ITableColumnConfiguration } from '../base-table.component';
 
 @Component({
   selector: 'app-table-mobile',
-  imports: [CommonModule, ForgeLabelValueModule, ForgeDividerModule, ForgeButtonAreaModule, TableMobileTemplateComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ForgeButtonAreaModule,
+    ForgeDividerModule,
+    ForgeLabelValueModule,
+    ForgeTextFieldModule,
+    TableMobileTemplateComponent,
+    FormControlInvalidDirective
+  ],
   templateUrl: './table-mobile.component.html',
   styleUrl: './table-mobile.component.scss'
 })
@@ -17,9 +27,13 @@ export class TableMobileComponent {
   @Input({ required: true })
   public data: any[];
   @Input({ required: true })
-  public columnConfigurations: IColumnConfiguration[];
+  public columnConfigurations: ITableColumnConfiguration[];
+  @Input()
+  public formArray: FormArray;
   @Input()
   public allowRowClick = false;
+  @Input()
+  public isEditing = false;
   @Output()
   public rowClick = new EventEmitter<ITableRowClickEventData>();
 

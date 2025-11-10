@@ -1,0 +1,19 @@
+<app-dialog-template dialogTitle="{{ title }}" dialogLabel="{{ title }}" (dialogClose)="onCancel()">
+  <form class="form-grid" novalidate autocomplete="off" [formGroup]="formGroup">
+    <forge-text-field required [appFormControlInvalid]="formGroup.controls.name">
+      <input type="text" id="filter-save--name" formControlName="name" appAutoFocus />
+      <label for="filter-save--name" slot="label">Name</label>
+      <span slot="support-text" class="app--form-control-invalid">A name is required</span>
+    </forge-text-field>
+    <forge-text-field>
+      <input type="text" id="filter-save--description" formControlName="description" />
+      <label for="filter-save--description" slot="label">Description</label>
+    </forge-text-field>
+    <forge-checkbox formControlName="isDefault">Make this your default filter</forge-checkbox>
+  </form>
+
+  <ng-container app-dialog-footer>
+    <forge-button slot="end" variant="outlined" (click)="onCancel()">Cancel</forge-button>
+    <forge-button slot="end" variant="filled" (click)="onSave()" [disabled]="formGroup.invalid">Save</forge-button>
+  </ng-container>
+</app-dialog-template>

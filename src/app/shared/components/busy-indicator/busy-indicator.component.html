@@ -1,13 +1,13 @@
-@if (dialogConfig.title?.length) {
-  <h2 class="header forge-typography--heading5">{{ dialogConfig.title }}</h2>
+@if (dialogData.title?.length) {
+  <h2 class="header forge-typography--heading5">{{ dialogData.title }}</h2>
 }
 
 <div class="body">
-  @if (dialogConfig.progress === 'circular') {
+  @if (dialogData.progress === 'circular') {
     <forge-circular-progress></forge-circular-progress>
   }
-  <div class="forge-typography--subheading4">{{ dialogConfig.message }}</div>
-  @if (dialogConfig.progress === 'linear') {
+  <div class="forge-typography--subheading4">{{ dialogData.message }}</div>
+  @if (dialogData.progress === 'linear') {
     <forge-linear-progress></forge-linear-progress>
   }
 </div>

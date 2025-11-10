@@ -1,5 +1,5 @@
 export interface IPerson {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   gender: 'male' | 'female';

@@ -1,5 +1,5 @@
 export interface ISearch {
-  id: number;
+  id: string;
   name: string;
   description: string;
   isDefault: boolean;

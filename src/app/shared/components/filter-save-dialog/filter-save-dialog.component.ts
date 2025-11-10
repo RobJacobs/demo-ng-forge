@@ -14,16 +14,14 @@ import {
 import { AutoFocusDirective, FormControlInvalidDirective } from 'src/app/shared/directives';
 import { DialogTemplateComponent } from 'src/app/shared/components';
 
-export interface ISearchSaveDialogData {
-  id: number;
-  name: string;
-  description: string;
-  isDefault: boolean;
-  isPublic: boolean;
-  filters: { property: string; value: string }[];
+export interface IFilterSaveDialogData {
+  title?: string;
+  description?: string;
+  isDefault?: boolean;
+  name?: string;
 }
 @Component({
-  selector: 'app-search-save',
+  selector: 'app-filter-save-dialog',
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -36,30 +34,28 @@ export interface ISearchSaveDialogData {
     DialogTemplateComponent,
     AutoFocusDirective
   ],
-  templateUrl: './search-save.component.html',
-  styleUrls: ['./search-save.component.scss']
+  templateUrl: './filter-save-dialog.component.html',
+  styleUrls: ['./filter-save-dialog.component.scss']
 })
-export class SearchSaveComponent implements OnInit {
-  private dialogConfig = inject<ISearchSaveDialogData>(DIALOG_DATA);
+export class FilterSaveDialogComponent implements OnInit {
+  private dialogData = inject<IFilterSaveDialogData>(DIALOG_DATA);
   private dialogRef = inject(DialogRef);
 
-  public record: ISearchSaveDialogData;
+  public title = 'Save filter';
   public formGroup = new FormGroup({
     name: new FormControl<string | null>(null, {
       validators: [Validators.required]
     }),
     description: new FormControl(),
-    isDefault: new FormControl(),
-    isPublic: new FormControl()
+    isDefault: new FormControl()
   });
 
   public ngOnInit() {
-    this.record = this.dialogConfig;
-    this.formGroup.patchValue(this.record);
+    this.formGroup.patchValue(this.dialogData);
   }
 
   public onSave() {
-    this.dialogRef.close({ ...this.record, ...this.formGroup.getRawValue() });
+    this.dialogRef.close(this.formGroup.value);
   }
 
   public onCancel() {

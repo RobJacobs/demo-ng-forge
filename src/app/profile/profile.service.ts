@@ -3,7 +3,7 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { IProfile } from 'src/app/shared/interfaces';
 
 @Injectable()
-export class ProfileCacheService {
+export class ProfileService {
   public formGroup = new FormGroup({
     personalFormGroup: new FormGroup({
       firstName: new FormControl<string | null>(null, {

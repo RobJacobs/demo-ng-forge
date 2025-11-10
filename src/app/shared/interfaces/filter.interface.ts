@@ -16,11 +16,13 @@ export enum FilterOperator {
 export interface IFilter {
   property: string;
   value?: any;
+  type?: 'string' | 'number' | 'boolean' | 'date';
   minValue?: any;
   maxValue?: any;
   label?: string;
   condition?: 'and' | 'or';
   operator?: FilterOperator;
+  strict?: boolean;
 }
 
 export interface IFilterParameter {
@@ -33,4 +35,12 @@ export interface IFilterParameter {
 export interface IFilterResponse<T> {
   count: number;
   data: T[];
+}
+
+export interface IFilterState {
+  id?: string;
+  name?: string;
+  description?: string;
+  isDefault?: boolean;
+  filters: any;
 }

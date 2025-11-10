@@ -15,5 +15,5 @@ export interface IBusyIndicatorData {
   imports: [CommonModule, ForgeLinearProgressModule, ForgeCircularProgressModule]
 })
 export class BusyIndicatorComponent {
-  public dialogConfig = inject<IBusyIndicatorData>(DIALOG_DATA);
+  public dialogData = inject<IBusyIndicatorData>(DIALOG_DATA);
 }

@@ -19,7 +19,7 @@ import { AppDataService } from 'src/app/app-data.service';
 import { ConfirmDialogComponent } from 'src/app/shared/components';
 import { CallbackPipe } from 'src/app/shared/pipes';
 import { IProfile } from 'src/app/shared/interfaces';
-import { ProfileCacheService } from './profile-cache.service';
+import { ProfileService } from './profile.service';
 
 @Component({
   selector: 'app-profile',
@@ -44,7 +44,7 @@ export class ProfileComponent implements OnInit {
   private appDataService = inject(AppDataService);
   private dialogService = inject(DialogService);
   private toastService = inject(ToastService);
-  public cache = inject(ProfileCacheService);
+  public cache = inject(ProfileService);
 
   private noImageUrl = 'mock-data/no-image.png';
 
@@ -169,7 +169,7 @@ export class ProfileComponent implements OnInit {
   }
 
   private loadForm(profile: IProfile) {
-    this.imageUrl = `mock-data/${Utils.formatNumber(this.cache.profile?.id as number, '2.0-0')}-small.png`;
+    this.imageUrl = `mock-data/${Utils.formatNumber(parseInt(this.cache.profile?.id, 109), '2.0-0')}-small.png`;
 
     this.personalFormGroup.controls.friends?.clear();
 
@@ -177,9 +177,9 @@ export class ProfileComponent implements OnInit {
     this.addressFormGroup.patchValue(profile.address as any);
   }
 
-  private parseForm(id?: number): IProfile {
+  private parseForm(id?: string): IProfile {
     return {
-      id: id || -1,
+      id: id || '-1',
       firstName: this.personalFormGroup.value.firstName as string,
       lastName: this.personalFormGroup.value.lastName as string,
       gender: this.personalFormGroup.value.gender as any,

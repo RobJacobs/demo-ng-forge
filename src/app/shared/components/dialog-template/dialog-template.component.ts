@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, inject } from '@angular/core';
-import { DialogRef, ForgeIconButtonModule, ForgeIconModule, ForgeScaffoldModule, ForgeToolbarModule } from '@tylertech/forge-angular';
-import { Utils } from 'src/utils';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { DialogRef, ForgeIconButtonModule, ForgeIconModule, ForgeScaffoldModule, ForgeToolbarModule, ForgeTooltipModule } from '@tylertech/forge-angular';
 
 @Component({
   selector: 'app-dialog-template',
-  imports: [CommonModule, ForgeIconButtonModule, ForgeIconModule, ForgeScaffoldModule, ForgeToolbarModule],
+  imports: [CommonModule, ForgeIconButtonModule, ForgeIconModule, ForgeScaffoldModule, ForgeTooltipModule, ForgeToolbarModule],
   templateUrl: './dialog-template.component.html',
   styleUrl: './dialog-template.component.scss'
 })

@@ -13,7 +13,7 @@ import { DefaultValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 })
 export class InputCasingDirective extends DefaultValueAccessor {
   @HostListener('input', ['$event'])
-  public inputHandler(event: InputEvent) {
+  public inputHandler(event: Event) {
     const target = event.target as HTMLInputElement;
     const start = target.selectionStart;
 
