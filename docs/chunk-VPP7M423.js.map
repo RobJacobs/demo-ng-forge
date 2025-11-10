@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/pipes/callback.pipe.ts"],
+  "sourcesContent": ["import { Pipe, PipeTransform } from '@angular/core';\n\n@Pipe({\n  name: 'appCallback'\n})\nexport class CallbackPipe implements PipeTransform {\n  transform(value: any, callback: (value: any, ...args: any[]) => any, ...args: any[]): any {\n    return callback(value, ...args);\n  }\n}\n"],
+  "mappings": "yCAKA,IAAaA,GAAY,IAAA,CAAnB,MAAOA,CAAY,CACvBC,UAAUC,EAAYC,KAAkDC,EAAW,CACjF,OAAOD,EAASD,EAAO,GAAGE,CAAI,CAChC,iDAHWJ,EAAY,CAAA,mDAAZA,EAAYK,KAAA,EAAA,CAAA,CAAA,SAAZL,CAAY,GAAA",
+  "names": ["CallbackPipe", "transform", "value", "callback", "args", "pure"]
+}

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/pipes/array-find.pipe.ts"],
+  "sourcesContent": ["import { Pipe, PipeTransform } from '@angular/core';\nimport { isDeepEqual } from '@tylertech/forge-core';\n\n@Pipe({\n  name: 'appArrayFind'\n})\nexport class ArrayFindPipe implements PipeTransform {\n  transform(value: string | number, source: any[], filterProperty: string, returnProperty?: string) {\n    if (!value?.toString().length || !source.length || !filterProperty.length) {\n      return;\n    }\n    const sourceValue = source.find((o) => isDeepEqual(o[filterProperty], value));\n    if (!sourceValue) {\n      return;\n    }\n\n    return returnProperty ? sourceValue[returnProperty] : sourceValue;\n  }\n}\n"],
+  "mappings": "iFAMA,IAAaA,GAAa,IAAA,CAApB,MAAOA,CAAa,CACxBC,UAAUC,EAAwBC,EAAeC,EAAwBC,EAAuB,CAC9F,GAAI,CAACH,GAAOI,SAAQ,EAAGC,QAAU,CAACJ,EAAOI,QAAU,CAACH,EAAeG,OACjE,OAEF,IAAMC,EAAcL,EAAOM,KAAMC,GAAMC,EAAYD,EAAEN,CAAc,EAAGF,CAAK,CAAC,EAC5E,GAAKM,EAIL,OAAOH,EAAiBG,EAAYH,CAAc,EAAIG,CACxD,iDAXWR,EAAa,CAAA,oDAAbA,EAAaY,KAAA,EAAA,CAAA,CAAA,SAAbZ,CAAa,GAAA",
+  "names": ["ArrayFindPipe", "transform", "value", "source", "filterProperty", "returnProperty", "toString", "length", "sourceValue", "find", "o", "isDeepEqual", "pure"]
+}
