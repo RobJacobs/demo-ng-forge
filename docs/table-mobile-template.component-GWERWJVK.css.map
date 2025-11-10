@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/components/table/table-mobile/table-mobile-template.component.ts"],
+  "sourcesContent": [":host { display: contents; } .content { display: flex; flex-wrap: wrap; }"],
+  "mappings": "AAAA,MAAQ,QAAA,SAAqB,CAAA,QAAW,QAAA,KAAe,UAAA",
+  "names": []
+}

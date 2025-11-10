@@ -1,0 +1,2 @@
+import{H as a}from"./chunk-WGIND62E.js";import{ob as p}from"./chunk-UXY6XTJ4.js";var c=(()=>{class t{transform(i,r,n,o){if(!i?.toString().length||!r.length||!n.length)return;let e=r.find(s=>a(s[n],i));if(e)return o?e[o]:e}static{this.\u0275fac=function(r){return new(r||t)}}static{this.\u0275pipe=p({name:"appArrayFind",type:t,pure:!0})}}return t})();export{c as a};
+//# sourceMappingURL=chunk-RIJLVLGM.js.map

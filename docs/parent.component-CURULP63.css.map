@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/test/parent/parent.component.scss"],
+  "sourcesContent": [":host {\r\n  display: grid;\r\n  grid-template-rows: auto 1fr;\r\n  overflow: hidden;\r\n  height: 100%;\r\n}\r\n\r\n.body {\r\n  overflow: auto;\r\n  padding: 24px;\r\n\r\n  &__container {\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 8px 16px;\r\n    flex-wrap: wrap;\r\n    padding-block: 8px;\r\n  }\r\n}\r\n\r\nforge-button {\r\n  --forge-circular-progress-size: 1rem;\r\n}"],
+  "mappings": "AAAA,MACE,QAAA,KACA,mBAAA,KAAA,IACA,SAAA,OACA,OAAA,KAGF,CAAA,KACE,SAAA,KARF,QASE,KAEA,CAAA,gBACE,QAAA,KACA,YAAA,OACA,IAAA,IAAA,KACA,UAAA,KACA,cAAA,IAIJ,aACE,gCAAA",
+  "names": []
+}

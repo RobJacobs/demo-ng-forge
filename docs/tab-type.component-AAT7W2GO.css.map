@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/formly-demo/components/tab-type.component.ts"],
+  "sourcesContent": ["\n      :host {\n        display: block;\n      }\n\n      forge-tab-bar {\n        &::part(container) {\n          justify-items: flex-start;\n        }\n\n        margin: 16px 0;\n      }\n\n      forge-tab {\n        min-width: 240px;\n      }\n    "],
+  "mappings": "AACM,MACE,QAAA,MAIA,aAAA,OAAA,WACE,cAAA,WAFJ,cAJA,OASE,KAAA,EAGF,UACE,UAAA",
+  "names": []
+}
