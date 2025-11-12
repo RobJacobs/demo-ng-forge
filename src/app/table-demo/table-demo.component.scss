@@ -15,14 +15,14 @@
   }
 }
 
-@mixin cell-padding($type: head) {
-  padding-left: var(--table-#{$type}-cell-inline-padding);
-  padding-right: var(--table-#{$type}-cell-inline-padding);
+@mixin cell-padding() {
+  padding-left: var(--table-cell-inline-padding);
+  padding-right: var(--table-cell-inline-padding);
 
   &:first-child,
   &:last-child {
-    padding-left: var(--table-#{$type}-cell-inline-padding) !important;
-    padding-right: var(--table-#{$type}-cell-inline-padding) !important;
+    padding-left: var(--table-cell-inline-padding) !important;
+    padding-right: var(--table-cell-inline-padding) !important;
   }
 }
 
@@ -36,8 +36,7 @@
   ::ng-deep {
     .forge-table {
       --table-row-height: 48px;
-      --table-head-cell-inline-padding: 8px;
-      --table-body-cell-inline-padding: 8px;
+      --table-cell-inline-padding: 8px;
 
       min-width: 100%;
       width: max-content;
@@ -96,7 +95,7 @@
 
       &-body {
         &__cell {
-          @include cell-padding(body);
+          @include cell-padding();
 
           forge-text-field {
             width: 100%;
@@ -132,10 +131,12 @@
       }
 
       &-row {
+
+        &__selector,
         &__expander {
           min-width: 48px;
           max-width: 48px;
-          --table-body-cell-inline-padding: 0;
+          --table-cell-inline-padding: 0;
           text-align: center;
         }
 

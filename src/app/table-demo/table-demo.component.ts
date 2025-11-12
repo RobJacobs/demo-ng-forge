@@ -20,7 +20,7 @@ import {
   ForgeToolbarModule,
   ForgeTooltipModule
 } from '@tylertech/forge-angular';
-import { CellAlign, PopoverComponent, SortDirection } from '@tylertech/forge';
+import { CellAlign, SortDirection } from '@tylertech/forge';
 import { isDefined } from '@tylertech/forge-core';
 import { finalize, fromEvent, merge, Subject, takeUntil, tap } from 'rxjs';
 
@@ -93,7 +93,6 @@ export class TableDemoComponent implements OnInit, OnDestroy {
   public cache = inject(TableDemoService);
   private readonly bodyTableElementRef = viewChild<ElementRef<HTMLDivElement>>('bodyTable');
   private readonly tableElementRef = viewChild<ElementRef<HTMLTableElement>>('table');
-  private readonly columnsEditPopover = viewChild<ElementRef<PopoverComponent>>('columnsEditPopover');
   private tableColumnResize$ = new Subject<void>();
   private isColumnResizing = false;
 
@@ -187,7 +186,7 @@ export class TableDemoComponent implements OnInit, OnDestroy {
     }
   ];
 
-  public visibleColumns = (columns: ITableColumnConfiguration[]) => {
+  public visibleColumns = (columns: ITableColumnConfiguration[]): ITableColumnConfiguration[] => {
     return Utils.sortData(
       columns.filter((c) => c.hidden !== true),
       'order',
@@ -196,8 +195,20 @@ export class TableDemoComponent implements OnInit, OnDestroy {
     );
   };
 
-  public optionalColumns = (columns: ITableColumnConfiguration[]) => {
+  public optionalColumns = (columns: ITableColumnConfiguration[]): ITableColumnConfiguration[] => {
     return columns.filter((c) => c.optional !== false);
+  };
+
+  public headerSelectedIcon = (selectedRows: string[]): 'check_box' | 'check_box_outline_blank' | 'indeterminate_check_box' => {
+    return this.cache.selectedRows?.length && this.cache.selectedRows?.length === this.cache.recordsetFormGroup.value.recordsetFormArray?.length
+      ? 'check_box'
+      : !this.cache.selectedRows?.length
+        ? 'check_box_outline_blank'
+        : 'indeterminate_check_box';
+  };
+
+  public isRowSelected = (selectedRows: string[], id: string): boolean => {
+    return selectedRows?.findIndex((r) => r === id) !== -1 ? true : false;
   };
 
   public ngOnInit() {
@@ -223,7 +234,6 @@ export class TableDemoComponent implements OnInit, OnDestroy {
       next: (result) => {
         if (result) {
           this.cache.filter.skip = 0;
-          this.cache.expandedRows.length = 0;
           this.cache.filter.filters = this.cache.convertRecordsetFilterFormGroup();
           this.getRecords();
         }
@@ -352,9 +362,6 @@ export class TableDemoComponent implements OnInit, OnDestroy {
         break;
       }
     }
-    const columnHeaderPopover = this.columnsEditPopover();
-    columnHeaderPopover.nativeElement.open = false;
-    columnHeaderPopover.nativeElement.anchor = '';
   }
 
   public onColumnSort(event: MouseEvent, column: ITableColumnConfiguration) {
@@ -382,7 +389,6 @@ export class TableDemoComponent implements OnInit, OnDestroy {
 
     (this.cache.filter as any).sort = column.sortDirection ? { property: column.property, direction: column.sortDirection } : undefined;
     this.cache.filter.skip = 0;
-    this.cache.expandedRows.length = 0;
     this.saveTableState();
     this.getRecords();
   }
@@ -390,15 +396,37 @@ export class TableDemoComponent implements OnInit, OnDestroy {
   public onPaginatorChange(detail: { pageIndex: number; pageSize: number }) {
     this.cache.filter.skip = detail.pageIndex * detail.pageSize;
     this.cache.filter.take = detail.pageSize;
-    this.cache.expandedRows.length = 0;
     this.getRecords();
   }
 
-  public onExpandRow(index: number) {
-    if (this.cache.expandedRows[index]) {
-      this.cache.expandedRows[index] = undefined;
+  public onSelectHeader() {
+    if (this.cache.selectedRows?.length === this.cache.recordsetFormGroup.value.recordsetFormArray?.length) {
+      this.cache.selectedRows = [];
     } else {
-      this.cache.expandedRows[index] = this.cache.recordsetFormGroup.controls.recordsetFormArray.at(index).getRawValue();
+      this.cache.selectedRows = this.cache.recordsetFormGroup.value.recordsetFormArray?.map((r) => r.id);
+    }
+    this.cache.selectedRows = [...this.cache.selectedRows];
+  }
+
+  public onSelectRow(id: string) {
+    const selectedRowIndex = this.cache.selectedRows.findIndex((r) => r === id);
+    if (selectedRowIndex !== -1) {
+      this.cache.selectedRows.splice(selectedRowIndex, 1);
+    } else {
+      this.cache.selectedRows.push(id);
+    }
+    this.cache.selectedRows = [...this.cache.selectedRows];
+  }
+
+  public onExpandRow(id: string) {
+    const expandedRowIndex = this.cache.expandedRows.findIndex((r) => r === id);
+    if (expandedRowIndex !== -1) {
+      this.cache.expandedRows[expandedRowIndex] = undefined;
+    } else {
+      const recordIndex = this.cache.recordsetFormGroup.value.recordsetFormArray.findIndex((r) => r.id === id);
+      if (recordIndex !== -1) {
+        this.cache.expandedRows[recordIndex] = id;
+      }
     }
   }
 
@@ -411,6 +439,7 @@ export class TableDemoComponent implements OnInit, OnDestroy {
     this.isBusy = true;
     this.cache.recordsetFormGroup.controls.recordsetFormArray.clear();
     this.cache.expandedRows = [];
+    this.cache.selectedRows = [];
     this.appDataService
       .getPeople({
         sort: this.cache.filter.sort,

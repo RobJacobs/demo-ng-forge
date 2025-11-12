@@ -58,7 +58,8 @@ export class TableDemoService {
   public recordsetFormGroup = new FormGroup({
     recordsetFormArray: new FormArray<FormGroup<IRecordsetForm>>([])
   });
-  public expandedRows: any[] = [];
+  public expandedRows: string[] = [];
+  public selectedRows: string[] = [];
   public recordsetFilterFormGroup = new FormGroup<IRecordsetFilterForm>({
     firstName: new FormGroup({
       value: new FormControl<string | null>(null),

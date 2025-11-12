@@ -53,11 +53,14 @@ import {
   tylIconAdjust,
   tylIconCheckBox,
   tylIconCheckBoxOutlineBlank,
+  tylIconIndeterminateCheckBox,
   tylIconTylerTalkingTLogo,
   tylIconFormatLetterCase,
   tylIconDynamicForm,
   tylIconSecurity,
-  tylIconCancel
+  tylIconCancel,
+  tylIconCursorMove,
+  tylIconArrowExpandHorizontal
 } from '@tylertech/tyler-icons';
 
 const standardIcons = [
@@ -114,10 +117,13 @@ const standardIcons = [
   tylIconAdjust,
   tylIconCheckBox,
   tylIconCheckBoxOutlineBlank,
+  tylIconIndeterminateCheckBox,
   tylIconFormatLetterCase,
   tylIconDynamicForm,
   tylIconSecurity,
-  tylIconCancel
+  tylIconCancel,
+  tylIconCursorMove,
+  tylIconArrowExpandHorizontal
 ];
 
 const customIcons = [tylIconTylerTalkingTLogo];

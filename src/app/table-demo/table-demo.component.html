@@ -29,7 +29,7 @@
       <forge-list class="column-popover" (forge-list-item-select)="onColumnsEditPopoverSelected($event.detail.value)">
         @for (column of tableColumns | appCallback: optionalColumns; track i; let i = $index) {
           <forge-list-item [value]="column">
-            <forge-icon slot="start" aria-hidden="true" [name]="column.hidden ? 'check_box_outline_blank' : 'check_box'"></forge-icon>
+            <forge-icon slot="start" [name]="column.hidden ? 'check_box_outline_blank' : 'check_box'" aria-hidden="true"></forge-icon>
             <button type="button" [attr.aria-label]="column.header + column.hidden ? +' hidden' : ' visible'">{{ column.header }}</button>
           </forge-list-item>
         }
@@ -56,9 +56,16 @@
         [isEditing]="isEditing"
       ></app-table-mobile>
     } @else {
-      <table #table class="forge-table" [formGroup]="cache.recordsetFormGroup" [style.--table-body-cell-inline-padding]="isEditing ? '4px' : '8px'">
+      <table #table class="forge-table" [formGroup]="cache.recordsetFormGroup" [style.--table-cell-inline-padding]="isEditing ? '4px' : '8px'">
         <thead>
           <tr class="forge-table-row forge-table-head__row" cdkDropList (cdkDropListDropped)="onColumnHeaderDragDrop($event)" cdkDropListOrientation="horizontal">
+            @if (!isEditing) {
+              <th class="forge-table-cell forge-table-head__cell forge-table-row__selector">
+                <forge-icon-button (click)="onSelectHeader()" [disabled]="isBusy">
+                  <forge-icon [name]="cache.selectedRows | appCallback: headerSelectedIcon" aria-hidden="true"></forge-icon>
+                </forge-icon-button>
+              </th>
+            }
             <th class="forge-table-cell forge-table-head__cell forge-table-row__expander"></th>
             @for (column of tableColumns | appCallback: visibleColumns; track colIndex; let colIndex = $index) {
               <th
@@ -81,13 +88,13 @@
                     <div class="forge-table-head__cell-actions" aria-hidden="true">
                       @if (column.moveable !== false) {
                         <forge-icon-button variant="tonal" cdkDragHandle density="small" class="forge-table-head__cell-dragger">
-                          <forge-icon external name="cursor_move"></forge-icon>
+                          <forge-icon name="cursor_move" aria-hidden="true"></forge-icon>
                         </forge-icon-button>
                         <forge-tooltip>Move column</forge-tooltip>
                       }
                       @if (column.resizable !== false) {
-                        <forge-icon-button variant="tonal" cdkDragHandle density="small" class="forge-table-head__cell-resizer" (mousedown)="onColumnHeaderResize($event, colIndex + 1, column)">
-                          <forge-icon external name="arrow_expand_horizontal"></forge-icon>
+                        <forge-icon-button variant="tonal" cdkDragHandle density="small" class="forge-table-head__cell-resizer" (mousedown)="onColumnHeaderResize($event, colIndex + 2, column)">
+                          <forge-icon name="arrow_expand_horizontal" aria-hidden="true"></forge-icon>
                         </forge-icon-button>
                         <forge-tooltip>Resize column</forge-tooltip>
                       }
@@ -102,16 +109,23 @@
           @if (isBusy) {
             @for (skl of [1, 2, 3]; track i; let i = $index) {
               <tr class="forge-table-row forge-table-body__row">
-                <td class="forge-table-cell forge-table-body__cell" [attr.colspan]="(tableColumns | appCallback: visibleColumns).length + 1"><forge-skeleton list-item></forge-skeleton></td>
+                <td class="forge-table-cell forge-table-body__cell" [attr.colspan]="(tableColumns | appCallback: visibleColumns).length + 2"><forge-skeleton list-item></forge-skeleton></td>
               </tr>
             }
           } @else {
             <ng-container formArrayName="recordsetFormArray">
               @for (record of cache.recordsetFormGroup.controls.recordsetFormArray.controls; track rowIndex; let rowIndex = $index) {
                 <tr [formGroup]="record" class="forge-table-row forge-table-body__row" [ngClass]="{ 'forge-table-row--expanded': cache.expandedRows[rowIndex] }">
+                  @if (!isEditing) {
+                    <td class="forge-table-cell forge-table-body__cell forge-table-row__selector">
+                      <forge-icon-button (click)="onSelectRow(record.value.id)" aria-label="Toggle selection">
+                        <forge-icon [name]="(cache.selectedRows | appCallback: isRowSelected : record.value.id) ? 'check_box' : 'check_box_outline_blank'" aria-hidden="true"></forge-icon>
+                      </forge-icon-button>
+                    </td>
+                  }
                   <td class="forge-table-cell forge-table-body__cell forge-table-row__expander">
-                    <forge-icon-button (click)="onExpandRow(rowIndex)" aria-label="Toggle details">
-                      <forge-icon [name]="cache.expandedRows[rowIndex] ? 'expand_less' : 'expand_more'"></forge-icon>
+                    <forge-icon-button (click)="onExpandRow(record.value.id)" aria-label="Toggle details">
+                      <forge-icon [name]="cache.expandedRows[rowIndex] ? 'expand_less' : 'expand_more'" aria-hidden="true"></forge-icon>
                     </forge-icon-button>
                     <forge-tooltip>View person details</forge-tooltip>
                   </td>
@@ -145,8 +159,8 @@
                 </tr>
                 @if (cache.expandedRows[rowIndex]) {
                   <tr class="forge-table-row forge-table-body__row forge-table-row__expandable-content">
-                    <td class="forge-table-row__expandable-content-cell" [attr.colspan]="(tableColumns | appCallback: visibleColumns).length + 1">
-                      <app-table-detail [data]="cache.expandedRows[rowIndex]" [rowIndex]="rowIndex"></app-table-detail>
+                    <td class="forge-table-row__expandable-content-cell" [attr.colspan]="(tableColumns | appCallback: visibleColumns).length + 2">
+                      <app-table-detail [data]="cache.recordsetFormGroup.controls.recordsetFormArray.at(rowIndex).getRawValue()" [rowIndex]="rowIndex"></app-table-detail>
                     </td>
                   </tr>
                 }
@@ -157,7 +171,7 @@
         @if (!isBusy && cache.recordsetFormGroup.controls.recordsetFormArray.controls?.length) {
           <tfoot>
             <tr class="forge-table-row forge-table-foot__row">
-              <td class="forge-table-cell forge-table-foot__cell" [attr.colspan]="(tableColumns | appCallback: visibleColumns).length + 1">
+              <td class="forge-table-cell forge-table-foot__cell" [attr.colspan]="(tableColumns | appCallback: visibleColumns).length + 2">
                 <div class="forge-table-cell__container">Footer row</div>
               </td>
             </tr>
