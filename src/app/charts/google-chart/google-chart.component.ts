@@ -1,5 +1,4 @@
 import { Component, DestroyRef, ElementRef, Input, OnDestroy, OnInit, inject, viewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, filter, fromEvent } from 'rxjs';
 
@@ -16,7 +15,6 @@ interface IChartItem {
 // https://developers.google.com/chart/
 @Component({
   selector: 'app-charts-google-chart',
-  imports: [CommonModule],
   providers: [GoogleChartService],
   templateUrl: './google-chart.component.html',
   styleUrls: ['./google-chart.component.scss']

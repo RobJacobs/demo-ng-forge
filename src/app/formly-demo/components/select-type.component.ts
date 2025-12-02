@@ -1,9 +1,8 @@
-import { CommonModule } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
 import { ForgeSelectModule } from '@tylertech/forge-angular';
-import { finalize, map, of, Subject, takeUntil } from 'rxjs';
+import { map, of, Subject, takeUntil } from 'rxjs';
 import { FormlyDemoService } from '../formly-demo.service';
 
 @Component({
@@ -36,7 +35,7 @@ import { FormlyDemoService } from '../formly-demo.service';
       // }
     `
   ],
-  imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeSelectModule],
+  imports: [ReactiveFormsModule, FormlyModule, ForgeSelectModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class SelectTypeComponent extends FieldType<FieldTypeConfig> implements OnInit, OnDestroy {

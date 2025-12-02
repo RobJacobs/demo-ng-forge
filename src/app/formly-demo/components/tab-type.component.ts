@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
@@ -36,7 +35,7 @@ import { FormlyDemoService } from '../formly-demo.service';
       }
     `
   ],
-  imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeTabBarModule, ForgeTabModule],
+  imports: [ReactiveFormsModule, FormlyModule, ForgeTabBarModule, ForgeTabModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TabTypeComponent extends FieldType<FieldTypeConfig> implements OnInit {

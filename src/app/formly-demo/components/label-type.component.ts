@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
 
@@ -12,6 +11,6 @@ import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
       }
     `
   ],
-  imports: [CommonModule, FormlyModule]
+  imports: [FormlyModule]
 })
 export class LabelTypeComponent extends FieldType<FieldTypeConfig> {}

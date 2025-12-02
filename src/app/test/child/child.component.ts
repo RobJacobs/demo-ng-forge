@@ -1,11 +1,10 @@
-import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, ForgeToolbarModule } from '@tylertech/forge-angular';
 
 @Component({
   selector: 'app-test-child',
-  imports: [CommonModule, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, ForgeToolbarModule],
+  imports: [ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, ForgeToolbarModule],
   templateUrl: './child.component.html',
   styleUrls: ['./child.component.scss']
 })

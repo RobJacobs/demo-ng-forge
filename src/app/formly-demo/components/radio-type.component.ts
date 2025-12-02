@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
@@ -49,7 +48,7 @@ import { ForgeRadioGroupModule, ForgeRadioModule } from '@tylertech/forge-angula
       }
     `
   ],
-  imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeRadioModule, ForgeRadioGroupModule],
+  imports: [ReactiveFormsModule, FormlyModule, ForgeRadioModule, ForgeRadioGroupModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class RadioTypeComponent extends FieldType<FieldTypeConfig> {

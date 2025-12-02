@@ -1,10 +1,8 @@
-import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { isDefined, isNumber, isString } from '@tylertech/forge-core';
 import { ITableTemplateBuilderResult, TableTemplateBuilder } from '@tylertech/forge';
 @Component({
   selector: 'app-table-mobile-template',
-  imports: [CommonModule],
   styles: ':host { display: contents; } .content { display: flex; flex-wrap: wrap; }',
   template: '<div #content class="content"></div>'
 })

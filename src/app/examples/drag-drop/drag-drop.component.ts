@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { ForgeListItemModule, ForgeListModule } from '@tylertech/forge-angular';
 
 @Component({
   selector: 'app-examples-drag-drop',
-  imports: [CommonModule, DragDropModule, ForgeListItemModule, ForgeListModule],
+  imports: [DragDropModule, ForgeListItemModule, ForgeListModule],
   templateUrl: './drag-drop.component.html',
   styleUrls: ['./drag-drop.component.scss']
 })

@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { map, of, Subject, takeUntil } from 'rxjs';
@@ -26,7 +25,7 @@ import { FormlyDemoService } from '../formly-demo.service';
       }
     `
   ],
-  imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeCheckboxModule]
+  imports: [ReactiveFormsModule, FormlyModule, ForgeCheckboxModule]
 })
 export class CheckboxTypeComponent extends FieldType<FieldTypeConfig> implements OnInit, OnDestroy {
   private moduleService = inject(FormlyDemoService);

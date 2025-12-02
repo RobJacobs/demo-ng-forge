@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
@@ -45,7 +44,7 @@ import { FieldHelpDialogComponent } from './field-help-dialog/field-help-dialog.
       // }
     `
   ],
-  imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeIconButtonModule, ForgeIconModule, ForgeTextFieldModule],
+  imports: [ReactiveFormsModule, FormlyModule, ForgeIconButtonModule, ForgeIconModule, ForgeTextFieldModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class InputHelpTypeComponent extends FieldType<FieldTypeConfig> implements OnInit, OnDestroy {

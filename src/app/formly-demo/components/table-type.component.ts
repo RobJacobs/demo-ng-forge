@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, viewChild } from '@angular/core';
 import { FieldArrayType, FormlyModule } from '@ngx-formly/core';
 import { FormlyFieldDirective } from './formly-field.directive';
@@ -80,7 +79,7 @@ import { FormlyFieldDirective } from './formly-field.directive';
       }
     `
   ],
-  imports: [CommonModule, FormlyModule, FormlyFieldDirective],
+  imports: [FormlyModule, FormlyFieldDirective],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TableTypeComponent extends FieldArrayType {

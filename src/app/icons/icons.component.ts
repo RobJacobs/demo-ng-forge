@@ -2,11 +2,10 @@ import { Component, inject } from '@angular/core';
 import { AutocompleteFilterCallback, IOption } from '@tylertech/forge';
 import { IconsCacheService } from './icons-cache.service';
 import { ForgeAutocompleteModule, ForgeIconModule, ForgeTextFieldModule, ForgeToolbarModule } from '@tylertech/forge-angular';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-icons',
-  imports: [CommonModule, ForgeAutocompleteModule, ForgeIconModule, ForgeTextFieldModule, ForgeToolbarModule],
+  imports: [ForgeAutocompleteModule, ForgeIconModule, ForgeTextFieldModule, ForgeToolbarModule],
   providers: [IconsCacheService],
   templateUrl: './icons.component.html',
   styleUrls: ['./icons.component.scss']

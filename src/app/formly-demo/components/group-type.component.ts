@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, HostBinding, inject, OnInit, viewChild } from '@angular/core';
 import { FieldGroupTypeConfig, FieldType, FormlyModule } from '@ngx-formly/core';
 import { FormlyFieldDirective } from './formly-field.directive';
@@ -57,7 +56,7 @@ import { FormlyFieldDirective } from './formly-field.directive';
       }
     `
   ],
-  imports: [CommonModule, FormlyModule, FormlyFieldDirective],
+  imports: [FormlyModule, FormlyFieldDirective],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class GroupTypeComponent extends FieldType<FieldGroupTypeConfig> implements OnInit {

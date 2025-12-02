@@ -1,7 +1,6 @@
-import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, OnDestroy, OnInit, inject, viewChild } from '@angular/core';
 import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
-import { finalize, map, of, Subject, takeUntil } from 'rxjs';
+import { map, of, Subject, takeUntil } from 'rxjs';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
 import { ForgeTextFieldModule } from '@tylertech/forge-angular';
 
@@ -47,7 +46,7 @@ import { FormlyDemoService } from '../formly-demo.service';
       }
     `
   ],
-  imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeTextFieldModule],
+  imports: [ReactiveFormsModule, FormlyModule, ForgeTextFieldModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class InputTypeComponent extends FieldType<FieldTypeConfig> implements OnInit, OnDestroy {

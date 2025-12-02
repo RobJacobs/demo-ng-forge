@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, forwardRef, Input, HostListener, OnInit, inject, DestroyRef, viewChild, ElementRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR, FormControl, ReactiveFormsModule, ControlValueAccessor } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -25,7 +24,6 @@ import { AutoFocusDirective } from '../../directives';
   templateUrl: './date-time.component.html',
   styleUrls: ['./date-time.component.scss'],
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     IMaskDirective,
     ForgeCalendarModule,
@@ -53,7 +51,7 @@ export class DateTimeComponent implements OnInit, ControlValueAccessor {
   private elementRef = inject(ElementRef);
   private timeFormat = 'hh:mm aa';
 
-  @HostListener('focusout', ['$event'])
+  @HostListener('focusout')
   public componentFocusout() {
     setTimeout(() => {
       if (!(this.elementRef.nativeElement as HTMLElement).contains(document.activeElement)) {

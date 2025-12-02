@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { OnInit, viewChild } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -58,7 +57,7 @@ import { FormlyFieldDirective } from './formly-field.directive';
       }
     `
   ],
-  imports: [CommonModule, FormlyModule, FormlyFieldDirective],
+  imports: [FormlyModule, FormlyFieldDirective],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ContainerTypeComponent extends FieldType implements OnInit {

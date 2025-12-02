@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, input } from '@angular/core';
 import { ForgeToolbarModule } from '@tylertech/forge-angular';
 
@@ -10,7 +9,7 @@ import { ForgeToolbarModule } from '@tylertech/forge-angular';
     '[class.app-card--raised]': 'border() === "raised"',
     '[class.app-card--outlined]': 'border() === "outlined"'
   },
-  imports: [CommonModule, ForgeToolbarModule]
+  imports: [ForgeToolbarModule]
 })
 export class CardComponent {
   public readonly border = input<'raised' | 'outlined'>('outlined');

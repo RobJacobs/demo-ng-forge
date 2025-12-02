@@ -2,7 +2,6 @@ import { Component, input, OnInit } from '@angular/core';
 import { IPerson } from 'src/app/shared/interfaces';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CellContext } from '@tanstack/angular-table';
-import { CommonModule } from '@angular/common';
 import {
   ForgeTextFieldModule,
   ForgeAutocompleteProxyModule,
@@ -13,15 +12,7 @@ import {
 
 @Component({
   selector: 'app-table-cell-input',
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    ForgeTextFieldModule,
-    ForgeAutocompleteProxyModule,
-    ForgeDatePickerProxyModule,
-    ForgeCheckboxModule,
-    ForgeSelectModule
-  ],
+  imports: [ReactiveFormsModule, ForgeTextFieldModule, ForgeAutocompleteProxyModule, ForgeDatePickerProxyModule, ForgeCheckboxModule, ForgeSelectModule],
   templateUrl: './table-cell-input.component.html',
   styleUrl: './table-cell-input.component.scss'
 })

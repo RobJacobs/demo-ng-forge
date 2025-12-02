@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, input, model, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ForgeButtonModule, ForgeLabelValueModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
@@ -7,7 +6,7 @@ import { Utils } from 'src/utils';
 
 @Component({
   selector: 'app-external',
-  imports: [CommonModule, FormsModule, ForgeButtonModule, ForgeLabelValueModule, ForgeTextFieldModule],
+  imports: [FormsModule, ForgeButtonModule, ForgeLabelValueModule, ForgeTextFieldModule],
   templateUrl: './external.component.html',
   styleUrl: './external.component.scss'
 })

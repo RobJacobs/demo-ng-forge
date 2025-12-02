@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output, input } from '@angular/core';
 import { ForgeChipModule, ForgeChipSetModule } from '@tylertech/forge-angular';
 
@@ -6,7 +5,7 @@ import { ForgeChipModule, ForgeChipSetModule } from '@tylertech/forge-angular';
   selector: 'app-filter-chips',
   templateUrl: './filter-chips.component.html',
   styleUrls: ['./filter-chips.component.scss'],
-  imports: [CommonModule, ForgeChipModule, ForgeChipSetModule]
+  imports: [ForgeChipModule, ForgeChipSetModule]
 })
 export class FilterChipsComponent {
   public readonly filters = input<

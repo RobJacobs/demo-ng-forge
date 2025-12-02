@@ -1,5 +1,4 @@
 import { Component, viewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ForgeButtonModule, ForgeOptionModule, ForgeSelectModule, ForgeTabBarModule, ForgeTabModule, ForgeToolbarModule } from '@tylertech/forge-angular';
 
@@ -21,7 +20,6 @@ export enum ChartTypes {
 @Component({
   selector: 'app-charts',
   imports: [
-    CommonModule,
     FormsModule,
     ForgeButtonModule,
     ForgeOptionModule,

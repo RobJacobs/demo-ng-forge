@@ -17,7 +17,6 @@ import {
   viewChild,
   DestroyRef
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
@@ -40,7 +39,6 @@ import { Utils } from 'src/utils';
   templateUrl: './autocomplete-range.component.html',
   styleUrls: ['./autocomplete-range.component.scss'],
   imports: [
-    CommonModule,
     FormsModule,
     ForgeAutocompleteModule,
     ForgeDividerModule,
@@ -63,7 +61,7 @@ export class AutocompleteRangeComponent implements ControlValueAccessor, AfterVi
   private viewContainerRef = inject(ViewContainerRef);
   private destroyRef = inject(DestroyRef);
 
-  @HostListener('focusout', ['$event'])
+  @HostListener('focusout')
   public autocompleteBlur() {
     this.onTouched();
   }

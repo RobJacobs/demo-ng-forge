@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { debounce } from '@tylertech/forge-core';
@@ -7,7 +6,7 @@ import { ForgeTableModule, ForgeTextFieldModule, ForgeToolbarModule } from '@tyl
 
 @Component({
   selector: 'app-css-variables',
-  imports: [CommonModule, FormsModule, ForgeTableModule, ForgeTextFieldModule, ForgeToolbarModule],
+  imports: [FormsModule, ForgeTableModule, ForgeTextFieldModule, ForgeToolbarModule],
   templateUrl: './css-variables.component.html',
   styleUrl: './css-variables.component.scss'
 })

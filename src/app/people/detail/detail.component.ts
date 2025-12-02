@@ -1,5 +1,4 @@
 import { Component, DestroyRef, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { isDefined } from '@tylertech/forge-core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -13,7 +12,7 @@ import { PeopleCacheService } from '../people-cache.service';
 
 @Component({
   selector: 'app-people-detail',
-  imports: [CommonModule, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, ForgeLabelValueModule, ForgeToolbarModule],
+  imports: [ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, ForgeLabelValueModule, ForgeToolbarModule],
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.scss']
 })

@@ -1,5 +1,4 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ForgeTextFieldModule } from '@tylertech/forge-angular';
 
@@ -8,7 +7,7 @@ import { ProfileService } from '../profile.service';
 
 @Component({
   selector: 'app-profile-address',
-  imports: [CommonModule, ReactiveFormsModule, ForgeTextFieldModule, FormControlInvalidDirective, AutoFocusDirective],
+  imports: [ReactiveFormsModule, ForgeTextFieldModule, FormControlInvalidDirective, AutoFocusDirective],
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.scss'],
   host: {

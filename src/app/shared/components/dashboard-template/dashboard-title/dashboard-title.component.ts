@@ -1,9 +1,7 @@
-import { CommonModule } from '@angular/common';
 import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-dashboard-title',
-  imports: [CommonModule],
   templateUrl: './dashboard-title.component.html',
   styleUrl: './dashboard-title.component.scss',
   host: {

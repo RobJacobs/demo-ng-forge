@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { map, of, Subject, takeUntil } from 'rxjs';
@@ -35,7 +34,7 @@ import { FormlyDemoService } from '../formly-demo.service';
       // }
     `
   ],
-  imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeDatePickerModule, ForgeTextFieldModule],
+  imports: [ReactiveFormsModule, FormlyModule, ForgeDatePickerModule, ForgeTextFieldModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class DatePickerTypeComponent extends FieldType<FieldTypeConfig> implements OnInit, OnDestroy {

@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -23,7 +22,6 @@ export interface IFilterSaveDialogData {
 @Component({
   selector: 'app-filter-save-dialog',
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     ForgeButtonModule,
     ForgeCheckboxModule,

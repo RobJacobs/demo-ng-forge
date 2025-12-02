@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { map, of, Subject, takeUntil } from 'rxjs';
@@ -34,7 +33,7 @@ import { FormlyDemoService } from '../formly-demo.service';
       }
     `
   ],
-  imports: [CommonModule, ReactiveFormsModule, FormlyModule, ForgeTextFieldModule],
+  imports: [ReactiveFormsModule, FormlyModule, ForgeTextFieldModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TextareaTypeComponent extends FieldType<FieldTypeConfig> implements OnInit, OnDestroy {

@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, inputBinding, model, outputBinding, signal, TemplateRef, twoWayBinding, Type, viewChild, ViewContainerRef } from '@angular/core';
 import { ForgeToolbarModule, ForgeButtonModule, ForgeTextFieldModule, ForgeLabelValueModule } from '@tylertech/forge-angular';
 
@@ -10,7 +9,7 @@ import { Utils } from 'src/utils';
 
 @Component({
   selector: 'app-dynamic-component',
-  imports: [CommonModule, FormsModule, ForgeButtonModule, ForgeLabelValueModule, ForgeTextFieldModule, ForgeToolbarModule],
+  imports: [FormsModule, ForgeButtonModule, ForgeLabelValueModule, ForgeTextFieldModule, ForgeToolbarModule],
   templateUrl: './dynamic-component.component.html',
   styleUrl: './dynamic-component.component.scss'
 })

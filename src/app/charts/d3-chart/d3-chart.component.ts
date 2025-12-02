@@ -1,5 +1,4 @@
 import { Component, DestroyRef, ElementRef, Input, OnInit, inject, viewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, fromEvent } from 'rxjs';
 import { ForgeListItemModule, ForgeListModule } from '@tylertech/forge-angular';
@@ -33,7 +32,7 @@ interface IChartItem {
 
 @Component({
   selector: 'app-charts-d3-chart',
-  imports: [CommonModule, ForgeListItemModule, ForgeListModule],
+  imports: [ForgeListItemModule, ForgeListModule],
   templateUrl: './d3-chart.component.html',
   styleUrls: ['./d3-chart.component.scss']
 })

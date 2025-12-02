@@ -1,5 +1,4 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ActivatedRouteSnapshot, Router, ActivatedRoute, NavigationEnd, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
@@ -13,7 +12,6 @@ import { CallbackPipe } from './shared/pipes/callback.pipe';
   selector: 'app-root',
   imports: [
     RouterOutlet,
-    CommonModule,
     ForgeScaffoldModule,
     ForgeDrawerModule,
     ForgeButtonModule,

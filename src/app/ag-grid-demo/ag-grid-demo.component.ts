@@ -1,5 +1,4 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Component, DestroyRef, OnInit, inject, viewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IOption, SortDirection } from '@tylertech/forge';
 import { isDefined } from '@tylertech/forge-core';
@@ -34,16 +33,7 @@ import { AppDataService } from '../app-data.service';
 
 @Component({
   selector: 'app-ag-grid-demo',
-  imports: [
-    CommonModule,
-    ForgeIconButtonModule,
-    ForgeIconModule,
-    ForgeOptionModule,
-    ForgePaginatorModule,
-    ForgeSelectDropdownModule,
-    ForgeToolbarModule,
-    AgGridAngular
-  ],
+  imports: [ForgeIconButtonModule, ForgeIconModule, ForgeOptionModule, ForgePaginatorModule, ForgeSelectDropdownModule, ForgeToolbarModule, AgGridAngular],
   templateUrl: './ag-grid-demo.component.html',
   styleUrls: ['./ag-grid-demo.component.scss'],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
