@@ -15,8 +15,8 @@ export interface ITableColumnConfiguration extends IColumnConfiguration {
   order?: string | number;
   editable?: boolean;
   frozen?: 'left' | 'right';
-  moveable?: boolean;
   optional?: boolean;
+  orderable?: boolean;
   resizable?: boolean;
 }
 

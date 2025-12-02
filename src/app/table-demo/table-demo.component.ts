@@ -2,8 +2,8 @@ import { Component, DestroyRef, ElementRef, NgZone, OnDestroy, OnInit, ViewChild
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CdkDragDrop, CdkDropList, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import {
   DialogService,
   ForgeButtonModule,
@@ -20,7 +20,7 @@ import {
   ForgeToolbarModule,
   ForgeTooltipModule
 } from '@tylertech/forge-angular';
-import { CellAlign, SortDirection } from '@tylertech/forge';
+import { CellAlign, IPaginatorChangeEventData, SortDirection } from '@tylertech/forge';
 import { isDefined } from '@tylertech/forge-core';
 import { finalize, fromEvent, merge, Subject, takeUntil, tap } from 'rxjs';
 
@@ -81,8 +81,6 @@ interface IRecordsetForm {
   styleUrl: './table-demo.component.scss'
 })
 export class TableDemoComponent implements OnInit, OnDestroy {
-  @ViewChild(CdkDropList)
-  private cdkDropList: CdkDropList;
   private destroyRef = inject(DestroyRef);
   private ngZone = inject(NgZone);
   private router = inject(Router);
@@ -91,11 +89,10 @@ export class TableDemoComponent implements OnInit, OnDestroy {
   private busyIndicatorService = inject(BusyIndicatorService);
   public appCache = inject(AppCacheService);
   public cache = inject(TableDemoService);
-  private readonly bodyTableElementRef = viewChild<ElementRef<HTMLDivElement>>('bodyTable');
+
   private readonly tableElementRef = viewChild<ElementRef<HTMLTableElement>>('table');
   private tableColumnResize$ = new Subject<void>();
-  private isColumnResizing = false;
-
+  public isColumnResizing = false;
   private tableStateStorageKey = 'app--table-demo--table-state';
   private filtersStateStorageKey = 'app--table-demo--filters-state';
   private tableColumnDefaultWidths: (string | number)[];
@@ -110,7 +107,7 @@ export class TableDemoComponent implements OnInit, OnDestroy {
       editable: false,
       sortable: false,
       resizable: false,
-      moveable: false,
+      orderable: false,
       optional: false,
       align: CellAlign.Center,
       width: 48,
@@ -124,7 +121,7 @@ export class TableDemoComponent implements OnInit, OnDestroy {
       }
     },
     { header: 'Id', property: 'id', width: 48 },
-    { header: 'First', property: 'firstName', moveable: false },
+    { header: 'First', property: 'firstName', orderable: false },
     { header: 'Last', property: 'lastName', resizable: false },
     { header: 'Gender', property: 'gender' },
     { header: 'Occupation', property: 'occupation' },
@@ -134,57 +131,40 @@ export class TableDemoComponent implements OnInit, OnDestroy {
       editable: false,
       sortable: false,
       resizable: false,
-      moveable: false,
+      orderable: false,
       optional: false,
       align: CellAlign.Center,
       width: 120,
       frozen: 'right',
-      template: (rowIndex: number, cellElement: HTMLElement, data: any) => {
-        this.ngZone.run(() => {
-          cellElement.classList.add('forge-table-body__cell__actions');
-          cellElement.appendChild(
-            TableUtils.createIconButton(
-              'delete',
-              (event: Event) => {
-                this.dialogService
-                  .open(ConfirmDialogComponent, {
-                    options: { persistent: true },
-                    data: { title: 'Delete record', message: 'Are you sure you want to delete this record?' }
-                  })
-                  .afterClosed.subscribe({
-                    next: (result) => {
-                      if (result) {
-                        const busyData: IBusyIndicatorData = {
-                          message: 'Deleting...',
-                          progress: 'circular'
-                        };
-                        this.busyIndicatorService.show(busyData);
-                        setTimeout(() => {
-                          this.busyIndicatorService.hide();
-                          this.cache.recordsetFormGroup.controls.recordsetFormArray.removeAt(rowIndex);
-                        }, 2000);
-                      }
-                    }
-                  });
-              },
-              'Delete person'
-            )
-          );
-          cellElement.appendChild(
-            TableUtils.createIconButton(
-              'keyboard_arrow_right',
-              (event: Event) => {
-                this.router.navigate([`people/detail/${data.id}`]);
-              },
-              'View person details'
-            )
-          );
-        });
+      template: (rowIndex: number, cellElement: HTMLElement, data: IPerson) => {
+        cellElement.classList.add('forge-table-body__cell__actions');
+        cellElement.appendChild(
+          TableUtils.createIconButton(
+            'delete',
+            (event: Event) => {
+              this.onDelete(data.id);
+            },
+            'Delete person'
+          )
+        );
+        cellElement.appendChild(
+          TableUtils.createIconButton(
+            'keyboard_arrow_right',
+            (event: Event) => {
+              this.onViewDetail(data.id);
+            },
+            'View person details'
+          )
+        );
 
         return null;
       }
     }
   ];
+
+  public recordsetFormGroup = new FormGroup({
+    recordsetFormArray: new FormArray<FormGroup<IRecordsetForm>>([])
+  });
 
   public visibleColumns = (columns: ITableColumnConfiguration[]): ITableColumnConfiguration[] => {
     return Utils.sortData(
@@ -200,7 +180,7 @@ export class TableDemoComponent implements OnInit, OnDestroy {
   };
 
   public headerSelectedIcon = (selectedRows: string[]): 'check_box' | 'check_box_outline_blank' | 'indeterminate_check_box' => {
-    return this.cache.selectedRows?.length && this.cache.selectedRows?.length === this.cache.recordsetFormGroup.value.recordsetFormArray?.length
+    return this.cache.selectedRows?.length && this.cache.selectedRows?.length === this.cache.recordset().length
       ? 'check_box'
       : !this.cache.selectedRows?.length
         ? 'check_box_outline_blank'
@@ -222,8 +202,7 @@ export class TableDemoComponent implements OnInit, OnDestroy {
     this.tableColumnResize$.complete();
   }
 
-  public onFilter(event) {
-    event.preventDefault();
+  public onFilter() {
     this.isFiltering = !this.isFiltering;
 
     const dialogData: ITableDemoFilterDialogData = {
@@ -237,24 +216,24 @@ export class TableDemoComponent implements OnInit, OnDestroy {
           this.cache.filter.filters = this.cache.convertRecordsetFilterFormGroup();
           this.getRecords();
         }
-
-        if (!this.cache.filter.filters.length) {
-          this.cache.recordsetFilterFormGroup.markAsPristine();
-        }
       }
     });
   }
 
-  public onEdit(event, isEditing) {
-    event.preventDefault();
+  public onEdit(isEditing) {
     this.isEditing = isEditing;
-    this.cdkDropList.disabled = this.isEditing;
     this.tableColumns.find((tc) => tc.header === 'Actions').hidden = this.isEditing;
     this.tableColumns = [...this.tableColumns];
+
+    this.recordsetFormGroup.controls.recordsetFormArray.clear();
+    if (this.isEditing) {
+      this.cache.recordset().forEach((person) => {
+        this.recordsetFormGroup.controls.recordsetFormArray.push(this.buildRecordForm(person), { emitEvent: false });
+      });
+    }
   }
 
-  public onSubmit(event) {
-    event.preventDefault();
+  public onSubmit() {
     const busyData: IBusyIndicatorData = {
       message: 'Submitting...',
       progress: 'circular'
@@ -263,15 +242,44 @@ export class TableDemoComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.busyIndicatorService.hide();
       this.isEditing = false;
-    }, 2000);
+      this.cache.recordset.set(this.recordsetFormGroup.controls.recordsetFormArray.getRawValue());
+      this.recordsetFormGroup.controls.recordsetFormArray.clear();
+    }, 1000);
   }
 
-  public onColumnHeaderDragStart() {
-    this.bodyTableElementRef().nativeElement.scrollTo(0, 0);
+  public onDelete(id: string) {
+    this.dialogService
+      .open(ConfirmDialogComponent, {
+        options: { persistent: true },
+        data: { title: 'Delete record', message: 'Are you sure you want to delete this record?' }
+      })
+      .afterClosed.subscribe({
+        next: (result) => {
+          if (result) {
+            const busyData: IBusyIndicatorData = {
+              message: 'Deleting...',
+              progress: 'circular'
+            };
+            this.busyIndicatorService.show(busyData);
+            setTimeout(() => {
+              this.ngZone.run(() => {
+                this.cache.totalRecords--;
+                const index = this.cache.recordset().findIndex((p) => p.id === id);
+                this.cache.recordset.set(this.cache.recordset().toSpliced(index, 1));
+                this.busyIndicatorService.hide();
+              });
+            }, 1000);
+          }
+        }
+      });
   }
 
-  public onColumnHeaderDragDrop(event: CdkDragDrop<string[]>) {
-    if (this.tableColumns[event.currentIndex]?.moveable === false) {
+  public onViewDetail(id: string) {
+    this.router.navigate([`people/detail/${id}`]);
+  }
+
+  public onColumnHeaderDragDrop(event: CdkDragDrop<ITableColumnConfiguration>) {
+    if (event.item.data.moveable === false) {
       return;
     }
     moveItemInArray(this.tableColumns, event.previousIndex, event.currentIndex);
@@ -279,6 +287,10 @@ export class TableDemoComponent implements OnInit, OnDestroy {
     this.tableColumns.forEach((tc, index) => (tc.order = index));
     this.tableColumns = [...this.tableColumns];
   }
+
+  public columnHeaderSortPredicate = (index: number) => {
+    return this.tableColumns[index].orderable !== false;
+  };
 
   public onColumnHeaderResize(event: MouseEvent, columnIndex: number, column: ITableColumnConfiguration) {
     event.stopPropagation();
@@ -331,10 +343,6 @@ export class TableDemoComponent implements OnInit, OnDestroy {
         )
         .subscribe();
     }
-  }
-
-  public onColumnsEdit(event) {
-    event.preventDefault();
   }
 
   public onColumnsEditPopoverSelected(value: any) {
@@ -393,22 +401,37 @@ export class TableDemoComponent implements OnInit, OnDestroy {
     this.getRecords();
   }
 
-  public onPaginatorChange(detail: { pageIndex: number; pageSize: number }) {
+  public onPaginatorChange(detail: IPaginatorChangeEventData) {
     this.cache.filter.skip = detail.pageIndex * detail.pageSize;
     this.cache.filter.take = detail.pageSize;
+    if (detail.type === 'page-size') {
+      this.saveTableState();
+    }
     this.getRecords();
   }
 
-  public onSelectHeader() {
-    if (this.cache.selectedRows?.length === this.cache.recordsetFormGroup.value.recordsetFormArray?.length) {
+  public onRowExpand(id: string) {
+    const expandedRowIndex = this.cache.expandedRows.findIndex((r) => r === id);
+    if (expandedRowIndex !== -1) {
+      this.cache.expandedRows[expandedRowIndex] = undefined;
+    } else {
+      const recordIndex = this.cache.recordset().findIndex((r) => r.id === id);
+      if (recordIndex !== -1) {
+        this.cache.expandedRows[recordIndex] = id;
+      }
+    }
+  }
+
+  public onRowSelectHeader() {
+    if (this.cache.selectedRows?.length === this.cache.recordset().length) {
       this.cache.selectedRows = [];
     } else {
-      this.cache.selectedRows = this.cache.recordsetFormGroup.value.recordsetFormArray?.map((r) => r.id);
+      this.cache.selectedRows = this.cache.recordset().map((r) => r.id);
     }
     this.cache.selectedRows = [...this.cache.selectedRows];
   }
 
-  public onSelectRow(id: string) {
+  public onRowSelect(id: string) {
     const selectedRowIndex = this.cache.selectedRows.findIndex((r) => r === id);
     if (selectedRowIndex !== -1) {
       this.cache.selectedRows.splice(selectedRowIndex, 1);
@@ -418,18 +441,6 @@ export class TableDemoComponent implements OnInit, OnDestroy {
     this.cache.selectedRows = [...this.cache.selectedRows];
   }
 
-  public onExpandRow(id: string) {
-    const expandedRowIndex = this.cache.expandedRows.findIndex((r) => r === id);
-    if (expandedRowIndex !== -1) {
-      this.cache.expandedRows[expandedRowIndex] = undefined;
-    } else {
-      const recordIndex = this.cache.recordsetFormGroup.value.recordsetFormArray.findIndex((r) => r.id === id);
-      if (recordIndex !== -1) {
-        this.cache.expandedRows[recordIndex] = id;
-      }
-    }
-  }
-
   private getRecords() {
     if (this.isBusy) {
       // TODO cancel request
@@ -437,7 +448,8 @@ export class TableDemoComponent implements OnInit, OnDestroy {
     }
 
     this.isBusy = true;
-    this.cache.recordsetFormGroup.controls.recordsetFormArray.clear();
+    this.cache.recordset.set([]);
+    this.recordsetFormGroup.controls.recordsetFormArray.clear();
     this.cache.expandedRows = [];
     this.cache.selectedRows = [];
     this.appDataService
@@ -454,9 +466,7 @@ export class TableDemoComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (result) => {
           this.cache.totalRecords = result.count;
-          result.data.forEach((person) => {
-            this.cache.recordsetFormGroup.controls.recordsetFormArray.push(this.buildRecordForm(person), { emitEvent: false });
-          });
+          this.cache.recordset.set(result.data);
         }
       });
   }
@@ -522,7 +532,6 @@ export class TableDemoComponent implements OnInit, OnDestroy {
       const defaultFilter = this.cache.userFilters?.find((f) => f.isDefault);
       if (defaultFilter) {
         this.cache.recordsetFilterFormGroup.patchValue(defaultFilter.filters);
-        this.cache.recordsetFilterFormGroup.markAsDirty();
         this.cache.filter.filters = this.cache.convertRecordsetFilterFormGroup();
         this.cache.activeUserFilter = defaultFilter;
       }

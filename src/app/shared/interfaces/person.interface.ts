@@ -2,7 +2,7 @@ export interface IPerson {
   id: string;
   firstName: string;
   lastName: string;
-  gender: 'male' | 'female';
+  gender: string;
   occupation?: string;
   quote?: string;
   url?: string;

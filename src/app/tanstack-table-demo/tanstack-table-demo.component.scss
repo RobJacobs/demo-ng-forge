@@ -72,6 +72,8 @@ $table-cell-inline-padding: 8px;
           width: calc(var(--table-column-width) * 1px);
           // min-width: calc(var(--table-column-width) * 1px);
           // max-width: calc(var(--table-column-width) * 1px);
+          // min-width: calc(var(--table-column-width, 200) * 1px);
+          // max-width: calc(var(--table-column-width, 200) * 1px);
 
           &:hover {
             .forge-table-head__cell {
@@ -226,7 +228,8 @@ $table-cell-inline-padding: 8px;
     @include global.app-container-outlined();
     border: solid 2px global.$forge-color-indigo-500;
     display: flex;
-    padding-inline: $table-cell-inline-padding;
+    padding-inline: 8px;
+    overflow: hidden;
 
     .forge-table-head__cell-actions {
       display: none;
@@ -264,5 +267,20 @@ $table-cell-inline-padding: 8px;
 
   img {
     width: 256px;
+  }
+}
+
+.mobile {
+  &__row {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    forge-label-value {
+      &::part(value) {
+        width: 100%;
+      }
+    }
   }
 }

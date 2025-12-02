@@ -1,0 +1,28 @@
+@use 'src/global';
+
+:host {
+  display: contents;
+}
+
+::ng-deep {
+  .operator-popover {
+    min-width: 200px;
+
+    forge-list-item {
+      cursor: pointer;
+    }
+  }
+}
+
+.form-grid {
+  padding: 16px;
+  @include global.app-form-grid();
+}
+
+.operator {
+  &__addon {
+    &--selected {
+      color: var(--forge-theme-warning);
+    }
+  }
+}

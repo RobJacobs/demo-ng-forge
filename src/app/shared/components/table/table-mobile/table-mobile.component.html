@@ -19,13 +19,13 @@
   <div class="row">
     @for (column of columnConfigurations; track ii; let ii = $index) {
       @if (column.hidden !== true) {
-        @if (isEditing && column.editable !== false) {
-          <forge-text-field [appFormControlInvalid]="formArray.at(rowIndex).get(column.property)">
+        @if (formArray?.length && isEditing && column.editable !== false) {
+          <forge-text-field [appFormControlInvalid]="formArray?.at(rowIndex)?.get(column.property)">
             @if (column.header?.length) {
               <label [for]="'app-table-mobile--' + column.property + '--' + rowIndex" slot="label">{{ column.header }}</label>
             }
-            <input type="text" [id]="'app-table-mobile--' + column.property + '--' + rowIndex" [formControl]="$any(formArray.at(rowIndex).get(column.property))" />
-            <span slot="support-text" class="app--form-control-invalid">{{ formArray.at(rowIndex).get(column.property).errors | json }}</span>
+            <input type="text" [id]="'app-table-mobile--' + column.property + '--' + rowIndex" [formControl]="$any(formArray.at(rowIndex)?.get(column.property))" />
+            <span slot="support-text" class="app--form-control-invalid">{{ formArray.at(rowIndex)?.get(column.property).errors | json }}</span>
           </forge-text-field>
         } @else {
           <forge-label-value>

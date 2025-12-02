@@ -1,0 +1,23 @@
+@if (isEditing()) {
+  @switch ($any(context().column.columnDef).controlType) {
+    @case ('autocomplete') {
+      <forge-autocomplete></forge-autocomplete>
+    }
+    @case ('datepicker') {
+      <forge-date-picker></forge-date-picker>
+    }
+    @case ('checkbox') {
+      <forge-checkbox></forge-checkbox>
+    }
+    @case ('select') {
+      <forge-select [options]="$any(context().column.columnDef).options()" [formControl]="control()"></forge-select>
+    }
+    @default {
+      <forge-text-field>
+        <input type="text" [id]="'app-table-demo--' + context().column.id + '--' + context().row.index" [attr.aria-label]="context().column.id + ' ' + context().row.index" [formControl]="control()" />
+      </forge-text-field>
+    }
+  }
+} @else {
+  {{ context().getValue() }}
+}

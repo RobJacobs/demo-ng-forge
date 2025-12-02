@@ -7,6 +7,7 @@
 [slot='body'] {
   display: grid;
   background-color: var(--forge-theme-surface-dim);
+  outline: none;
 }
 
 .menu-expander {

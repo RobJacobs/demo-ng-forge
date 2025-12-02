@@ -1,0 +1,82 @@
+<app-dialog-template dialogTitle="Filter records" dialogLabel="Filter records" (dialogClose)="onCancel()">
+  <form class="form-grid" novalidate autocomplete="off" [formGroup]="cache.recordsetFilterFormGroup" (keydown.enter)="onApply()">
+    @if (cache.userFilters?.length) {
+      <forge-select [value]="userFilter?.id" slot="center" label="Saved filters" (change)="onFilterChange($event)">
+        @for (filter of cache.userFilters; track i; let i = $index) {
+          <forge-option [value]="filter.id">{{ filter.name }}</forge-option>
+        }
+        @if (userFilter?.description?.length) {
+          <span slot="support-text" class="forge-typography--label2">{{ userFilter?.description }}</span>
+        }
+        <forge-icon-button slot="addon-end" density="medium" (click)="onFilterDelete()" aria-label="Delete filter" [disabled]="!userFilter">
+          <forge-icon name="delete" aria-hidden="true"></forge-icon>
+        </forge-icon-button>
+        <forge-tooltip slot="addon-end">Delete filter</forge-tooltip>
+      </forge-select>
+
+      <forge-divider></forge-divider>
+    }
+
+    <ng-container formGroupName="firstName">
+      <forge-text-field>
+        <label for="filter-dialog--first-name" slot="label">First name</label>
+        <input type="text" id="filter-dialog--first-name" formControlName="value" appAutoFocus />
+        <ng-container *ngTemplateOutlet="opertatorAddonTemplate; context: { name: 'firstName' }"></ng-container>
+      </forge-text-field>
+    </ng-container>
+
+    <ng-container formGroupName="lastName">
+      <forge-text-field>
+        <label for="filter-dialog--last-name" slot="label">Last name</label>
+        <input type="text" id="filter-dialog--last-name" formControlName="value" />
+        <ng-container *ngTemplateOutlet="opertatorAddonTemplate; context: { name: 'lastName' }"></ng-container>
+      </forge-text-field>
+    </ng-container>
+
+    <forge-select label="Gender" formControlName="gender" multiple="true" [options]="genderOptions"></forge-select>
+
+    <ng-container formGroupName="occupation">
+      <forge-text-field>
+        <label for="filter-dialog--occupation" slot="label">Occupation</label>
+        <input type="text" id="filter-dialog--occupation" formControlName="value" />
+        <ng-container *ngTemplateOutlet="opertatorAddonTemplate; context: { name: 'occupation' }"></ng-container>
+      </forge-text-field>
+    </ng-container>
+  </form>
+  <ng-container app-dialog-footer>
+    <forge-button slot="end" variant="outlined" (click)="onSave()">Save</forge-button>
+    <forge-button slot="end" variant="outlined" (click)="onClear()">Clear</forge-button>
+    <forge-button slot="end" variant="filled" (click)="onApply()">Apply</forge-button>
+  </ng-container>
+</app-dialog-template>
+
+<ng-template #opertatorAddonTemplate let-name="name">
+  <forge-icon-button
+    slot="addon-end"
+    density="medium"
+    class="operator__addon"
+    [ngClass]="{
+      'operator__addon--selected': cache.recordsetFilterFormGroup.get(name)?.value?.operator
+    }"
+    #operatorPopover="forgePopover"
+    [forgePopover]="operatorPopoverTemplate"
+    (click)="onOperatorPopoverOpen($event, operatorPopover, name)"
+    aria-label="Filter operators"
+  >
+    <forge-icon name="bolt" aria-hidden="true"></forge-icon>
+  </forge-icon-button>
+  <forge-tooltip>Filter operators</forge-tooltip>
+</ng-template>
+
+<ng-template #operatorPopoverTemplate>
+  <forge-list class="operator-popover" (forge-list-item-select)="onOperatorSelected($any($event.detail.value))">
+    @for (option of operatorOptions; track i; let i = $index) {
+      <forge-list-item [value]="option.value" [selected]="operatorPopoverFormGroup?.value.operator === option.value">
+        <button type="button">{{ option.label }}</button>
+        @if (operatorPopoverFormGroup?.value.operator === option.value) {
+          <forge-icon name="check" slot="end" [attr.aria-label]="option.label + ' selected'"></forge-icon>
+        }
+      </forge-list-item>
+    }
+  </forge-list>
+</ng-template>

@@ -25,6 +25,7 @@ export class TableUtils {
 
     const iconElement = document.createElement('forge-icon');
     iconElement.setAttribute('name', icon);
+    iconElement.setAttribute('aria-hidden', 'true');
     iconButtonElement.appendChild(iconElement);
 
     const tooltipElement = document.createElement('forge-tooltip');

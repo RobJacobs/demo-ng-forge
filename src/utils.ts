@@ -207,6 +207,27 @@ export class Utils {
     return formatNumber(value, navigator.language, format);
   }
 
+  public static formatString(value: string, format: 'title' | 'sentence' | 'upper' | 'lower') {
+    if (!isDefined(value)) {
+      return value;
+    }
+
+    switch (format) {
+      case 'title':
+        return value.toLocaleLowerCase(navigator.language).replace(/(?:^|\s)\w/g, (match) => {
+          return match.toLocaleUpperCase(navigator.language);
+        });
+      case 'sentence':
+        return value.replace(/^\w/, (c) => c.toLocaleUpperCase(navigator.language)).toLocaleLowerCase(navigator.language);
+      case 'lower':
+        return value.toLocaleLowerCase(navigator.language);
+      case 'upper':
+        return value.toLocaleUpperCase(navigator.language);
+      default:
+        return value;
+    }
+  }
+
   public static uniqueId(): string {
     return Math.random().toString(36).substring(2);
   }

@@ -23,10 +23,10 @@ import { Utils } from 'src/utils';
 import { DialogTemplateComponent, FilterSaveDialogComponent, IFilterSaveDialogData } from 'src/app/shared/components';
 import { AutoFocusDirective } from 'src/app/shared/directives';
 import { IFilterState } from 'src/app/shared/interfaces';
-import { TableDemoService } from '../table-demo.service';
+import { TanStackTableDemoService } from '../tanstack-table-demo.service';
 
 export interface ITableDemoFilterDialogData {
-  cache: TableDemoService;
+  cache: TanStackTableDemoService;
   saveCallback: () => void;
 }
 
@@ -50,7 +50,7 @@ export interface ITableDemoFilterDialogData {
   ],
   templateUrl: './filter-dialog.component.html',
   styleUrl: './filter-dialog.component.scss',
-  host: { 'component-id': 'table-demo' }
+  host: { 'component-id': 'tanstack-table-demo' }
 })
 export class FilterDialogComponent implements OnInit {
   private dialogService = inject(DialogService);
@@ -59,7 +59,7 @@ export class FilterDialogComponent implements OnInit {
   private operatorPopover?: PopoverDirective;
 
   public userFilter: IFilterState;
-  public cache: TableDemoService;
+  public cache: TanStackTableDemoService;
   public genderOptions: IOption[] = [
     { label: 'Male', value: 'male' },
     { label: 'Female', value: 'female' },

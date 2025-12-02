@@ -1,0 +1,253 @@
+<forge-toolbar class="header">
+  <h2 slot="start" class="forge-typography--subheading4">Tanstack table demo</h2>
+  @if (isEditing) {
+    <forge-button slot="end" variant="outlined" (click)="onEdit(false)">
+      <forge-icon name="cancel" aria-hidden="true"></forge-icon>
+      Cancel
+    </forge-button>
+    <forge-button slot="end" variant="filled" (click)="onSubmit()" [disabled]="!recordsetFormGroup.dirty || recordsetFormGroup.invalid">
+      <forge-icon name="check" aria-hidden="true"></forge-icon>
+      Submit
+    </forge-button>
+  } @else {
+    @if (cache.activeUserFilter?.description?.length) {
+      <span slot="end" class="forge-typography--subheading1">{{ cache.activeUserFilter.description }}</span>
+    }
+    <forge-icon-button variant="tonal" slot="end" aria-label="Filter records" [disabled]="isBusy" (click)="onFilter()" [theme]="cache.filter?.filters?.length ? 'warning' : $any('')">
+      <forge-icon name="filter_list" aria-hidden="true"></forge-icon>
+    </forge-icon-button>
+    <forge-tooltip slot="end">Filter records</forge-tooltip>
+    <forge-icon-button variant="tonal" slot="end" aria-label="Edit records" [disabled]="isBusy" (click)="onEdit(true)">
+      <forge-icon name="edit" aria-hidden="true"></forge-icon>
+    </forge-icon-button>
+    <forge-tooltip slot="end">Edit records</forge-tooltip>
+    <forge-icon-button id="table-demo--btn--edit-columns" variant="tonal" slot="end" aria-label="Edit columns" [disabled]="isBusy">
+      <forge-icon name="list_alt" aria-hidden="true"></forge-icon>
+    </forge-icon-button>
+    <forge-tooltip slot="end">Edit columns</forge-tooltip>
+    <forge-popover slot="end" #columnsEditPopover anchor="table-demo--btn--edit-columns" placement="right-end" animation-type="none" open="false">
+      <forge-list class="column-popover" (forge-list-item-select)="onColumnsEditPopoverSelected($event.detail.value)">
+        @for (column of table.getAllFlatColumns(); track i; let i = $index) {
+          @if (column.id !== 'selector' && column.columnDef.enableHiding !== false) {
+            <forge-list-item [value]="column">
+              <forge-icon slot="start" [name]="column.getIsVisible() === false ? 'check_box_outline_blank' : 'check_box'" aria-hidden="true"></forge-icon>
+              <button type="button" [attr.aria-label]="$any(column.columnDef)?.headerText">{{ $any(column.columnDef).headerText }}</button>
+            </forge-list-item>
+          }
+        }
+        <forge-divider></forge-divider>
+        <forge-list-item value="reset-column-width">
+          <button type="button">Reset column widths</button>
+        </forge-list-item>
+        <forge-divider></forge-divider>
+        <forge-list-item value="delete-table-cache">
+          <button type="button">Delete table cache</button>
+        </forge-list-item>
+      </forge-list>
+    </forge-popover>
+  }
+</forge-toolbar>
+
+<div class="body">
+  <form #formRef class="body__table" novalidate autocomplete="off">
+    @if (appCache.layoutMode === 'sm') {
+      <div>
+        @if (isBusy) {
+          @for (skl of [1, 2, 3]; track i; let i = $index) {
+            <forge-skeleton list-item></forge-skeleton>
+          }
+        } @else {
+          @for (row of table.getRowModel().rows; track row.id; let rowIndex = $index) {
+            <div class="mobile__row">
+              @for (cell of row.getVisibleCells(); track cell.id; let cellIndex = $index) {
+                @if ($any(cell.column.columnDef).enableMobile !== false) {
+                  <forge-label-value>
+                    @for (header of table.getLeafHeaders(); track header.id) {
+                      @if (header.column.id === cell.column.id) {
+                        <div slot="label">
+                          <ng-container *flexRender="header.column.columnDef.header; props: header.getContext(); let context"></ng-container>
+                        </div>
+                      }
+                    }
+                    <div slot="value">
+                      <ng-container *flexRender="cell.column.columnDef.cell; props: cell.getContext(); let context"></ng-container>
+                    </div>
+                  </forge-label-value>
+                }
+              }
+            </div>
+            <forge-divider></forge-divider>
+          }
+        }
+      </div>
+    } @else {
+      <table #tableRef class="forge-table" [formGroup]="recordsetFormGroup" [ngClass]="{ 'forge-table--editing': isEditing }" [style.--table-cell-inline-padding]="isEditing ? '4px' : '8px'">
+        <thead>
+          @for (headerGroup of table.getHeaderGroups(); track headerGroup.id) {
+            <tr class="forge-table-row forge-table-head__row" cdkDropList (cdkDropListDropped)="onColumnHeaderDragDrop($event)" [cdkDropListSortPredicate]="columnHeaderSortPredicate" cdkDropListOrientation="horizontal">
+              @for (header of headerGroup.headers; track header.id) {
+                @if (!header.isPlaceholder) {
+                  <th
+                    class="forge-table-cell forge-table-head__cell"
+                    [ngClass]="{
+                      'forge-table-head__cell--sortable': header.column.getCanSort(),
+                      'forge-table-cell--frozen-left': header.column.getIsPinned() === 'left',
+                      'forge-table-cell--frozen-right': header.column.getIsPinned() === 'right',
+                      'forge-table-row__expander': header.column.id === 'expander',
+                      'forge-table-row__selector': header.column.id === 'selector'
+                    }"
+                    cdkDrag
+                    [cdkDragData]="header"
+                    cdkDragLockAxis="x"
+                    (click)="header.column.getToggleSortingHandler()?.($event)"
+                    tabindex="-1"
+                    [style.--table-column-width]="header.column.getSize() || null"
+                  >
+                    <div
+                      class="forge-table-head__cell-container"
+                      [ngClass]="{ 'forge-table-cell--center': $any(header.column.columnDef).align === cellAlignEnum.Center, 'forge-table-cell--right': $any(header.column.columnDef).align === cellAlignEnum.Right }"
+                    >
+                      <ng-container *flexRender="header.column.columnDef.header; props: header.getContext(); let context"></ng-container>
+                    </div>
+                  </th>
+                }
+              }
+            </tr>
+          }
+        </thead>
+        <tbody>
+          @if (isBusy) {
+            @for (skl of [1, 2, 3]; track i; let i = $index) {
+              <tr class="forge-table-row forge-table-body__row">
+                <td class="forge-table-cell forge-table-body__cell" [attr.colspan]="table.getVisibleLeafColumns().length"><forge-skeleton list-item></forge-skeleton></td>
+              </tr>
+            }
+          } @else {
+            @for (row of table.getRowModel().rows; track row.id; let rowIndex = $index) {
+              <tr class="forge-table-row forge-table-body__row">
+                @for (cell of row.getVisibleCells(); track cell.id; let cellIndex = $index) {
+                  <td
+                    class="forge-table-cell forge-table-body__cell"
+                    [ngClass]="{
+                      'forge-table-cell--frozen-left': cell.column.getIsPinned() === 'left',
+                      'forge-table-cell--frozen-right': cell.column.getIsPinned() === 'right',
+                      'forge-table-row__expander': cell.column.id === 'expander',
+                      'forge-table-row__selector': cell.column.id === 'selector'
+                    }"
+                  >
+                    <div
+                      class="forge-table-cell__container"
+                      [ngClass]="{ 'forge-table-cell--center': $any(cell.column.columnDef).align === cellAlignEnum.Center, 'forge-table-cell--right': $any(cell.column.columnDef).align === cellAlignEnum.Right }"
+                    >
+                      <ng-container *flexRender="cell.column.columnDef.cell; props: cell.getContext(); let context"></ng-container>
+                    </div>
+                  </td>
+                }
+              </tr>
+              @if (row.getIsExpanded()) {
+                <tr class="forge-table-row forge-table-body__row forge-table-row__expandable-content">
+                  <td class="forge-table-row__expandable-content-cell" [attr.colspan]="table.getVisibleLeafColumns().length">
+                    <app-table-detail [data]="cache.recordset()[rowIndex]" [rowIndex]="rowIndex"></app-table-detail>
+                  </td>
+                </tr>
+              }
+            }
+          }
+        </tbody>
+        <tfoot>
+          @for (footerGroup of table.getFooterGroups(); track footerGroup.id) {
+            <tr class="forge-table-row forge-table-foot__row">
+              @for (footer of footerGroup.headers; track footer.id) {
+                <th class="forge-table-cell forge-table-foot__cell">
+                  <div class="forge-table-cell__container">
+                    <ng-container *flexRender="footer.column.columnDef.footer; props: footer.getContext(); let context">
+                      {{ context }}
+                    </ng-container>
+                  </div>
+                </th>
+              }
+            </tr>
+          }
+        </tfoot>
+      </table>
+    }
+    @if (!isBusy && !cache.totalRecords) {
+      <div class="empty-state">
+        <img src="https://cdn.forge.tylertech.com/v1/images/spot-hero/general-empty-state-spot-hero.svg" alt />
+        <div>No records found.</div>
+      </div>
+    }
+  </form>
+  <forge-toolbar class="footer" inverted="true">
+    <forge-paginator
+      slot="end"
+      [pageIndex]="cache.filter.skip / cache.filter.take"
+      [pageSize]="cache.filter.take"
+      [total]="cache.totalRecords"
+      (forge-paginator-change)="onPaginatorChange($event.detail)"
+      [disabled]="isEditing || isBusy"
+    ></forge-paginator>
+  </forge-toolbar>
+</div>
+
+<ng-template #tableCellHeader let-context>
+  <span class="forge-table-head__cell-text">{{ context.column.columnDef.headerText }}</span>
+  @if (appCache.layoutMode !== 'sm') {
+    @if (context.column.getCanSort()) {
+      <forge-icon [name]="context.column.getIsSorted() === 'desc' ? 'arrow_downward' : context.column.getIsSorted() === 'asc' ? 'arrow_upward' : ''" class="forge-table-head__cell-sort-icon" aria-hidden="true"></forge-icon>
+    }
+    @if (!isBusy && !isEditing && !isColumnResizing && (context.column.columnDef.enableOrdering !== false || context.column.columnDef.enableResizing !== false)) {
+      <div class="forge-table-head__cell-actions" aria-hidden="true">
+        @if (context.column.columnDef.enableOrdering !== false) {
+          <forge-icon-button variant="tonal" cdkDragHandle density="small" class="forge-table-head__cell-dragger">
+            <forge-icon name="cursor_move" aria-hidden="true"></forge-icon>
+          </forge-icon-button>
+          <forge-tooltip>Move column</forge-tooltip>
+        }
+        @if (context.column.columnDef.enableResizing !== false) {
+          <forge-icon-button variant="tonal" cdkDragHandle density="small" class="forge-table-head__cell-resizer" (mousedown)="onColumnHeaderResize($event, context)">
+            <forge-icon name="arrow_expand_horizontal" aria-hidden="true"></forge-icon>
+          </forge-icon-button>
+          <forge-tooltip>Resize column</forge-tooltip>
+        }
+      </div>
+    }
+  }
+</ng-template>
+
+<ng-template #tableCellDefault let-context>
+  {{ context.getValue() }}
+</ng-template>
+
+<ng-template #tableRowSelectHeader let-context>
+  <forge-icon-button (click)="onRowSelectHeader(context)" [disabled]="isBusy">
+    <forge-icon [name]="table.getIsAllRowsSelected() ? 'check_box' : table.getIsSomeRowsSelected() ? 'indeterminate_check_box' : 'check_box_outline_blank'" aria-hidden="true"></forge-icon>
+  </forge-icon-button>
+</ng-template>
+
+<ng-template #tableRowSelect let-context>
+  <forge-icon-button aria-label="Toggle selection" (click)="onRowSelect(context)">
+    <forge-icon [name]="context.row.getIsSelected() ? 'check_box' : 'check_box_outline_blank'" aria-hidden="true"></forge-icon>
+  </forge-icon-button>
+</ng-template>
+
+<ng-template #tableRowExpand let-context>
+  <forge-icon-button [attr.aria-label]="context.row.getIsExpanded() ? 'Collapse row' : 'Expand row'" [attr.aria-expanded]="context.row.getIsExpanded()" (click)="onRowExpand(context)">
+    <forge-icon aria-hidden="true" [name]="context.row.getIsExpanded() ? 'expand_less' : 'expand_more'"></forge-icon>
+  </forge-icon-button>
+</ng-template>
+
+<ng-template #tableCellImage let-context>
+  <img [src]="'mock-data/' + (context.row.original.id | number: '2.0-0') + '-small.png'" alt="" class="forge-table-cell__image" />
+</ng-template>
+
+<ng-template #tableCellActions let-context>
+  <forge-icon-button (click)="onDelete(context)" aria-label="Delete person">
+    <forge-icon name="delete" aria-hidden="true"></forge-icon>
+  </forge-icon-button>
+  <forge-tooltip>Delete person</forge-tooltip>
+  <forge-icon-button (click)="onViewDetail(context)" aria-label="View person details">
+    <forge-icon name="keyboard_arrow_right" aria-hidden="true"></forge-icon>
+  </forge-icon-button>
+  <forge-tooltip>View person details</forge-tooltip>
+</ng-template>

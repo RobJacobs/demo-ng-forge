@@ -14,6 +14,7 @@ import { AppPetsService } from './app-pets.service';
 import { AppCacheService } from './app-cache.service';
 import { ReCaptchaService } from './re-captcha/re-captcha.service';
 import { TableDemoService } from './table-demo/table-demo.service';
+import { TanStackTableDemoService } from './tanstack-table-demo/tanstack-table-demo.service';
 
 @Injectable()
 export class RootRouteGuard implements CanActivate, CanDeactivate<Component> {
@@ -111,6 +112,12 @@ export const routes: Routes = [
         path: 'ag-grid-demo',
         title: 'AG Grid demo',
         loadComponent: () => import('./ag-grid-demo/ag-grid-demo.component').then((m) => m.AgGridDemoComponent)
+      },
+      {
+        path: 'tanstack-table-demo',
+        title: 'Tanstack Table Demo',
+        loadComponent: () => import('./tanstack-table-demo/tanstack-table-demo.component').then((m) => m.TanstackTableDemoComponent),
+        providers: [TanStackTableDemoService]
       },
       {
         path: 'storage',

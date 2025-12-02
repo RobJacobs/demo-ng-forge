@@ -64,6 +64,7 @@ export class AppCacheService implements IAppCacheService {
       { label: 'Formly', value: 'formly-demo', icon: 'article' },
       { label: 'Table', value: 'table-demo', icon: 'table_rows' },
       { label: 'AG Grid', value: 'ag-grid-demo', icon: 'table_rows' },
+      { label: 'Tanstack Table', value: 'tanstack-table-demo', icon: 'table_rows' },
       { label: 'Storage', value: 'storage', icon: 'storage' },
       { label: 'IMask', value: 'imask', icon: 'masks' },
       { label: 'Charts', value: 'charts', icon: 'bar_chart' },
