@@ -499,9 +499,13 @@ export class TableDemoComponent implements OnInit, OnDestroy {
           }
         }
       });
-      this.tableColumns = [...this.tableColumns];
       this.cache.filter.sort = tableState.sort;
       this.cache.filter.take = tableState.take;
+    } else {
+      const column = this.tableColumns.find((tc) => tc.property === this.cache.filter?.sort?.property);
+      if (column) {
+        column.sortDirection = this.cache.filter.sort.direction;
+      }
     }
   }
 

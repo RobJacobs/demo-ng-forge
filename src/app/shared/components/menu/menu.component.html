@@ -11,7 +11,7 @@
 }
 
 <ng-template #rootTemplate>
-  <nav>
+  <nav id="app--main--nav">
     <forge-list class="menu" navlist (forge-list-item-select)="onMenuItemSelected($any($event.detail.value))">
       @for (o of options(); track i; let i = $index) {
         <ng-container *ngTemplateOutlet="o.options?.length ? itemExpanderTemplate : itemTemplate; context: { option: o, index: i }"> </ng-container>
@@ -21,14 +21,12 @@
 </ng-template>
 
 <ng-template #itemTemplate let-option="option">
-  <forge-list-item class="menu__item" [value]="option.value" [selected]="option.value === $any(selectedValue())[0] || option.value === selectedValue()?.join('/')">
+  <forge-list-item #listItem class="menu__item" [value]="option.value" [selected]="option.value === $any(selectedValue())[0] || option.value === selectedValue()?.join('/')">
     @if (open()) {
       <forge-icon slot="start" [name]="option.icon"></forge-icon>
-      <button type="button">
-        {{ option.label }}
-      </button>
+      <button type="button" [attr.aria-current]="listItem.selected ? 'page' : null">{{ option.label }}</button>
     } @else {
-      <button type="button">
+      <button type="button" [attr.aria-label]="option.label" [attr.aria-current]="listItem.selected ? 'page' : null">
         <forge-icon [name]="option.icon"></forge-icon>
       </button>
       @if (option.label?.length) {
@@ -69,7 +67,7 @@
 </ng-template>
 
 <ng-template #menuExpanderTemplate>
-  <forge-button slot="footer" class="menu-expander" [ngClass]="{ 'menu-expander--open': appCache.menu.open }" aria-label="Toggle menu" (click)="onExpand()">
+  <forge-button #menuExpander class="menu-expander" slot="footer" aria-label="Toggle menu" aria-controls="app--main--nav" [attr.aria-expanded]="appCache.menu.open ? 'true' : 'false'" (click)="onExpand()">
     <forge-icon [name]="appCache.menu.open ? 'chevron_left' : 'chevron_right'"></forge-icon>
   </forge-button>
 </ng-template>

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { delay, Observable, of, Subject } from 'rxjs';
 import { IProfile } from 'src/app/shared/interfaces';
 
 @Injectable()
@@ -8,18 +9,33 @@ export class ProfileService {
     personalFormGroup: new FormGroup({
       firstName: new FormControl<string | null>(null, {
         validators: [Validators.required]
+        // asyncValidators: [
+        //   (control: AbstractControl): Observable<ValidationErrors> => {
+        //     return of({ duplicate: true }).pipe(delay(1000));
+        //     // const validationSub = new Subject<ValidationErrors>();
+        //     // setTimeout(() => {
+        //     //   validationSub.next({ duplicate: true });
+        //     //   validationSub.complete();
+        //     // }, 1000);
+        //     // return validationSub.asObservable();
+        //   }
+        // ]
       }),
       lastName: new FormControl<string | null>(null, {
         validators: [Validators.required]
       }),
-      gender: new FormControl<string | null>(null),
+      gender: new FormControl<string | null>(null, {
+        validators: [Validators.required]
+      }),
       email: new FormControl<string | null>(null, {
         validators: [Validators.required]
       }),
       phone: new FormControl<string | null>(null, {
         validators: [Validators.required]
       }),
-      dateOfBirth: new FormControl<string | Date | null>(null),
+      dateOfBirth: new FormControl<string | Date | null>(null, {
+        validators: [Validators.required]
+      }),
       comment: new FormControl<string | null>(null),
       rank: new FormControl<number>(5),
       size: new FormControl<string | null>(null),

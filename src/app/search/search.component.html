@@ -45,8 +45,8 @@
     <ng-container formGroupName="name">
       <forge-autocomplete multiple="true" formControlName="value" [filter]="nameFilter" allow-unmatched="true">
         <forge-text-field>
+          <label slot="label" for="search--name">Name</label>
           <input type="text" id="search--name" />
-          <label for="search--name">Name</label>
           <forge-icon slot="end" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
           <ng-container *ngTemplateOutlet="opertatorAddonTemplate; context: { name: 'name' }"></ng-container>
         </forge-text-field>
@@ -56,8 +56,8 @@
     <ng-container formGroupName="dateOfBirth">
       <forge-date-picker formControlName="value">
         <forge-text-field>
+          <label slot="label" for="search--date-of-birth">Date of birth</label>
           <input type="text" id="search--date-of-birth" />
-          <label for="search--date-of-birth">Date</label>
           <ng-container *ngTemplateOutlet="opertatorAddonTemplate; context: { name: 'dateOfBirth' }"></ng-container>
         </forge-text-field>
       </forge-date-picker>
@@ -65,8 +65,8 @@
 
     <ng-container formGroupName="address">
       <forge-text-field>
+        <label slot="label" for="search--address">Address</label>
         <input type="text" id="search--address" formControlName="value" />
-        <label for="search--address" slot="label">Address</label>
         <ng-container *ngTemplateOutlet="opertatorAddonTemplate; context: { name: 'address' }"></ng-container>
       </forge-text-field>
     </ng-container>

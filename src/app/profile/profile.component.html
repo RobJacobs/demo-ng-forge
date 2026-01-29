@@ -11,14 +11,14 @@
   </div>
 </forge-toolbar>
 
-<forge-tab-bar secondary [activeTab]="activeTab">
-  <forge-tab (forge-tab-select)="onTabSelected('personal')" aria-controls="app--profile--personal">
+<forge-tab-bar [activeTab]="activeTab">
+  <forge-tab (forge-tab-select)="onTabSelected('personal')" id="app--profile--personal--tab" aria-controls="app--profile--personal--tab-body">
     Personal
     @if ([personalFormGroup.invalid, personalFormGroup.touched] | appCallback: isInvalid) {
       <forge-icon slot="end" name="error"></forge-icon>
     }
   </forge-tab>
-  <forge-tab (forge-tab-select)="onTabSelected('address')" aria-controls="app--profile--address">
+  <forge-tab (forge-tab-select)="onTabSelected('address')" id="app--profile--address--tab" aria-controls="app--profile--address--tab-body">
     Address
     @if ([addressFormGroup.invalid, addressFormGroup.touched] | appCallback: isInvalid) {
       <forge-icon slot="end" name="error"></forge-icon>
@@ -28,6 +28,7 @@
 
 <div class="body">
   <form novalidate autocomplete="off" [formGroup]="cache.formGroup">
+    <p class="forge-typography--label3" style="margin-top: 0"><span class="app--color--error">*</span> indicates a required field</p>
     <router-outlet></router-outlet>
     <p>
       {{ cache.formGroup.getRawValue() | json }}

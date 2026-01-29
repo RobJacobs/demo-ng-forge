@@ -2,7 +2,7 @@
   <app-header slot="header"></app-header>
   <app-menu slot="body-left" [options]="appCache.menu.options" [open]="appCache.menu.open" [selectedValue]="appCache.activeRoute | appCallback: mapRoutes"></app-menu>
 
-  <div id="app--main-content" tabindex="-1" class="app-content" slot="body">
+  <main id="app--main-content" tabindex="-1" class="app-content" slot="body">
     <router-outlet></router-outlet>
-  </div>
+  </main>
 </forge-scaffold>

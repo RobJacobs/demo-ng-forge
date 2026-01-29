@@ -11,6 +11,9 @@ import { FieldHelpDialogComponent } from './field-help-dialog/field-help-dialog.
   selector: 'app-formly-input-help',
   template: `
     <forge-text-field [required]="props.required" [invalid]="showError">
+      @if (props.label) {
+        <label slot="label" [attr.for]="id">{{ props.label }}</label>
+      }
       <input
         #input
         [id]="id"
@@ -20,9 +23,6 @@ import { FieldHelpDialogComponent } from './field-help-dialog/field-help-dialog.
         [formControl]="formControl"
         [formlyAttributes]="field"
       />
-      @if (props.label) {
-        <label [attr.for]="id" slot="label">{{ props.label }}</label>
-      }
       <forge-icon-button slot="addon-end" dense aria-label="Browse options" [disabled]="formControl.disabled" (click)="onShowDialog()">
         <forge-icon name="more_horiz"></forge-icon>
       </forge-icon-button>

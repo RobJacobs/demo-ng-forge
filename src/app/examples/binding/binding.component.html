@@ -1,7 +1,7 @@
 <div class="two-way-binding">
   <forge-text-field>
+    <label slot="label" for="examples--binding--name">Parent component</label>
     <input type="text" id="examples--binding--name" [(ngModel)]="name" autocomplete="off" />
-    <label for="examples--binding--name" slot="label">Parent component</label>
   </forge-text-field>
   <app-examples-binding-child [(name)]="name"></app-examples-binding-child>
 </div>

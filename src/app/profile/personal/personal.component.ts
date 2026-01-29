@@ -47,7 +47,9 @@ import { ProfileService } from '../profile.service';
   styleUrls: ['./personal.component.scss'],
   host: {
     role: 'tabpanel',
-    id: 'app--profile--personal'
+    id: 'app--profile--personal--tab-body',
+    'aria-labelledby': 'app--profile--personal--tab',
+    tabindex: '-1'
   }
 })
 export class PersonalComponent implements OnInit {
@@ -61,6 +63,11 @@ export class PersonalComponent implements OnInit {
   public get friendsFormArray() {
     return this.formGroup.controls.friends;
   }
+
+  public firstNameErrorMessage = new Map<string, string>([
+    ['required', 'First name is required'],
+    ['duplicate', 'First name is duplicated']
+  ]);
 
   public genderOptions: IOption[] = [
     { label: '', value: null },

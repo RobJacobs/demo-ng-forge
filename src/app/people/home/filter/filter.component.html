@@ -8,17 +8,17 @@
 
   <form class="body" [formGroup]="formGroup" novalidate autocomplete="off" (ngSubmit)="onApplyFilter()">
     <forge-text-field>
+      <label slot="label" for="people--home--filter--first-name">First name</label>
       <input type="text" id="people--home--filter--first-name" formControlName="firstName" />
-      <label for="people--home--filter--first-name" slot="label">First name</label>
     </forge-text-field>
     <forge-text-field>
+      <label slot="label" for="people--home--filter--last-name">Last name</label>
       <input type="text" id="people--home--filter--last-name" formControlName="lastName" />
-      <label for="people--home--filter--last-name" slot="label">Last name</label>
     </forge-text-field>
     <forge-select label="Gender" formControlName="gender" [options]="genderOptions" multiple="true"></forge-select>
     <forge-text-field>
+      <label slot="label" for="people--home--filter--occupation">Occupation</label>
       <input type="text" id="people--home--filter--occupation" formControlName="occupation" />
-      <label for="people--home--filter--occupation" slot="label">Occupation</label>
     </forge-text-field>
     <forge-divider></forge-divider>
     <app-autocomplete-range [optionFilter]="facetFilter" formControlName="facet" label="Facet"></app-autocomplete-range>

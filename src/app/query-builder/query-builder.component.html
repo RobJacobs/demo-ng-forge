@@ -23,41 +23,38 @@
   <ng-container [formGroup]="formGroup">
     <div class="filter__form">
       <forge-autocomplete formControlName="property" [filter]="propertyFilter">
-        <forge-text-field required [appFormControlInvalid]="formGroup.controls.property">
+        <forge-text-field required [appFormControlInvalid]="formGroup.controls.property" invalidMessage="A property is required">
+          <label slot="label" for="{{ 'query-builder--filter-property-' + index }}">Property</label>
           <input type="text" id="{{ 'query-builder--filter-property-' + index }}" />
-          <label for="{{ 'query-builder--filter-property-' + index }}">Property</label>
           <forge-icon slot="end" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
-          <span slot="support-text" class="app--form-control-invalid">A property is required</span>
         </forge-text-field>
       </forge-autocomplete>
 
-      <forge-select formControlName="operator" label="Operator" required [appFormControlInvalid]="formGroup.controls.operator">
+      <forge-select formControlName="operator" label="Operator" required [appFormControlInvalid]="formGroup.controls.operator" invalidMessage="An operator is required">
         @for (operator of operatorOptions; track i; let i = $index) {
           <forge-option [value]="operator.value">{{ operator.label }}</forge-option>
         }
-        <span slot="support-text" class="app--form-control-invalid">An operator is required</span>
       </forge-select>
 
       @if (formGroup.controls.operator.value === 6) {
         <div class="filter__form__range">
-          <forge-text-field required [appFormControlInvalid]="formGroup.controls.minValue">
+          <forge-text-field required [appFormControlInvalid]="formGroup.controls.minValue" invalidMessage="A minimum value is required">
+            <label slot="label" for="{{ 'query-builder--filter-min-' + index }}">Minimum</label>
             <input type="text" id="{{ 'query-builder--filter-min-' + index }}" formControlName="minValue" />
-            <label for="{{ 'query-builder--filter-min-' + index }}" slot="label">Minimum</label>
-            <span slot="support-text" class="app--form-control-invalid">A minimum value is required</span>
           </forge-text-field>
-          <forge-text-field required [appFormControlInvalid]="formGroup.controls.maxValue">
+          <forge-text-field
+            required
+            [appFormControlInvalid]="formGroup.controls.maxValue"
+            [invalidMessage]="formGroup.controls.maxValue.errors.required ? 'A maximum value is required' : formGroup.controls.maxValue.errors.range ? 'Max value must be greater or equal to min value' : ''"
+          >
+            <label slot="label" for="{{ 'query-builder--filter-max-' + index }}">Maximum</label>
             <input type="text" id="{{ 'query-builder--filter-max-' + index }}" formControlName="maxValue" />
-            <label for="{{ 'query-builder--filter-max-' + index }}" slot="label">Maximum</label>
-            <span slot="support-text" class="app--form-control-invalid">
-              {{ formGroup.controls.maxValue.errors.required ? 'A maximum value is required' : formGroup.controls.maxValue.errors.range ? 'Max value must be greater or equal to min value' : '' }}
-            </span>
           </forge-text-field>
         </div>
       } @else {
-        <forge-text-field required [appFormControlInvalid]="formGroup.controls.value">
+        <forge-text-field required [appFormControlInvalid]="formGroup.controls.value" invalidMessage="A value is required">
+          <label slot="label" for="{{ 'query-builder--filter-value-' + index }}">Value</label>
           <input type="text" id="{{ 'query-builder--filter-value-' + index }}" formControlName="value" />
-          <label for="{{ 'query-builder--filter-value-' + index }}" slot="label">Value</label>
-          <span slot="support-text" class="app--form-control-invalid">A value is required</span>
         </forge-text-field>
       }
 

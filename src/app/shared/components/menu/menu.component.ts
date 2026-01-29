@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, inject, input } from '@angular/core';
+import { Component, ElementRef, inject, input, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { ButtonComponent } from '@tylertech/forge';
 import {
   ForgeButtonModule,
   ForgeDrawerModule,
@@ -35,6 +36,7 @@ import { AppCacheService } from 'src/app/app-cache.service';
 export class MenuComponent {
   private router = inject(Router);
   private elementRef = inject(ElementRef);
+  @ViewChild('menuExpander') private menuExpander: ElementRef;
   public appCache = inject(AppCacheService);
 
   public readonly options = input<any[]>();
@@ -52,5 +54,8 @@ export class MenuComponent {
     if (!this.appCache.menu.open) {
       (this.elementRef.nativeElement as HTMLElement).querySelectorAll('forge-expansion-panel').forEach((element) => (element.open = false));
     }
+    requestAnimationFrame(() => {
+      this.menuExpander.nativeElement.focus({});
+    });
   }
 }

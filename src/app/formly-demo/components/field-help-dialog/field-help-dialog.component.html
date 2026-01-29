@@ -37,6 +37,8 @@
   </div>
 
   <forge-toolbar slot="footer" inverted="true">
-    <forge-paginator slot="end" [pageIndex]="paginator.pageIndex" [pageSize]="paginator.pageSize" [total]="paginator.total" (forge-paginator-change)="onPaginatorChange($event.detail)" [disabled]="isBusy || !data.length"> </forge-paginator>
+    <nav slot="end" aria-label="pagination">
+      <forge-paginator [pageIndex]="paginator.pageIndex" [pageSize]="paginator.pageSize" [total]="paginator.total" (forge-paginator-change)="onPaginatorChange($event.detail)" [disabled]="isBusy || !data.length"> </forge-paginator>
+    </nav>
   </forge-toolbar>
 </forge-scaffold>

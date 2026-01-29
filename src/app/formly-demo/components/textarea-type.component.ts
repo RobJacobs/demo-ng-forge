@@ -10,11 +10,10 @@ import { FormlyDemoService } from '../formly-demo.service';
   selector: 'app-formly-textarea',
   template: `
     <forge-text-field [required]="props.required" [invalid]="showError">
-      <textarea [id]="id" [cols]="props.cols" [rows]="props.rows" [readonly]="props.readonly" [formControl]="formControl" [formlyAttributes]="field">
-      </textarea>
       @if (props.label) {
-        <label [attr.for]="id" slot="label">{{ props.label }}</label>
+        <label slot="label" [attr.for]="id">{{ props.label }}</label>
       }
+      <textarea [id]="id" [cols]="props.cols" [rows]="props.rows" [readonly]="props.readonly" [formControl]="formControl" [formlyAttributes]="field"></textarea>
       @if (showError) {
         <span slot="helper-text">
           <formly-validation-message [field]="field"></formly-validation-message>

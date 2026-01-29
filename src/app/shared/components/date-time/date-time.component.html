@@ -1,21 +1,21 @@
 <forge-text-field>
-  <input #dateTimeInput type="text" [id]="id" [formControl]="dateTime" [imask]="mask" [unmask]="'typed'" />
   @if (label?.length) {
     <label [attr.for]="id" slot="label">{{ label }}</label>
   }
+  <input #dateTimeInput type="text" [id]="id" [formControl]="dateTime" [imask]="mask" [unmask]="'typed'" />
   <forge-icon-button [id]="'popover-toggle-' + id" slot="end" tabindex="-1" aria-label="Open calendar" density="medium" [disabled]="dateTime.disabled">
     <forge-icon name="insert_invitation"></forge-icon>
   </forge-icon-button>
-  <forge-popover [anchor]="'popover-toggle-' + id" placement="bottom-end" (forge-popover-toggle)="onPopoverToggle($event)" animationType="none">
-    <div class="calendar-popover" (keydown.tab)="onKeyDown($any($event))" tabindex="0">
-      <forge-calendar #calendar [id]="'calendar-' + id" prevent-focus="true" (forge-calendar-date-select)="onDateSelected($event)"></forge-calendar>
+  <forge-popover cdkTrapFocus [anchor]="'popover-toggle-' + id" placement="bottom-end" (forge-popover-toggle)="onPopoverToggle($event)" animationType="none">
+    <form class="calendar-popover" novalidate autocomplete="off">
+      <forge-calendar #calendar [id]="'calendar-' + id" (forge-calendar-date-select)="onDateSelected($event)" preventFocus="false" tabindex="0"></forge-calendar>
       <forge-divider></forge-divider>
       <forge-time-picker [formControl]="time">
         <forge-text-field>
-          <input #timeInput type="text" [id]="'time-' + id" placeholder="hh:mm:ss aa" appAutoFocus />
-          <label [attr.for]="'time-' + id" slot="label">Time</label>
+          <label slot="label" [attr.for]="'time-' + id" slot="label">Time</label>
+          <input #timeInput type="text" [id]="'time-' + id" placeholder="hh:mm:ss aa" />
         </forge-text-field>
       </forge-time-picker>
-    </div>
+    </form>
   </forge-popover>
 </forge-text-field>

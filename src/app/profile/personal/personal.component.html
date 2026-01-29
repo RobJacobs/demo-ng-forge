@@ -1,41 +1,37 @@
 <ng-container [formGroup]="formGroup">
   <div class="form-grid">
-    <forge-text-field required [appFormControlInvalid]="formGroup.controls.firstName">
+    <forge-text-field required [appFormControlInvalid]="formGroup.controls.firstName" [invalidMessage]="firstNameErrorMessage">
+      <label slot="label" for="profile--personal--first-name">First name</label>
       <input type="text" id="profile--personal--first-name" formControlName="firstName" [appInputCasing]="'upper'" appAutoFocus />
-      <label for="profile--personal--first-name" slot="label">First name</label>
-      <span slot="support-text" class="app--form-control-invalid">First name is required</span>
     </forge-text-field>
 
-    <forge-text-field required [appFormControlInvalid]="formGroup.controls.lastName">
+    <forge-text-field required [appFormControlInvalid]="formGroup.controls.lastName" invalidMessage="Last name is required">
+      <label slot="label" for="profile--personal--last-name">Last name</label>
       <input type="text" id="profile--personal--last-name" formControlName="lastName" />
-      <label for="profile--personal--last-name" slot="label">Last name</label>
-      <span slot="support-text" class="app--form-control-invalid">Last name is required</span>
     </forge-text-field>
 
-    <forge-select label="Gender" formControlName="gender" [options]="genderOptions"></forge-select>
+    <forge-select id="profile--personal--gender" label="Gender" required formControlName="gender" [options]="genderOptions" [appFormControlInvalid]="formGroup.controls.gender" invalidMessage="Gender is required"></forge-select>
 
-    <forge-text-field required [appFormControlInvalid]="formGroup.controls.email">
+    <forge-text-field required [appFormControlInvalid]="formGroup.controls.email" invalidMessage="Email is required">
+      <label slot="label" for="profile--personal--email">Email</label>
       <input type="text" id="profile--personal--email" formControlName="email" />
-      <label for="profile--personal--email" slot="label">Email</label>
-      <span slot="support-text" class="app--form-control-invalid">Email is required</span>
     </forge-text-field>
 
-    <forge-text-field required [appFormControlInvalid]="formGroup.controls.phone">
+    <forge-text-field required [appFormControlInvalid]="formGroup.controls.phone" invalidMessage="Phone number is required">
+      <label slot="label" for="profile--personal--phone">Phone</label>
       <input type="text" id="profile--personal--phone" formControlName="phone" />
-      <label for="profile--personal--phone" slot="label">Phone</label>
-      <span slot="support-text" class="app--form-control-invalid">Phone number is required</span>
     </forge-text-field>
 
     <forge-date-picker formControlName="dateOfBirth">
-      <forge-text-field>
+      <forge-text-field [appFormControlInvalid]="formGroup.controls.dateOfBirth" invalidMessage="DOB is required">
+        <label slot="label" for="profile--personal--dob">Date of birth</label>
         <input type="text" id="profile--personal--dob" />
-        <label for="profile--personal--dob">Date of birth</label>
       </forge-text-field>
     </forge-date-picker>
 
     <forge-text-field class="form-grid__comment form-grid--col-span">
+      <label slot="label" for="profile--personal--comment">Comment</label>
       <textarea type="text" id="profile--personal--comment" formControlName="comment" rows="4"></textarea>
-      <label for="profile--personal--comment">Comment</label>
     </forge-text-field>
 
     <forge-label-value style="--forge-label-value-align: stretch">
@@ -72,10 +68,9 @@
     <ng-container formArrayName="friends">
       @for (friend of formGroup.controls.friends.controls; track i; let i = $index) {
         <div class="friend">
-          <forge-select [options]="friendOptions" [formControlName]="i" label="Friend" [appFormControlInvalid]="formGroup.controls.friends.controls[i]">
-            <span slot="support-text" class="app--form-control-invalid">A friend is required</span>
-            <forge-icon-button slot="accessory" density="medium" aria-label="Delete" (click)="onDeleteFriend(i)">
-              <forge-icon name="delete"></forge-icon>
+          <forge-select [options]="friendOptions" [formControlName]="i" label="Friend" [appFormControlInvalid]="formGroup.controls.friends.controls[i]" invalidMessage="A friend is required">
+            <forge-icon-button slot="accessory" density="medium" [attr.aria-label]="`Delete friend ${i}`" (click)="onDeleteFriend(i)">
+              <forge-icon aria-hidden="true" name="delete"></forge-icon>
             </forge-icon-button>
           </forge-select>
         </div>

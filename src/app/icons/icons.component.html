@@ -12,9 +12,9 @@
 </forge-toolbar>
 
 <div class="body">
-  <div class="body__icons">
+  <div class="body__icons" role="list">
     @for (icon of cache.iconOptions; track i; let i = $index) {
-      <div class="icon">
+      <div class="icon" role="listitem">
         <forge-icon lazy [name]="icon.value"></forge-icon>
         <div class="forge-typography--label1">{{ icon.value }}</div>
       </div>

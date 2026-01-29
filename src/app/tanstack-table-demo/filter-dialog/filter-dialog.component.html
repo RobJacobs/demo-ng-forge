@@ -19,7 +19,7 @@
 
     <ng-container formGroupName="firstName">
       <forge-text-field>
-        <label for="filter-dialog--first-name" slot="label">First name</label>
+        <label slot="label" for="filter-dialog--first-name">First name</label>
         <input type="text" id="filter-dialog--first-name" formControlName="value" appAutoFocus />
         <ng-container *ngTemplateOutlet="opertatorAddonTemplate; context: { name: 'firstName' }"></ng-container>
       </forge-text-field>
@@ -27,7 +27,7 @@
 
     <ng-container formGroupName="lastName">
       <forge-text-field>
-        <label for="filter-dialog--last-name" slot="label">Last name</label>
+        <label slot="label" for="filter-dialog--last-name">Last name</label>
         <input type="text" id="filter-dialog--last-name" formControlName="value" />
         <ng-container *ngTemplateOutlet="opertatorAddonTemplate; context: { name: 'lastName' }"></ng-container>
       </forge-text-field>
@@ -37,7 +37,7 @@
 
     <ng-container formGroupName="occupation">
       <forge-text-field>
-        <label for="filter-dialog--occupation" slot="label">Occupation</label>
+        <label slot="label" for="filter-dialog--occupation">Occupation</label>
         <input type="text" id="filter-dialog--occupation" formControlName="value" />
         <ng-container *ngTemplateOutlet="opertatorAddonTemplate; context: { name: 'occupation' }"></ng-container>
       </forge-text-field>

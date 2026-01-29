@@ -11,10 +11,10 @@ import { FormlyDemoService } from '../formly-demo.service';
   template: `
     <forge-date-picker [max]="$any(props.max)" [min]="$any(props.min)">
       <forge-text-field [required]="props.required" [invalid]="showError">
-        <input [id]="id" type="text" [placeholder]="props.placeholder" [readonly]="props.readonly" [formControl]="formControl" [formlyAttributes]="field" />
         @if (props.label) {
-          <label [attr.for]="id" slot="label">{{ props.label }}</label>
+          <label slot="label" [attr.for]="id">{{ props.label }}</label>
         }
+        <input [id]="id" type="text" [placeholder]="props.placeholder" [readonly]="props.readonly" [formControl]="formControl" [formlyAttributes]="field" />
         @if (showError) {
           <span slot="helper-text">
             <formly-validation-message [field]="field"></formly-validation-message>

@@ -1,7 +1,7 @@
 <forge-autocomplete #rangeAutocomplete [filter]="onFilter" [selectedTextBuilder]="selectedTextBuilder" [popupHeaderBuilder]="optionHeaderBuilder" multiple (forge-autocomplete-change)="onAutocompleteChange()">
   <forge-text-field>
+    <label slot="label" [attr.for]="elementId">{{ label() }}</label>
     <input #filterInput type="text" [attr.id]="elementId" />
-    <label [attr.for]="elementId">{{ label() }}</label>
     <forge-icon slot="end" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
   </forge-text-field>
 </forge-autocomplete>

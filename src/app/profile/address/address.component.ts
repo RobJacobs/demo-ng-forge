@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ForgeTextFieldModule } from '@tylertech/forge-angular';
 
@@ -12,11 +12,15 @@ import { ProfileService } from '../profile.service';
   styleUrls: ['./address.component.scss'],
   host: {
     role: 'tabpanel',
-    id: 'app--profile--address'
+    id: 'app--profile--address--tab-body',
+    'aria-labelledby': 'app--profile--address--tab',
+    tabindex: '-1'
   }
 })
 export class AddressComponent {
   public cache = inject(ProfileService);
+
+  public streetErrorMessage = 'Street name is required';
 
   public get formGroup() {
     return this.cache.formGroup.controls.addressFormGroup;

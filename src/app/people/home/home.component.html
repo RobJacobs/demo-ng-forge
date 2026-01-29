@@ -63,7 +63,9 @@
     } @else {
       @if (recordCount) {
         <div class="table__footer">
-          <forge-paginator class="app--flex-right" [pageIndex]="filterCache.skip / filterCache.take" [pageSize]="filterCache.take" [total]="recordCount" (forge-paginator-change)="onTablePaginatorChange($event)"></forge-paginator>
+          <nav class="app--flex-right" aria-label="pagination">
+            <forge-paginator [pageIndex]="filterCache.skip / filterCache.take" [pageSize]="filterCache.take" [total]="recordCount" (forge-paginator-change)="onTablePaginatorChange($event)"></forge-paginator>
+          </nav>
         </div>
       } @else {
         <div class="empty-state">

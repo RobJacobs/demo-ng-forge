@@ -6,6 +6,8 @@
 }
 
 forge-mini-drawer {
+  --forge-mini-drawer-width: 72px;
+
   .menu {
     width: drawer-mini-tokens.get('width');
 
@@ -31,5 +33,9 @@ forge-mini-drawer {
     &--nested {
       margin-left: 16px;
     }
+  }
+
+  &-expander {
+    margin: 8px;
   }
 }

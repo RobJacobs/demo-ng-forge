@@ -9,14 +9,3 @@
   background-color: var(--forge-theme-surface-dim);
   outline: none;
 }
-
-.menu-expander {
-  --forge-button-height: 3rem;
-
-  &--open {
-    forge-icon {
-      margin-left: auto;
-      margin-right: 8px;
-    }
-  }
-}

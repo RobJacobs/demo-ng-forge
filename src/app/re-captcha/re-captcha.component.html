@@ -15,19 +15,19 @@
     </div>
 
     <forge-text-field>
+      <label slot="label" for="re-captcha--action">Action</label>
       <input type="text" id="re-captcha--action" formControlName="recaptchaAction" />
-      <label for="re-captcha--action" slot="label">Action</label>
     </forge-text-field>
     <forge-text-field class="form-grid--col-span2">
+      <label slot="label" for="re-captcha--site-key">Site key</label>
       <input type="text" id="re-captcha--site-key" formControlName="recaptchaSiteKey" />
-      <label for="re-captcha--site-key" slot="label">Site key</label>
       <span slot="helper-text" class="forge-typography--label2">Site key can only be set once, refresh the page to change site key.</span>
       <span slot="helper-text" class="forge-typography--label2">reCaptcha must be Intialized after setting site key.</span>
       <span slot="helper-text" class="forge-typography--label2">Execute will generate a new token.</span>
     </forge-text-field>
     <forge-text-field class="form-grid--col-span2">
+      <label slot="label" for="re-captcha--google-api-key">Google API key</label>
       <input type="text" id="re-captcha--google-api-key" formControlName="googleAPIKey" />
-      <label for="re-captcha--google-api-key" slot="label">Google API key</label>
       <span slot="helper-text" class="forge-typography--label2">Google API key is required to Assess a token.</span>
       <span slot="helper-text" class="forge-typography--label2">Token may only be assessed once, then it will become invalid.</span>
     </forge-text-field>

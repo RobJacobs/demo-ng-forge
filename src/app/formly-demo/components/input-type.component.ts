@@ -10,6 +10,9 @@ import { FormlyDemoService } from '../formly-demo.service';
   selector: 'app-formly-input',
   template: `
     <forge-text-field [required]="props.required" [invalid]="showError">
+      @if (props.label) {
+        <label slot="label" [attr.for]="id">{{ props.label }}</label>
+      }
       <input
         #input
         [id]="id"
@@ -19,9 +22,6 @@ import { FormlyDemoService } from '../formly-demo.service';
         [formControl]="formControl"
         [formlyAttributes]="field"
       />
-      @if (props.label) {
-        <label [attr.for]="id" slot="label">{{ props.label }}</label>
-      }
       @if (showError) {
         <span slot="helper-text">
           <formly-validation-message [field]="field"></formly-validation-message>

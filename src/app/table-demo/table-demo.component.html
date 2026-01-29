@@ -193,13 +193,14 @@
   </form>
 
   <forge-toolbar class="footer" inverted="true">
-    <forge-paginator
-      slot="end"
-      [pageIndex]="cache.filter.skip / cache.filter.take"
-      [pageSize]="cache.filter.take"
-      [total]="cache.totalRecords"
-      (forge-paginator-change)="onPaginatorChange($event.detail)"
-      [disabled]="isEditing || isBusy"
-    ></forge-paginator>
+    <nav slot="end" aria-label="pagination">
+      <forge-paginator
+        [pageIndex]="cache.filter.skip / cache.filter.take"
+        [pageSize]="cache.filter.take"
+        [total]="cache.totalRecords"
+        (forge-paginator-change)="onPaginatorChange($event.detail)"
+        [disabled]="isEditing || isBusy"
+      ></forge-paginator>
+    </nav>
   </forge-toolbar>
 </div>

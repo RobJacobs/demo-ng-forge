@@ -37,7 +37,9 @@
 
     @if (recordCount) {
       <forge-toolbar inverted="true">
-        <forge-paginator slot="end" [pageIndex]="filterCache.skip / filterCache.take" [pageSize]="filterCache.take" [total]="recordCount" (forge-paginator-change)="onTablePaginatorChange($event.detail)"></forge-paginator>
+        <nav slot="end" aria-label="pagination">
+          <forge-paginator [pageIndex]="filterCache.skip / filterCache.take" [pageSize]="filterCache.take" [total]="recordCount" (forge-paginator-change)="onTablePaginatorChange($event.detail)"></forge-paginator>
+        </nav>
       </forge-toolbar>
     }
   }

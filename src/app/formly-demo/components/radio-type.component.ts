@@ -7,7 +7,7 @@ import { ForgeRadioGroupModule, ForgeRadioModule } from '@tylertech/forge-angula
   selector: 'app-formly-radio',
   template: `
     @if (props.label) {
-      <label [attr.for]="id" slot="label">{{ props.label }}</label>
+      <label slot="label" [attr.for]="id">{{ props.label }}</label>
     }
     <forge-radio-group [name]="id + '-radio-group'">
       @for (option of $any(props.options); track i; let i = $index) {

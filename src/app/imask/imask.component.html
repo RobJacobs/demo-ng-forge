@@ -5,8 +5,8 @@
 <div class="body">
   <form novalidate autocomplete="off" [formGroup]="formGroup">
     <forge-text-field>
+      <label slot="label" for="imask--input">Input</label>
       <input #input id="imask--input" type="text" [imask]="mask" [unmask]="unmask" #imaskRef="imask" formControlName="input" />
-      <label for="imask--input" slot="label">Input</label>
       <span slot="support-text">{{ helpText }}</span>
     </forge-text-field>
     <div style="width: 600px">
@@ -14,8 +14,8 @@
       <div><b>number mask</b>: (#) required digit, (&) optional digit, (-) sign, (.) decimal, (,) separator</div>
     </div>
     <forge-text-field>
+      <label slot="label" for="imask--format">Format</label>
       <input #input id="imask--format" type="text" formControlName="format" />
-      <label for="imask--format" slot="label">Format</label>
     </forge-text-field>
     <forge-select formControlName="maskType" label="Mask type">
       @for (option of maskOptions; track i; let i = $index) {

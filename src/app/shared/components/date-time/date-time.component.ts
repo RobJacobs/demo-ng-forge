@@ -1,6 +1,7 @@
 import { Component, forwardRef, Input, HostListener, OnInit, inject, DestroyRef, viewChild, ElementRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR, FormControl, ReactiveFormsModule, ControlValueAccessor } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CdkTrapFocus } from '@angular/cdk/a11y';
 import { isValid as dateIsValid, parse as dateParse, format as dateFormat } from 'date-fns';
 import * as IMask from 'imask';
 import { IMaskDirective } from 'angular-imask';
@@ -17,7 +18,6 @@ import {
 } from '@tylertech/forge-angular';
 
 import { Utils } from 'src/utils';
-import { AutoFocusDirective } from '../../directives';
 
 @Component({
   selector: 'app-date-time',
@@ -25,6 +25,7 @@ import { AutoFocusDirective } from '../../directives';
   styleUrls: ['./date-time.component.scss'],
   imports: [
     ReactiveFormsModule,
+    CdkTrapFocus,
     IMaskDirective,
     ForgeCalendarModule,
     ForgeDividerModule,
@@ -32,8 +33,7 @@ import { AutoFocusDirective } from '../../directives';
     ForgeIconModule,
     ForgePopoverModule,
     ForgeTextFieldModule,
-    ForgeTimePickerModule,
-    AutoFocusDirective
+    ForgeTimePickerModule
   ],
   providers: [
     {
@@ -122,6 +122,10 @@ export class DateTimeComponent implements OnInit, ControlValueAccessor {
       if (!document.activeElement || document.activeElement === document.body) {
         this.dateTimeInputElementRef().nativeElement.focus();
       }
+    } else {
+      requestAnimationFrame(() => {
+        this.timeInputElementRef().nativeElement.focus();
+      });
     }
   }
 
@@ -131,15 +135,6 @@ export class DateTimeComponent implements OnInit, ControlValueAccessor {
       selectedDate = mergeDateWithTime(selectedDate, this.time.value as string, this.timePrecision === 's');
     }
     this.dateTime.setValue(selectedDate);
-  }
-
-  public onKeyDown(event: KeyboardEvent) {
-    if (event.target === this.timeInputElementRef().nativeElement) {
-      event.preventDefault();
-      (
-        (this.calendarElementRef().nativeElement as HTMLElement)?.shadowRoot?.querySelector(CALENDAR_CONSTANTS.selectors.PREVIOUS_BUTTON) as HTMLElement
-      )?.focus();
-    }
   }
 
   public writeValue(value?: Date) {

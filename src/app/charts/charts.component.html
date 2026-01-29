@@ -18,15 +18,15 @@
   </div>
 </forge-toolbar>
 
-<forge-tab-bar secondary [activeTab]="activeTab">
-  <forge-tab (forge-tab-select)="onTabSelected(0)">D3</forge-tab>
-  <forge-tab (forge-tab-select)="onTabSelected(1)">Google</forge-tab>
+<forge-tab-bar [activeTab]="activeTab">
+  <forge-tab (forge-tab-select)="onTabSelected(0)" id="app--charts--d3--tab" aria-controls="app--charts--d3--tab-body">D3</forge-tab>
+  <forge-tab (forge-tab-select)="onTabSelected(1)" id="app--charts--google--tab" aria-controls="app--charts--google--tab-body">Google</forge-tab>
 </forge-tab-bar>
 
 <div class="body">
   @if (activeTab === 0) {
-    <app-charts-d3-chart [chartType]="chartType"></app-charts-d3-chart>
+    <app-charts-d3-chart [chartType]="chartType" id="app--charts--d3--tab-body" aria-labelledby="app--charts--d3--tab" role="tabpanel" tabindex="-1"></app-charts-d3-chart>
   } @else if (activeTab === 1) {
-    <app-charts-google-chart [chartType]="chartType"></app-charts-google-chart>
+    <app-charts-google-chart [chartType]="chartType" id="app--charts--google--tab-body" aria-labelledby="app--charts--google--tab" role="tabpanel" tabindex="-1"></app-charts-google-chart>
   }
 </div>

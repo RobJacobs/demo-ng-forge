@@ -15,8 +15,8 @@
       <div class="card-body__section">
         <div>File viewer</div>
         <forge-text-field>
+          <label slot="label" for="test--parent--file-name">File name</label>
           <input type="text" id="test--parent--file-name" [(ngModel)]="fileName" autocomplete="off" />
-          <label for="test--parent--file-name" slot="label">File name</label>
           <div slot="support-text">
             <div slot="support-text">Must exist in src/mock-data.</div>
             <div slot="support-text">Included examples: test.docx test.jpg test.pdf test.png test.txt test.xlsx test.xml</div>
@@ -34,21 +34,21 @@
       <form class="card-body__section" [formGroup]="formGroup" novalidate autocomplete="off">
         <div>Async validation</div>
         <forge-text-field>
+          <label slot="label" for="test--parent--name">Name</label>
           <input type="text" id="test--parent--name" formControlName="name" />
-          <label for="test--parent--name" slot="label">Name</label>
           <span slot="support-text">
             status: {{ formGroup.controls.name.status }} - valid: {{ formGroup.controls.name.valid }} - pristine: {{ formGroup.controls.name.pristine }} - touched: {{ formGroup.controls.name.touched }} - dirty:
             {{ formGroup.controls.name.dirty }}
           </span>
         </forge-text-field>
         <forge-text-field>
+          <label slot="label" for="test--parent--age">Age</label>
           <input type="text" id="test--parent--age" formControlName="age" />
-          <label for="test--parent--age" slot="label">Age</label>
           <span slot="support-text">{{ formGroup.controls.age.status }}</span>
         </forge-text-field>
         <forge-text-field>
+          <label slot="label" for="test--parent--location">Location</label>
           <input type="text" id="test--parent--location" formControlName="location" />
-          <label for="test--parent--location" slot="label">Location</label>
           <span slot="support-text">{{ formGroup.controls.location.status }}</span>
         </forge-text-field>
         <div class="card-body__section__footer">
