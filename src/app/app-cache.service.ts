@@ -15,9 +15,10 @@ export interface IAppCacheService {
   providedIn: 'root'
 })
 export class AppCacheService implements IAppCacheService {
+  public mode = signal<'current' | 'legacy'>('current');
   public isBusy = signal<boolean>(false);
   public storageKey = 'demo-ng-forge--app';
-  public theme: 'dark' | 'light' = 'light';
+  public theme = signal<'dark' | 'light'>('light');
   public layoutMode: 'sm' | 'md' | 'lg' = 'lg';
   public menu = {
     open: true,

@@ -54,6 +54,14 @@ export const routes: Routes = [
         path: 'dashboard',
         title: 'Dashboard',
         loadComponent: () => import('./dashboard/dashboard.component').then((m) => m.DashboardComponent)
+        // loadComponent: () => {  // https://angular.dev/guide/routing/define-routes#injection-context-lazy-loading
+        //   const appCache = inject(AppCacheService);
+        //   if (appCache.mode() === 'current') {
+        //     return import('./dashboard/dashboard.component').then((m) => m.DashboardComponent);
+        //   } else {
+        //     return import('./charts/charts.component').then((m) => m.ChartsComponent);
+        //   }
+        // }
       },
       {
         path: 'profile',

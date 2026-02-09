@@ -1,7 +1,7 @@
 <forge-app-bar title-text="Demo Angular & Forge components" type="static" raised="true">
   <forge-icon slot="logo" name="tyler_talking_t_logo"></forge-icon>
   <forge-icon-button slot="end" (click)="onThemeChange()" aria-label="Toggle theme">
-    <forge-icon [name]="appCache.theme === 'dark' ? 'wb_sunny' : 'nightlight_round'"></forge-icon>
+    <forge-icon [name]="appCache.theme() === 'dark' ? 'wb_sunny' : 'nightlight_round'"></forge-icon>
   </forge-icon-button>
   <forge-tooltip slot="end">Toggle theme</forge-tooltip>
 </forge-app-bar>
