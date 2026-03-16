@@ -55,9 +55,9 @@
   } @else {
     <forge-menu [options]="option.options" placement="right-start" (forge-menu-select)="onMenuItemSelected($event.detail.value)">
       <forge-list-item class="menu__item" [value]="option.value" [selected]="option.value === selectedValue()?.join('/')">
-        @if (option.icon) {
-          <forge-icon slot="start" [name]="option.icon"></forge-icon>
-        }
+        <button type="button" [attr.aria-label]="option.label">
+          <forge-icon [name]="option.icon"></forge-icon>
+        </button>
       </forge-list-item>
       @if (option.label?.length) {
         <forge-tooltip>{{ option.label }}</forge-tooltip>

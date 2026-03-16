@@ -1,9 +1,9 @@
 import { ApplicationConfig, provideAppInitializer } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
-import { interceptorProviders } from './shared/interceptors/interceptors';
+import { busyInterceptor } from 'src/app/shared/interceptors/busy.interceptor';
 
 export function initializeAppFactory(): () => Promise<void> {
   return () => {
@@ -17,9 +17,8 @@ export function initializeAppFactory(): () => Promise<void> {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withInterceptors([busyInterceptor])),
     provideRouter(routes, withComponentInputBinding()),
-    provideAppInitializer(initializeAppFactory()),
-    interceptorProviders
+    provideAppInitializer(initializeAppFactory())
   ]
 };

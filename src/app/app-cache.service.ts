@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
 
 export interface IAppCacheService {
@@ -8,7 +8,6 @@ export interface IAppCacheService {
     open: boolean;
     options: any[];
   };
-  activeRoute: { path: string; params: any }[];
 }
 
 @Injectable({
@@ -75,9 +74,11 @@ export class AppCacheService implements IAppCacheService {
       { label: 'Re-Captcha', value: 're-captcha', icon: 'security' }
     ]
   };
-  public activeRoute: { path: string; params: any }[] = [];
-  public currentRoute: string;
-  public previousRoute: string;
+  public currentRoute = signal<string>('');
+  public previousRoute = signal<string>('');
+  public routePaths = computed<string[]>(() => {
+    return this.currentRoute().split('/');
+  });
 
   public static getResolvedUrl(route: ActivatedRouteSnapshot, routeConfig = false): string {
     let url = '';

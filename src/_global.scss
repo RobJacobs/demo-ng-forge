@@ -1,5 +1,6 @@
 @forward '@tylertech/forge/sass/core/styles/typography' as forge-typography-*;
 @forward '@tylertech/forge/sass/core/styles/tokens/color-palette' as forge-color-*;
 @forward '@tylertech/forge/sass/utils/mixins-flex' as forge-flex-*;
+@forward '@tylertech/forge/sass/utils/_mixins-media' as forge-media-*;
 @forward 'src/mixins' as app-*;
 @forward 'src/variables' as app-*;

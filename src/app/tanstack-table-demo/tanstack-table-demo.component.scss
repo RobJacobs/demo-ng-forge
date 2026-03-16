@@ -109,7 +109,8 @@ $table-cell-inline-padding: 8px;
         &__cell {
           @include cell-padding();
 
-          forge-text-field {
+          forge-text-field,
+          forge-select {
             width: 100%;
             --forge-field-background: var(--forge-theme-surface);
 
@@ -223,13 +224,12 @@ $table-cell-inline-padding: 8px;
   @include global.app-toolbar-gap();
 }
 
+@include global.app-drag-drop();
+
 .cdk-drag {
   &-preview {
-    @include global.app-container-outlined();
-    border: solid 2px global.$forge-color-indigo-500;
     display: flex;
-    padding-inline: 8px;
-    overflow: hidden;
+    padding-inline: $table-cell-inline-padding;
 
     .forge-table-head__cell-actions {
       display: none;
@@ -240,23 +240,24 @@ $table-cell-inline-padding: 8px;
     .forge-table-head__cell-container {
       visibility: hidden;
     }
-
-    background-color: global.$forge-color-indigo-50;
-  }
-
-  &-animating {
-    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
   }
 }
 
 .cdk-drop-list {
   &-dragging {
-    .cdk-drag:not(.cdk-drag-placeholder) {
-      transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-    }
 
-    th {
-      pointer-events: none;
+    .forge-table-head {
+      &__cell {
+        cursor: move !important;
+
+        &-container {
+          pointer-events: none;
+        }
+
+        &-actions {
+          display: none;
+        }
+      }
     }
   }
 }

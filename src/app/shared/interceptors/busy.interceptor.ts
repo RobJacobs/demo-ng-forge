@@ -1,33 +1,28 @@
-import { Injectable, inject } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpContextToken } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { inject } from '@angular/core';
+import { HttpContextToken, HttpInterceptorFn } from '@angular/common/http';
 import { finalize } from 'rxjs/operators';
 import { AppCacheService } from 'src/app/app-cache.service';
 
 export const SHOW_BUSY_INDICATOR = new HttpContextToken<boolean>(() => false);
 
-@Injectable()
-export class BusyInterceptor implements HttpInterceptor {
-  private appCache = inject(AppCacheService);
-  private activeRequests = 0;
+export const busyInterceptor: HttpInterceptorFn = (request, next) => {
+  const isBusy = inject(AppCacheService).isBusy;
+  let requestCount = 0;
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    if (req.context.get(SHOW_BUSY_INDICATOR)) {
-      if (this.activeRequests === 0) {
-        this.appCache.isBusy.set(true);
-      }
-      this.activeRequests++;
-
-      return next.handle(req).pipe(
-        finalize(() => {
-          this.activeRequests--;
-          if (this.activeRequests === 0) {
-            this.appCache.isBusy.set(false);
-          }
-        })
-      );
-    } else {
-      return next.handle(req);
+  if (request.context.get(SHOW_BUSY_INDICATOR)) {
+    requestCount++;
+    if (requestCount) {
+      isBusy.set(true);
     }
+    return next(request).pipe(
+      finalize(() => {
+        requestCount--;
+        if (requestCount <= 0) {
+          isBusy.set(false);
+        }
+      })
+    );
+  } else {
+    return next(request);
   }
-}
+};

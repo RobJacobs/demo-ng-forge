@@ -1,65 +1,25 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRouteSnapshot, Router, ActivatedRoute, NavigationEnd, RouterOutlet } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { RouterOutlet } from '@angular/router';
 
 import { AppCacheService } from './app-cache.service';
 import { ForgeButtonModule, ForgeDrawerModule, ForgeIconModule, ForgeMiniDrawerModule, ForgeScaffoldModule } from '@tylertech/forge-angular';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { MenuComponent } from './shared/components/menu/menu.component';
-import { CallbackPipe } from './shared/pipes/callback.pipe';
 
 @Component({
   selector: 'app-root',
-  imports: [
-    RouterOutlet,
-    ForgeScaffoldModule,
-    ForgeDrawerModule,
-    ForgeButtonModule,
-    ForgeIconModule,
-    ForgeMiniDrawerModule,
-    HeaderComponent,
-    MenuComponent,
-    CallbackPipe
-  ],
+  imports: [RouterOutlet, ForgeScaffoldModule, ForgeDrawerModule, ForgeButtonModule, ForgeIconModule, ForgeMiniDrawerModule, HeaderComponent, MenuComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
   public appCache = inject(AppCacheService);
 
   public ngOnInit() {
-    this.initRouteWatch();
     this.initLayoutWatch();
 
     // const param = encodeURIComponent(btoa(JSON.stringify({ property: 'value' })));
     // const decoded = JSON.parse(atob(decodeURIComponent(param)));
-  }
-
-  public mapRoutes(values: { path: string; params: any }[]): string[] {
-    return values?.map((r) => r.path) || [];
-  }
-
-  private initRouteWatch() {
-    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe({
-      next: () => {
-        const routes: { path: string; params: any }[] = [];
-        const parseRoute = (r: ActivatedRouteSnapshot) => {
-          if (r.url.length) {
-            routes.push({
-              path: r.url[0].path,
-              params: Object.keys(r.params).length ? r.params : undefined
-            });
-          }
-          if (r.children) {
-            r.children.forEach((rc) => parseRoute(rc));
-          }
-        };
-        parseRoute(this.route.snapshot);
-        this.appCache.activeRoute = routes;
-      }
-    });
   }
 
   private initLayoutWatch() {

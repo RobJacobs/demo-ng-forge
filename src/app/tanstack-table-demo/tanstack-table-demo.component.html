@@ -191,7 +191,7 @@
   </forge-toolbar>
 </div>
 
-<ng-template #tableCellHeader let-context>
+<ng-template #tableCellHeaderDefault let-context>
   <span class="forge-table-head__cell-text">{{ context.column.columnDef.headerText }}</span>
   @if (appCache.layoutMode !== 'sm') {
     @if (context.column.getCanSort()) {

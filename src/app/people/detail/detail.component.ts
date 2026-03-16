@@ -50,7 +50,7 @@ export class DetailComponent {
   public onNavigate(route: string) {
     switch (route) {
       case 'back':
-        this.router.navigate([this.appCache.previousRoute]);
+        this.router.navigate([this.appCache.previousRoute()]);
         break;
     }
   }

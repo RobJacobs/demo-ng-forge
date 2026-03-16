@@ -22,8 +22,8 @@ export class RootRouteGuard implements CanActivate, CanDeactivate<Component> {
   private route = inject(ActivatedRoute);
 
   canActivate: CanActivateFn = (currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot) => {
-    this.appCache.previousRoute = AppCacheService.getResolvedUrl(this.route.snapshot);
-    this.appCache.currentRoute = AppCacheService.getResolvedUrl(currentRoute);
+    this.appCache.previousRoute.set(AppCacheService.getResolvedUrl(this.route.snapshot) ?? '');
+    this.appCache.currentRoute.set(AppCacheService.getResolvedUrl(currentRoute));
     return true;
   };
 

@@ -13,7 +13,6 @@ export interface IPetsService {
   appCache: {
     isBusy: Signal<boolean>;
     layoutMode: 'sm' | 'md' | 'lg';
-    activeRoute: { path: string; params: unknown }[];
     menu: {
       open: boolean;
     };

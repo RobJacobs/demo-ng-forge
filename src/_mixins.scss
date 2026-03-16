@@ -156,7 +156,7 @@
   @include toolbar-gap();
 
   @media (max-width: 400px) {
-    @include toolbar-stacked(end);
+    @include toolbar-stacked(start, center, end);
   }
 }
 
@@ -183,6 +183,46 @@
       align-items: stretch;
       row-gap: 8px;
       padding: 8px 0;
+    }
+  }
+}
+
+@mixin drag-drop() {
+  .cdk-drag {
+    background-color: var(--forge-theme-surface);
+
+    &-preview {
+      border-radius: var(--forge-shape-medium);
+      border: solid 2px var(--forge-theme-primary) !important;
+      overflow: hidden;
+    }
+
+    &-placeholder {
+
+      .cdk-drag__content {
+        visibility: hidden;
+      }
+
+      background-color: var(--forge-theme-primary-container-low);
+      border: dashed 1px var(--forge-theme-primary) !important;
+    }
+
+    &-animating {
+      transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    }
+  }
+
+  .cdk-drop-list {
+    &-dragging {
+      cursor: move;
+
+      .cdk-drag {
+        user-select: none;
+
+        &:not(.cdk-drag-placeholder) {
+          transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+        }
+      }
     }
   }
 }

@@ -93,7 +93,7 @@ export class TanstackTableDemoComponent implements OnInit, OnDestroy {
   public cache = inject(TanStackTableDemoService);
 
   private readonly tableElementRef = viewChild.required<ElementRef<HTMLTableElement>>('tableRef');
-  private tableCellHeaderTemplate = viewChild.required<TemplateRef<{ $implicit: CellContext<IPerson, unknown> }>>('tableCellHeader');
+  private tableCellHeaderDefaultTemplate = viewChild.required<TemplateRef<{ $implicit: CellContext<IPerson, unknown> }>>('tableCellHeaderDefault');
   private tableCellDefaultTemplate = viewChild.required<TemplateRef<{ $implicit: CellContext<IPerson, unknown> }>>('tableCellDefault');
   private tableRowSelectHeaderTemplate = viewChild.required<TemplateRef<{ $implicit: CellContext<IPerson, unknown> }>>('tableRowSelectHeader');
   private tableRowSelectTemplate = viewChild.required<TemplateRef<{ $implicit: CellContext<IPerson, unknown> }>>('tableRowSelect');
@@ -128,6 +128,7 @@ export class TanstackTableDemoComponent implements OnInit, OnDestroy {
   public defaultColumnDef: Partial<ComponentColumnDef> = {
     size: 0,
     minSize: 0,
+    header: () => this.tableCellHeaderDefaultTemplate(),
     cell: () => this.tableCellDefaultTemplate()
   };
   public columnDefs: ComponentColumnDef[] = [
@@ -176,25 +177,21 @@ export class TanstackTableDemoComponent implements OnInit, OnDestroy {
     },
     {
       headerText: 'Id',
-      header: () => this.tableCellHeaderTemplate(),
       accessorKey: 'id'
     },
     {
       headerText: 'First name',
       enableEditing: false,
-      header: () => this.tableCellHeaderTemplate(),
       accessorKey: 'firstName',
       cell: (context) => this.tableCellInputComponentRender(context)
     },
     {
       headerText: 'Last name',
-      header: () => this.tableCellHeaderTemplate(),
       accessorKey: 'lastName',
       cell: (context) => this.tableCellInputComponentRender(context)
     },
     {
       headerText: 'Gender',
-      header: () => this.tableCellHeaderTemplate(),
       accessorKey: 'gender',
       accessorFn: (value, index) => Utils.formatString(value.gender, 'title'),
       cell: (context) => this.tableCellInputComponentRender(context),
@@ -203,13 +200,11 @@ export class TanstackTableDemoComponent implements OnInit, OnDestroy {
     },
     {
       headerText: 'Occupation',
-      header: () => this.tableCellHeaderTemplate(),
       accessorKey: 'occupation',
       cell: (context) => this.tableCellInputComponentRender(context)
     },
     {
       headerText: 'Actions',
-      header: () => this.tableCellHeaderTemplate(),
       id: 'actions',
       minSize: 96,
       maxSize: 96,

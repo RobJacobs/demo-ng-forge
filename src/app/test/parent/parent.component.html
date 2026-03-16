@@ -1,11 +1,6 @@
 <forge-toolbar class="header">
   <h2 slot="start" class="forge-typography--subheading4">Parent</h2>
+  <forge-button slot="end" (click)="onNavigate('test/child')">Child</forge-button>
 </forge-toolbar>
 
-<div class="body">
-  <div>Parent content</div>
-
-  <div class="body__container">
-    <forge-button variant="filled" (click)="onNavigate('test/child')">View child</forge-button>
-  </div>
-</div>
+<div class="body"></div>
