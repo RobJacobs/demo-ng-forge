@@ -8,21 +8,15 @@ export class ProfileService {
   public formGroup = new FormGroup({
     personalFormGroup: new FormGroup({
       firstName: new FormControl<string | null>(null, {
-        validators: [Validators.required]
-        // asyncValidators: [
-        //   (control: AbstractControl): Observable<ValidationErrors> => {
-        //     return of({ duplicate: true }).pipe(delay(1000));
-        //     // const validationSub = new Subject<ValidationErrors>();
-        //     // setTimeout(() => {
-        //     //   validationSub.next({ duplicate: true });
-        //     //   validationSub.complete();
-        //     // }, 1000);
-        //     // return validationSub.asObservable();
-        //   }
-        // ]
+        validators: [Validators.required],
+        asyncValidators: [
+          (control: AbstractControl): Observable<ValidationErrors> => {
+            return of({ duplicate: true }).pipe(delay(1000));
+          }
+        ]
       }),
       lastName: new FormControl<string | null>(null, {
-        validators: [Validators.required]
+        validators: [Validators.required, Validators.minLength(3)]
       }),
       gender: new FormControl<string | null>(null, {
         validators: [Validators.required]

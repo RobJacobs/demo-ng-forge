@@ -1,0 +1,8 @@
+@use 'src/global';
+
+:host {
+  display: block;
+  @include global.app-container-outlined();
+
+  padding: var(--forge-spacing-medium);
+}

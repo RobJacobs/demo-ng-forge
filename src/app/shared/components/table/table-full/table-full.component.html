@@ -1,0 +1,224 @@
+<forge-toolbar class="header">
+  <h3 slot="start" class="forge-typography--heading4">{{ headerTitle() }}</h3>
+  <ng-content select="[app-full-table-header]"></ng-content>
+  @if (isEditing()) {
+    <forge-button slot="end" variant="outlined" (click)="onEdit(false)">
+      <forge-icon name="cancel" aria-hidden="true"></forge-icon>
+      Cancel
+    </forge-button>
+    <forge-button slot="end" variant="filled" (click)="onSubmit()">
+      <forge-icon name="check" aria-hidden="true"></forge-icon>
+      Submit
+    </forge-button>
+  } @else {
+    @if (layoutMode() === 'sm') {
+      @if (headerOptions().length) {
+        <forge-menu slot="end" [options]="headerOptions()" (forge-menu-select)="onHeaderOptionSelected($event)" (forge-menu-open)="onHeaderActionsMenu('open')">
+          <forge-icon-button #headerActionsMenu aria-label="view table actions">
+            <forge-icon name="more_vert" aria-hidden="true"></forge-icon>
+          </forge-icon-button>
+          <forge-tooltip>View table actions</forge-tooltip>
+        </forge-menu>
+      }
+    } @else {
+      @if (canEdit()) {
+        <forge-button slot="end" [disabled]="isBusy()" (click)="onEdit(true)">
+          <forge-icon slot="start" name="edit" aria-hidden="true"></forge-icon>
+          Edit
+        </forge-button>
+      }
+      @if (canFilter()) {
+        <forge-button slot="end" [disabled]="isBusy()" (click)="onFilter()">
+          <forge-icon slot="start" name="filter_list" aria-hidden="true"></forge-icon>
+          Filter
+        </forge-button>
+      }
+      @if (canConfigureColumns()) {
+        <forge-button slot="end" [disabled]="isBusy()" (click)="onColumnsConfigure($event)">
+          <forge-icon slot="start" name="view_column" aria-hidden="true"></forge-icon>
+          Columns
+        </forge-button>
+      }
+    }
+  }
+  <forge-popover slot="end" #columnsConfigurePopover placement="right-end" animation-type="none">
+    <forge-list class="columns-configure-popover" cdkDropList (cdkDropListDropped)="onColumnDragDrop($event)" [cdkDropListSortPredicate]="columnOrderPredicate" cdkDropListOrientation="vertical">
+      @for (column of table.getAllFlatColumns(); track i; let i = $index) {
+        @if (column.columnDef.enableHiding !== false || $any(column.columnDef).enableOrdering !== false) {
+          <forge-list-item [value]="column" (forge-list-item-select)="onColumnToggleVisibilty($event.detail.value)" cdkDrag [cdkDragData]="column" cdkDragLockAxis="y">
+            <div slot="start" style="column-gap: 8px">
+              <forge-icon-button density="small" cdkDragHandle [attr.aria-label]="`${$any(column.columnDef).headerText} column reorder`" [disabled]="$any(column.columnDef).enableOrdering === false">
+                <forge-icon name="drag_handle" aria-hidden="true"></forge-icon>
+              </forge-icon-button>
+              @if (column.columnDef.enableHiding === false) {
+                <forge-icon name="checkbox_blank_off" aria-hidden="true"></forge-icon>
+              } @else {
+                <forge-icon [name]="column.getIsVisible() === false ? 'check_box_outline_blank' : 'check_box'" [style.color]="column.getIsVisible() ? 'var(--forge-theme-primary)' : null" aria-hidden="true"></forge-icon>
+              }
+            </div>
+
+            <button type="button" [attr.aria-label]="$any(column.columnDef)?.headerText">{{ $any(column.columnDef).headerText }}</button>
+          </forge-list-item>
+        }
+      }
+      <forge-divider></forge-divider>
+      <forge-list-item value="reset-column-width" (forge-list-item-select)="onColumnSizeReset()">
+        <button type="button">Reset column widths</button>
+      </forge-list-item>
+    </forge-list>
+  </forge-popover>
+</forge-toolbar>
+<div class="body">
+  <ng-content select="[app-full-table-body-header]"></ng-content>
+  <form #formRef class="body__table" novalidate autocomplete="off">
+    @if (layoutMode() === 'sm') {
+      <app-table-mobile [table]="table" [isBusy]="isBusy()" [isEditing]="isEditing()" [columnDefs]="columnDefs()" [tableRowDetailTemplate]="tableRowDetailTemplate()" (rowClicked)="onRowClick($event)"></app-table-mobile>
+    } @else {
+      <table #tableRef class="forge-table" [class.forge-table--editing]="isEditing()">
+        <thead>
+          @for (headerGroup of table.getHeaderGroups(); track headerGroup.id) {
+            <tr class="forge-table-row forge-table-head__row">
+              @for (header of headerGroup.headers; track header.id) {
+                @if (!header.isPlaceholder) {
+                  <th
+                    class="forge-table-cell forge-table-head__cell"
+                    [class.forge-table-head__cell--sortable]="header.column.getCanSort()"
+                    [class.forge-table-cell--frozen-left]="header.column.getIsPinned() === 'left'"
+                    [class.forge-table-cell--frozen-right]="header.column.getIsPinned() === 'right'"
+                    [class.forge-table-row__expander]="header.column.id === columnIds.expander"
+                    [class.forge-table-row__selector]="header.column.id === columnIds.selector"
+                    (click)="header.column.getToggleSortingHandler()?.($event)"
+                    [style.--table-column-width]="header.column.getSize() || null"
+                    [style.vertical-align]="isFiltering() ? 'top' : null"
+                  >
+                    <div
+                      class="forge-table-head__cell-container"
+                      [class.forge-table-cell--center]="$any(header.column.columnDef).align === cellAlignEnum.Center"
+                      [class.forge-table-cell--right]="$any(header.column.columnDef).align === cellAlignEnum.Right"
+                    >
+                      <ng-container *flexRender="header.column.columnDef.header; props: header.getContext(); let context"></ng-container>
+                    </div>
+                    @if (!isEditing() && isFiltering() && header.column.getCanFilter()) {
+                      <app-table-cell-filter [context]="header"></app-table-cell-filter>
+                    }
+                  </th>
+                }
+              }
+            </tr>
+          }
+        </thead>
+        <tbody>
+          @if (isBusy()) {
+            @for (skl of [1, 2, 3]; track i; let i = $index) {
+              <tr class="forge-table-row forge-table-body__row">
+                <td class="forge-table-cell forge-table-body__cell" [attr.colspan]="table.getVisibleLeafColumns().length">
+                  <forge-skeleton list-item></forge-skeleton>
+                </td>
+              </tr>
+            }
+          } @else {
+            @for (row of table.getRowModel().rows; track row.id; let rowIndex = $index) {
+              <tr class="forge-table-row forge-table-body__row" (click)="onRowClick({ event: $event, row })">
+                @for (cell of row.getVisibleCells(); track cell.id; let cellIndex = $index) {
+                  <td
+                    class="forge-table-cell forge-table-body__cell"
+                    [class.forge-table-cell--frozen-left]="cell.column.getIsPinned() === 'left'"
+                    [class.forge-table-cell--frozen-right]="cell.column.getIsPinned() === 'right'"
+                    [class.forge-table-row__expander]="cell.column.id === columnIds.expander"
+                    [class.forge-table-row__selector]="cell.column.id === columnIds.selector"
+                  >
+                    <div
+                      class="forge-table-cell__container"
+                      [class.forge-table-cell--center]="$any(cell.column.columnDef).align === cellAlignEnum.Center"
+                      [class.forge-table-cell--right]="$any(cell.column.columnDef).align === cellAlignEnum.Right"
+                    >
+                      <ng-container *flexRender="cell.column.columnDef.cell; props: cell.getContext(); let context"></ng-container>
+                    </div>
+                  </td>
+                }
+              </tr>
+              @if (row.getIsExpanded()) {
+                <tr class="forge-table-row forge-table-body__row forge-table-row__expandable-content">
+                  <td class="forge-table-row__expandable-content-cell" [attr.colspan]="table.getVisibleLeafColumns().length">
+                    <ng-container *ngTemplateOutlet="tableRowDetailTemplate(); context: { data: row.original, rowIndex }"></ng-container>
+                  </td>
+                </tr>
+              }
+            }
+          }
+        </tbody>
+        @if (hasFooter()) {
+          <tfoot>
+            @for (footerGroup of table.getFooterGroups(); track footerGroup.id) {
+              <tr class="forge-table-row forge-table-foot__row">
+                @for (footer of footerGroup.headers; track footer.id) {
+                  <th class="forge-table-cell forge-table-foot__cell">
+                    <div class="forge-table-cell__container">
+                      <ng-container *flexRender="footer.column.columnDef.footer; props: footer.getContext(); let context">
+                        {{ context }}
+                      </ng-container>
+                    </div>
+                  </th>
+                }
+              </tr>
+            }
+          </tfoot>
+        }
+      </table>
+    }
+  </form>
+  @if (!isBusy() && !recordCount() && state().columns?.filters().length) {
+    <forge-page-state>
+      <img src="https://cdn.forge.tylertech.com/v1/images/spot-hero/no-search-results-spot-hero.svg" alt="" slot="graphic" />
+      <div slot="message">No records found matching the supplied filters.</div>
+    </forge-page-state>
+  }
+  <ng-content select="[app-full-table-body-footer]"></ng-content>
+</div>
+<forge-toolbar class="footer" inverted>
+  <ng-content select="[app-full-table-footer]"></ng-content>
+  <forge-paginator
+    slot="end"
+    [pageIndex]="state().skip() / state().take()"
+    [pageSize]="state().take()"
+    [total]="recordCount()"
+    [disabled]="isBusy() || isEditing()"
+    (forge-paginator-change)="onPaginatorChange($event.detail)"
+  ></forge-paginator>
+</forge-toolbar>
+
+<ng-template #tableCellHeaderDefault let-context>
+  <span class="forge-table-head__cell-text">{{ context.column.columnDef.headerText }}</span>
+  @if (context.column.getCanSort()) {
+    <forge-icon [name]="context.column.getIsSorted() === 'desc' ? 'arrow_downward' : context.column.getIsSorted() === 'asc' ? 'arrow_upward' : ''" class="forge-table-head__cell-sort-icon" aria-hidden="true"></forge-icon>
+  }
+  @if (!isBusy() && context.column.columnDef.enableResizing !== false) {
+    <forge-button class="forge-table-head__cell-resizer" tabindex="-1" [attr.aria-label]="`${context.column.columnDef.headerText} column resizer`" (mousedown)="onColumnHeaderResize($event, context)"></forge-button>
+  }
+</ng-template>
+
+<ng-template #tableCellDefault let-context>
+  {{ context.getValue() }}
+</ng-template>
+
+<ng-template #tableRowSelectHeader let-context>
+  <forge-checkbox
+    [disabled]="isBusy() || isEditing() || !recordCount()"
+    [attr.aria-label]="`${table.getIsAllRowsSelected() ? 'unselect' : 'select'} all records`"
+    [attr.indeterminate]="table.getIsSomeRowsSelected() ? true : null"
+    [checked]="table.getIsAllRowsSelected() ? true : false"
+    (click)="onStopEvent($event)"
+    (change)="onRowSelectHeader(context)"
+  ></forge-checkbox>
+</ng-template>
+
+<ng-template #tableRowSelect let-context>
+  <forge-checkbox [attr.aria-label]="context.row.getIsSelected() ? 'unselect record' : 'select record'" (change)="onRowSelect(context)" (click)="onStopEvent($event)" [disabled]="isEditing()" [checked]="context.row.getIsSelected()">
+  </forge-checkbox>
+</ng-template>
+
+<ng-template #tableRowExpand let-context>
+  <forge-icon-button [attr.aria-label]="context.row.getIsExpanded() ? 'view less' : 'view more'" [attr.aria-expanded]="context.row.getIsExpanded()" (click)="onRowExpand($event, context)">
+    <forge-open-icon [open]="context.row.getIsExpanded()" aria-hidden="true"></forge-open-icon>
+  </forge-icon-button>
+</ng-template>

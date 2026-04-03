@@ -2,7 +2,7 @@
 @use '@tylertech/forge/sass/table' as forge-table;
 
 $table-row-height: 48px;
-$table-cell-inline-padding: 8px;
+
 
 @mixin sticky($direction: top, $z-index: 0, $important: false) {
   position: sticky;
@@ -31,23 +31,24 @@ $table-cell-inline-padding: 8px;
 
 :host {
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto 1fr auto;
   overflow: hidden;
-  height: 100%;
   background-color: var(--forge-theme-surface);
 
   ::ng-deep {
     .forge-table {
-      --table-row-height: $table-row-height;
-      --table-cell-inline-padding: $table-cell-inline-padding;
+      --table-row-height: #{$table-row-height};
+      --table-cell-inline-padding: var(--forge-spacing-xsmall);
 
       min-width: 100%;
       width: max-content;
       position: relative;
 
       &--editing {
+        --table-cell-inline-padding: var(--forge-spacing-xxsmall);
+
         th {
-          pointer-events: none;
+          cursor: default;
         }
       }
 
@@ -70,8 +71,6 @@ $table-cell-inline-padding: 8px;
         &__cell {
           @include cell-padding();
           width: calc(var(--table-column-width) * 1px);
-          // min-width: calc(var(--table-column-width) * 1px);
-          // max-width: calc(var(--table-column-width) * 1px);
 
           &:hover {
             .forge-table-head__cell {
@@ -84,6 +83,7 @@ $table-cell-inline-padding: 8px;
 
           &-container {
             position: relative;
+            min-height: var(--table-row-height);
           }
 
           &-sort-icon {
@@ -100,21 +100,26 @@ $table-cell-inline-padding: 8px;
             max-width: 0;
             transition: max-width 250ms;
           }
+
+          &-resizer {
+            --forge-button-padding: 0;
+            --forge-button-spacing: 0;
+            --forge-button-shape: var(--forge-spacing-xxsmall);
+            --forge-button-width: 16px;
+            --forge-button-min-width: 16px;
+            --forge-button-height: var(--table-row-height);
+            --forge-button-min-height: var(--table-row-height);
+            --forge-button-background: transparent;
+            --forge-button-border-width: 0;
+            --forge-button-cursor: col-resize;
+            margin-left: auto;
+          }
         }
       }
 
       &-body {
         &__cell {
           @include cell-padding();
-
-          forge-text-field {
-            width: 100%;
-            --forge-field-background: var(--forge-theme-surface);
-
-            &::part(label) {
-              display: none;
-            }
-          }
 
           forge-skeleton {
             margin: 4px 0;
@@ -151,8 +156,12 @@ $table-cell-inline-padding: 8px;
         }
 
         &__expandable-content {
-          background-color: global.$forge-color-indigo-50 !important;
+          background-color: var(--forge-theme-primary-container);
           @include global.app-border(border-bottom);
+
+          &:hover {
+            background-color: var(--forge-theme-primary-container) !important;
+          }
         }
       }
 
@@ -191,79 +200,29 @@ $table-cell-inline-padding: 8px;
   }
 }
 
-::ng-deep {
-  .column-popover {
-    min-width: 280px;
-    --forge-list-padding: 0;
-
-    forge-list-item {
-      cursor: pointer;
-    }
-  }
-}
-
 .header {
-  @include global.app-toolbar-gap();
+  @include global.app-toolbar();
 }
 
 .body {
-  display: grid;
-  grid-template-rows: 1fr auto;
-  overflow: hidden;
-  height: 100%;
+  overflow: auto;
 
-  &__table {
-    overflow: auto;
+  .busy-indicator {
+    padding-inline: 16px;
   }
 }
 
 .footer {
-  @include global.app-toolbar-gap();
+  @include global.app-toolbar();
+}
+
+forge-page-state {
+  --forge-page-state-graphic-spacing: var(--forge-spacing-medium);
+  --forge-page-state-graphic-height: calc(var(--forge-spacing-medium) * 10);
+  --forge-page-state-graphic-width: calc(var(--forge-spacing-medium) * 10);
+  --forge-page-state-spacing: var(--forge-spacing-medium);
+  --forge-page-state-title-spacing: var(--forge-spacing-medium);
+  --forge-page-state-message-spacing: var(--forge-spacing-medium);
 }
 
 @include global.app-drag-drop();
-
-.cdk-drag {
-  &-preview {
-    display: flex;
-    padding-inline: $table-cell-inline-padding;
-
-    .forge-table-head__cell-actions {
-      display: none;
-    }
-  }
-
-  &-placeholder {
-    .forge-table-head__cell-container {
-      visibility: hidden;
-    }
-  }
-}
-
-.cdk-drop-list {
-  &-dragging {
-
-    .forge-table-head {
-      &__cell {
-        cursor: move !important;
-
-        &-container {
-          pointer-events: none;
-        }
-
-        &-actions {
-          display: none;
-        }
-      }
-    }
-  }
-}
-
-.empty-state {
-  @include global.forge-flex-container(flex, column, nowrap, center);
-  padding: 24px;
-
-  img {
-    width: 256px;
-  }
-}

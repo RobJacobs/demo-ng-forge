@@ -1,0 +1,28 @@
+@switch ($any(context().column.columnDef).filterControlType) {
+  @case ('autocomplete') {
+    <forge-autocomplete multiple="true" [id]="elementId()" [filter]="$any(context().column.columnDef).autocompleteFilterCallback" [formControl]="formControl">
+      <forge-text-field density="small">
+        <input type="text" [id]="`${elementId()}--input`" [attr.aria-label]="label()" />
+        <forge-icon slot="end" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
+      </forge-text-field>
+    </forge-autocomplete>
+  }
+  @case ('datepicker') {
+    <forge-date-picker [id]="elementId()" [formControl]="formControl">
+      <forge-text-field density="small">
+        <input type="text" [id]="`${elementId()}--input`" [attr.aria-label]="label()" />
+      </forge-text-field>
+    </forge-date-picker>
+  }
+  @case ('checkbox') {
+    <forge-checkbox [id]="elementId()" [attr.aria-label]="label()" [formControl]="formControl"></forge-checkbox>
+  }
+  @case ('select') {
+    <forge-select density="small" multiple="true" [id]="elementId()" [options]="$any(context().column.columnDef).options()" [attr.aria-label]="label()" [formControl]="formControl"></forge-select>
+  }
+  @default {
+    <forge-text-field density="small" [id]="elementId()">
+      <input type="text" [id]="`${elementId()}--input`" [attr.aria-label]="label()" [formControl]="formControl" />
+    </forge-text-field>
+  }
+}

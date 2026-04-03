@@ -1,0 +1,10 @@
+@use 'src/global';
+
+:host {
+  display: contents;
+}
+
+.form-grid {
+  padding: 16px;
+  @include global.app-form-grid();
+}

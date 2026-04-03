@@ -1,0 +1,16 @@
+<forge-scaffold>
+  <div slot="header">
+    <ng-content select="[app-card-header]"></ng-content>
+  </div>
+  <div slot="body">
+    @if (isBusy()) {
+      <forge-skeleton></forge-skeleton>
+    } @else {
+      <ng-content></ng-content>
+    }
+  </div>
+
+  <div slot="footer">
+    <ng-content select="[app-card-footer]"></ng-content>
+  </div>
+</forge-scaffold>

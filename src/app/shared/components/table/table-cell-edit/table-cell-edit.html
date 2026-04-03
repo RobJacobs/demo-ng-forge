@@ -1,0 +1,32 @@
+@if (isEditing()) {
+  @switch ($any(context().column.columnDef).editControlType) {
+    @case ("autocomplete") {
+      <forge-autocomplete [id]="elementId()" [formControl]="control()" [filter]="$any(context().column.columnDef).autocompleteFilterCallback">
+        <forge-text-field>
+          <input type="text" [id]="`${elementId()}--input`" [attr.aria-label]="label()" />
+          <forge-icon slot="end" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
+        </forge-text-field>
+      </forge-autocomplete>
+    }
+    @case ("datepicker") {
+      <forge-date-picker [id]="elementId()" [formControl]="control()">
+        <forge-text-field>
+          <input type="text" [id]="`${elementId()}--input`" [attr.aria-label]="label()" />
+        </forge-text-field>
+      </forge-date-picker>
+    }
+    @case ("checkbox") {
+      <forge-checkbox [id]="elementId()" [attr.aria-label]="label()" [formControl]="control()"></forge-checkbox>
+    }
+    @case ("select") {
+      <forge-select [id]="elementId()" [options]="$any(context().column.columnDef).options()" [attr.aria-label]="label()" [formControl]="control()"></forge-select>
+    }
+    @default {
+      <forge-text-field [id]="elementId()">
+        <input type="text" [id]="`${elementId()}--input`" [attr.aria-label]="label()" [formControl]="control()" />
+      </forge-text-field>
+    }
+  }
+} @else {
+  {{ context().getValue() }}
+}

@@ -5,44 +5,6 @@
   "projects": {
     "demo-ng-forge": {
       "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss",
-          "displayBlock": true,
-          "skipTests": true,
-          "type": "component"
-        },
-        "@schematics/angular:directive": {
-          "skipTests": true,
-          "type": "directive"
-        },
-        "@schematics/angular:service": {
-          "skipTests": true,
-          "type": "service"
-        },
-        "@schematics/angular:class": {
-          "skipTests": true
-        },
-        "@schematics/angular:guard": {
-          "skipTests": true,
-          "typeSeparator": "."
-        },
-        "@schematics/angular:interceptor": {
-          "skipTests": true,
-          "typeSeparator": "."
-        },
-        "@schematics/angular:module": {
-          "typeSeparator": "."
-        },
-        "@schematics/angular:pipe": {
-          "skipTests": true,
-          "typeSeparator": "."
-        },
-        "@schematics/angular:resolver": {
-          "skipTests": true,
-          "typeSeparator": "."
-        }
-      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -174,6 +136,44 @@
           }
         }
       }
+    }
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "style": "scss",
+      "displayBlock": true,
+      "skipTests": true,
+      "type": "component"
+    },
+    "@schematics/angular:directive": {
+      "skipTests": true,
+      "type": "directive"
+    },
+    "@schematics/angular:service": {
+      "skipTests": true,
+      "type": "service"
+    },
+    "@schematics/angular:class": {
+      "skipTests": true
+    },
+    "@schematics/angular:guard": {
+      "skipTests": true,
+      "typeSeparator": "."
+    },
+    "@schematics/angular:interceptor": {
+      "skipTests": true,
+      "typeSeparator": "."
+    },
+    "@schematics/angular:module": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:pipe": {
+      "skipTests": true,
+      "typeSeparator": "."
+    },
+    "@schematics/angular:resolver": {
+      "skipTests": true,
+      "typeSeparator": "."
     }
   }
 }

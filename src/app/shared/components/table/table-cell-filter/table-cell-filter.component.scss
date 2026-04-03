@@ -1,0 +1,16 @@
+:host {
+  display: block;
+  padding-bottom: 8px;
+}
+
+forge-autocomplete,
+forge-datepicker,
+forge-text-field,
+forge-select {
+  width: 100%;
+  --forge-field-background: var(--forge-theme-surface);
+
+  &::part(label) {
+    display: none;
+  }
+}

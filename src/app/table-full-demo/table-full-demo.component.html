@@ -1,0 +1,48 @@
+<app-table-full
+  #tableFull
+  headerTitle="Table Full"
+  [recordset]="recordset()"
+  [recordCount]="recordCount()"
+  [isBusy]="isBusy()"
+  [columnDefs]="columnDefs"
+  [layoutMode]="appCache.layoutMode"
+  [state]="cache.tableState"
+  [canEdit]="true"
+  [canRowClick]="true"
+  [(isEditing)]="isEditing"
+  [tableRowDetailTemplate]="tableRowDetail"
+  (filterShow)="onFilter()"
+  (editSubmit)="onSubmit()"
+  (rowClicked)="onRowClicked($event)"
+>
+  <ng-container eerp-full-table-header>
+    <div slot="center">Projected header content</div>
+  </ng-container>
+
+  <ng-container eerp-full-table-body-header>
+    <div class="table__body-header">Projected body header content</div>
+  </ng-container>
+
+  <ng-container eerp-full-table-body-footer>
+    <div class="table__body-footer">Projected body footer content</div>
+  </ng-container>
+
+  <ng-container eerp-full-table-footer>
+    <div slot="center">Projected footer content</div>
+  </ng-container>
+</app-table-full>
+
+<ng-template #tableCellActions let-context>
+  <forge-icon-button (click)="onDeleteRecord($event, context)" aria-label="Delete person" [disabled]="isEditing()">
+    <forge-icon name="delete" aria-hidden="true"></forge-icon>
+  </forge-icon-button>
+  <forge-tooltip>Delete person</forge-tooltip>
+  <forge-icon-button (click)="onViewDetailRecord($event, context)" aria-label="View person details" [disabled]="isEditing()">
+    <forge-icon name="keyboard_arrow_right" aria-hidden="true"></forge-icon>
+  </forge-icon-button>
+  <forge-tooltip>View person details</forge-tooltip>
+</ng-template>
+
+<ng-template #tableRowDetail let-data="data" let-rowIndex="rowIndex">
+  <app-table-detail [data]="data" [rowIndex]="rowIndex"></app-table-detail>
+</ng-template>

@@ -1,0 +1,31 @@
+@use 'src/global';
+
+:host {
+  display: block;
+  overflow: hidden;
+  padding: 24px;
+
+  ::ng-deep {
+    td {
+      app-table-detail {
+        padding: 16px;
+      }
+    }
+  }
+}
+
+app-table-full {
+  @include global.app-container-outlined();
+  height: 100%;
+}
+
+.table {
+  &__body-header {
+    @include global.app-border(border-bottom);
+    padding: 16px;
+  }
+
+  &__body-footer {
+    padding: 16px;
+  }
+}

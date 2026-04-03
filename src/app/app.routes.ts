@@ -13,8 +13,7 @@ import { PETS_SERVICE } from '@demo-ng-forge/pets';
 import { AppPetsService } from './app-pets.service';
 import { AppCacheService } from './app-cache.service';
 import { ReCaptchaService } from './re-captcha/re-captcha.service';
-import { TableDemoService } from './table-demo/table-demo.service';
-import { TanStackTableDemoService } from './tanstack-table-demo/tanstack-table-demo.service';
+import { TableFullDemoService } from './table-full-demo/table-full-demo.service';
 
 @Injectable()
 export class RootRouteGuard implements CanActivate, CanDeactivate<Component> {
@@ -113,19 +112,13 @@ export const routes: Routes = [
       {
         path: 'table-demo',
         title: 'Table demo',
-        loadComponent: () => import('./table-demo/table-demo.component').then((m) => m.TableDemoComponent),
-        providers: [TableDemoService]
+        loadComponent: () => import('./table-full-demo/table-full-demo.component').then((m) => m.TableFullDemoComponent),
+        providers: [TableFullDemoService]
       },
       {
         path: 'ag-grid-demo',
         title: 'AG Grid demo',
         loadComponent: () => import('./ag-grid-demo/ag-grid-demo.component').then((m) => m.AgGridDemoComponent)
-      },
-      {
-        path: 'tanstack-table-demo',
-        title: 'Tanstack Table Demo',
-        loadComponent: () => import('./tanstack-table-demo/tanstack-table-demo.component').then((m) => m.TanstackTableDemoComponent),
-        providers: [TanStackTableDemoService]
       },
       {
         path: 'storage',

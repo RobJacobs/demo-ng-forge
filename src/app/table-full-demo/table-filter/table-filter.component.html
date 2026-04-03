@@ -1,0 +1,20 @@
+<app-table-filter-dialog-template [filterFormGroup]="formGroup" (filter)="onFilter()">
+  <div class="form-grid" [formGroup]="formGroup">
+    <forge-text-field>
+      <label slot="label" for="table-filter--first-name">First Name</label>
+      <input type="text" id="table-filter--first-name" formControlName="firstName" />
+    </forge-text-field>
+    <forge-text-field>
+      <label slot="label" for="table-filter--last-name">Last Name</label>
+      <input type="text" id="table-filter--last-name" formControlName="lastName" />
+    </forge-text-field>
+    <forge-text-field>
+      <label slot="label" for="table-filter--gender">Gender</label>
+      <input type="text" id="table-filter--gender" formControlName="gender" />
+    </forge-text-field>
+    <forge-text-field>
+      <label slot="label" for="table-filter--occupation">Occupation</label>
+      <input type="text" id="table-filter--occupation" formControlName="occupation" />
+    </forge-text-field>
+  </div>
+</app-table-filter-dialog-template>

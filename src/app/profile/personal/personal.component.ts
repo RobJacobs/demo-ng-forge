@@ -18,7 +18,7 @@ import {
 } from '@tylertech/forge-angular';
 
 import { AppDataService } from 'src/app/app-data.service';
-import { AutoFocusDirective, FormControlInvalidDirective, InputCasingDirective } from 'src/app/shared/directives';
+import { AutoFocusDirective, defaultErrorMessages, FieldErrorMessages, FormControlInvalidDirective, InputCasingDirective } from 'src/app/shared/directives';
 import { DateTimeComponent } from 'src/app/shared/components';
 import { ProfileService } from '../profile.service';
 
@@ -64,10 +64,15 @@ export class PersonalComponent implements OnInit {
     return this.formGroup.controls.friends;
   }
 
-  public firstNameErrorMessage = new Map<string, string>([
-    ['required', 'First name is required'],
-    ['duplicate', 'First name is duplicated']
-  ]);
+  public firstNameErrorMessage: FieldErrorMessages = {
+    required: () => 'First name is required',
+    duplicate: () => 'First name is duplicated'
+  };
+  public defaultErrorMessage = defaultErrorMessages;
+  // public firstNameErrorMessage = new Map<string, string>([
+  //   ['required', 'First name is required'],
+  //   ['duplicate', 'First name is duplicated']
+  // ]);
 
   public genderOptions: IOption[] = [
     { label: '', value: null },

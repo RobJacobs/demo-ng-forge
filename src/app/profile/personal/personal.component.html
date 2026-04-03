@@ -1,23 +1,23 @@
 <ng-container [formGroup]="formGroup">
   <div class="form-grid">
-    <forge-text-field required [appFormControlInvalid]="formGroup.controls.firstName" [invalidMessage]="firstNameErrorMessage">
+    <forge-text-field [appFormControlInvalid]="formGroup.controls.firstName" [invalidMessage]="firstNameErrorMessage">
       <label slot="label" for="profile--personal--first-name">First name</label>
       <input type="text" id="profile--personal--first-name" formControlName="firstName" [appInputCasing]="'upper'" appAutoFocus />
     </forge-text-field>
 
-    <forge-text-field required [appFormControlInvalid]="formGroup.controls.lastName" invalidMessage="Last name is required">
+    <forge-text-field [appFormControlInvalid]="formGroup.controls.lastName" [invalidMessage]="defaultErrorMessage">
       <label slot="label" for="profile--personal--last-name">Last name</label>
       <input type="text" id="profile--personal--last-name" formControlName="lastName" />
     </forge-text-field>
 
-    <forge-select id="profile--personal--gender" label="Gender" required formControlName="gender" [options]="genderOptions" [appFormControlInvalid]="formGroup.controls.gender" invalidMessage="Gender is required"></forge-select>
+    <forge-select id="profile--personal--gender" label="Gender" formControlName="gender" [options]="genderOptions" [appFormControlInvalid]="formGroup.controls.gender" invalidMessage="Gender is required"></forge-select>
 
-    <forge-text-field required [appFormControlInvalid]="formGroup.controls.email" invalidMessage="Email is required">
+    <forge-text-field [appFormControlInvalid]="formGroup.controls.email" invalidMessage="Email is required">
       <label slot="label" for="profile--personal--email">Email</label>
       <input type="text" id="profile--personal--email" formControlName="email" />
     </forge-text-field>
 
-    <forge-text-field required [appFormControlInvalid]="formGroup.controls.phone" invalidMessage="Phone number is required">
+    <forge-text-field [appFormControlInvalid]="formGroup.controls.phone" invalidMessage="Phone number is required">
       <label slot="label" for="profile--personal--phone">Phone</label>
       <input type="text" id="profile--personal--phone" formControlName="phone" />
     </forge-text-field>

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
 import { isArray } from '@tylertech/forge-core';
-import { CellAlign, IColumnConfiguration, TableComponent, TextFieldComponentDelegate } from '@tylertech/forge';
+import { CellAlign, TableComponent, TextFieldComponentDelegate } from '@tylertech/forge';
 import {
   ForgeBadgeModule,
   ForgeButtonModule,
@@ -23,7 +23,6 @@ import {
   TableUtils,
   BaseTableComponent,
   TableDetailComponent,
-  TableMobileComponent,
   FilterChipsComponent,
   RouterlinkButtonComponent,
   ITableColumnConfiguration
@@ -33,6 +32,7 @@ import { AppDataService } from 'src/app/app-data.service';
 import { IPerson } from 'src/app/shared/interfaces';
 import { PeopleCacheService } from '../people-cache.service';
 import { FilterComponent } from './filter/filter.component';
+import { TableMobileComponent } from './table-mobile/table-mobile.component';
 
 @Component({
   selector: 'app-people-home',

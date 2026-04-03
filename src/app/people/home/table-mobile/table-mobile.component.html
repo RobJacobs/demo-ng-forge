@@ -1,0 +1,51 @@
+@if (columnConfigurations?.length) {
+  @for (row of data; track i; let i = $index, last = $last) {
+    @if (allowRowClick) {
+      <forge-button-area (click)="onTableRowClick(i)">
+        <!-- eslint-disable-next-line @angular-eslint/template/elements-content -->
+        <button slot="button"></button>
+        <ng-container *ngTemplateOutlet="columnTemplate; context: { rowData: row, rowIndex: i }"></ng-container>
+      </forge-button-area>
+    } @else {
+      <ng-container *ngTemplateOutlet="columnTemplate; context: { rowData: row, rowIndex: i }"></ng-container>
+    }
+    @if (!last) {
+      <forge-divider></forge-divider>
+    }
+  }
+}
+
+<ng-template #columnTemplate let-rowData="rowData" let-rowIndex="rowIndex">
+  <div class="row">
+    @for (column of columnConfigurations; track ii; let ii = $index) {
+      @if (column.hidden !== true) {
+        @if (formArray?.length && isEditing && column.editable !== false) {
+          <forge-text-field [appFormControlInvalid]="formArray?.at(rowIndex)?.get(column.property)" [invalidMessage]="formArray.at(rowIndex)?.get(column.property).errors | json">
+            @if (column.header?.length) {
+              <label slot="label" [for]="'app-table-mobile--' + column.property + '--' + rowIndex" slot="label">{{ column.header }}</label>
+            }
+            <input type="text" [id]="'app-table-mobile--' + column.property + '--' + rowIndex" [formControl]="$any(formArray.at(rowIndex)?.get(column.property))" />
+          </forge-text-field>
+        } @else {
+          <forge-label-value>
+            @if (column.header?.length) {
+              <div slot="label">{{ column.header }}</div>
+            }
+
+            @if (column.template) {
+              <app-table-mobile-template slot="value" [template]="column.template" [rowIndex]="rowIndex" [rowData]="rowData"></app-table-mobile-template>
+            } @else if (column.property?.length) {
+              @if (column.transform) {
+                <div slot="value">
+                  {{ column.transform(rowData[column.property]) }}
+                </div>
+              } @else {
+                <div slot="value">{{ rowData[column.property] }}</div>
+              }
+            }
+          </forge-label-value>
+        }
+      }
+    }
+  </div>
+</ng-template>

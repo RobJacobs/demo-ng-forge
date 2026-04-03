@@ -152,7 +152,7 @@
   #{$border}: 1px solid var(--forge-theme-outline);
 }
 
-@mixin toolbar($slots...) {
+@mixin toolbar() {
   @include toolbar-gap();
 
   @media (max-width: 400px) {
@@ -198,23 +198,30 @@
     }
 
     &-placeholder {
-
       .cdk-drag__content {
         visibility: hidden;
       }
 
       background-color: var(--forge-theme-primary-container-low);
-      border: dashed 1px var(--forge-theme-primary) !important;
+      border: dashed var(--forge-border-medium) var(--forge-theme-primary) !important;
     }
 
     &-animating {
       transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
     }
+
+    &-handle {
+      cursor: grab;
+      --forge-button-cursor: grab;
+      --forge-icon-button-cursor: grab;
+    }
   }
 
   .cdk-drop-list {
     &-dragging {
-      cursor: move;
+      cursor: grabbing;
+      --forge-button-cursor: grabbing;
+      --forge-icon-button-cursor: grabbing;
 
       .cdk-drag {
         user-select: none;

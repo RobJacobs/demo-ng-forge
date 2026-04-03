@@ -1,0 +1,9 @@
+<app-dialog-template [dialogTitle]="filterTitle()" (dialogClose)="onCancel()">
+  <form novalidate autocomplete="off" [formGroup]="filterFormGroup()" (keydown.enter)="onApply()">
+    <ng-content></ng-content>
+  </form>
+  <ng-container app-dialog-footer>
+    <forge-button slot="end" variant="outlined" (click)="onClear()">Clear</forge-button>
+    <forge-button slot="end" variant="filled" (click)="onApply()">Apply</forge-button>
+  </ng-container>
+</app-dialog-template>

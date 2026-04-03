@@ -8,7 +8,7 @@ import { defineIcons } from './define-icons';
 defineIcons();
 window.TylerForgeGlobalConfiguration = {
   'forge-field': {
-    labelPosition: 'block-start'
+    floatLabel: true
   }
 };
 

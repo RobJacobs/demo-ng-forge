@@ -1,47 +1,54 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ITableRowClickEventData } from '@tylertech/forge';
-import { FormArray, ReactiveFormsModule } from '@angular/forms';
-import { ForgeButtonAreaModule, ForgeDividerModule, ForgeLabelValueModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
-
-import { FormControlInvalidDirective } from 'src/app/shared/directives';
-import { TableMobileTemplateComponent } from './table-mobile-template.component';
-import { ITableColumnConfiguration } from '../base-table.component';
+import { Component, input, output, TemplateRef } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import {
+  ForgeButtonAreaModule,
+  ForgeButtonModule,
+  ForgeDividerModule,
+  ForgeLabelValueModule,
+  ForgeOpenIconModule,
+  ForgeSkeletonModule,
+  ForgeTextFieldModule
+} from '@tylertech/forge-angular';
+import { Table, FlexRender, Row } from '@tanstack/angular-table';
+import { columnIds, ComponentColumnDef } from '../table-full/table-full.constants';
 
 @Component({
   selector: 'app-table-mobile',
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    ForgeButtonModule,
     ForgeButtonAreaModule,
     ForgeDividerModule,
     ForgeLabelValueModule,
+    ForgeOpenIconModule,
+    ForgeSkeletonModule,
     ForgeTextFieldModule,
-    TableMobileTemplateComponent,
-    FormControlInvalidDirective
+    FlexRender
   ],
   templateUrl: './table-mobile.component.html',
   styleUrl: './table-mobile.component.scss'
 })
 export class TableMobileComponent {
-  @Input({ required: true })
-  public data: any[];
-  @Input({ required: true })
-  public columnConfigurations: ITableColumnConfiguration[];
-  @Input()
-  public formArray: FormArray;
-  @Input()
-  public allowRowClick = false;
-  @Input()
-  public isEditing = false;
-  @Output()
-  public rowClick = new EventEmitter<ITableRowClickEventData>();
+  public columnDefs = input<ComponentColumnDef<any>[]>();
+  public table = input<Table<unknown>>();
+  public tableRowDetailTemplate = input<TemplateRef<{ data: unknown; rowIndex: number }>>();
+  public isBusy = input(false);
+  public isEditing = input(false);
+  public rowClickEnabled = input(true);
+  public rowClicked = output<{ event: Event; row: Row<any> }>();
+  public columnIds = columnIds;
 
-  public onTableRowClick(rowIndex: number) {
-    const event: ITableRowClickEventData = {
-      index: rowIndex,
-      data: this.data[rowIndex]
-    };
-    this.rowClick.emit(event);
+  public onRowClick(event: Event, row: Row<any>) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.rowClicked.emit({ event, row });
+  }
+
+  public onRowExpand(event: Event, row: Row<any>) {
+    event.preventDefault();
+    event.stopPropagation();
+    row.toggleExpanded();
   }
 }
