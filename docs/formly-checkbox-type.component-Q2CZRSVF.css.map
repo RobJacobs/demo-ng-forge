@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/formly-demo/lib/components/formly-checkbox-type.component.ts"],
+  "sourcesContent": ["\n    :host {\n      display: contents;\n    }\n\n    forge-checkbox {\n      width: fit-content;\n    }\n  "],
+  "mappings": "AACI,MACE,QAAA,SAGF,eACE,MAAA",
+  "names": []
+}

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/components/table/table-cell-edit/table-cell-edit.scss"],
+  "sourcesContent": [":host {\r\n  display: contents;\r\n}\r\n\r\nforge-autocomplete,\r\nforge-datepicker,\r\nforge-text-field,\r\nforge-select {\r\n  width: 100%;\r\n  --forge-field-background: var(--forge-theme-surface);\r\n\r\n  &::part(label) {\r\n    display: none;\r\n  }\r\n}"],
+  "mappings": "AAAA,MACE,QAAA,SAGF,mBAAA,iBAAA,iBAAA,aAIE,MAAA,KACA,0BAAA,IAAA,uBAEA,kBAAA,OAAA,OAAA,gBAAA,OAAA,OAAA,gBAAA,OAAA,OAAA,YAAA,OAAA,OACE,QAAA",
+  "names": []
+}

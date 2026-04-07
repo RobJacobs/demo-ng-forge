@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/formly-demo/lib/components/formly-radio-type.component.ts"],
+  "sourcesContent": ["\n    :host {\n      display: contents;\n    }\n\n    forge-radio-group {\n      display: flex;\n      flex-direction: var(--formly--radio--orientation, row);\n      align-items: var(--formly--radio--alignment, flext-start);\n      gap: 8px;\n    }\n  "],
+  "mappings": "AACI,MACE,QAAA,SAGF,kBACE,QAAA,KACA,eAAA,IAAA,4BAAA,EAAA,KACA,YAAA,IAAA,0BAAA,EAAA,aACA,IAAA",
+  "names": []
+}
