@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/components/routerlink-button/routerlink-button.component.scss"],
+  "sourcesContent": [":host {\n  display: block;\n}\n\n.routerlink {\n  &--disabled {\n    pointer-events: none;\n  }\n}\n"],
+  "mappings": "AAAA,MACE,QAAA,MAIA,CAAA,qBACE,eAAA",
+  "names": []
+}

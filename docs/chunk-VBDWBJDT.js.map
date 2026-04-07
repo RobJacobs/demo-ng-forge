@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/table-full-demo/table-full-demo.service.ts"],
+  "sourcesContent": ["import { Injectable, OnDestroy } from '@angular/core';\r\nimport { initializeTableState } from '../shared/components/table/table-full/table-full.constants';\r\n\r\n@Injectable()\r\nexport class TableFullDemoService {\r\n  public tableState = initializeTableState({ id: 'lastName', desc: false });\r\n}\r\n"],
+  "mappings": "gFAIA,IAAaA,GAAoB,IAAA,CAA3B,MAAOA,CAAoB,CADjCC,aAAA,CAES,KAAAC,WAAaC,EAAqB,CAAEC,GAAI,WAAYC,KAAM,EAAK,CAAE,kDAD7DL,EAAoB,CAAA,iCAApBA,EAAoBM,QAApBN,EAAoBO,SAAA,CAAA,CAAA,SAApBP,CAAoB,GAAA",
+  "names": ["TableFullDemoService", "constructor", "tableState", "initializeTableState", "id", "desc", "factory", "\u0275fac"]
+}
