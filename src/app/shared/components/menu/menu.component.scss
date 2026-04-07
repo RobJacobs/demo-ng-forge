@@ -5,23 +5,6 @@
   display: block;
 }
 
-forge-mini-drawer {
-  --forge-mini-drawer-width: 72px;
-
-  .menu {
-    width: drawer-mini-tokens.get('width');
-
-    forge-list-item {
-      button {
-        &:has(forge-icon) {
-          display: flex;
-          align-items: center;
-        }
-      }
-    }
-  }
-}
-
 .menu {
   forge-menu {
     cursor: pointer;
@@ -30,6 +13,10 @@ forge-mini-drawer {
   &__item {
     --forge-list-padding: 0;
 
+    button {
+      height: 24px;
+    }
+
     &--nested {
       margin-left: 16px;
     }
@@ -37,5 +24,28 @@ forge-mini-drawer {
 
   &-expander {
     margin: 8px;
+  }
+
+  &--mini {
+    --forge-drawer-width: auto;
+
+    &::part(content) {
+      width: 100%;
+      margin-inline: auto;
+      min-width: 56px;
+    }
+
+    forge-list-item {
+      text-align: center;
+    }
+
+    forge-menu {
+      display: block;
+    }
+
+    .menu-expander {
+      --forge-button-padding-inline: 0;
+      --forge-button-min-width: 56px;
+    }
   }
 }

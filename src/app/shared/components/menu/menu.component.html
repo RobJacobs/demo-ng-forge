@@ -1,14 +1,7 @@
-@if (appCache.menu.open) {
-  <forge-drawer slot="body-left">
-    <ng-container *ngTemplateOutlet="rootTemplate"></ng-container>
-    <ng-container *ngTemplateOutlet="menuExpanderTemplate"></ng-container>
-  </forge-drawer>
-} @else {
-  <forge-mini-drawer slot="body-left">
-    <ng-container *ngTemplateOutlet="rootTemplate"></ng-container>
-    <ng-container *ngTemplateOutlet="menuExpanderTemplate"></ng-container>
-  </forge-mini-drawer>
-}
+<forge-drawer [class.menu--mini]="!open()">
+  <ng-container *ngTemplateOutlet="rootTemplate"></ng-container>
+  <ng-container *ngTemplateOutlet="menuExpanderTemplate"></ng-container>
+</forge-drawer>
 
 <ng-template #rootTemplate>
   <nav id="app--main--nav">
