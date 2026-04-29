@@ -107,7 +107,7 @@ export const routes: Routes = [
       {
         path: 'formly-demo',
         title: 'Formly demo',
-        loadChildren: () => import('./formly-demo/formly-demo.module').then((m) => m.FormlyDemoModule)
+        loadComponent: () => import('./formly-demo/formly-demo.component').then((m) => m.FormlyDemoComponent)
       },
       {
         path: 'table-demo',

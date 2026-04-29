@@ -43,23 +43,21 @@
   }
   <forge-popover slot="end" #columnsConfigurePopover placement="right-end" animation-type="none">
     <forge-list class="columns-configure-popover" cdkDropList (cdkDropListDropped)="onColumnDragDrop($event)" [cdkDropListSortPredicate]="columnOrderPredicate" cdkDropListOrientation="vertical">
-      @for (column of table.getAllFlatColumns(); track i; let i = $index) {
-        @if (column.columnDef.enableHiding !== false || $any(column.columnDef).enableOrdering !== false) {
-          <forge-list-item [value]="column" (forge-list-item-select)="onColumnToggleVisibilty($event.detail.value)" cdkDrag [cdkDragData]="column" cdkDragLockAxis="y">
-            <div slot="start" style="column-gap: 8px">
-              <forge-icon-button density="small" cdkDragHandle [attr.aria-label]="`${$any(column.columnDef).headerText} column reorder`" [disabled]="$any(column.columnDef).enableOrdering === false">
-                <forge-icon name="drag_handle" aria-hidden="true"></forge-icon>
-              </forge-icon-button>
-              @if (column.columnDef.enableHiding === false) {
-                <forge-icon name="checkbox_blank_off" aria-hidden="true"></forge-icon>
-              } @else {
-                <forge-icon [name]="column.getIsVisible() === false ? 'check_box_outline_blank' : 'check_box'" [style.color]="column.getIsVisible() ? 'var(--forge-theme-primary)' : null" aria-hidden="true"></forge-icon>
-              }
-            </div>
+      @for (column of configurableColumns(); track i; let i = $index) {
+        <forge-list-item [value]="column" (forge-list-item-select)="onColumnToggleVisibilty($event.detail.value)" cdkDrag [cdkDragData]="column" cdkDragLockAxis="y">
+          <div slot="start" style="column-gap: 8px">
+            <forge-icon-button density="small" cdkDragHandle [attr.aria-label]="`${$any(column.columnDef).headerText} column reorder`" [disabled]="$any(column.columnDef).enableOrdering === false">
+              <forge-icon name="drag_handle" aria-hidden="true"></forge-icon>
+            </forge-icon-button>
+            @if (column.columnDef.enableHiding === false) {
+              <forge-icon name="checkbox_blank_off" aria-hidden="true"></forge-icon>
+            } @else {
+              <forge-icon [name]="column.getIsVisible() === false ? 'check_box_outline_blank' : 'check_box'" [style.color]="column.getIsVisible() ? 'var(--forge-theme-primary)' : null" aria-hidden="true"></forge-icon>
+            }
+          </div>
 
-            <button type="button" [attr.aria-label]="$any(column.columnDef)?.headerText">{{ $any(column.columnDef).headerText }}</button>
-          </forge-list-item>
-        }
+          <button type="button" [attr.aria-label]="$any(column.columnDef)?.headerText">{{ $any(column.columnDef).headerText }}</button>
+        </forge-list-item>
       }
       <forge-divider></forge-divider>
       <forge-list-item value="reset-column-width" (forge-list-item-select)="onColumnSizeReset()">
@@ -109,7 +107,7 @@
         </thead>
         <tbody>
           @if (isBusy()) {
-            @for (skl of [1, 2, 3]; track i; let i = $index) {
+            @for (skl of loadingIndicators(); track i; let i = $index) {
               <tr class="forge-table-row forge-table-body__row">
                 <td class="forge-table-cell forge-table-body__cell" [attr.colspan]="table.getVisibleLeafColumns().length">
                   <forge-skeleton list-item></forge-skeleton>

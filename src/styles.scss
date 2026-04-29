@@ -128,6 +128,15 @@ router-outlet {
   }
 }
 
+// :root {
+//   --forge-card-shape: var(--forge-shape-extra-large);
+//   --forge-dialog-shape: var(--forge-shape-extra-large);
+//   --forge-inline-message-shape: var(--forge-shape-extra-large);
+//   --forge-popover-border-radius: var(--forge-shape-extra-large);
+//   --forge-toast-shape: var(--forge-shape-extra-large);
+//   --forge-tooltip-shape: var(--forge-shape-extra-large);
+// }
+
 forge-popover {
   --forge-popover-min-width: 240px;
 }

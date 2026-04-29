@@ -9,10 +9,27 @@
 ::ng-deep {
   formly {
 
+    &-field,
     &-form,
     &-group,
-    &-field {
+    &-template {
+      display: contents;
+    }
+  }
+
+  .formly {
+    &--container-block {
       display: block;
+    }
+
+    &--container-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    &--container-flex {
+      display: flex;
+      gap: 16px;
     }
   }
 }
