@@ -1,8 +1,9 @@
 import { AfterViewInit, DestroyRef, Directive, ElementRef, Renderer2, RendererStyleFlags2, inject, input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AbstractControl, Validators } from '@angular/forms';
-import { combineLatest, distinctUntilChanged, fromEvent, map, startWith } from 'rxjs';
+import { combineLatest, distinctUntilChanged, fromEvent, map, startWith, tap } from 'rxjs';
 import { isDefined } from '@tylertech/forge-core';
+import { TextFieldComponent } from '@tylertech/forge';
 
 export type FieldErrorMessages = Record<string, (...args: any[]) => string>;
 
@@ -10,10 +11,8 @@ export const defaultErrorMessages: FieldErrorMessages = {
   required: () => 'Required',
   max: (error: { max: number }) => `Must be ${error.max} or less`,
   min: (error: { min: number }) => `Must be ${error.min} or greater`,
-  exactLength: (error: { exactLength: number }) => `Must be ${error.exactLength} characters`,
   maxlength: (error: { requiredLength: number }) => `Must be ${error.requiredLength} or fewer characters`,
-  minlength: (error: { requiredLength: number }) => `Must be at least ${error.requiredLength} characters`,
-  integer: () => 'Only whole numbers are allowed'
+  minlength: (error: { requiredLength: number }) => `Must be at least ${error.requiredLength} characters`
 };
 
 @Directive({
@@ -25,8 +24,7 @@ export class FormControlInvalidDirective implements AfterViewInit {
   private elementRef: ElementRef<HTMLElement> = inject(ElementRef<HTMLElement>);
   private inputElement: HTMLInputElement | HTMLTextAreaElement;
   private invalidMessageElement: HTMLElement = document.createElement('span');
-
-  private tagName: string;
+  private isTextField = this.elementRef.nativeElement instanceof TextFieldComponent;
 
   public readonly control = input.required<AbstractControl>({
     alias: 'appFormControlInvalid'
@@ -40,7 +38,6 @@ export class FormControlInvalidDirective implements AfterViewInit {
   }
 
   public ngAfterViewInit() {
-    this.tagName = this.elementRef.nativeElement.tagName;
     this.inputElement = this.elementRef.nativeElement.querySelector('input');
     if (!this.inputElement) {
       this.inputElement = this.elementRef.nativeElement.querySelector('textarea');
@@ -51,7 +48,7 @@ export class FormControlInvalidDirective implements AfterViewInit {
       this.renderer.setAttribute(this.elementRef.nativeElement, 'required', '');
     }
 
-    if (this.tagName === 'FORGE-TEXT-FIELD') {
+    if (this.isTextField) {
       if (required) {
         this.renderer.setAttribute(this.inputElement, 'required', '');
       }
@@ -64,14 +61,16 @@ export class FormControlInvalidDirective implements AfterViewInit {
     this.renderer.appendChild(this.elementRef.nativeElement, this.invalidMessageElement);
     this.setErrorDisplay();
 
-    const blur$ = fromEvent<FocusEvent>(this.elementRef.nativeElement, 'focusout');
+    const blur$ = fromEvent<FocusEvent>(this.inputElement || this.elementRef.nativeElement, 'focusout').pipe(tap(() => this.control().markAsTouched()));
     const statusChanges$ = this.control().statusChanges.pipe(startWith(this.control().status));
     const valueChanges$ = this.control().valueChanges.pipe(startWith(this.control().value));
 
     combineLatest({ event: blur$, status: statusChanges$, value: valueChanges$ })
       .pipe(
         map((evt) => ({ invalid: evt.status === 'INVALID' && this.control().touched, errors: this.control().errors })),
-        distinctUntilChanged((prev, curr) => prev.invalid === curr.invalid && prev.errors === curr.errors),
+        distinctUntilChanged((prev, curr) => {
+          return prev.invalid === curr.invalid && prev.errors == curr.errors;
+        }),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
@@ -84,14 +83,14 @@ export class FormControlInvalidDirective implements AfterViewInit {
   private setValidity(invalid: boolean) {
     if (invalid) {
       this.renderer.setAttribute(this.elementRef.nativeElement, 'invalid', '');
-      if (this.tagName === 'FORGE-TEXT-FIELD') {
+      if (this.isTextField) {
         this.renderer.setAttribute(this.inputElement, 'aria-invalid', 'true');
       } else {
         this.renderer.setAttribute(this.elementRef.nativeElement, 'aria-invalid', 'true');
       }
     } else {
       this.renderer.removeAttribute(this.elementRef.nativeElement, 'invalid');
-      if (this.tagName === 'FORGE-TEXT-FIELD') {
+      if (this.isTextField) {
         this.renderer.setAttribute(this.inputElement, 'aria-invalid', 'false');
       } else {
         this.renderer.setAttribute(this.elementRef.nativeElement, 'aria-invalid', 'false');
@@ -115,7 +114,8 @@ export class FormControlInvalidDirective implements AfterViewInit {
           'innerText',
           Object.entries(this.control().errors)
             .map<string>(([key, value]) => {
-              return this.invalidMessage()[key](value) || undefined;
+              const fn = this.invalidMessage()[key.toLowerCase()];
+              return fn ? fn(value) : typeof value === 'string' ? value : 'Invalid';
             })
             .filter((m) => m?.length)
         );

@@ -1,36 +1,59 @@
-import { Injectable } from '@angular/core';
-import { Observable, of, Subject } from 'rxjs';
+import { Injectable, signal } from '@angular/core';
+import { lastValueFrom, Observable, of, Subject } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { IFilterParameter, IFilterResponse } from '../shared/interfaces/filter.interface';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
+import { FormlyFieldConfig } from '@ngx-formly/core';
+import { FORMLY_CLASSES, FORMLY_COMPONENT_TYPES, FormlyFieldPropsExtended } from './lib/formly.constants';
+import { isDefined } from '@tylertech/forge-core';
+import { AutocompleteFilterCallback, IOption } from '@tylertech/forge';
 
 @Injectable()
 export class FormlyDemoService {
-  public formMessage = new Subject<{ id: string; message: string }>();
+  private options = [
+    { label: 'Option 01', value: '01' },
+    { label: 'Option 02', value: '02' },
+    { label: 'Option 03', value: '03' },
+    { label: 'Option 04', value: '04' },
+    { label: 'Option 05', value: '05' },
+    { label: 'Option 06', value: '06' },
+    { label: 'Option 07', value: '07' },
+    { label: 'Option 08', value: '08' },
+    { label: 'Option 09', value: '09' },
+    { label: 'Option 10', value: '10' }
+  ];
 
-  public validateField(field: string, value: any): Observable<{ invalid: boolean; message: string }> {
-    const validation = {
-      invalid: false,
-      message: `Error from server: ${field}`
-    };
-
-    return of(validation).pipe(delay(1000));
-  }
-
-  public getFieldHelp(field: string, param: IFilterParameter): Observable<IFilterResponse<any>> {
-    if (param.filters?.length) {
-      return of({ count: 0, data: [] }).pipe(delay(1000));
+  public autocompleteFilter: AutocompleteFilterCallback = (filterText: string, value: string) => {
+    if (isDefined(value)) {
+      return this.options.filter((o) => o.value === value);
     } else {
-      const result = [];
-      for (let index = param.skip as number; index < param.skip + param.take; index++) {
-        result.push({
-          id: index,
-          address: `${index} street`,
-          city: `${index} city`,
-          state: `${index} state`
-        });
-      }
-
-      return of({ count: 75, data: result }).pipe(delay(1000));
+      // return new Promise<IOption[]>((resolve, reject) => {
+      //   setTimeout(() => {
+      //     resolve(this.options.filter((o) => o.label.toLowerCase().includes(filterText.toLowerCase())));
+      //   }, 1000);
+      // });
+      return lastValueFrom(of(this.options.filter((o) => o.label.toLowerCase().includes(filterText.toLowerCase()))).pipe(delay(1000)));
     }
+  };
+
+  public validateFieldAsync(control: AbstractControl, field: FormlyFieldConfig): Observable<ValidationErrors> {
+    switch (field.key) {
+      case 'firstName': {
+        if (control.value?.length === 1) {
+          return of({ duplicate: 'First name is duplicated.' }).pipe(delay(1000));
+        } else {
+          return of(null).pipe(delay(1000));
+        }
+      }
+      case 'stringMask': {
+        const pattern = /\d{3}-\d{2}-\d{4}/;
+        if (!pattern.test(control.value)) {
+          return of({ invalid: 'Invalid format' });
+        } else {
+          return of(null);
+        }
+      }
+    }
+    return of(null).pipe(delay(1000));
   }
 }

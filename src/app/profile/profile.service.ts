@@ -30,6 +30,7 @@ export class ProfileService {
       dateOfBirth: new FormControl<string | Date | null>(null, {
         validators: [Validators.required]
       }),
+      partner: new FormControl<string | number | null>(null, { validators: [Validators.required] }),
       comment: new FormControl<string | null>(null),
       rank: new FormControl<number>(5),
       size: new FormControl<string | null>(null),

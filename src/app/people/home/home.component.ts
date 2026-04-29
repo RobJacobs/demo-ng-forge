@@ -87,8 +87,10 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
       template: (rowIndex: number, cellElement: HTMLElement, data: any) => {
         const imgElement = document.createElement('img') as HTMLImageElement;
         imgElement.src = `mock-data/${Utils.formatNumber(data.id, '2.0-0')}-small.png`;
+        imgElement.style.width = '48px';
+        imgElement.style.height = '48px';
+        imgElement.style.borderRadius = '50%';
         imgElement.setAttribute('alt', '');
-        imgElement.classList.add('forge-table-cell__image');
         return imgElement;
       }
     },
@@ -99,7 +101,7 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
       filter: true,
       filterDelegate: () => {
         const delegate = new TextFieldComponentDelegate();
-        delegate.inputElement.setAttribute('aria-label', 'Dd');
+        delegate.inputElement.setAttribute('aria-label', 'Id');
         return delegate;
       }
     },

@@ -1,8 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpContext } from '@angular/common/http';
 import { isDefined, isNumber } from '@tylertech/forge-core';
-import { Observable, Subject, timer } from 'rxjs';
-import { map, delay, concatMap, take, timeout, filter } from 'rxjs/operators';
+import { Observable, of, Subject, timer, map, delay, concatMap, take, timeout, filter, tap } from 'rxjs';
 
 import { SHOW_BUSY_INDICATOR } from 'src/app/shared/interceptors/busy.interceptor';
 import { IFilterParameter, IPerson, IProfile, ISearch } from 'src/app/shared/interfaces';
@@ -14,12 +13,20 @@ import { Utils } from 'src/utils';
 export class AppDataService {
   private httpClient = inject(HttpClient);
 
+  private peopleCache: IPerson[];
+
   public getProfile(): Observable<IProfile> {
     return this.httpClient.get<IProfile>('mock-data/profile.json');
   }
 
   public getPeople(filter?: IFilterParameter): Observable<{ count: number; data: IPerson[] }> {
-    return this.httpClient.get<IPerson[]>('mock-data/people.json').pipe(
+    let obs: Observable<any>;
+    if (this.peopleCache?.length) {
+      obs = of(this.peopleCache);
+    } else {
+      obs = this.httpClient.get<IPerson[]>('mock-data/people.json').pipe(tap((r) => (this.peopleCache = r)));
+    }
+    return obs.pipe(
       delay(1000),
       map((r) => {
         let count = r.length;
@@ -50,7 +57,16 @@ export class AppDataService {
   }
 
   public getPerson(id: number): Observable<IPerson | undefined> {
-    return this.httpClient.get('mock-data/people.json').pipe(map((r) => (r as IPerson[]).find((p) => p.id.toString() === id.toString())));
+    let obs: Observable<any>;
+    if (this.peopleCache?.length) {
+      obs = of(this.peopleCache);
+    } else {
+      obs = this.httpClient.get<IPerson[]>('mock-data/people.json').pipe(tap((r) => (this.peopleCache = r)));
+    }
+    return obs.pipe(
+      delay(1000),
+      map((r) => (r as IPerson[]).find((p) => p.id.toString() === id.toString()))
+    );
   }
 
   public getSearches(key: string): Observable<ISearch[]> {

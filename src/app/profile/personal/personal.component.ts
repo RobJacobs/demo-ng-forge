@@ -1,8 +1,10 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { IOption } from '@tylertech/forge';
+import { isDefined } from '@tylertech/forge-core';
+import { AutocompleteFilterCallback, CellAlign, IOption, TextFieldComponentDelegate } from '@tylertech/forge';
 import {
+  ForgeAutocompleteModule,
   ForgeButtonModule,
   ForgeDatePickerModule,
   ForgeDividerModule,
@@ -21,11 +23,17 @@ import { AppDataService } from 'src/app/app-data.service';
 import { AutoFocusDirective, defaultErrorMessages, FieldErrorMessages, FormControlInvalidDirective, InputCasingDirective } from 'src/app/shared/directives';
 import { DateTimeComponent } from 'src/app/shared/components';
 import { ProfileService } from '../profile.service';
+import { FieldHelpButtonComponent } from 'src/app/shared/components/field-help/field-help-button/field-help-button.component';
+import { IFieldHelpConfig } from 'src/app/shared/components/field-help/field-help.constants';
+import { Utils } from 'src/utils';
+import { IPerson } from 'src/app/shared/interfaces';
+import { lastValueFrom, map, of } from 'rxjs';
 
 @Component({
   selector: 'app-profile-personal',
   imports: [
     ReactiveFormsModule,
+    ForgeAutocompleteModule,
     ForgeButtonModule,
     ForgeDatePickerModule,
     ForgeDividerModule,
@@ -41,6 +49,7 @@ import { ProfileService } from '../profile.service';
     FormControlInvalidDirective,
     InputCasingDirective,
     DateTimeComponent,
+    FieldHelpButtonComponent,
     AutoFocusDirective
   ],
   templateUrl: './personal.component.html',
@@ -75,7 +84,7 @@ export class PersonalComponent implements OnInit {
   // ]);
 
   public genderOptions: IOption[] = [
-    { label: '', value: null },
+    // { label: '', value: null },
     { label: 'Male', value: 'M' },
     { label: 'Female', value: 'F' },
     { label: 'Undecided', value: 'U' }
@@ -86,6 +95,112 @@ export class PersonalComponent implements OnInit {
     { label: 'Medium', value: 'md' },
     { label: 'Large', value: 'lg' }
   ];
+  public partnerFilter: AutocompleteFilterCallback = (filterText: string, value: number) => {
+    if (isDefined(value)) {
+      return lastValueFrom(
+        this.appDataService.getPerson(value).pipe(
+          map((p) => {
+            return [{ label: `${p.firstName} ${p.lastName}`, value: p.id }];
+          })
+        )
+      );
+    } else {
+      return lastValueFrom(
+        this.appDataService.getPeople().pipe(
+          map((r) => {
+            return r.data
+              .map((p) => ({ label: `${p.firstName} ${p.lastName}`, value: p.id }))
+              .filter((o) => o.label.toLowerCase().includes(filterText.toLowerCase()));
+          })
+        )
+      );
+    }
+  };
+  public partnerFieldHelpConfig: IFieldHelpConfig = {
+    columnConfigurations: [
+      {
+        property: 'image',
+        width: 48,
+        align: CellAlign.Center,
+        template: (rowIndex: number, cellElement: HTMLElement, data: any) => {
+          const imgElement = document.createElement('img') as HTMLImageElement;
+          imgElement.src = `mock-data/${Utils.formatNumber(data.id, '2.0-0')}-small.png`;
+          imgElement.style.width = '48px';
+          imgElement.style.height = '48px';
+          imgElement.style.borderRadius = '50%';
+          imgElement.setAttribute('alt', '');
+          return imgElement;
+        }
+      },
+      {
+        header: 'Id',
+        property: 'id',
+        sortable: true,
+        filter: true,
+        filterDelegate: () => {
+          const delegate = new TextFieldComponentDelegate();
+          delegate.inputElement.setAttribute('aria-label', 'Id');
+          return delegate;
+        }
+      },
+      {
+        header: 'First',
+        property: 'firstName',
+        sortable: true,
+        filter: true,
+        filterDelegate: () => {
+          const delegate = new TextFieldComponentDelegate();
+          delegate.inputElement.setAttribute('aria-label', 'First Nmae');
+          return delegate;
+        }
+      },
+      {
+        header: 'Last',
+        property: 'lastName',
+        initialSort: true,
+        sortable: true,
+        filter: true,
+        filterDelegate: () => {
+          const delegate = new TextFieldComponentDelegate();
+          delegate.inputElement.setAttribute('aria-label', 'Last Nmae');
+          return delegate;
+        }
+      },
+      {
+        header: 'Gender',
+        property: 'gender',
+        sortable: true,
+        filter: true,
+        filterDelegate: () => {
+          const delegate = new TextFieldComponentDelegate();
+          delegate.inputElement.setAttribute('aria-label', 'Gender');
+          return delegate;
+        }
+      },
+      {
+        header: 'Occupation',
+        property: 'occupation',
+        sortable: true,
+        filter: true,
+        filterDelegate: () => {
+          const delegate = new TextFieldComponentDelegate();
+          delegate.inputElement.setAttribute('aria-label', 'Occupation');
+          return delegate;
+        }
+      }
+    ],
+    title: 'Browse people',
+    key: 'id',
+    dataObservable: (param) => this.appDataService.getPeople(param),
+    transform: (value: IPerson) => {
+      return value.id;
+      // return `${value.id} - ${value.firstName} ${value.lastName}`;
+    }
+    // multiselect: true
+    // transform: (value: IPerson[]) => {
+    //   return value.map((p) => `${p.firstName} ${p.lastName}`).join(', ');
+    // }
+  };
 
   public ngOnInit() {
     this.appDataService

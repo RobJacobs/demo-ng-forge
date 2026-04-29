@@ -1,0 +1,42 @@
+<app-dialog-template [dialogTitle]="config.title" (dialogClose)="onClose()">
+  <div class="body">
+    @if (isBusy()) {
+      <div class="loading-indicator">
+        @for (skl of loadingIndicators; track i; let i = $index) {
+          <forge-skeleton list-item></forge-skeleton>
+        }
+      </div>
+    }
+
+    <forge-table
+      #helpTable
+      [data]="data()"
+      [columnConfigurations]="config.columnConfigurations"
+      allow-row-click
+      [select]="config.multiselect"
+      [multiselect]="config.multiselect"
+      [selectKey]="config.key"
+      filter
+      (forge-table-sort)="onTableSort($any($event))"
+      (forge-table-filter)="onTableFilter($event)"
+      (forge-table-row-click)="onTableRowClick($event)"
+      (forge-table-select)="onTableRowSelect($event)"
+      (forge-table-select-all)="onTableRowSelectAll($event)"
+      [class.hidden]="isBusy()"
+    ></forge-table>
+
+    @if (!isBusy() && !data().length) {
+      <forge-page-state>
+        <img src="https://cdn.forge.tylertech.com/v1/images/spot-hero/no-search-results-spot-hero.svg" alt="" slot="graphic" />
+        <div slot="message">No records found matching the supplied filters.</div>
+      </forge-page-state>
+    }
+  </div>
+
+  <ng-container app-dialog-footer>
+    <forge-paginator slot="end" [pageIndex]="paginator.pageIndex" [pageSize]="paginator.pageSize" [total]="paginator.total" (forge-paginator-change)="onPaginatorChange($event)" [disabled]="isBusy() || !data().length" />
+    @if (config.multiselect) {
+      <forge-button slot="end" variant="raised" (click)="onApplySelection()" [disabled]="isBusy() || !selectedRows.length">Apply selection</forge-button>
+    }
+  </ng-container>
+</app-dialog-template>

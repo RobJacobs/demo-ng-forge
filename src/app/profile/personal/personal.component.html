@@ -29,6 +29,17 @@
       </forge-text-field>
     </forge-date-picker>
 
+    <forge-autocomplete [filter]="partnerFilter" formControlName="partner">
+      <forge-text-field [appFormControlInvalid]="formGroup.controls.partner">
+        <label slot="label" for="profile--personal--partner">Partner</label>
+        <input type="text" id="profile--personal--partner" />
+        <forge-icon slot="end" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
+        <app-field-help-button slot="accessory" [control]="formGroup.controls.partner" [config]="partnerFieldHelpConfig"></app-field-help-button>
+      </forge-text-field>
+    </forge-autocomplete>
+
+    <app-date-time label="Entry date" formControlName="entryDate"></app-date-time>
+
     <forge-text-field class="form-grid__comment form-grid--col-span">
       <label slot="label" for="profile--personal--comment">Comment</label>
       <textarea type="text" id="profile--personal--comment" formControlName="comment" rows="4"></textarea>
@@ -58,8 +69,6 @@
         <forge-switch formControlName="citizen" aria-label="Is a citizen"></forge-switch>
       </div>
     </forge-label-value>
-
-    <app-date-time label="Entry date" formControlName="entryDate"></app-date-time>
   </div>
 
   <forge-divider></forge-divider>

@@ -128,6 +128,9 @@ export class TableFullComponent {
   public rowClicked = output<{ event: Event; row: Row<any> }>();
   public filterShow = output();
   public editSubmit = output();
+  public loadingIndicators = computed(() => {
+    return new Array(this.state().take());
+  });
   public headerOptions = computed<IMenuOption[]>(() => {
     const menuOptions: IMenuOption[] = [];
     if (this.canEdit()) {
@@ -175,6 +178,11 @@ export class TableFullComponent {
         .flat()
         .filter((h) => isDefined(h)).length > 0
     );
+  });
+  public configurableColumns = computed(() => {
+    return this.table
+      .getAllLeafColumns()
+      .filter((c) => c.columnDef.enableHiding !== false || (c.columnDef as ComponentColumnDef<unknown>).enableOrdering !== false);
   });
 
   public table: Table<unknown> = createAngularTable(() => ({
@@ -267,7 +275,7 @@ export class TableFullComponent {
 
     const columns = this.table.getAllFlatColumns();
     const previousIndex = columns.findIndex((c) => c.id === dragDropEvent.item.data.id);
-    const currentIndex = columns.findIndex((c) => c.id === this.configurableColumns[dragDropEvent.currentIndex].id);
+    const currentIndex = columns.findIndex((c) => c.id === this.configurableColumns()[dragDropEvent.currentIndex].id);
 
     if ((columns[currentIndex].columnDef as ComponentColumnDef<unknown>).enableOrdering === false) {
       return;
@@ -277,14 +285,8 @@ export class TableFullComponent {
   }
 
   public columnOrderPredicate = (index: number, item) => {
-    return this.configurableColumns[index].enableOrdering !== false;
+    return (this.configurableColumns()[index] as ComponentColumnDef<unknown>).enableOrdering !== false;
   };
-
-  private get configurableColumns(): ComponentColumnDef<unknown>[] {
-    return this.table
-      .getAllFlatColumns()
-      .filter((c) => c.columnDef.enableHiding !== false || (c.columnDef as ComponentColumnDef<unknown>).enableOrdering !== false);
-  }
 
   public onColumnsConfigure(event: MouseEvent) {
     this.columnsConfigurePopover().nativeElement.anchorElement = event.target as HTMLElement;

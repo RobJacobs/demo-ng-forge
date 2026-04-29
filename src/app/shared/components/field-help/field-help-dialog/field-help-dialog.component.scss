@@ -1,0 +1,24 @@
+:host {
+  display: contents;
+}
+
+.body {
+  min-width: 95vw;
+}
+
+.loading-indicator {
+  padding: 8px;
+}
+
+.hidden {
+  display: none;
+}
+
+forge-page-state {
+  --forge-page-state-graphic-spacing: var(--forge-spacing-medium);
+  --forge-page-state-graphic-height: calc(var(--forge-spacing-medium) * 10);
+  --forge-page-state-graphic-width: calc(var(--forge-spacing-medium) * 10);
+  --forge-page-state-spacing: var(--forge-spacing-medium);
+  --forge-page-state-title-spacing: var(--forge-spacing-medium);
+  --forge-page-state-message-spacing: var(--forge-spacing-medium);
+}

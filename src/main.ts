@@ -7,9 +7,9 @@ import { defineIcons } from './define-icons';
 
 defineIcons();
 window.TylerForgeGlobalConfiguration = {
-  'forge-field': {
-    floatLabel: true
-  }
+  // 'forge-field': {
+  //   floatLabel: true
+  // }
 };
 
 bootstrapApplication(AppComponent, { ...appConfig, providers: [provideZoneChangeDetection(), ...appConfig.providers] }).catch((err) => console.error(err));

@@ -14,14 +14,6 @@
           @include global.app-border(border-bottom);
         }
       }
-
-      &-cell {
-        &__image {
-          width: 48px;
-          height: 48px;
-          border-radius: 50%;
-        }
-      }
     }
   }
 }
