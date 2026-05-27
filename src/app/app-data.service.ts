@@ -22,9 +22,9 @@ export class AppDataService {
   public getPeople(filter?: IFilterParameter): Observable<{ count: number; data: IPerson[] }> {
     let obs: Observable<any>;
     if (this.peopleCache?.length) {
-      obs = of(this.peopleCache);
+      obs = of(structuredClone(this.peopleCache));
     } else {
-      obs = this.httpClient.get<IPerson[]>('mock-data/people.json').pipe(tap((r) => (this.peopleCache = r)));
+      obs = this.httpClient.get<IPerson[]>('mock-data/people.json').pipe(tap((r) => (this.peopleCache = structuredClone(r))));
     }
     return obs.pipe(
       delay(1000),
@@ -59,9 +59,9 @@ export class AppDataService {
   public getPerson(id: number): Observable<IPerson | undefined> {
     let obs: Observable<any>;
     if (this.peopleCache?.length) {
-      obs = of(this.peopleCache);
+      obs = of(structuredClone(this.peopleCache));
     } else {
-      obs = this.httpClient.get<IPerson[]>('mock-data/people.json').pipe(tap((r) => (this.peopleCache = r)));
+      obs = this.httpClient.get<IPerson[]>('mock-data/people.json').pipe(tap((r) => (this.peopleCache = structuredClone(r))));
     }
     return obs.pipe(
       delay(1000),
