@@ -1,4 +1,4 @@
-import { Component, computed, ElementRef, input, model, output, signal, TemplateRef, viewChild } from '@angular/core';
+import { Component, computed, ElementRef, input, model, output, signal, TemplateRef, viewChild, viewChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
@@ -84,11 +84,13 @@ import { TableMobileComponent } from '../table-mobile/table-mobile.component';
 })
 export class TableFullComponent {
   private tableColumnResize$ = new Subject<void>();
+  private bodyRef = viewChild.required<ElementRef<HTMLElement>>('bodyRef');
   private tableElementRef = viewChild.required<ElementRef<HTMLTableElement>>('tableRef');
   private columnsConfigurePopover = viewChild.required<ElementRef<PopoverComponent>>('columnsConfigurePopover');
   private headerActionsMenu = viewChild.required<ElementRef<IconButtonComponent>>('headerActionsMenu');
   private tableCellHeaderDefaultTemplate = viewChild.required<TemplateRef<{ $implicit: CellContext<unknown, unknown> }>>('tableCellHeaderDefault');
   private tableCellDefaultTemplate = viewChild.required<TemplateRef<{ $implicit: CellContext<unknown, unknown> }>>('tableCellDefault');
+  private tableCellFilters = viewChildren(TableCellFilterComponent);
 
   public tableRowSelectHeaderTemplate = viewChild.required<TemplateRef<{ $implicit: CellContext<unknown, unknown> }>>('tableRowSelectHeader');
   public tableRowSelectTemplate = viewChild.required<TemplateRef<{ $implicit: CellContext<unknown, unknown> }>>('tableRowSelect');
@@ -129,7 +131,7 @@ export class TableFullComponent {
   public filterShow = output();
   public editSubmit = output();
   public loadingIndicators = computed(() => {
-    return new Array(this.state().take());
+    return new Array(this.state()?.take() || 5);
   });
   public headerOptions = computed<IMenuOption[]>(() => {
     const menuOptions: IMenuOption[] = [];
@@ -194,7 +196,8 @@ export class TableFullComponent {
     manualPagination: true,
     manualSorting: true,
     onColumnFiltersChange: (value) => {
-      this.resetRowState();
+      this.resetTableState();
+      this.state()?.skip.set(0);
       if (typeof value === 'function') {
         this.state()?.columns?.filters.update(value);
       } else {
@@ -205,7 +208,8 @@ export class TableFullComponent {
       if (this.isBusy() || this.isEditing() || this.isColumnResizing()) {
         return;
       }
-      this.resetRowState();
+      this.resetTableState();
+      this.state()?.skip.set(0);
       if (typeof value === 'function') {
         this.state()?.sorting.update(value);
       } else {
@@ -298,7 +302,7 @@ export class TableFullComponent {
   }
 
   public onColumnSizeReset() {
-    this.state().columns.sizing.set({});
+    this.table.setColumnSizing({});
   }
 
   public onColumnHeaderResize(event, context: HeaderContext<any, unknown>) {
@@ -389,10 +393,10 @@ export class TableFullComponent {
   }
 
   public onRowSelectHeader(context: HeaderContext<any, unknown>) {
-    if (this.table.getIsAllRowsSelected()) {
+    if (this.table.getIsAllPageRowsSelected()) {
       this.table.toggleAllPageRowsSelected(false);
     } else {
-      this.table.toggleAllRowsSelected(true);
+      this.table.toggleAllPageRowsSelected(true);
     }
   }
 
@@ -407,12 +411,12 @@ export class TableFullComponent {
   }
 
   public onPaginatorChange(data: IPaginatorChangeEventData) {
-    this.resetRowState();
+    this.resetTableState();
     if (data.type === 'page-size') {
-      this.state().take.set(data.pageSize);
-      this.state().skip.set(0);
+      this.state()?.take.set(data.pageSize);
+      this.state()?.skip.set(0);
     } else {
-      this.state().skip.set(data.offset);
+      this.state()?.skip.set(data.offset);
     }
   }
 
@@ -422,6 +426,11 @@ export class TableFullComponent {
 
   public onSubmit() {
     this.editSubmit.emit();
+  }
+
+  public onClearFilters() {
+    this.table.setColumnFilters([]);
+    this.tableCellFilters().forEach((c) => c.formControl.setValue(null, { emitEvent: false }));
   }
 
   public onFilter() {
@@ -434,8 +443,9 @@ export class TableFullComponent {
     event.stopPropagation();
   }
 
-  private resetRowState() {
-    this.state().rows.expanded.set({});
-    this.state().rows.selected.set({});
+  private resetTableState() {
+    this.bodyRef().nativeElement.scrollTo({ top: 0, behavior: 'smooth' });
+    this.table.toggleAllPageRowsSelected(false);
+    this.table.setExpanded({});
   }
 }

@@ -21,27 +21,32 @@
         </forge-menu>
       }
     } @else {
-      @if (canEdit()) {
-        <forge-button slot="end" [disabled]="isBusy()" (click)="onEdit(true)">
-          <forge-icon slot="start" name="edit" aria-hidden="true"></forge-icon>
-          Edit
-        </forge-button>
-      }
-      @if (canFilter()) {
-        <forge-button slot="end" [disabled]="isBusy()" (click)="onFilter()">
-          <forge-icon slot="start" name="filter_list" aria-hidden="true"></forge-icon>
-          Filter
-        </forge-button>
-      }
-      @if (canConfigureColumns()) {
-        <forge-button slot="end" [disabled]="isBusy()" (click)="onColumnsConfigure($event)">
-          <forge-icon slot="start" name="view_column" aria-hidden="true"></forge-icon>
-          Columns
-        </forge-button>
-      }
+      <div slot="end">
+        @if (canEdit()) {
+          <forge-icon-button [disabled]="isBusy()" (click)="onEdit(true)" aria-label="Edit records">
+            <forge-icon name="edit"></forge-icon>
+          </forge-icon-button>
+          <forge-tooltip>Edit records</forge-tooltip>
+        }
+        @if (canConfigureColumns()) {
+          <forge-icon-button [disabled]="isBusy()" (click)="onColumnsConfigure($event)">
+            <forge-icon name="view_column"></forge-icon>
+          </forge-icon-button>
+          <forge-tooltip>Configure columns</forge-tooltip>
+        }
+        @if (canFilter()) {
+          @if (table.getAllFlatColumns().some((c) => c.getIsFiltered())) {
+            <forge-button (click)="onClearFilters()" [disabled]="isBusy()">Clear filters</forge-button>
+          }
+          <forge-icon-button [disabled]="isBusy()" (click)="onFilter()" aria-label="Toggle filter">
+            <forge-icon name="filter_list"></forge-icon>
+          </forge-icon-button>
+          <forge-tooltip>Toggle filter</forge-tooltip>
+        }
+      </div>
     }
   }
-  <forge-popover slot="end" #columnsConfigurePopover placement="right-end" animation-type="none">
+  <forge-popover #columnsConfigurePopover placement="right-end" animation-type="none">
     <forge-list class="columns-configure-popover" cdkDropList (cdkDropListDropped)="onColumnDragDrop($event)" [cdkDropListSortPredicate]="columnOrderPredicate" cdkDropListOrientation="vertical">
       @for (column of configurableColumns(); track i; let i = $index) {
         <forge-list-item [value]="column" (forge-list-item-select)="onColumnToggleVisibilty($event.detail.value)" cdkDrag [cdkDragData]="column" cdkDragLockAxis="y">
@@ -66,7 +71,7 @@
     </forge-list>
   </forge-popover>
 </forge-toolbar>
-<div class="body">
+<div #bodyRef class="body">
   <ng-content select="[app-full-table-body-header]"></ng-content>
   <form #formRef class="body__table" novalidate autocomplete="off">
     @if (layoutMode() === 'sm') {
@@ -137,8 +142,10 @@
               </tr>
               @if (row.getIsExpanded()) {
                 <tr class="forge-table-row forge-table-body__row forge-table-row__expandable-content">
-                  <td class="forge-table-row__expandable-content-cell" [attr.colspan]="table.getVisibleLeafColumns().length">
-                    <ng-container *ngTemplateOutlet="tableRowDetailTemplate(); context: { data: row.original, rowIndex }"></ng-container>
+                  <td class="forge-table-row__expandable-content__cell" [attr.colspan]="table.getVisibleLeafColumns().length">
+                    <div class="forge-table-row__expandable-content__container">
+                      <ng-container *ngTemplateOutlet="tableRowDetailTemplate(); context: { data: row.original, rowIndex }"></ng-container>
+                    </div>
                   </td>
                 </tr>
               }
@@ -187,8 +194,8 @@
 
 <ng-template #tableCellHeaderDefault let-context>
   <span class="forge-table-head__cell-text">{{ context.column.columnDef.headerText }}</span>
-  @if (context.column.getCanSort()) {
-    <forge-icon [name]="context.column.getIsSorted() === 'desc' ? 'arrow_downward' : context.column.getIsSorted() === 'asc' ? 'arrow_upward' : ''" class="forge-table-head__cell-sort-icon" aria-hidden="true"></forge-icon>
+  @if (context.column.getCanSort() && context.column.getIsSorted()) {
+    <forge-icon class="forge-table-head__cell-sort-icon" [name]="context.column.getIsSorted() === 'desc' ? 'arrow_downward' : context.column.getIsSorted() === 'asc' ? 'arrow_upward' : ''" aria-hidden="true"></forge-icon>
   }
   @if (!isBusy() && context.column.columnDef.enableResizing !== false) {
     <forge-button class="forge-table-head__cell-resizer" tabindex="-1" [attr.aria-label]="`${context.column.columnDef.headerText} column resizer`" (mousedown)="onColumnHeaderResize($event, context)"></forge-button>
