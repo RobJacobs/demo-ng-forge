@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/interceptors/busy.interceptor.ts"],
+  "sourcesContent": ["import { inject } from '@angular/core';\r\nimport { HttpContextToken, HttpInterceptorFn } from '@angular/common/http';\r\nimport { finalize } from 'rxjs/operators';\r\nimport { AppCacheService } from 'src/app/app-cache.service';\r\n\r\nexport const SHOW_BUSY_INDICATOR = new HttpContextToken<boolean>(() => false);\r\n\r\nexport const busyInterceptor: HttpInterceptorFn = (request, next) => {\r\n  const isBusy = inject(AppCacheService).isBusy;\r\n  let requestCount = 0;\r\n\r\n  if (request.context.get(SHOW_BUSY_INDICATOR)) {\r\n    requestCount++;\r\n    if (requestCount) {\r\n      isBusy.set(true);\r\n    }\r\n    return next(request).pipe(\r\n      finalize(() => {\r\n        requestCount--;\r\n        if (requestCount <= 0) {\r\n          isBusy.set(false);\r\n        }\r\n      })\r\n    );\r\n  } else {\r\n    return next(request);\r\n  }\r\n};\r\n"],
+  "mappings": "gIAKO,IAAMA,EAAsB,IAAIC,EAA0B,IAAM,EAAK,EAE/DC,EAAqCA,CAACC,EAASC,IAAQ,CAClE,IAAMC,EAASC,EAAOC,CAAe,EAAEF,OACnCG,EAAe,EAEnB,OAAIL,EAAQM,QAAQC,IAAIV,CAAmB,GACzCQ,IACIA,GACFH,EAAOM,IAAI,EAAI,EAEVP,EAAKD,CAAO,EAAES,KACnBC,EAAS,IAAK,CACZL,IACIA,GAAgB,GAClBH,EAAOM,IAAI,EAAK,CAEpB,CAAC,CAAC,GAGGP,EAAKD,CAAO,CAEvB",
+  "names": ["SHOW_BUSY_INDICATOR", "HttpContextToken", "busyInterceptor", "request", "next", "isBusy", "inject", "AppCacheService", "requestCount", "context", "get", "set", "pipe", "finalize"]
+}

@@ -96,6 +96,7 @@
                     [class.forge-table-head__cell--filtering]="isFiltering() && filterMode() === 'column'"
                     [class.forge-table-head__cell--resizing]="header.column.getIsResizing()"
                     [class.forge-table-head__cell--sortable]="header.column.getCanSort()"
+                    [class.forge-table-head__cell--filtering]="isFiltering() && filterMode() === 'column'"
                     [class.forge-table-cell--frozen-left]="header.column.getIsPinned() === 'left'"
                     [class.forge-table-cell--frozen-right]="header.column.getIsPinned() === 'right'"
                     [class.forge-table-row__actions]="header.column.id === columnIds.actions"

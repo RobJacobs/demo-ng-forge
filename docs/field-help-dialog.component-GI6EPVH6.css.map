@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/components/field-help/field-help-dialog/field-help-dialog.component.scss"],
+  "sourcesContent": [":host {\r\n  display: contents;\r\n}\r\n\r\n.body {\r\n  min-width: 95vw;\r\n}\r\n\r\n.loading-indicator {\r\n  padding: 8px;\r\n}\r\n\r\n.hidden {\r\n  display: none;\r\n}\r\n\r\nforge-page-state {\r\n  --forge-page-state-graphic-spacing: var(--forge-spacing-medium);\r\n  --forge-page-state-graphic-height: calc(var(--forge-spacing-medium) * 10);\r\n  --forge-page-state-graphic-width: calc(var(--forge-spacing-medium) * 10);\r\n  --forge-page-state-spacing: var(--forge-spacing-medium);\r\n  --forge-page-state-title-spacing: var(--forge-spacing-medium);\r\n  --forge-page-state-message-spacing: var(--forge-spacing-medium);\r\n}"],
+  "mappings": "AAAA,MACE,QAAA,SAGF,CAAA,KACE,UAAA,KAGF,CAAA,kBARA,QASE,IAGF,CAAA,OACE,QAAA,KAGF,iBACE,oCAAA,IAAA,wBACA,mCAAA,KAAA,IAAA,wBAAA,EAAA,IACA,kCAAA,KAAA,IAAA,wBAAA,EAAA,IACA,4BAAA,IAAA,wBACA,kCAAA,IAAA,wBACA,oCAAA,IAAA",
+  "names": []
+}
