@@ -86,7 +86,7 @@ export class HomeComponent extends BaseTableComponent implements OnInit, OnDestr
       align: CellAlign.Center,
       template: (rowIndex: number, cellElement: HTMLElement, data: any) => {
         const imgElement = document.createElement('img') as HTMLImageElement;
-        imgElement.src = `mock-data/${Utils.formatNumber(data.id, '2.0-0')}-small.png`;
+        imgElement.src = data.imageUrl;
         imgElement.style.width = '48px';
         imgElement.style.height = '48px';
         imgElement.style.borderRadius = '50%';

@@ -1,8 +1,9 @@
 <forge-toolbar class="header">
   <div slot="start">
     <h2 class="forge-typography--subheading4">Profile</h2>
-    @if (imageUrl) {
-      <img [src]="imageUrl" (error)="onImageError($event)" alt />
+
+    @if (cache.profile?.imageUrl) {
+      <img [src]="cache.profile.imageUrl" (error)="onImageError($event)" alt />
     }
   </div>
 

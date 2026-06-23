@@ -21,11 +21,12 @@ app-table-full {
 
 .table {
   &__body-header {
-    @include global.app-border(border-bottom);
     padding: 16px;
+    // @include global.app-border(border-bottom);
   }
 
   &__body-footer {
     padding: 16px;
+    // @include global.app-border(border-top);
   }
 }

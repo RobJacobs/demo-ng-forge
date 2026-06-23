@@ -47,6 +47,13 @@ router-outlet {
 }
 
 .app {
+  &-content {
+
+    forge-icon-button:not([theme]) {
+      --forge-icon-color: var(--forge-theme-text-medium);
+    }
+  }
+
   &--hidden {
     display: none !important;
   }

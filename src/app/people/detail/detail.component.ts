@@ -25,7 +25,6 @@ export class DetailComponent {
   public cache = inject(PeopleCacheService);
 
   public person?: IPerson;
-  public imageUrl?: string;
   public index = 0;
 
   private noImageUrl = 'mock-data/no-image.png';
@@ -39,7 +38,6 @@ export class DetailComponent {
         .subscribe({
           next: (r) => {
             this.person = r;
-            this.imageUrl = `mock-data/${Utils.formatNumber(parseInt(this.person?.id, 10), '2.0-0')}.png`;
           }
         });
     } else {
