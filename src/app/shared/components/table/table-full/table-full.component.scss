@@ -44,10 +44,13 @@ $table-row-height: 48px;
       position: relative;
 
       &--editing {
-        --table-cell-inline-padding: var(--forge-spacing-xxsmall);
-
         th {
           cursor: default;
+        }
+
+        .forge-table-row__actions,
+        .forge-table-row__selector {
+          display: none;
         }
       }
 
@@ -67,18 +70,20 @@ $table-row-height: 48px;
       }
 
       &-head {
+        &__row {
+          &--resizing {
+            th {
+              cursor: col-resize;
+            }
+          }
+        }
+
         &__cell {
           @include cell-padding();
           width: calc(var(--table-column-width) * 1px);
-
-          &:hover {
-            .forge-table-head__cell {
-              &-actions {
-                transition-delay: 500ms;
-                max-width: 72px;
-              }
-            }
-          }
+          min-width: calc(var(--table-column-min-width) * 1px);
+          max-width: calc(var(--table-column-max-width) * 1px);
+          border-top: var(--forge-border-thin) solid var(--forge-theme-outline);
 
           &--filtering {
             vertical-align: top;
@@ -90,6 +95,12 @@ $table-row-height: 48px;
                   padding-top: 8px;
                 }
               }
+            }
+          }
+
+          &--resizing {
+            .forge-table-head__cell-resizer {
+              --forge-divider-color: var(--forge-theme-primary);
             }
           }
 
@@ -114,20 +125,25 @@ $table-row-height: 48px;
           }
 
           &-resizer {
-            --forge-button-padding: 0;
-            --forge-button-spacing: 0;
-            --forge-button-shape: var(--forge-spacing-xxsmall);
-            --forge-button-width: 16px;
-            --forge-button-min-width: 16px;
+            --forge-button-padding-block: var(--forge-spacing-xxsmall);
+            --forge-button-shape: var(--forge-shape-small);
+            --forge-button-width: var(--forge-spacing-medium);
+            --forge-button-min-width: var(--forge-spacing-medium);
             --forge-button-height: 100%;
             --forge-button-min-height: 100%;
             --forge-button-background: transparent;
-            --forge-button-border-width: 0;
             --forge-button-cursor: col-resize;
+            --forge-divider-width: var(--forge-spacing-xxxsmall);
             position: absolute;
             top: 0;
             bottom: 0;
-            right: 0;
+            right: calc(var(--forge-spacing-medium) * -1);
+          }
+
+          &:last-of-type {
+            .forge-table-head__cell-resizer {
+              right: calc(var(--forge-spacing-xsmall) * -1);
+            }
           }
         }
       }
@@ -145,12 +161,71 @@ $table-row-height: 48px;
             flex-direction: row;
           }
         }
+
+        &__row {
+          height: var(--table-row-height);
+
+          &--selected {
+            .forge-table-cell {
+
+              &--frozen-left,
+              &--frozen-right {
+                &::before {
+                  content: '';
+                  position: absolute;
+                  top: 0;
+                  bottom: 0;
+                  left: 0;
+                  right: 0;
+                  background-color: var(--forge-table-theme-row-selected-background, var(--forge-theme-primary-container-low)) !important;
+                }
+              }
+            }
+
+            &:hover {
+              .forge-table-cell {
+
+                &--frozen-left,
+                &--frozen-right {
+                  &::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    background-color: var(--forge-table-theme-row-selected-hover-background, var(--forge-theme-primary-container)) !important;
+                  }
+                }
+              }
+            }
+          }
+
+          &:hover {
+            .forge-table-cell {
+
+              &--frozen-left,
+              &--frozen-right {
+
+                &::before {
+                  content: '';
+                  position: absolute;
+                  top: 0;
+                  bottom: 0;
+                  left: 0;
+                  right: 0;
+                  background-color: var(--forge-table-theme-row-hover-background, var(--forge-theme-surface-container-low));
+                }
+              }
+            }
+          }
+        }
       }
 
       &-foot {
         &__row {
           @include forge-table.head-row();
-          height: auto;
+          height: var(--table-row-height);
         }
 
         &__cell {
@@ -171,11 +246,11 @@ $table-row-height: 48px;
         }
 
         &__expandable-content {
-          background-color: var(--forge-theme-primary-container);
+          background-color: var(--forge-theme-surface-container-minimum);
           @include global.app-border(border-bottom);
 
           &:hover {
-            background-color: var(--forge-theme-primary-container) !important;
+            background-color: var(--forge-theme-surface-container-minimum) !important;
           }
 
           &__container {
@@ -206,14 +281,6 @@ $table-row-height: 48px;
           }
         }
 
-        &--resizing {
-          .forge-table-head__cell {
-            &-dragger {
-              display: none;
-            }
-          }
-        }
-
         &__image {
           width: 48px;
           height: 48px;
@@ -226,6 +293,19 @@ $table-row-height: 48px;
 
 .header {
   @include global.app-toolbar();
+  --forge-toolbar-height: auto;
+  --forge-toolbar-min-height: var(--forge-spacing-xxxlarge);
+
+  &__table-selection {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &--selecting {
+    --forge-theme-surface: var(--forge-theme-primary-container-low);
+  }
 
   [slot='end'] {
     display: flex;
@@ -243,6 +323,8 @@ $table-row-height: 48px;
 
 .footer {
   @include global.app-toolbar();
+  --forge-toolbar-height: auto;
+  --forge-toolbar-min-height: var(--forge-spacing-xxxlarge);
 }
 
 forge-page-state {

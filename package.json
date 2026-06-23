@@ -13,7 +13,7 @@
     "pw:report": "playwright show-report",
     "lint": "ng lint",
     "server": "tsx node-server.ts",
-    "publish": "ng build --configuration production --base-href /demo-ng-forge/ && node publish.js"
+    "build:docs": "ng build --configuration production --base-href /demo-ng-forge/ && node docs-build.js"
   },
   "engines": {
     "npm": ">=11.0.0",
@@ -31,7 +31,7 @@
     "@angular/platform-browser-dynamic": "^21.2.7",
     "@angular/router": "^21.2.7",
     "@ngx-formly/core": "^7.1.0",
-    "@tanstack/angular-table": "^8.21.3",
+    "@tanstack/angular-table": "^8.21.4",
     "@tylertech/angular-core": "^7.0.1",
     "@tylertech/forge": "^3.14.4",
     "@tylertech/forge-angular": "^7.3.0",

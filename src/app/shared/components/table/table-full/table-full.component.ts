@@ -1,7 +1,9 @@
-import { Component, computed, ElementRef, input, model, output, signal, TemplateRef, viewChild, viewChildren } from '@angular/core';
+import { Component, computed, DestroyRef, ElementRef, inject, input, model, output, TemplateRef, viewChild, viewChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Subject } from 'rxjs';
 import {
   CellContext,
   Column,
@@ -10,11 +12,11 @@ import {
   FlexRender,
   getCoreRowModel,
   getExpandedRowModel,
+  Header,
   HeaderContext,
   Row,
   Table
 } from '@tanstack/angular-table';
-import { finalize, fromEvent, merge, Subject, takeUntil, tap } from 'rxjs';
 import { isDefined } from '@tylertech/forge-core';
 import {
   tylIconArrowDownward,
@@ -46,11 +48,12 @@ import {
   ForgePopoverModule,
   ForgeSkeletonModule,
   ForgeToolbarModule,
-  ForgeTooltipModule
+  ForgeTooltipModule,
+  PaginatorComponent
 } from '@tylertech/forge-angular';
 
 import { Utils } from 'src/utils';
-import { columnIds, ComponentColumnDef, ITableState } from './table-full.constants';
+import { columnIds, ComponentColumnDef, IPaginatorOptions, ITableState } from './table-full.constants';
 import { TableCellFilterComponent } from '../table-cell-filter/table-cell-filter.component';
 import { TableMobileComponent } from '../table-mobile/table-mobile.component';
 
@@ -83,14 +86,15 @@ import { TableMobileComponent } from '../table-mobile/table-mobile.component';
   styleUrl: './table-full.component.scss'
 })
 export class TableFullComponent {
-  private tableColumnResize$ = new Subject<void>();
+  private destroyRef = inject(DestroyRef);
   private bodyRef = viewChild.required<ElementRef<HTMLElement>>('bodyRef');
-  private tableElementRef = viewChild.required<ElementRef<HTMLTableElement>>('tableRef');
+  private paginatorRef = viewChild<PaginatorComponent>('paginatorRef');
   private columnsConfigurePopover = viewChild.required<ElementRef<PopoverComponent>>('columnsConfigurePopover');
   private headerActionsMenu = viewChild.required<ElementRef<IconButtonComponent>>('headerActionsMenu');
   private tableCellHeaderDefaultTemplate = viewChild.required<TemplateRef<{ $implicit: CellContext<unknown, unknown> }>>('tableCellHeaderDefault');
   private tableCellDefaultTemplate = viewChild.required<TemplateRef<{ $implicit: CellContext<unknown, unknown> }>>('tableCellDefault');
   private tableCellFilters = viewChildren(TableCellFilterComponent);
+  private tableSortRefs = viewChildren<ElementRef<HTMLElement>>('sortRef');
 
   public tableRowSelectHeaderTemplate = viewChild.required<TemplateRef<{ $implicit: CellContext<unknown, unknown> }>>('tableRowSelectHeader');
   public tableRowSelectTemplate = viewChild.required<TemplateRef<{ $implicit: CellContext<unknown, unknown> }>>('tableRowSelect');
@@ -120,18 +124,24 @@ export class TableFullComponent {
   public tableRowDetailTemplate = input<TemplateRef<{ data: unknown; rowIndex: number }>>();
   public recordset = input<unknown[]>([]);
   public recordCount = input<number>(0);
+  public recordKey = input<string>('id');
   public isBusy = input<boolean>(false);
   public canEdit = input<boolean>(false);
   public isEditing = model<boolean>();
   public canFilter = input<boolean>(true);
   public isFiltering = model<boolean>(false);
   public canConfigureColumns = input<boolean>(true);
+  public canMultiSelect = input<boolean>(true);
   public canRowClick = input(false);
   public rowClicked = output<{ event: Event; row: Row<any> }>();
   public filterShow = output();
   public editSubmit = output();
-  public loadingIndicators = computed(() => {
-    return new Array(this.state()?.take() || 5);
+  public beforeRender = input<(sub: Subject<boolean>) => void>();
+  public paginator = input<IPaginatorOptions>({
+    alternative: false,
+    first: false,
+    firstLast: false,
+    label: 'Rows per page:'
   });
   public headerOptions = computed<IMenuOption[]>(() => {
     const menuOptions: IMenuOption[] = [];
@@ -145,6 +155,9 @@ export class TableFullComponent {
       menuOptions.push({ label: 'Columns', value: 'columns', leadingIcon: 'view_column', leadingIconType: 'component' });
     }
     return menuOptions;
+  });
+  public loadingIndicators = computed(() => {
+    return new Array(this.state()?.take() || 5);
   });
 
   private columnPinning = computed<ColumnPinningState>(() => {
@@ -162,14 +175,12 @@ export class TableFullComponent {
 
   public elementId = Utils.elementId('app-full-table');
   public columnIds = columnIds;
-
-  public isColumnResizing = signal(false);
+  public maxColumnSize = Number.MAX_SAFE_INTEGER;
   public cellAlignEnum = CellAlign;
   public defaultColumnDef: Partial<ComponentColumnDef<any>> = {
-    size: 0,
-    minSize: 0,
     header: () => this.tableCellHeaderDefaultTemplate(),
     cell: () => this.tableCellDefaultTemplate(),
+    minSize: 48,
     enableColumnFilter: false
   };
   public hasFooter = computed(() => {
@@ -181,40 +192,54 @@ export class TableFullComponent {
         .filter((h) => isDefined(h)).length > 0
     );
   });
+  public filterMode = computed(() => {
+    return this.columnDefs().some((c) => c.enableColumnFilter) ? 'column' : 'dialog';
+  });
   public configurableColumns = computed(() => {
     return this.table
       .getAllLeafColumns()
       .filter((c) => c.columnDef.enableHiding !== false || (c.columnDef as ComponentColumnDef<unknown>).enableOrdering !== false);
+  });
+  public selectedRowKeys = computed(() => {
+    return Object.entries(this.table.getState().rowSelection).map(([k, v]) => k);
   });
 
   public table: Table<unknown> = createAngularTable(() => ({
     data: this.recordset(),
     defaultColumn: this.defaultColumnDef,
     columns: this.columnDefs(),
+    columnResizeMode: 'onChange',
     getCoreRowModel: getCoreRowModel(),
     manualFiltering: true,
     manualPagination: true,
     manualSorting: true,
+    getRowId: (row) => row[this.recordKey()],
+    enableMultiRowSelection: this.canMultiSelect(),
     onColumnFiltersChange: (value) => {
-      this.resetTableState();
-      this.state()?.skip.set(0);
-      if (typeof value === 'function') {
-        this.state()?.columns?.filters.update(value);
-      } else {
-        this.state()?.columns?.filters.set(value);
-      }
+      this.stateChangeRenderHandler(() => {
+        this.resetTableState();
+        this.state()?.skip.set(0);
+        if (typeof value === 'function') {
+          this.state()?.columns?.filters.update(value);
+        } else {
+          this.state()?.columns?.filters.set(value);
+        }
+      });
     },
     onSortingChange: (value) => {
-      if (this.isBusy() || this.isEditing() || this.isColumnResizing()) {
+      if (this.isBusy() || this.isEditing()) {
         return;
       }
-      this.resetTableState();
-      this.state()?.skip.set(0);
-      if (typeof value === 'function') {
-        this.state()?.sorting.update(value);
-      } else {
-        this.state()?.sorting.set(value);
-      }
+
+      this.stateChangeRenderHandler(() => {
+        this.resetTableState();
+        this.state()?.skip.set(0);
+        if (typeof value === 'function') {
+          this.state()?.sorting.update(value);
+        } else {
+          this.state()?.sorting.set(value);
+        }
+      });
     },
     onColumnSizingChange: (value) => {
       if (typeof value === 'function') {
@@ -301,63 +326,30 @@ export class TableFullComponent {
     column.toggleVisibility();
   }
 
+  public onColumnSize(event: MouseEvent, header: Header<any, unknown>, element: HTMLElement) {
+    if (event.button === 0 && header.id) {
+      const columnSizing = this.table.getState().columnSizing;
+      if (!columnSizing[header.id]) {
+        columnSizing[header.id] = element.clientWidth;
+      }
+      header.getResizeHandler()(event);
+    }
+  }
+
   public onColumnSizeReset() {
     this.table.setColumnSizing({});
   }
 
-  public onColumnHeaderResize(event, context: HeaderContext<any, unknown>) {
-    this.onStopEvent(event);
-
-    this.tableColumnResize$.next();
-
-    let columnHeaderElement = (this.tableElementRef().nativeElement as HTMLTableElement).querySelectorAll('thead tr th')[
-      context.column.getIndex()
-    ] as HTMLTableCellElement;
-    let columnElements = (this.tableElementRef().nativeElement as HTMLTableElement).querySelectorAll(`tbody tr td:nth-child(${context.column.getIndex() + 1})`);
-
-    let positionX = event.clientX;
-    if (columnHeaderElement) {
-      this.isColumnResizing.set(true);
-      this.tableElementRef().nativeElement.querySelector('.forge-table-head__row')?.classList.add('forge-table-row--resizing');
-      columnHeaderElement.classList.add('forge-table-cell--resizing');
-      columnElements.forEach((c) => c.classList.add('forge-table-cell--resizing'));
-      const theadElement = this.tableElementRef().nativeElement.querySelector('thead');
-
-      fromEvent<MouseEvent>(document.body, 'mousemove')
-        .pipe(
-          takeUntil(this.tableColumnResize$),
-          tap((event) => {
-            this.table.setColumnSizing((value) => {
-              value = { ...value, [context.column.id]: columnHeaderElement.offsetWidth + (event.clientX - positionX) };
-              return value;
-            });
-            positionX = event.clientX;
-          })
-        )
-        .subscribe();
-
-      merge(fromEvent(theadElement, 'mouseup'), fromEvent(theadElement, 'mouseleave'))
-        .pipe(
-          finalize(() =>
-            requestAnimationFrame(() => {
-              this.isColumnResizing.set(false);
-              (columnHeaderElement as any) = undefined;
-              (columnElements as any) = undefined;
-            })
-          ),
-          takeUntil(this.tableColumnResize$),
-          tap((event) => {
-            this.tableColumnResize$.next();
-
-            this.tableElementRef()
-              ?.nativeElement.querySelectorAll('.forge-table-row--resizing')
-              .forEach((el) => el.classList.remove('forge-table-row--resizing'));
-            this.tableElementRef()
-              ?.nativeElement.querySelectorAll('.forge-table-cell--resizing')
-              .forEach((el) => el.classList.remove('forge-table-cell--resizing'));
-          })
-        )
-        .subscribe();
+  public onColumnSort(event: MouseEvent, header: Header<any, unknown>) {
+    if (
+      !header.column.getIsResizing() &&
+      event.button === 0 &&
+      header.column.columnDef.enableSorting !== false &&
+      this.tableSortRefs()
+        .map((ref) => ref.nativeElement)
+        .includes(event.target as HTMLElement)
+    ) {
+      header.column.toggleSorting();
     }
   }
 
@@ -401,7 +393,7 @@ export class TableFullComponent {
   }
 
   public onRowClick(data: { event: Event; row: any }) {
-    if (this.canRowClick()) {
+    if (!this.isEditing() && this.canRowClick()) {
       this.rowClicked.emit(data);
     }
   }
@@ -410,13 +402,34 @@ export class TableFullComponent {
     context.row.toggleSelected();
   }
 
-  public onPaginatorChange(data: IPaginatorChangeEventData) {
-    this.resetTableState();
-    if (data.type === 'page-size') {
-      this.state()?.take.set(data.pageSize);
-      this.state()?.skip.set(0);
+  public onPaginatorChange(event: CustomEvent<IPaginatorChangeEventData>) {
+    const changeHandler = () => {
+      this.resetTableState();
+      if (event.detail.type === 'page-size') {
+        this.state()?.take.set(event.detail.pageSize);
+        this.state()?.skip.set(0);
+      } else {
+        this.state()?.skip.set(event.detail.offset);
+      }
+    };
+    if (this.beforeRender()) {
+      const sub = new Subject<boolean>();
+      sub.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+        next: (result) => {
+          if (result) {
+            changeHandler();
+          } else {
+            if (event.detail.type === 'page-size') {
+              this.paginatorRef().pageSize = this.state()?.take();
+            } else {
+              this.paginatorRef().pageIndex = this.state().skip() / this.state().take();
+            }
+          }
+        }
+      });
+      this.beforeRender()(sub);
     } else {
-      this.state()?.skip.set(data.offset);
+      changeHandler();
     }
   }
 
@@ -443,9 +456,24 @@ export class TableFullComponent {
     event.stopPropagation();
   }
 
+  private stateChangeRenderHandler = (callback: () => void) => {
+    if (this.beforeRender()) {
+      const sub = new Subject<boolean>();
+      sub.subscribe({
+        next: (result) => {
+          if (result) {
+            callback();
+          }
+        }
+      });
+      this.beforeRender()(sub);
+    } else {
+      callback();
+    }
+  };
+
   private resetTableState() {
     this.bodyRef().nativeElement.scrollTo({ top: 0, behavior: 'smooth' });
-    this.table.toggleAllPageRowsSelected(false);
     this.table.setExpanded({});
   }
 }

@@ -1,5 +1,12 @@
-<forge-toolbar class="header">
-  <h3 slot="start" class="forge-typography--heading4">{{ headerTitle() }}</h3>
+<forge-toolbar class="header" [class.header--selecting]="selectedRowKeys().length && !isEditing()">
+  @if (selectedRowKeys().length && !isEditing()) {
+    <div class="header__table-selection" slot="start">
+      <span class="forge-typography--subheading1">{{ selectedRowKeys().length }} {{ selectedRowKeys().length === 1 ? 'row' : 'rows' }} selected</span>
+      <forge-button (click)="table.resetRowSelection(true)" [disabled]="isBusy()">Unselect all</forge-button>
+    </div>
+  } @else {
+    <h3 slot="start" class="forge-typography--heading4">{{ headerTitle() }}</h3>
+  }
   <ng-content select="[app-full-table-header]"></ng-content>
   @if (isEditing()) {
     <forge-button slot="end" variant="outlined" (click)="onEdit(false)">
@@ -22,7 +29,10 @@
       }
     } @else {
       <div slot="end">
-        @if (canEdit()) {
+        @if (canFilter() && table.getAllFlatColumns().some((c) => c.getIsFiltered())) {
+          <forge-button (click)="onClearFilters()" [disabled]="isBusy()">Clear filters</forge-button>
+        }
+        @if (canEdit() && !selectedRowKeys().length) {
           <forge-icon-button [disabled]="isBusy()" (click)="onEdit(true)" aria-label="Edit records">
             <forge-icon name="edit"></forge-icon>
           </forge-icon-button>
@@ -35,9 +45,6 @@
           <forge-tooltip>Configure columns</forge-tooltip>
         }
         @if (canFilter()) {
-          @if (table.getAllFlatColumns().some((c) => c.getIsFiltered())) {
-            <forge-button (click)="onClearFilters()" [disabled]="isBusy()">Clear filters</forge-button>
-          }
           <forge-icon-button [disabled]="isBusy()" (click)="onFilter()" aria-label="Toggle filter">
             <forge-icon name="filter_list"></forge-icon>
           </forge-icon-button>
@@ -65,8 +72,8 @@
         </forge-list-item>
       }
       <forge-divider></forge-divider>
-      <forge-list-item value="reset-column-width" (forge-list-item-select)="onColumnSizeReset()">
-        <button type="button">Reset column widths</button>
+      <forge-list-item>
+        <forge-button style="width: 100%" (click)="onColumnSizeReset()">Reset column widths</forge-button>
       </forge-list-item>
     </forge-list>
   </forge-popover>
@@ -77,29 +84,49 @@
     @if (layoutMode() === 'sm') {
       <app-table-mobile [table]="table" [isBusy]="isBusy()" [isEditing]="isEditing()" [columnDefs]="columnDefs()" [tableRowDetailTemplate]="tableRowDetailTemplate()" (rowClicked)="onRowClick($event)"></app-table-mobile>
     } @else {
-      <table #tableRef class="forge-table" [class.forge-table--editing]="isEditing()">
+      <table #tableRef class="forge-table" [class.forge-table--editing]="isEditing()" [class.forge-table--selecting]="selectedRowKeys().length && !isEditing()">
         <thead>
           @for (headerGroup of table.getHeaderGroups(); track headerGroup.id) {
-            <tr class="forge-table-row forge-table-head__row">
+            <tr class="forge-table-row forge-table-head__row" [class.forge-table-head__row--resizing]="table.getAllFlatColumns().some(c => c.getIsResizing())">
               @for (header of headerGroup.headers; track header.id) {
                 @if (!header.isPlaceholder) {
                   <th
+                    #sortRef
                     class="forge-table-cell forge-table-head__cell"
+                    [class.forge-table-head__cell--filtering]="isFiltering() && filterMode() === 'column'"
+                    [class.forge-table-head__cell--resizing]="header.column.getIsResizing()"
                     [class.forge-table-head__cell--sortable]="header.column.getCanSort()"
                     [class.forge-table-cell--frozen-left]="header.column.getIsPinned() === 'left'"
                     [class.forge-table-cell--frozen-right]="header.column.getIsPinned() === 'right'"
+                    [class.forge-table-row__actions]="header.column.id === columnIds.actions"
                     [class.forge-table-row__expander]="header.column.id === columnIds.expander"
                     [class.forge-table-row__selector]="header.column.id === columnIds.selector"
-                    (click)="header.column.getToggleSortingHandler()?.($event)"
-                    [style.--table-column-width]="header.column.getSize() || null"
+                    (mousedown)="onColumnSort($event, header)"
+                    [style.--table-column-width]="table.getState().columnSizing[header.id]"
+                    [style.--table-column-max-width]="header.column.columnDef.maxSize < maxColumnSize ? header.column.columnDef.maxSize : null"
+                    [style.--table-column-min-width]="header.column.columnDef.minSize"
                     [style.vertical-align]="isFiltering() ? 'top' : null"
                   >
                     <div
+                      #sortRef
                       class="forge-table-head__cell-container"
                       [class.forge-table-cell--center]="$any(header.column.columnDef).align === cellAlignEnum.Center"
                       [class.forge-table-cell--right]="$any(header.column.columnDef).align === cellAlignEnum.Right"
                     >
                       <ng-container *flexRender="header.column.columnDef.header; props: header.getContext(); let context"></ng-container>
+                      @if (header.column.getCanSort() && header.column.getIsSorted()) {
+                        <forge-icon
+                          #sortRef
+                          class="forge-table-head__cell-sort-icon"
+                          [name]="header.column.getIsSorted() === 'desc' ? 'arrow_downward' : header.column.getIsSorted() === 'asc' ? 'arrow_upward' : ''"
+                          aria-hidden="true"
+                        ></forge-icon>
+                      }
+                      @if (!isBusy() && header.column.columnDef.enableResizing !== false) {
+                        <forge-button class="forge-table-head__cell-resizer" tabindex="-1" [attr.aria-label]="`${$any(header.column.columnDef).headerText} column resizer`" (mousedown)="onColumnSize($event, header, sortRef)">
+                          <forge-divider vertical="true"></forge-divider>
+                        </forge-button>
+                      }
                     </div>
                     @if (!isEditing() && isFiltering() && header.column.getCanFilter()) {
                       <app-table-cell-filter [context]="header"></app-table-cell-filter>
@@ -121,12 +148,13 @@
             }
           } @else {
             @for (row of table.getRowModel().rows; track row.id; let rowIndex = $index) {
-              <tr class="forge-table-row forge-table-body__row" (click)="onRowClick({ event: $event, row })">
+              <tr class="forge-table-row forge-table-body__row" [class.forge-table-body__row--selected]="row.getIsSelected()" [class.forge-table-row--clickable]="canRowClick()" (click)="onRowClick({ event: $event, row })">
                 @for (cell of row.getVisibleCells(); track cell.id; let cellIndex = $index) {
                   <td
                     class="forge-table-cell forge-table-body__cell"
                     [class.forge-table-cell--frozen-left]="cell.column.getIsPinned() === 'left'"
                     [class.forge-table-cell--frozen-right]="cell.column.getIsPinned() === 'right'"
+                    [class.forge-table-row__actions]="cell.column.id === columnIds.actions"
                     [class.forge-table-row__expander]="cell.column.id === columnIds.expander"
                     [class.forge-table-row__selector]="cell.column.id === columnIds.selector"
                   >
@@ -183,23 +211,22 @@
 <forge-toolbar class="footer" inverted>
   <ng-content select="[app-full-table-footer]"></ng-content>
   <forge-paginator
+    #paginatorRef
     slot="end"
     [pageIndex]="state().skip() / state().take()"
     [pageSize]="state().take()"
     [total]="recordCount()"
     [disabled]="isBusy() || isEditing()"
-    (forge-paginator-change)="onPaginatorChange($event.detail)"
+    (forge-paginator-change)="onPaginatorChange($event)"
+    [alternative]="paginator().alternative"
+    [first]="paginator().firstLast"
+    [firstLast]="paginator().firstLast"
+    [label]="paginator().label"
   ></forge-paginator>
 </forge-toolbar>
 
 <ng-template #tableCellHeaderDefault let-context>
-  <span class="forge-table-head__cell-text">{{ context.column.columnDef.headerText }}</span>
-  @if (context.column.getCanSort() && context.column.getIsSorted()) {
-    <forge-icon class="forge-table-head__cell-sort-icon" [name]="context.column.getIsSorted() === 'desc' ? 'arrow_downward' : context.column.getIsSorted() === 'asc' ? 'arrow_upward' : ''" aria-hidden="true"></forge-icon>
-  }
-  @if (!isBusy() && context.column.columnDef.enableResizing !== false) {
-    <forge-button class="forge-table-head__cell-resizer" tabindex="-1" [attr.aria-label]="`${context.column.columnDef.headerText} column resizer`" (mousedown)="onColumnHeaderResize($event, context)"></forge-button>
-  }
+  <span #sortRef class="forge-table-head__cell-text">{{ context.column.columnDef.headerText }}</span>
 </ng-template>
 
 <ng-template #tableCellDefault let-context>
@@ -209,9 +236,9 @@
 <ng-template #tableRowSelectHeader let-context>
   <forge-checkbox
     [disabled]="isBusy() || isEditing() || !recordCount()"
-    [attr.aria-label]="`${table.getIsAllRowsSelected() ? 'unselect' : 'select'} all records`"
-    [attr.indeterminate]="table.getIsSomeRowsSelected() ? true : null"
-    [checked]="table.getIsAllRowsSelected() ? true : false"
+    [attr.aria-label]="`${table.getIsAllPageRowsSelected() ? 'unselect' : 'select'} all records`"
+    [attr.indeterminate]="table.getIsSomePageRowsSelected() ? true : null"
+    [checked]="table.getIsAllPageRowsSelected() ? true : false"
     (click)="onStopEvent($event)"
     (change)="onRowSelectHeader(context)"
   ></forge-checkbox>

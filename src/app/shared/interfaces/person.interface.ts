@@ -6,6 +6,8 @@ export interface IPerson {
   occupation?: string;
   quote?: string;
   url?: string;
+  imageUrl?: string;
+  imageLargeUrl?: string;
 }
 
 export interface IProfile extends IPerson {

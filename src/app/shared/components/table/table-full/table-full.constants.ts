@@ -100,3 +100,10 @@ export const filterCellComponent = (context: Header<any, any>, control: FormCont
     }
   });
 };
+
+export interface IPaginatorOptions {
+  alternative?: boolean;
+  first?: boolean;
+  firstLast?: boolean;
+  label?: string;
+}

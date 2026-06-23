@@ -14,13 +14,8 @@ export class AppDataService {
   private httpClient = inject(HttpClient);
 
   private peopleCache: IPerson[];
-
-  public getProfile(): Observable<IProfile> {
-    return this.httpClient.get<IProfile>('mock-data/profile.json');
-  }
-
-  public getPeople(filter?: IFilterParameter): Observable<{ count: number; data: IPerson[] }> {
-    let obs: Observable<any>;
+  private peopleObservable = () => {
+    let obs: Observable<IPerson[]>;
     if (this.peopleCache?.length) {
       obs = of(structuredClone(this.peopleCache));
     } else {
@@ -28,44 +23,54 @@ export class AppDataService {
     }
     return obs.pipe(
       delay(1000),
-      map((r) => {
-        let count = r.length;
+      tap((result) =>
+        result.forEach((p) => {
+          p.imageUrl = `mock-data/${Utils.formatNumber(p.id, '2.0-0')}-small.png`;
+          p.imageLargeUrl = `mock-data/${Utils.formatNumber(p.id, '2.0-0')}.png`;
+        })
+      )
+    );
+  };
+
+  public getProfile(): Observable<IProfile> {
+    return this.httpClient.get<IProfile>('mock-data/profile.json').pipe(tap((p) => (p.imageUrl = `mock-data/${Utils.formatNumber(p.id, '2.0-0')}-small.png`)));
+  }
+
+  public getPeople(filter?: IFilterParameter): Observable<{ count: number; data: IPerson[] }> {
+    return this.peopleObservable().pipe(
+      map((result) => {
+        let count = result.length;
         if (filter) {
           if (filter.filters?.length) {
-            r = Utils.filterData(
-              r,
+            result = Utils.filterData(
+              result,
               filter.filters.map((f) => ({
                 key: f.property,
                 value: f.value,
                 strict: f.strict
               }))
             );
-            count = r.length;
+            count = result.length;
           }
 
           if (filter.sort) {
-            r = Utils.sortData(r, filter.sort.property, 'string', filter.sort.direction);
+            result = Utils.sortData(result, filter.sort.property, 'string', filter.sort.direction);
           }
 
           if (isNumber(filter.skip) && isNumber(filter.take)) {
-            r = r.slice(filter.skip, filter.skip + filter.take);
+            result = result.slice(filter.skip, filter.skip + filter.take);
           }
         }
-        return { count, data: r };
+        return { count, data: result };
       })
     );
   }
 
   public getPerson(id: number): Observable<IPerson | undefined> {
-    let obs: Observable<any>;
-    if (this.peopleCache?.length) {
-      obs = of(structuredClone(this.peopleCache));
-    } else {
-      obs = this.httpClient.get<IPerson[]>('mock-data/people.json').pipe(tap((r) => (this.peopleCache = structuredClone(r))));
-    }
-    return obs.pipe(
-      delay(1000),
-      map((r) => (r as IPerson[]).find((p) => p.id.toString() === id.toString()))
+    return this.peopleObservable().pipe(
+      map((r) => {
+        return (r as IPerson[]).find((p) => p.id.toString() === id.toString());
+      })
     );
   }
 

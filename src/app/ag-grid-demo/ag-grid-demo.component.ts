@@ -174,13 +174,13 @@ class ImageCellRendererComponent implements ICellRendererComp {
 
   init?(params: ICellRendererParams<any, any, any>) {
     this.cellElement = document.createElement('img');
-    this.cellElement.src = `mock-data/${Utils.formatNumber(params.data.id, '2.0-0')}-small.png`;
+    this.cellElement.src = params.data.imageUrl;
     this.cellElement.alt = '';
     this.cellElement.classList.add('ag-cell-image');
   }
 
   refresh(params: ICellRendererParams<any, any, any>): boolean {
-    this.cellElement!.src = `mock-data/${Utils.formatNumber(params.data.id, '2.0-0')}-small.png`;
+    this.cellElement!.src = params.data.imageUrl;
 
     return true;
   }

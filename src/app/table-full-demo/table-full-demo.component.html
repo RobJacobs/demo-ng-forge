@@ -1,8 +1,9 @@
 <app-table-full
   #tableFull
-  headerTitle="Table Full"
+  headerTitle="Table Full Title"
   [recordset]="recordset()"
   [recordCount]="recordCount()"
+  recordKey="id"
   [isBusy]="isBusy()"
   [columnDefs]="columnDefs"
   [layoutMode]="appCache.layoutMode"
@@ -11,26 +12,31 @@
   [canRowClick]="true"
   [(isEditing)]="isEditing"
   [tableRowDetailTemplate]="tableRowDetail"
+  [beforeRender]="beforeTableRender"
   (filterShow)="onFilter()"
   (editSubmit)="onSubmit()"
   (rowClicked)="onRowClicked($event)"
 >
-  <ng-container eerp-full-table-header>
+  <ng-container app-full-table-header>
     <div slot="center">Projected header content</div>
   </ng-container>
 
-  <ng-container eerp-full-table-body-header>
+  <ng-container app-full-table-body-header>
     <div class="table__body-header">Projected body header content</div>
   </ng-container>
 
-  <ng-container eerp-full-table-body-footer>
+  <ng-container app-full-table-body-footer>
     <div class="table__body-footer">Projected body footer content</div>
   </ng-container>
 
-  <ng-container eerp-full-table-footer>
+  <ng-container app-full-table-footer>
     <div slot="center">Projected footer content</div>
   </ng-container>
 </app-table-full>
+
+<ng-template #tableCellImage let-context>
+  <forge-avatar [imageUrl]="context.row.original.imageUrl" [text]="`${context.row.original.firstName} ${context.row.original.firstName}`"></forge-avatar>
+</ng-template>
 
 <ng-template #tableCellActions let-context>
   <forge-icon-button (click)="onDeleteRecord($event, context)" aria-label="Delete person" [disabled]="isEditing()">

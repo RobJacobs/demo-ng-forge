@@ -1,12 +1,13 @@
 import { Component, DestroyRef, inject, OnInit, signal, TemplateRef, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { finalize, skip } from 'rxjs';
+import { delay, finalize, Observable, of, skip, Subject } from 'rxjs';
 import { CellContext } from '@tanstack/table-core';
 import { debounce, isDefined } from '@tylertech/forge-core';
 import { CellAlign, IOption, SortDirection } from '@tylertech/forge';
-import { DialogService, ForgeCardModule, ForgeIconButtonModule, ForgeIconModule, ForgeTooltipModule } from '@tylertech/forge-angular';
+import { DialogService, ForgeAvatarModule, ForgeCardModule, ForgeIconButtonModule, ForgeIconModule, ForgeTooltipModule } from '@tylertech/forge-angular';
 
 import { TableFullComponent } from 'src/app/shared/components/table/table-full/table-full.component';
 import { TableDetailComponent } from 'src/app/shared/components/table/table-detail/table-detail.component';
@@ -18,6 +19,7 @@ import { AppCacheService } from 'src/app/app-cache.service';
 import { IPerson } from 'src/app/shared/interfaces';
 import { TableFullDemoService } from './table-full-demo.service';
 import { TableFilterComponent } from './table-filter/table-filter.component';
+import { ConfirmDialogComponent } from '../shared/components';
 
 @Component({
   selector: 'app-table-full-demo',
@@ -25,6 +27,7 @@ import { TableFilterComponent } from './table-filter/table-filter.component';
     CommonModule,
     ReactiveFormsModule,
     TableFullComponent,
+    ForgeAvatarModule,
     ForgeCardModule,
     ForgeIconButtonModule,
     ForgeIconModule,
@@ -36,8 +39,10 @@ import { TableFilterComponent } from './table-filter/table-filter.component';
 })
 export class TableFullDemoComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
+  private router = inject(Router);
   private dialogService = inject(DialogService);
   private tableFullComponent = viewChild.required<TableFullComponent>('tableFull');
+  private tableCellImageTemplate = viewChild.required<TemplateRef<{ $implicit: CellContext<IPerson, unknown> }>>('tableCellImage');
   private tableCellActionsTemplate = viewChild.required<TemplateRef<{ $implicit: CellContext<IPerson, unknown> }>>('tableCellActions');
   private dataService = inject(AppDataService);
   private storageKey = 'app-table-full-demo--table-state';
@@ -76,6 +81,14 @@ export class TableFullDemoComponent implements OnInit {
       maxSize: 48,
       align: CellAlign.Center,
       cell: () => this.tableFullComponent().tableRowExpandTemplate()
+    },
+    {
+      id: 'image',
+      ...staticColumn(),
+      minSize: 48,
+      maxSize: 48,
+      align: CellAlign.Center,
+      cell: () => this.tableCellImageTemplate()
     },
     {
       headerText: 'Id',
@@ -125,9 +138,28 @@ export class TableFullDemoComponent implements OnInit {
       maxSize: 96,
       frozen: 'right',
       align: CellAlign.Center,
-      cell: (context) => this.tableCellActionsTemplate()
+      cell: () => this.tableCellActionsTemplate()
     }
   ];
+  public beforeTableRender = (sub: Subject<boolean>) => {
+    if (this.tableFullComponent().table.getIsSomePageRowsSelected()) {
+      this.dialogService
+        .open(ConfirmDialogComponent, {
+          options: { persistent: true },
+          data: {
+            title: 'Unsaved changes',
+            message: 'You have rows selected that will be reset, do you want to continue?'
+          }
+        })
+        .afterClosed.subscribe({
+          next: (result) => {
+            sub.next(result);
+          }
+        });
+    } else {
+      sub.next(true);
+    }
+  };
 
   public constructor() {
     this.loadState();
@@ -142,12 +174,17 @@ export class TableFullDemoComponent implements OnInit {
     event.stopPropagation();
     event.preventDefault();
     console.log(context);
+    if (context.row.getIsSelected()) {
+      context.row.toggleSelected();
+    }
+    this.recordset.set(this.recordset().filter((r) => r.id !== context.row.original.id));
   }
 
   public onViewDetailRecord(event: MouseEvent, context: CellContext<IPerson, unknown>) {
     event.stopPropagation();
     event.preventDefault();
     console.log(context);
+    this.router.navigate([`people/detail/${context.row.original.id}`]);
   }
 
   public onFilter() {
@@ -234,7 +271,6 @@ export class TableFullDemoComponent implements OnInit {
   }
 
   private saveState = debounce(() => {
-    console.log('save state');
     const state = {
       columns: {
         order: this.cache.tableState.columns.order(),

@@ -55,7 +55,6 @@ export class ProfileComponent implements OnInit {
     return this.cache.formGroup.controls.addressFormGroup;
   }
   public activeTab = 0;
-  public imageUrl?: string;
 
   public ngOnInit() {
     if (this.cache.profile) {
@@ -152,7 +151,6 @@ export class ProfileComponent implements OnInit {
   public onCancel() {
     this.cache.formGroup.reset();
     this.cache.formGroup.markAsPristine();
-    this.imageUrl = undefined;
     this.cache.profile = undefined;
   }
 
@@ -169,8 +167,6 @@ export class ProfileComponent implements OnInit {
   }
 
   private loadForm(profile: IProfile) {
-    this.imageUrl = `mock-data/${Utils.formatNumber(parseInt(this.cache.profile?.id, 109), '2.0-0')}-small.png`;
-
     this.personalFormGroup.controls.friends?.clear();
 
     this.personalFormGroup.patchValue(profile);

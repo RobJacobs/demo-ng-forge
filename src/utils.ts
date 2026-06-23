@@ -203,7 +203,10 @@ export class Utils {
     return formatDate(value, format, navigator.language);
   }
 
-  public static formatNumber(value: number, format = '1.2-2'): string {
+  public static formatNumber(value: number | string, format = '1.2-2'): string {
+    if (isString(value)) {
+      value = parseFloat(value as string);
+    }
     return formatNumber(value, navigator.language, format);
   }
 
