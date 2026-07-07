@@ -1,9 +1,10 @@
-import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { isDefined, isNumber, isString } from '@tylertech/forge-core';
 import { ITableTemplateBuilderResult, TableTemplateBuilder } from '@tylertech/forge';
 @Component({
   selector: 'app-table-mobile-template',
   styles: ':host { display: contents; } .content { display: flex; flex-wrap: wrap; }',
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: '<div #content class="content"></div>'
 })
 export class TableMobileTemplateComponent implements AfterViewInit {

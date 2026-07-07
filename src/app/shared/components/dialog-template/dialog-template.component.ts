@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject, ChangeDetectionStrategy } from '@angular/core';
 import { DialogRef, ForgeIconButtonModule, ForgeIconModule, ForgeScaffoldModule, ForgeToolbarModule, ForgeTooltipModule } from '@tylertech/forge-angular';
 
 @Component({
   selector: 'app-dialog-template',
   imports: [ForgeIconButtonModule, ForgeIconModule, ForgeScaffoldModule, ForgeTooltipModule, ForgeToolbarModule],
   templateUrl: './dialog-template.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './dialog-template.component.scss'
 })
 export class DialogTemplateComponent implements OnInit {

@@ -1,12 +1,13 @@
-import { Component, inject } from '@angular/core';
-import { IPetsService, PETS_SERVICE } from './pets.config';
-import { CommonModule } from '@angular/common';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { JsonPipe } from '@angular/common';
 import { ForgeButtonModule } from '@tylertech/forge-angular';
+import { IPetsService, PETS_SERVICE } from './pets.config';
 
 @Component({
   selector: 'lib-pets-main',
-  imports: [CommonModule, ForgeButtonModule],
+  imports: [JsonPipe, ForgeButtonModule],
   templateUrl: './pets-main.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./pets-main.component.scss']
 })
 export class PetsMainComponent {

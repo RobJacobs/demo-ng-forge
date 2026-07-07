@@ -68,7 +68,7 @@
     }
 
     @if (isLoaded && !error) {
-      <div #pdfViewerLeftToolbar class="pdf-viewer__left-toolbar" [ngClass]="{ 'app--hidden': !showLeftToolbar }"></div>
+      <div #pdfViewerLeftToolbar class="pdf-viewer__left-toolbar" [class.app--hidden]="!showLeftToolbar"></div>
     }
     <pdf-viewer
       #pdfViewer

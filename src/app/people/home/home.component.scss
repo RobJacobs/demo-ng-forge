@@ -28,8 +28,9 @@
   grid-template-columns: 1fr auto;
 
   &__left {
-    overflow: auto;
-    padding-top: 8px;
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: 1fr auto;
   }
 
   app-people-home-filter {
@@ -40,10 +41,9 @@
 .table {
   @include global.app-table-header-footer();
 
-  & {
-    grid-template-rows: auto 1fr;
-    display: grid;
-  }
+  grid-template-rows: auto 1fr;
+  display: grid;
+  overflow: auto;
 
   &__header {
     &__filter-count {
@@ -61,6 +61,7 @@
 
   &__footer {
     padding-right: 24px;
+    height: 54px;
   }
 }
 

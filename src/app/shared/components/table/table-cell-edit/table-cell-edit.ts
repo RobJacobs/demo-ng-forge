@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CellContext } from '@tanstack/angular-table';
 import { IconRegistry } from '@tylertech/forge';
@@ -20,6 +20,7 @@ import { ComponentColumnDef } from '../table-full/table-full.constants';
   imports: [ReactiveFormsModule, ForgeAutocompleteModule, ForgeCheckboxModule, ForgeDatePickerModule, ForgeIconModule, ForgeSelectModule, ForgeTextFieldModule],
   templateUrl: './table-cell-edit.html',
   styleUrl: './table-cell-edit.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     '[class.editing]': 'isEditing()'
   }

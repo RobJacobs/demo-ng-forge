@@ -1,4 +1,4 @@
-import { Component, input, model, output } from '@angular/core';
+import { Component, input, model, output, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ForgeButtonModule, ForgeLabelValueModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
 
@@ -8,6 +8,7 @@ import { Utils } from 'src/utils';
   selector: 'app-external',
   imports: [FormsModule, ForgeButtonModule, ForgeLabelValueModule, ForgeTextFieldModule],
   templateUrl: './external.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './external.component.scss'
 })
 export class ExternalComponent {

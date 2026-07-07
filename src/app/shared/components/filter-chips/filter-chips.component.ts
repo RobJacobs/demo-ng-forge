@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Output, input } from '@angular/core';
+import { Component, EventEmitter, Output, input, ChangeDetectionStrategy } from '@angular/core';
 import { ForgeChipModule, ForgeChipSetModule } from '@tylertech/forge-angular';
 
 @Component({
   selector: 'app-filter-chips',
   templateUrl: './filter-chips.component.html',
   styleUrls: ['./filter-chips.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ForgeChipModule, ForgeChipSetModule]
 })
 export class FilterChipsComponent {

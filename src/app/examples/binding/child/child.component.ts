@@ -1,4 +1,4 @@
-import { Component, model } from '@angular/core';
+import { Component, model, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ForgeTextFieldModule } from '@tylertech/forge-angular';
 
@@ -6,6 +6,7 @@ import { ForgeTextFieldModule } from '@tylertech/forge-angular';
   selector: 'app-examples-binding-child',
   imports: [FormsModule, ForgeTextFieldModule],
   templateUrl: './child.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./child.component.scss']
 })
 export class ChildComponent {

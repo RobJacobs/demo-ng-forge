@@ -1,6 +1,6 @@
-import { Component, DestroyRef, ElementRef, inject, OnInit, viewChild } from '@angular/core';
+import { Component, DestroyRef, ElementRef, inject, OnInit, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CommonModule } from '@angular/common';
+import { PercentPipe } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
 import { PdfViewerModule as NgPdfViewerModule } from 'ng2-pdf-viewer';
@@ -32,7 +32,7 @@ import { pdfString } from './pdf-string';
 @Component({
   selector: 'app-pdf-viewer',
   imports: [
-    CommonModule,
+    PercentPipe,
     FormsModule,
     ReactiveFormsModule,
     NgPdfViewerModule,
@@ -50,6 +50,7 @@ import { pdfString } from './pdf-string';
     CallbackPipe
   ],
   templateUrl: './pdf-viewer-demo.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./pdf-viewer-demo.component.scss']
 })
 export class PdfViewerDemoComponent implements OnInit {

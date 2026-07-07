@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, HostListener, OnInit, inject, DestroyRef, viewChild, ElementRef } from '@angular/core';
+import { Component, forwardRef, Input, HostListener, OnInit, inject, DestroyRef, viewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { NG_VALUE_ACCESSOR, FormControl, ReactiveFormsModule, ControlValueAccessor } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CdkTrapFocus } from '@angular/cdk/a11y';
@@ -35,6 +35,7 @@ import { Utils } from 'src/utils';
     ForgeTextFieldModule,
     ForgeTimePickerModule
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

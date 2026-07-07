@@ -15,7 +15,8 @@ import {
   inject,
   input,
   viewChild,
-  DestroyRef
+  DestroyRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -48,6 +49,7 @@ import { Utils } from 'src/utils';
     ForgeListModule,
     ForgeTextFieldModule
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

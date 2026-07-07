@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { DIALOG_DATA, DialogRef, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule } from '@tylertech/forge-angular';
 
 import { DialogTemplateComponent } from 'src/app/shared/components/dialog-template/dialog-template.component';
@@ -20,7 +19,8 @@ export interface IConfirmDialogData {
   selector: 'app-confirm-dialog',
   templateUrl: './confirm-dialog.component.html',
   styleUrls: ['./confirm-dialog.component.scss'],
-  imports: [CommonModule, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, DialogTemplateComponent, AutoFocusDirective]
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, DialogTemplateComponent, AutoFocusDirective]
 })
 export class ConfirmDialogComponent implements OnInit {
   public dialogData = inject<IConfirmDialogData>(DIALOG_DATA);

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import {
   DIALOG_DATA,
@@ -33,6 +33,7 @@ export interface IFilterSaveDialogData {
     AutoFocusDirective
   ],
   templateUrl: './filter-save-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./filter-save-dialog.component.scss']
 })
 export class FilterSaveDialogComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DialogRef, ForgeTextFieldModule } from '@tylertech/forge-angular';
 import { TableFilterDialogTemplateComponent } from 'src/app/shared/components/table/table-filter-dialog-template/table-filter-dialog-template.component';
@@ -7,6 +7,7 @@ import { TableFilterDialogTemplateComponent } from 'src/app/shared/components/ta
   selector: 'app-table-filter',
   imports: [ReactiveFormsModule, TableFilterDialogTemplateComponent, ForgeTextFieldModule],
   templateUrl: './table-filter.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './table-filter.component.scss'
 })
 export class TableFilterComponent {

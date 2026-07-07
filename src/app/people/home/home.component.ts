@@ -1,5 +1,4 @@
-import { Component, DestroyRef, NgZone, OnDestroy, OnInit, ViewContainerRef, inject, viewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, DestroyRef, NgZone, OnDestroy, OnInit, ViewContainerRef, inject, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
@@ -37,7 +36,6 @@ import { TableMobileComponent } from './table-mobile/table-mobile.component';
 @Component({
   selector: 'app-people-home',
   imports: [
-    CommonModule,
     ForgeBadgeModule,
     ForgeButtonModule,
     ForgeIconButtonModule,
@@ -54,6 +52,7 @@ import { TableMobileComponent } from './table-mobile/table-mobile.component';
     TableMobileComponent
   ],
   templateUrl: './home.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent extends BaseTableComponent implements OnInit, OnDestroy {

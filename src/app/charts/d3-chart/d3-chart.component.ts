@@ -1,4 +1,4 @@
-import { Component, DestroyRef, ElementRef, Input, OnInit, inject, viewChild } from '@angular/core';
+import { Component, DestroyRef, ElementRef, Input, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, fromEvent } from 'rxjs';
 import { ForgeListItemModule, ForgeListModule } from '@tylertech/forge-angular';
@@ -34,6 +34,7 @@ interface IChartItem {
   selector: 'app-charts-d3-chart',
   imports: [ForgeListItemModule, ForgeListModule],
   templateUrl: './d3-chart.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./d3-chart.component.scss']
 })
 export class D3ChartComponent implements OnInit {

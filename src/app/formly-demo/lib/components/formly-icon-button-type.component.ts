@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
 import { ForgeIconButtonModule, ForgeIconModule, ForgeTooltipModule } from '@tylertech/forge-angular';
 import { FormlyFieldPropsExtended } from '../formly.constants';
@@ -23,6 +23,7 @@ import { FormlyFieldPropsExtended } from '../formly.constants';
       display: contents;
     }
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormlyModule, ForgeIconButtonModule, ForgeIconModule, ForgeTooltipModule]
 })
 export class FormlyIconButtonTypeComponent extends FieldType<FieldTypeConfig<FormlyFieldPropsExtended>> {}

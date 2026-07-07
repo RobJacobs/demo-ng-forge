@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FieldType, FieldTypeConfig } from '@ngx-formly/core';
 import { ForgeButtonModule, ForgeFilePickerModule } from '@tylertech/forge-angular';
@@ -17,6 +17,7 @@ import { FormlyFieldPropsExtended } from '../formly.constants';
       display: contents;
     }
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ReactiveFormsModule, ForgeButtonModule, ForgeFilePickerModule]
 })
 export class FormlyFilePickerTypeComponent extends FieldType<FieldTypeConfig<FormlyFieldPropsExtended>> {}

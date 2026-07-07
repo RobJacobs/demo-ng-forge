@@ -1,4 +1,4 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, effect, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { debounce } from '@tylertech/forge-core';
 import { CellAlign, IColumnConfiguration } from '@tylertech/forge';
@@ -9,6 +9,7 @@ import { AppCacheService } from '../app-cache.service';
   selector: 'app-css-variables',
   imports: [FormsModule, ForgeTableModule, ForgeTextFieldModule, ForgeToolbarModule],
   templateUrl: './css-variables.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './css-variables.component.scss'
 })
 export class CssVariablesComponent {

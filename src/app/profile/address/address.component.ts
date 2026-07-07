@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ForgeTextFieldModule } from '@tylertech/forge-angular';
 
@@ -10,6 +10,7 @@ import { ProfileService } from '../profile.service';
   imports: [ReactiveFormsModule, ForgeTextFieldModule, FormControlInvalidDirective, AutoFocusDirective],
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     role: 'tabpanel',
     id: 'app--profile--address--tab-body',

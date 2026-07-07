@@ -1,9 +1,10 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-dashboard-title',
   templateUrl: './dashboard-title.component.html',
   styleUrl: './dashboard-title.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     class: 'dashboard-title'
   }

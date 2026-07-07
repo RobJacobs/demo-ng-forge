@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, input, output, TemplateRef } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { Component, input, output, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
   ForgeButtonAreaModule,
@@ -16,7 +16,7 @@ import { columnIds, ComponentColumnDef } from '../table-full/table-full.constant
 @Component({
   selector: 'app-table-mobile',
   imports: [
-    CommonModule,
+    NgTemplateOutlet,
     ReactiveFormsModule,
     ForgeButtonModule,
     ForgeButtonAreaModule,
@@ -28,6 +28,7 @@ import { columnIds, ComponentColumnDef } from '../table-full/table-full.constant
     FlexRender
   ],
   templateUrl: './table-mobile.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './table-mobile.component.scss'
 })
 export class TableMobileComponent {

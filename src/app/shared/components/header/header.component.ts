@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ForgeAppBarModule, ForgeIconButtonModule, ForgeIconModule, ForgeLinearProgressModule, ForgeTooltipModule } from '@tylertech/forge-angular';
 
 import { AppCacheService } from 'src/app/app-cache.service';
@@ -7,6 +7,7 @@ import { AppCacheService } from 'src/app/app-cache.service';
   selector: 'app-header',
   imports: [ForgeAppBarModule, ForgeIconModule, ForgeIconButtonModule, ForgeLinearProgressModule, ForgeTooltipModule],
   templateUrl: './header.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {

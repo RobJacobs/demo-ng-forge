@@ -4,7 +4,9 @@
       <forge-icon name="arrow_back"></forge-icon>
     </forge-icon-button>
     <h2 class="forge-typography--subheading4">
-      {{ person?.firstName + ' ' + person?.lastName }}
+      @if (person) {
+        {{ person?.firstName + ' ' + person?.lastName }}
+      }
     </h2>
   </div>
   <div slot="end">

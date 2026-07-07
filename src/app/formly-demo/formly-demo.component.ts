@@ -1,5 +1,5 @@
-import { Component, inject, signal, viewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, signal, viewChild, ChangeDetectionStrategy } from '@angular/core';
+import { JsonPipe } from '@angular/common';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormlyFormOptions, FormlyForm, provideFormlyCore, FormlyFieldConfig } from '@ngx-formly/core';
 import { CellAlign, TextFieldComponentDelegate } from '@tylertech/forge';
@@ -22,7 +22,8 @@ import { FormlyDemoService } from './formly-demo.service';
       ...FORMLY_PROVIDER_CONFIG
     })
   ],
-  imports: [CommonModule, ReactiveFormsModule, FormlyForm, ForgeToolbarModule]
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [JsonPipe, ReactiveFormsModule, FormlyForm, ForgeToolbarModule]
 })
 export class FormlyDemoComponent {
   private formlyForm = viewChild(FormlyForm);

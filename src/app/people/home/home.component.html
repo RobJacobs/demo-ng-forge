@@ -10,8 +10,8 @@
         <app-table-mobile [data]="recordset" [columnConfigurations]="tableColumns"></app-table-mobile>
       }
     } @else {
-      <div [ngClass]="{ 'app--hidden': isBusy }" class="table">
-        <div class="table__header" [ngClass]="{ 'table__header-action': selectedPeople.length }">
+      <div [class.app--hidden]="isBusy" class="table">
+        <div class="table__header" [class.table__header-action]="selectedPeople.length">
           @if (!selectedPeople.length) {
             <app-filter-chips [filters]="filterCache.filters" (filter)="onApplyFilter(true)"></app-filter-chips>
             <forge-button class="app--flex-right" variant="outlined" (click)="onTableShowFilter()">
@@ -40,7 +40,7 @@
         <forge-table
           #peopleTable
           class="table__body"
-          [ngClass]="{ 'app--hidden': !recordCount }"
+          [class.app--hidden]="!recordCount"
           [data]="recordset"
           [columnConfigurations]="tableColumns"
           (forge-table-sort)="onTableSort($event)"

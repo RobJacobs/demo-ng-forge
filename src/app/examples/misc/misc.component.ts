@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
+import { JsonPipe, NgTemplateOutlet } from '@angular/common';
+import { Component, DestroyRef, inject, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
 import {
   ForgeButtonModule,
@@ -25,7 +25,8 @@ import { AppCacheService } from 'src/app/app-cache.service';
 @Component({
   selector: 'app-examples-misc',
   imports: [
-    CommonModule,
+    JsonPipe,
+    NgTemplateOutlet,
     FormsModule,
     ReactiveFormsModule,
     ForgeButtonModule,
@@ -39,6 +40,7 @@ import { AppCacheService } from 'src/app/app-cache.service';
     ArrayFindPipe
   ],
   templateUrl: './misc.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./misc.component.scss']
 })
 export class MiscComponent implements OnInit, OnDestroy {

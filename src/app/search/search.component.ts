@@ -1,5 +1,5 @@
-import { Component, DestroyRef, OnInit, inject, viewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, DestroyRef, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core';
+import { JsonPipe, NgTemplateOutlet } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { isDefined } from '@tylertech/forge-core';
@@ -33,7 +33,8 @@ import { CheckboxThreeStateDirective } from 'src/app/shared/directives';
 @Component({
   selector: 'app-search',
   imports: [
-    CommonModule,
+    NgTemplateOutlet,
+    JsonPipe,
     ReactiveFormsModule,
     ForgeAutocompleteModule,
     ForgeButtonModule,
@@ -51,6 +52,7 @@ import { CheckboxThreeStateDirective } from 'src/app/shared/directives';
     CheckboxThreeStateDirective
   ],
   templateUrl: './search.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit {

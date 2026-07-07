@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { JsonPipe } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { lastValueFrom } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -11,17 +11,9 @@ import { ExamplesService, IRecord } from '../examples.service';
 
 @Component({
   selector: 'app-examples-autocomplete',
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ForgeAutocompleteModule,
-    ForgeButtonModule,
-    ForgeDividerModule,
-    ForgeIconModule,
-    ForgeTextFieldModule
-  ],
+  imports: [JsonPipe, FormsModule, ReactiveFormsModule, ForgeAutocompleteModule, ForgeButtonModule, ForgeDividerModule, ForgeIconModule, ForgeTextFieldModule],
   templateUrl: './autocomplete.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./autocomplete.component.scss']
 })
 export class AutocompleteComponent {

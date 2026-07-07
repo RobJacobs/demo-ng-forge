@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component, Input, input } from '@angular/core';
+import { Component, Input, input, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ForgeIconButtonModule, ForgeIconModule, ForgeTooltipModule } from '@tylertech/forge-angular';
 
@@ -7,7 +6,8 @@ import { ForgeIconButtonModule, ForgeIconModule, ForgeTooltipModule } from '@tyl
   selector: 'app-routerlink-button',
   templateUrl: './routerlink-button.component.html',
   styleUrls: ['./routerlink-button.component.scss'],
-  imports: [CommonModule, RouterModule, ForgeIconButtonModule, ForgeIconModule, ForgeTooltipModule]
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [RouterModule, ForgeIconButtonModule, ForgeIconModule, ForgeTooltipModule]
 })
 export class RouterlinkButtonComponent {
   public readonly route = input<string>();

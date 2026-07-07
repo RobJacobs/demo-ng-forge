@@ -56,24 +56,26 @@
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
+            },
+            "testing": {
+              "aot": false,
+              "optimization": false,
+              "extractLicenses": false,
+              "polyfills": [
+                "zone.js",
+                "zone.js/testing"
+              ]
             }
           },
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "./tsconfig.spec.json",
-            "stylePreprocessorOptions": {
-              "includePaths": [
-                "node_modules",
-                "."
-              ]
-            },
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
+            "buildTarget": ":build:testing",
+            "runner": "vitest",
+            "runnerConfig": "vitest.config.ts"
           }
         },
         "serve": {

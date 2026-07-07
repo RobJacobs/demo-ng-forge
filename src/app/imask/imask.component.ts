@@ -1,7 +1,7 @@
 // https://github.com/uNmAnNeR/imaskjs/issues/876
 
-import { Component, AfterViewInit, viewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, AfterViewInit, viewChild, ChangeDetectionStrategy } from '@angular/core';
+import { JsonPipe } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { IMaskDirective } from 'angular-imask';
 import * as IMask from 'imask';
@@ -12,17 +12,9 @@ import { parse as dateParse, format as dateFormat, isValid as dateIsValid } from
 import { NullableMask, NullableNumberMask } from './imask-extensions';
 @Component({
   selector: 'app-imask',
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    IMaskDirective,
-    ForgeButtonModule,
-    ForgeOptionModule,
-    ForgeSelectModule,
-    ForgeTextFieldModule,
-    ForgeToolbarModule
-  ],
+  imports: [JsonPipe, ReactiveFormsModule, IMaskDirective, ForgeButtonModule, ForgeOptionModule, ForgeSelectModule, ForgeTextFieldModule, ForgeToolbarModule],
   templateUrl: './imask.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./imask.component.scss']
 })
 export class ImaskComponent implements AfterViewInit {

@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { JsonPipe, NgTemplateOutlet } from '@angular/common';
 import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { isDefined } from '@tylertech/forge-core';
 import {
@@ -20,7 +20,8 @@ import { FormControlInvalidDirective } from 'src/app/shared/directives';
 @Component({
   selector: 'app-query-builder',
   imports: [
-    CommonModule,
+    NgTemplateOutlet,
+    JsonPipe,
     ReactiveFormsModule,
     ForgeAutocompleteModule,
     ForgeButtonModule,
@@ -33,6 +34,7 @@ import { FormControlInvalidDirective } from 'src/app/shared/directives';
     FormControlInvalidDirective
   ],
   templateUrl: './query-builder.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./query-builder.component.scss']
 })
 export class QueryBuilderComponent {

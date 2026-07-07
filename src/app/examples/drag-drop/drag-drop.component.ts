@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { ForgeListItemModule, ForgeListModule } from '@tylertech/forge-angular';
 
@@ -6,6 +6,7 @@ import { ForgeListItemModule, ForgeListModule } from '@tylertech/forge-angular';
   selector: 'app-examples-drag-drop',
   imports: [DragDropModule, ForgeListItemModule, ForgeListModule],
   templateUrl: './drag-drop.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./drag-drop.component.scss']
 })
 export class DragDropComponent {

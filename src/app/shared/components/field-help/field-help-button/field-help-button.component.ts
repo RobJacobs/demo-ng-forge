@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { isArray, isDefined } from '@tylertech/forge-core';
 import { IconRegistry } from '@tylertech/forge';
@@ -11,6 +11,7 @@ import { FieldHelpDialogComponent } from '../field-help-dialog/field-help-dialog
   selector: 'app-field-help-button',
   imports: [ForgeIconButtonModule, ForgeIconModule, ForgeTooltipModule],
   templateUrl: './field-help-button.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './field-help-button.component.scss'
 })
 export class FieldHelpButtonComponent {

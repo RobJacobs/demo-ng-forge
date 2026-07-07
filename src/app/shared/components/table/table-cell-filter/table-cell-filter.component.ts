@@ -1,4 +1,4 @@
-import { Component, computed, ElementRef, inject, input, OnInit } from '@angular/core';
+import { Component, computed, ElementRef, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Header } from '@tanstack/angular-table';
 import { IconRegistry } from '@tylertech/forge';
@@ -19,6 +19,7 @@ import { ComponentColumnDef } from '../table-full/table-full.constants';
   selector: 'app-table-cell-filter',
   imports: [ReactiveFormsModule, ForgeAutocompleteModule, ForgeCheckboxModule, ForgeDatePickerModule, ForgeIconModule, ForgeSelectModule, ForgeTextFieldModule],
   templateUrl: './table-cell-filter.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './table-cell-filter.component.scss'
 })
 export class TableCellFilterComponent implements OnInit {

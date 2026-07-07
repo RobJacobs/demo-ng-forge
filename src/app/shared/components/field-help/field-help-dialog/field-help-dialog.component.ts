@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal, viewChild } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
 import { isDefined } from '@tylertech/forge-core';
@@ -30,6 +30,7 @@ import { IFieldHelpConfig } from '../field-help.constants';
   selector: 'app-field-help-dialog',
   imports: [ForgeButtonModule, ForgePaginatorModule, ForgePageStateModule, ForgeSkeletonModule, ForgeTableModule, DialogTemplateComponent],
   templateUrl: './field-help-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './field-help-dialog.component.scss'
 })
 export class FieldHelpDialogComponent implements OnInit {

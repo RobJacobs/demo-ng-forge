@@ -30,6 +30,7 @@ forge-drawer {
   flex-direction: row;
   justify-content: flex-end;
   padding: 8px 16px;
+  height: 54px;
   @include global.app-border(border-top);
 
   forge-button {

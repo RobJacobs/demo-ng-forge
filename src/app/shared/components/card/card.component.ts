@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { ForgeToolbarModule } from '@tylertech/forge-angular';
 
 @Component({
@@ -9,6 +9,7 @@ import { ForgeToolbarModule } from '@tylertech/forge-angular';
     '[class.app-card--raised]': 'border() === "raised"',
     '[class.app-card--outlined]': 'border() === "outlined"'
   },
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ForgeToolbarModule]
 })
 export class CardComponent {

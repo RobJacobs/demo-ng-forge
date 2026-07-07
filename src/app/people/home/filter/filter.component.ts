@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, inject } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { IOption } from '@tylertech/forge';
@@ -31,6 +31,7 @@ import { PeopleCacheService } from '../../people-cache.service';
     AutocompleteRangeComponent
   ],
   templateUrl: './filter.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./filter.component.scss']
 })
 export class FilterComponent implements OnInit {

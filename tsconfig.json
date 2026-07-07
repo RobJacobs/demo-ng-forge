@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "paths": {
@@ -35,8 +36,8 @@
       "dom"
     ],
     "types": [
-      "jasmine",
       "node",
+      "vitest/globals",
       "google.visualization",
       "grecaptcha"
     ]

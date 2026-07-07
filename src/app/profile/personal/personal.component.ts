@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { isDefined } from '@tylertech/forge-core';
@@ -54,6 +54,7 @@ import { lastValueFrom, map, of } from 'rxjs';
   ],
   templateUrl: './personal.component.html',
   styleUrls: ['./personal.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     role: 'tabpanel',
     id: 'app--profile--personal--tab-body',

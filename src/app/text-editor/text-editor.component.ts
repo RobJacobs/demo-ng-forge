@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject } from '@angular/core';
+import { Component, ElementRef, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ForgeButtonModule, ForgeToolbarModule } from '@tylertech/forge-angular';
 import { QuillModule, QuillModules } from 'ngx-quill';
@@ -10,6 +10,7 @@ import { QuillModule, QuillModules } from 'ngx-quill';
   selector: 'app-text-editor',
   imports: [ReactiveFormsModule, QuillModule, ForgeButtonModule, ForgeToolbarModule],
   templateUrl: './text-editor.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: [
     './text-editor.component.scss'
     // '../../../node_modules/quill/dist/quill.snow.css'

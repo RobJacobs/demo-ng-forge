@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { JsonPipe } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IOption, SelectOptionBuilder, SelectSelectedTextBuilder } from '@tylertech/forge';
 import { ForgeDividerModule, ForgeOptionModule, ForgeSelectModule } from '@tylertech/forge-angular';
@@ -8,8 +8,9 @@ import { ExamplesService } from '../examples.service';
 
 @Component({
   selector: 'app-examples-select',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, ForgeDividerModule, ForgeOptionModule, ForgeSelectModule],
+  imports: [JsonPipe, FormsModule, ReactiveFormsModule, ForgeDividerModule, ForgeOptionModule, ForgeSelectModule],
   templateUrl: './select.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./select.component.scss']
 })
 export class SelectComponent {

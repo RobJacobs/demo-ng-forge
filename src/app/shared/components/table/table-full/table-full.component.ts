@@ -1,5 +1,18 @@
-import { Component, computed, DestroyRef, ElementRef, inject, input, model, output, TemplateRef, viewChild, viewChildren } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  Component,
+  computed,
+  DestroyRef,
+  ElementRef,
+  inject,
+  input,
+  model,
+  output,
+  TemplateRef,
+  viewChild,
+  viewChildren,
+  ChangeDetectionStrategy
+} from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -60,7 +73,7 @@ import { TableMobileComponent } from '../table-mobile/table-mobile.component';
 @Component({
   selector: 'app-table-full',
   imports: [
-    CommonModule,
+    NgTemplateOutlet,
     ReactiveFormsModule,
     DragDropModule,
     FlexRender,
@@ -83,6 +96,7 @@ import { TableMobileComponent } from '../table-mobile/table-mobile.component';
     TableMobileComponent
   ],
   templateUrl: './table-full.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './table-full.component.scss'
 })
 export class TableFullComponent {

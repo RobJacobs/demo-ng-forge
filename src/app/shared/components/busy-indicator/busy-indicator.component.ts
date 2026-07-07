@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { DIALOG_DATA, ForgeCircularProgressModule, ForgeLinearProgressModule } from '@tylertech/forge-angular';
 
 export interface IBusyIndicatorData {
@@ -11,6 +11,7 @@ export interface IBusyIndicatorData {
   selector: 'app-busy-indicator',
   templateUrl: './busy-indicator.component.html',
   styleUrl: './busy-indicator.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ForgeLinearProgressModule, ForgeCircularProgressModule]
 })
 export class BusyIndicatorComponent {

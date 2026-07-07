@@ -1,5 +1,5 @@
-import { Component, DestroyRef, inject, OnInit, signal, TemplateRef, viewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, DestroyRef, inject, OnInit, signal, TemplateRef, viewChild, ChangeDetectionStrategy } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -24,7 +24,7 @@ import { ConfirmDialogComponent } from '../shared/components';
 @Component({
   selector: 'app-table-full-demo',
   imports: [
-    CommonModule,
+    NgTemplateOutlet,
     ReactiveFormsModule,
     TableFullComponent,
     ForgeAvatarModule,
@@ -35,6 +35,7 @@ import { ConfirmDialogComponent } from '../shared/components';
     TableDetailComponent
   ],
   templateUrl: './table-full-demo.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './table-full-demo.component.scss'
 })
 export class TableFullDemoComponent implements OnInit {

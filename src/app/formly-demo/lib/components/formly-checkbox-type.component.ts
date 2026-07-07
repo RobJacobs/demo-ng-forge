@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
 import { ForgeCheckboxModule } from '@tylertech/forge-angular';
@@ -21,6 +21,7 @@ import { FormlyFieldPropsExtended } from '../formly.constants';
       width: fit-content;
     }
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ReactiveFormsModule, FormlyModule, ForgeCheckboxModule]
 })
 export class FormlyCheckboxTypeComponent extends FieldType<FieldTypeConfig<FormlyFieldPropsExtended>> {}

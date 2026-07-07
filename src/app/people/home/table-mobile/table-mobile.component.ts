@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { JsonPipe, NgTemplateOutlet } from '@angular/common';
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 import { ITableRowClickEventData } from '@tylertech/forge';
 import { FormArray, ReactiveFormsModule } from '@angular/forms';
 import { ForgeButtonAreaModule, ForgeDividerModule, ForgeLabelValueModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
@@ -11,7 +11,8 @@ import { ITableColumnConfiguration } from 'src/app/shared/components/table/base-
 @Component({
   selector: 'app-table-mobile',
   imports: [
-    CommonModule,
+    NgTemplateOutlet,
+    JsonPipe,
     ReactiveFormsModule,
     ForgeButtonAreaModule,
     ForgeDividerModule,
@@ -21,6 +22,7 @@ import { ITableColumnConfiguration } from 'src/app/shared/components/table/base-
     FormControlInvalidDirective
   ],
   templateUrl: './table-mobile.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './table-mobile.component.scss'
 })
 export class TableMobileComponent {

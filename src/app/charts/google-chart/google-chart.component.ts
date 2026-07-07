@@ -1,4 +1,4 @@
-import { Component, DestroyRef, ElementRef, Input, OnDestroy, OnInit, inject, viewChild } from '@angular/core';
+import { Component, DestroyRef, ElementRef, Input, OnDestroy, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, filter, fromEvent } from 'rxjs';
 
@@ -17,6 +17,7 @@ interface IChartItem {
   selector: 'app-charts-google-chart',
   providers: [GoogleChartService],
   templateUrl: './google-chart.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./google-chart.component.scss']
 })
 export class GoogleChartComponent implements OnInit, OnDestroy {

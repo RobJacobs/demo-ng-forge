@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { isDefined } from '@tylertech/forge-core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -14,6 +14,7 @@ import { PeopleCacheService } from '../people-cache.service';
   selector: 'app-people-detail',
   imports: [ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, ForgeLabelValueModule, ForgeToolbarModule],
   templateUrl: './detail.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./detail.component.scss']
 })
 export class DetailComponent {

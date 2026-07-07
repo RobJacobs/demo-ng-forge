@@ -1,7 +1,6 @@
-import { CommonModule } from '@angular/common';
-import { Component, ElementRef, inject, input, ViewChild } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { Component, ElementRef, inject, input, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
-import { ButtonComponent } from '@tylertech/forge';
 import {
   ForgeButtonModule,
   ForgeDrawerModule,
@@ -19,7 +18,7 @@ import { AppCacheService } from 'src/app/app-cache.service';
 @Component({
   selector: 'app-menu',
   imports: [
-    CommonModule,
+    NgTemplateOutlet,
     ForgeButtonModule,
     ForgeDrawerModule,
     ForgeMiniDrawerModule,
@@ -31,6 +30,7 @@ import { AppCacheService } from 'src/app/app-cache.service';
     ForgeTooltipModule
   ],
   templateUrl: './menu.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent {

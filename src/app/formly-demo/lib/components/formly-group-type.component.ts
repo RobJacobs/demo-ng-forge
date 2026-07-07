@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FieldGroupTypeConfig, FieldType, FormlyModule } from '@ngx-formly/core';
 import { FormlyFieldPropsExtended } from '../formly.constants';
 import { FormlyFieldDirective } from '../formly-field.directive';
@@ -12,6 +12,7 @@ import { FormlyFieldDirective } from '../formly-field.directive';
     }
     <ng-content></ng-content>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormlyModule, FormlyFieldDirective]
 })
 export class FormlyGroupTypeComponent extends FieldType<FieldGroupTypeConfig<FormlyFieldPropsExtended>> {}

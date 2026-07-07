@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject, NgZone } from '@angular/core';
+import { JsonPipe } from '@angular/common';
+import { Component, inject, NgZone, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   ForgeButtonModule,
@@ -18,7 +18,7 @@ import { ReCaptchaService } from './re-captcha.service';
 @Component({
   selector: 'app-re-captcha',
   imports: [
-    CommonModule,
+    JsonPipe,
     ReactiveFormsModule,
     ForgeButtonModule,
     ForgeDividerModule,
@@ -28,6 +28,7 @@ import { ReCaptchaService } from './re-captcha.service';
     ForgeToolbarModule
   ],
   templateUrl: './re-captcha.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './re-captcha.component.scss'
 })
 export class ReCaptchaComponent {

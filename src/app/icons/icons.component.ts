@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { AutocompleteFilterCallback, IOption } from '@tylertech/forge';
 import { IconsCacheService } from './icons-cache.service';
 import { ForgeAutocompleteModule, ForgeIconModule, ForgeTextFieldModule, ForgeToolbarModule } from '@tylertech/forge-angular';
@@ -8,6 +8,7 @@ import { ForgeAutocompleteModule, ForgeIconModule, ForgeTextFieldModule, ForgeTo
   imports: [ForgeAutocompleteModule, ForgeIconModule, ForgeTextFieldModule, ForgeToolbarModule],
   providers: [IconsCacheService],
   templateUrl: './icons.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./icons.component.scss']
 })
 export class IconsComponent {

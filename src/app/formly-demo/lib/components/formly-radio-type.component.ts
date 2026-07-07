@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
 import { ForgeLabelModule, ForgeRadioGroupModule, ForgeRadioModule } from '@tylertech/forge-angular';
@@ -35,6 +35,7 @@ import { FormlyFieldPropsExtended } from '../formly.constants';
       gap: 8px;
     }
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ReactiveFormsModule, FormlyModule, ForgeLabelModule, ForgeRadioGroupModule, ForgeRadioModule]
 })
 export class FormlyRadioTypeComponent extends FieldType<FieldTypeConfig<FormlyFieldPropsExtended>> {}

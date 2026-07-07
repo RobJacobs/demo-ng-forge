@@ -1,4 +1,4 @@
-import { Component, viewChild } from '@angular/core';
+import { Component, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ForgeButtonModule, ForgeOptionModule, ForgeSelectModule, ForgeTabBarModule, ForgeTabModule, ForgeToolbarModule } from '@tylertech/forge-angular';
 
@@ -31,6 +31,7 @@ export enum ChartTypes {
     GoogleChartComponent
   ],
   templateUrl: './charts.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./charts.component.scss']
 })
 export class ChartsComponent {

@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FieldType, FieldTypeConfig, FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
 import { ITabBarChangeEventData } from '@tylertech/forge';
 import { ForgeTabBarModule, ForgeTabModule } from '@tylertech/forge-angular';
@@ -23,6 +23,7 @@ import { FormlyFieldDirective } from '../formly-field.directive';
       display: contents;
     }
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormlyModule, ForgeTabBarModule, ForgeTabModule, FormlyFieldDirective]
 })
 export class FormlyTabBarTypeComponent extends FieldType<FieldTypeConfig<FormlyFieldPropsExtended>> implements OnInit {

@@ -1,5 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { JsonPipe } from '@angular/common';
 import { Subject } from 'rxjs';
 import { Observable as DexieObservable } from 'dexie';
 import { ForgeButtonModule, ForgeLabelValueModule, ForgeToolbarModule } from '@tylertech/forge-angular';
@@ -11,8 +11,9 @@ import { IndexedDBStorageService } from './indexed-db-storage.service';
 
 @Component({
   selector: 'app-storage',
-  imports: [CommonModule, ForgeButtonModule, ForgeLabelValueModule, ForgeToolbarModule],
+  imports: [JsonPipe, ForgeButtonModule, ForgeLabelValueModule, ForgeToolbarModule],
   templateUrl: './storage.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./storage.component.scss']
 })
 export class StorageComponent implements OnInit {

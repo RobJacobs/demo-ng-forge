@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ForgeButtonModule, ForgeToolbarModule } from '@tylertech/forge-angular';
 
@@ -6,6 +6,7 @@ import { ForgeButtonModule, ForgeToolbarModule } from '@tylertech/forge-angular'
   selector: 'app-test-parent',
   imports: [ForgeButtonModule, ForgeToolbarModule],
   templateUrl: './parent.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./parent.component.scss']
 })
 export class ParentComponent {

@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
 import { isDefined } from '@tylertech/forge-core';
@@ -37,6 +37,7 @@ import { FormlyFieldPropsExtended } from '../formly.constants';
       display: contents;
     }
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ReactiveFormsModule, FormlyModule, ForgeTextFieldModule, IMaskDirective, FormControlInvalidDirective]
 })
 export class FormlyTextFieldInputTypeComponent extends FieldType<FieldTypeConfig<FormlyFieldPropsExtended>> implements OnInit {

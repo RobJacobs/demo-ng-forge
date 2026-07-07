@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ForgeButtonModule } from '@tylertech/forge-angular';
 import { DashboardTemplateComponent, DashboardTitleComponent } from 'src/app/shared/components';
 
@@ -6,6 +6,7 @@ import { DashboardTemplateComponent, DashboardTitleComponent } from 'src/app/sha
   selector: 'app-dashboard',
   imports: [ForgeButtonModule, DashboardTemplateComponent, DashboardTitleComponent],
   templateUrl: './dashboard.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent {}

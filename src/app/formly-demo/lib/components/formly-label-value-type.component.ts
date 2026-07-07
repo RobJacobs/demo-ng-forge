@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FieldGroupTypeConfig, FieldType, FormlyModule } from '@ngx-formly/core';
 import { ForgeLabelValueModule } from '@tylertech/forge-angular';
 import { FormlyFieldPropsExtended } from '../formly.constants';
@@ -13,6 +13,7 @@ import { FormlyFieldPropsExtended } from '../formly.constants';
     </forge-label-value>
   `,
   imports: [FormlyModule, ForgeLabelValueModule],
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     :host {
       display: contents;

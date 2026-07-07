@@ -1,4 +1,16 @@
-import { Component, inputBinding, model, outputBinding, signal, TemplateRef, twoWayBinding, Type, viewChild, ViewContainerRef } from '@angular/core';
+import {
+  Component,
+  inputBinding,
+  model,
+  outputBinding,
+  signal,
+  TemplateRef,
+  twoWayBinding,
+  Type,
+  viewChild,
+  ViewContainerRef,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { ForgeToolbarModule, ForgeButtonModule, ForgeTextFieldModule, ForgeLabelValueModule } from '@tylertech/forge-angular';
 
 import { ExternalComponent } from './external/external.component';
@@ -11,6 +23,7 @@ import { Utils } from 'src/utils';
   selector: 'app-dynamic-component',
   imports: [FormsModule, ForgeButtonModule, ForgeLabelValueModule, ForgeTextFieldModule, ForgeToolbarModule],
   templateUrl: './dynamic-component.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './dynamic-component.component.scss'
 })
 export class DynamicComponentComponent {
