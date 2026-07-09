@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/components/table/table-mobile/table-mobile.component.scss"],
+  "sourcesContent": [":host {\r\n  display: block;\r\n}\r\n\r\n.row {\r\n  padding: 8px 16px;\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 8px;\r\n\r\n  &-expander {\r\n    display: block;\r\n    margin: 8px;\r\n  }\r\n}\r\n\r\n.busy-indicator {\r\n  padding-inline: 8px;\r\n}"],
+  "mappings": "AAAA,MACE,QAAA,MAGF,CAAA,IAJA,QAKE,IAAA,KACA,QAAA,KACA,eAAA,OACA,IAAA,IAEA,CAAA,aACE,QAAA,MAXJ,OAYI,IAIJ,CAAA,eACE,eAAA",
+  "names": []
+}
