@@ -3,7 +3,7 @@ import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient, withInterceptors, withXhr } from '@angular/common/http';
 
 import { routes } from './app.routes';
-import { busyInterceptor } from 'src/app/shared/interceptors/busy.interceptor';
+import { busyInterceptor } from '@app/shared/interceptors/busy.interceptor';
 
 export function initializeAppFactory(): () => Promise<void> {
   return () => {

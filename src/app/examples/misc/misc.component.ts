@@ -15,12 +15,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize, of, Subject } from 'rxjs';
 import { fileTypeFromStream } from 'file-type';
 
-import { Utils } from 'src/utils';
-import { AppDataService } from 'src/app/app-data.service';
-import { BusyIndicatorService, CardComponent } from 'src/app/shared/components';
-import { ArrayFindPipe } from 'src/app/shared/pipes';
-import { AppWebSocketService } from 'src/app/app-web-socket.service';
-import { AppCacheService } from 'src/app/app-cache.service';
+import { Utils } from '@app/shared/utils';
+import { AppDataService } from '@app/app-data.service';
+import { BusyIndicatorService, CardComponent } from '@app/shared/components';
+import { ArrayFindPipe } from '@app/shared/pipes';
+import { AppWebSocketService } from '@app/app-web-socket.service';
+import { AppCacheService } from '@app/app-cache.service';
 
 @Component({
   selector: 'app-examples-misc',

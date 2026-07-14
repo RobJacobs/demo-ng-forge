@@ -1,7 +1,7 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ForgeAppBarModule, ForgeIconButtonModule, ForgeIconModule, ForgeLinearProgressModule, ForgeTooltipModule } from '@tylertech/forge-angular';
 
-import { AppCacheService } from 'src/app/app-cache.service';
+import { AppCacheService } from '@app/app-cache.service';
 
 @Component({
   selector: 'app-header',

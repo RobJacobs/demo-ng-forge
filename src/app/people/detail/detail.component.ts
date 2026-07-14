@@ -4,10 +4,10 @@ import { isDefined } from '@tylertech/forge-core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule, ForgeLabelValueModule, ForgeToolbarModule } from '@tylertech/forge-angular';
 
-import { Utils } from 'src/utils';
-import { AppCacheService } from 'src/app/app-cache.service';
-import { AppDataService } from 'src/app/app-data.service';
-import { IPerson } from 'src/app/shared/interfaces';
+import { Utils } from '@app/shared/utils';
+import { AppCacheService } from '@app/app-cache.service';
+import { AppDataService } from '@app/app-data.service';
+import { IPerson } from '@app/shared/interfaces';
 import { PeopleCacheService } from '../people-cache.service';
 
 @Component({

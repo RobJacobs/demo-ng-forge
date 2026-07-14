@@ -10,8 +10,8 @@ import {
   ForgeTextFieldModule
 } from '@tylertech/forge-angular';
 
-import { AutoFocusDirective, FormControlInvalidDirective } from 'src/app/shared/directives';
-import { DialogTemplateComponent } from 'src/app/shared/components';
+import { AutoFocusDirective, FormControlInvalidDirective } from '@app/shared/directives';
+import { DialogTemplateComponent } from '@app/shared/components';
 
 export interface IFilterSaveDialogData {
   title?: string;

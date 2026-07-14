@@ -4,7 +4,7 @@ import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
 import { IconRegistry } from '@tylertech/forge';
 import { tylIconArrowDropDown } from '@tylertech/tyler-icons';
 import { ForgeAutocompleteModule, ForgeIconModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
-import { FormControlInvalidDirective } from 'src/app/shared/directives';
+import { FormControlInvalidDirective } from '@app/shared/directives';
 import { FormlyFieldPropsExtended } from '../formly.constants';
 
 @Component({

@@ -21,7 +21,7 @@ import {
   PopoverDirective
 } from '@tylertech/forge-angular';
 
-import { CallbackPipe } from 'src/app/shared/pipes';
+import { CallbackPipe } from '@app/shared/pipes';
 import { pdfString } from './pdf-string';
 
 // https://github.com/VadimDez/ng2-pdf-viewer

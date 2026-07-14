@@ -1,11 +1,7 @@
-@use '@tylertech/forge/dist/forge-core';
-
 @use '@tylertech/forge/dist/forge';
-@use '@tylertech/forge/dist/table/forge-table.css';
+@use '@tylertech/forge/sass/theme/theme-dark';
 
 @use 'src/global';
-
-@use '@tylertech/forge/sass/theme/theme-dark';
 
 *,
 *::before,

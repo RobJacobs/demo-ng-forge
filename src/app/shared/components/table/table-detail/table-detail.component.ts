@@ -1,6 +1,6 @@
 import { JsonPipe } from '@angular/common';
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
-import { CardComponent } from 'src/app/shared/components/card/card.component';
+import { CardComponent } from '@app/shared/components/card/card.component';
 
 @Component({
   selector: 'app-table-detail',

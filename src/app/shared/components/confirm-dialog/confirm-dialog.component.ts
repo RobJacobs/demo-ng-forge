@@ -1,8 +1,8 @@
 import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { DIALOG_DATA, DialogRef, ForgeButtonModule, ForgeIconButtonModule, ForgeIconModule } from '@tylertech/forge-angular';
 
-import { DialogTemplateComponent } from 'src/app/shared/components/dialog-template/dialog-template.component';
-import { AutoFocusDirective } from 'src/app/shared/directives';
+import { DialogTemplateComponent } from '@app/shared/components/dialog-template/dialog-template.component';
+import { AutoFocusDirective } from '@app/shared/directives';
 
 export interface IConfirmDialogData {
   title?: string;

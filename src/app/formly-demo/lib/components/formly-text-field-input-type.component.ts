@@ -5,7 +5,7 @@ import { isDefined } from '@tylertech/forge-core';
 import { ForgeTextFieldModule } from '@tylertech/forge-angular';
 import { IMaskDirective } from 'angular-imask';
 import * as IMask from 'imask';
-import { FormControlInvalidDirective } from 'src/app/shared/directives';
+import { FormControlInvalidDirective } from '@app/shared/directives';
 import { FormlyFieldPropsExtended } from '../formly.constants';
 
 // string mask: (0) any digit, (a) any letter, (*) any char

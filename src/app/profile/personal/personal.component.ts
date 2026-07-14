@@ -19,14 +19,14 @@ import {
   ForgeTextFieldModule
 } from '@tylertech/forge-angular';
 
-import { AppDataService } from 'src/app/app-data.service';
-import { AutoFocusDirective, defaultErrorMessages, FieldErrorMessages, FormControlInvalidDirective, InputCasingDirective } from 'src/app/shared/directives';
-import { DateTimeComponent } from 'src/app/shared/components';
+import { AppDataService } from '@app/app-data.service';
+import { AutoFocusDirective, defaultErrorMessages, FieldErrorMessages, FormControlInvalidDirective, InputCasingDirective } from '@app/shared/directives';
+import { DateTimeComponent } from '@app/shared/components';
 import { ProfileService } from '../profile.service';
-import { FieldHelpButtonComponent } from 'src/app/shared/components/field-help/field-help-button/field-help-button.component';
-import { IFieldHelpConfig } from 'src/app/shared/components/field-help/field-help.constants';
-import { Utils } from 'src/utils';
-import { IPerson } from 'src/app/shared/interfaces';
+import { FieldHelpButtonComponent } from '@app/shared/components/field-help/field-help-button/field-help-button.component';
+import { IFieldHelpConfig } from '@app/shared/components/field-help/field-help.constants';
+import { Utils } from '@app/shared/utils';
+import { IPerson } from '@app/shared/interfaces';
 import { lastValueFrom, map, of } from 'rxjs';
 
 @Component({

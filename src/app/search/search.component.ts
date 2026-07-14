@@ -24,11 +24,11 @@ import {
 import { Observable, lastValueFrom, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Utils } from 'src/utils';
-import { AppDataService } from 'src/app/app-data.service';
-import { ISearch } from 'src/app/shared/interfaces';
-import { AutocompleteRangeComponent, FilterSaveDialogComponent, IFilterSaveDialogData } from 'src/app/shared/components';
-import { CheckboxThreeStateDirective } from 'src/app/shared/directives';
+import { Utils } from '@app/shared/utils';
+import { AppDataService } from '@app/app-data.service';
+import { ISearch } from '@app/shared/interfaces';
+import { AutocompleteRangeComponent, FilterSaveDialogComponent, IFilterSaveDialogData } from '@app/shared/components';
+import { CheckboxThreeStateDirective } from '@app/shared/directives';
 
 @Component({
   selector: 'app-search',

@@ -9,7 +9,7 @@ import {
   ITableSortMultipleEventData,
   SortDirection
 } from '@tylertech/forge';
-import { IFilterParameter } from 'src/app/shared/interfaces';
+import { IFilterParameter } from '@app/shared/interfaces';
 
 export interface ITableColumnConfiguration extends IColumnConfiguration {
   order?: string | number;

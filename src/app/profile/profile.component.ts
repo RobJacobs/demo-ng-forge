@@ -14,11 +14,11 @@ import {
   ToastService
 } from '@tylertech/forge-angular';
 
-import { Utils } from 'src/utils';
-import { AppDataService } from 'src/app/app-data.service';
-import { ConfirmDialogComponent } from 'src/app/shared/components';
-import { CallbackPipe } from 'src/app/shared/pipes';
-import { IProfile } from 'src/app/shared/interfaces';
+import { Utils } from '@app/shared/utils';
+import { AppDataService } from '@app/app-data.service';
+import { ConfirmDialogComponent } from '@app/shared/components';
+import { CallbackPipe } from '@app/shared/pipes';
+import { IProfile } from '@app/shared/interfaces';
 import { ProfileService } from './profile.service';
 
 @Component({

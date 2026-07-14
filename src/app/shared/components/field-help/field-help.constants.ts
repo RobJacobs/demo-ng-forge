@@ -1,6 +1,6 @@
 import { IColumnConfiguration } from '@tylertech/forge';
 import { Observable } from 'rxjs';
-import { IFilterParameter, IFilterResponse } from 'src/app/shared/interfaces';
+import { IFilterParameter, IFilterResponse } from '@app/shared/interfaces';
 
 export interface IFieldHelpConfig {
   title: string;

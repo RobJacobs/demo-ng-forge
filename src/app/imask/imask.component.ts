@@ -1,6 +1,6 @@
 // https://github.com/uNmAnNeR/imaskjs/issues/876
 
-import { Component, AfterViewInit, viewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { JsonPipe } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { IMaskDirective } from 'angular-imask';
@@ -17,7 +17,7 @@ import { NullableMask, NullableNumberMask } from './imask-extensions';
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./imask.component.scss']
 })
-export class ImaskComponent implements AfterViewInit {
+export class ImaskComponent {
   private readonly imaskRef = viewChild<IMaskDirective<any>>('imaskRef');
 
   public formGroup = new FormGroup({
@@ -36,14 +36,6 @@ export class ImaskComponent implements AfterViewInit {
     { value: 'datetime', label: 'Date time' }
   ];
   public helpText = '';
-
-  constructor() {
-    // this.mask = this.buildStringMask(this.formGroup.value.format as string);
-  }
-
-  public ngAfterViewInit() {
-    console.log(this.imaskRef());
-  }
 
   public onReset() {
     this.formGroup.controls.input.setValue(null);

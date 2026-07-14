@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Utils } from 'src/utils';
+import { Utils } from '@app/shared/utils';
 
 export interface IRecord {
   id: number;

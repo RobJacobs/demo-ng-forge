@@ -82,7 +82,7 @@ export const routes: Routes = [
         path: 'pets',
         title: 'Pets',
         providers: [{ provide: PETS_SERVICE, useExisting: AppPetsService }],
-        loadChildren: () => import('projects/pets/src/lib/pets.config').then((m) => m.PETS_ROUTES)
+        loadChildren: () => import('@demo-ng-forge/pets').then((m) => m.PETS_ROUTES)
       },
       {
         path: 'search',

@@ -2,8 +2,8 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
 import { ForgeTextFieldModule } from '@tylertech/forge-angular';
-import { FieldHelpButtonComponent } from 'src/app/shared/components/field-help/field-help-button/field-help-button.component';
-import { FormControlInvalidDirective } from 'src/app/shared/directives';
+import { FieldHelpButtonComponent } from '@app/shared/components/field-help/field-help-button/field-help-button.component';
+import { FormControlInvalidDirective } from '@app/shared/directives';
 import { FormlyFieldPropsExtended } from '../formly.constants';
 
 @Component({

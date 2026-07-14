@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SortDirection } from '@tylertech/forge';
-import { IFilter, IPerson } from 'src/app/shared/interfaces';
+import { IFilter, IPerson } from '@app/shared/interfaces';
 
 @Injectable()
 export class PeopleCacheService {

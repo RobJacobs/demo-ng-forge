@@ -4,9 +4,9 @@ import { Subject } from 'rxjs';
 import { Observable as DexieObservable } from 'dexie';
 import { ForgeButtonModule, ForgeLabelValueModule, ForgeToolbarModule } from '@tylertech/forge-angular';
 
-import { Utils } from 'src/utils';
-import { AppDataService } from 'src/app/app-data.service';
-import { IPerson } from 'src/app/shared/interfaces';
+import { Utils } from '@app/shared/utils';
+import { AppDataService } from '@app/app-data.service';
+import { IPerson } from '@app/shared/interfaces';
 import { IndexedDBStorageService } from './indexed-db-storage.service';
 
 @Component({

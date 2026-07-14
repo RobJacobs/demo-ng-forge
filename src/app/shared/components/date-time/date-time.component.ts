@@ -17,7 +17,7 @@ import {
   ForgeTimePickerModule
 } from '@tylertech/forge-angular';
 
-import { Utils } from 'src/utils';
+import { Utils } from '@app/shared/utils';
 
 @Component({
   selector: 'app-date-time',

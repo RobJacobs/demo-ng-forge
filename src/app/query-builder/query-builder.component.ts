@@ -13,9 +13,9 @@ import {
   ForgeTextFieldModule
 } from '@tylertech/forge-angular';
 
-import { Utils } from 'src/utils';
-import { IFilter } from 'src/app/shared/interfaces';
-import { FormControlInvalidDirective } from 'src/app/shared/directives';
+import { Utils } from '@app/shared/utils';
+import { IFilter } from '@app/shared/interfaces';
+import { FormControlInvalidDirective } from '@app/shared/directives';
 
 @Component({
   selector: 'app-query-builder',

@@ -65,7 +65,7 @@ import {
   PaginatorComponent
 } from '@tylertech/forge-angular';
 
-import { Utils } from 'src/utils';
+import { Utils } from '@app/shared/utils';
 import { columnIds, ComponentColumnDef, IPaginatorOptions, ITableState } from './table-full.constants';
 import { TableCellFilterComponent } from '../table-cell-filter/table-cell-filter.component';
 import { TableMobileComponent } from '../table-mobile/table-mobile.component';

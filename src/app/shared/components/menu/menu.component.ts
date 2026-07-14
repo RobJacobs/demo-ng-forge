@@ -13,7 +13,7 @@ import {
   ForgeTooltipModule
 } from '@tylertech/forge-angular';
 import { isDefined } from '@tylertech/forge-core';
-import { AppCacheService } from 'src/app/app-cache.service';
+import { AppCacheService } from '@app/app-cache.service';
 
 @Component({
   selector: 'app-menu',

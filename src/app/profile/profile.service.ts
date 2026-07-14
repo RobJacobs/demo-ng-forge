@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { delay, Observable, of, Subject } from 'rxjs';
-import { IProfile } from 'src/app/shared/interfaces';
+import { IProfile } from '@app/shared/interfaces';
 
 @Injectable()
 export class ProfileService {

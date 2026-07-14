@@ -19,7 +19,7 @@ import {
   FOrmlyTextFieldTextareaTypeComponent
 } from './components';
 import {} from './components/formly-icon-button-type.component';
-import { IFieldHelpConfig } from 'src/app/shared/components/field-help/field-help.constants';
+import { IFieldHelpConfig } from '@app/shared/components/field-help/field-help.constants';
 
 export const CLASS_PREFIX = 'formly--';
 

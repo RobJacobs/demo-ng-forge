@@ -2,7 +2,7 @@ import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/cor
 import { ReactiveFormsModule } from '@angular/forms';
 import { ForgeTextFieldModule } from '@tylertech/forge-angular';
 
-import { AutoFocusDirective, FormControlInvalidDirective } from 'src/app/shared/directives';
+import { AutoFocusDirective, FormControlInvalidDirective } from '@app/shared/directives';
 import { ProfileService } from '../profile.service';
 
 @Component({

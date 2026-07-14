@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ForgeButtonModule } from '@tylertech/forge-angular';
-import { DashboardTemplateComponent, DashboardTitleComponent } from 'src/app/shared/components';
+import { DashboardTemplateComponent, DashboardTitleComponent } from '@app/shared/components';
 
 @Component({
   selector: 'app-dashboard',

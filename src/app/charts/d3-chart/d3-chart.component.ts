@@ -191,11 +191,6 @@ export class D3ChartComponent implements OnInit {
       // data.push({id: i + startId, value: randomNumber(1, 2000), label: 'Item ' + (i + startId), category: categories[randomNumber(0, 9)]});
       // data.push({id: i + startId, value: i * 100, label: 'Item ' + (i + startId), category: randomNumber(0, 100)});
     }
-    console.log(
-      data.sort((a, b) => {
-        return (a.category as number) - (b.category as number);
-      })
-    );
     return data.sort((a, b) => {
       return (a.category as number) - (b.category as number);
     });

@@ -6,10 +6,10 @@ import { CellAlign, TextFieldComponentDelegate } from '@tylertech/forge';
 import { ForgeToolbarModule } from '@tylertech/forge-angular';
 import { checkFieldExpressions, FORMLY_CLASSES, FORMLY_COMPONENT_TYPES, FORMLY_PROVIDER_CONFIG, FormlyFieldPropsExtended } from './lib/formly.constants';
 
-import { Utils } from 'src/utils';
-import { AppDataService } from 'src/app/app-data.service';
-import { IPerson } from 'src/app/shared/interfaces';
-import { IFieldHelpConfig } from 'src/app/shared/components/field-help/field-help.constants';
+import { Utils } from '@app/shared/utils';
+import { AppDataService } from '@app/app-data.service';
+import { IPerson } from '@app/shared/interfaces';
+import { IFieldHelpConfig } from '@app/shared/components/field-help/field-help.constants';
 import { FormlyDemoService } from './formly-demo.service';
 
 @Component({

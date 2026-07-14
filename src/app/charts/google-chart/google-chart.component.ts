@@ -402,13 +402,11 @@ export class GoogleChartComponent implements OnInit, OnDestroy {
 
   private addChartEvents() {
     google.visualization.events.addListener(this.chart, 'ready', () => {
-      console.log('chart ready');
       this.chartScale = 1;
       this.addZoomPanEvents();
     });
 
     google.visualization.events.addListener(this.chart, 'select', () => {
-      console.log('chart item selected');
       console.log(this.chart?.getSelection());
     });
     google.visualization.events.addListener(this.chart, 'mousedown', () => {

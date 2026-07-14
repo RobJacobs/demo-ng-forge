@@ -3,9 +3,9 @@ import { HttpClient, HttpContext } from '@angular/common/http';
 import { isDefined, isNumber } from '@tylertech/forge-core';
 import { Observable, of, Subject, timer, map, delay, concatMap, take, timeout, filter, tap } from 'rxjs';
 
-import { SHOW_BUSY_INDICATOR } from 'src/app/shared/interceptors/busy.interceptor';
-import { IFilterParameter, IPerson, IProfile, ISearch } from 'src/app/shared/interfaces';
-import { Utils } from 'src/utils';
+import { SHOW_BUSY_INDICATOR } from '@app/shared/interceptors/busy.interceptor';
+import { IFilterParameter, IPerson, IProfile, ISearch } from '@app/shared/interfaces';
+import { Utils } from '@app/shared/utils';
 
 @Injectable({
   providedIn: 'root'

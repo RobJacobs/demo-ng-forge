@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { HttpContextToken, HttpInterceptorFn } from '@angular/common/http';
 import { finalize } from 'rxjs/operators';
-import { AppCacheService } from 'src/app/app-cache.service';
+import { AppCacheService } from '@app/app-cache.service';
 
 export const SHOW_BUSY_INDICATOR = new HttpContextToken<boolean>(() => false);
 

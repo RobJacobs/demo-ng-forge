@@ -9,14 +9,14 @@ import { debounce, isDefined } from '@tylertech/forge-core';
 import { CellAlign, IOption, SortDirection } from '@tylertech/forge';
 import { DialogService, ForgeAvatarModule, ForgeCardModule, ForgeIconButtonModule, ForgeIconModule, ForgeTooltipModule } from '@tylertech/forge-angular';
 
-import { TableFullComponent } from 'src/app/shared/components/table/table-full/table-full.component';
-import { TableDetailComponent } from 'src/app/shared/components/table/table-detail/table-detail.component';
-import { staticColumn, ComponentColumnDef, editCellComponent, columnIds } from 'src/app/shared/components/table/table-full/table-full.constants';
+import { TableFullComponent } from '@app/shared/components/table/table-full/table-full.component';
+import { TableDetailComponent } from '@app/shared/components/table/table-detail/table-detail.component';
+import { staticColumn, ComponentColumnDef, editCellComponent, columnIds } from '@app/shared/components/table/table-full/table-full.constants';
 
-import { Utils } from 'src/utils';
-import { AppDataService } from 'src/app/app-data.service';
-import { AppCacheService } from 'src/app/app-cache.service';
-import { IPerson } from 'src/app/shared/interfaces';
+import { Utils } from '@app/shared/utils';
+import { AppDataService } from '@app/app-data.service';
+import { AppCacheService } from '@app/app-cache.service';
+import { IPerson } from '@app/shared/interfaces';
 import { TableFullDemoService } from './table-full-demo.service';
 import { TableFilterComponent } from './table-filter/table-filter.component';
 import { ConfirmDialogComponent } from '../shared/components';
@@ -172,7 +172,6 @@ export class TableFullDemoComponent implements OnInit {
   public onDeleteRecord(event: MouseEvent, context: CellContext<IPerson, unknown>) {
     event.stopPropagation();
     event.preventDefault();
-    console.log(context);
     if (context.row.getIsSelected()) {
       context.row.toggleSelected();
     }
@@ -182,7 +181,6 @@ export class TableFullDemoComponent implements OnInit {
   public onViewDetailRecord(event: MouseEvent, context: CellContext<IPerson, unknown>) {
     event.stopPropagation();
     event.preventDefault();
-    console.log(context);
     this.router.navigate([`people/detail/${context.row.original.id}`]);
   }
 

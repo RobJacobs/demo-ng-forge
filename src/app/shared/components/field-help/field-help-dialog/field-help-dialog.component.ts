@@ -22,8 +22,8 @@ import {
   ForgeTableModule
 } from '@tylertech/forge-angular';
 
-import { IFilter, IFilterParameter } from 'src/app/shared/interfaces';
-import { DialogTemplateComponent } from 'src/app/shared/components/dialog-template/dialog-template.component';
+import { IFilter, IFilterParameter } from '@app/shared/interfaces';
+import { DialogTemplateComponent } from '@app/shared/components/dialog-template/dialog-template.component';
 import { IFieldHelpConfig } from '../field-help.constants';
 
 @Component({

@@ -27,8 +27,8 @@ import {
 } from 'ag-grid-community';
 import { finalize } from 'rxjs';
 
-import { IPerson } from 'src/app/shared/interfaces';
-import { Utils } from 'src/utils';
+import { IPerson } from '@app/shared/interfaces';
+import { Utils } from '@app/shared/utils';
 import { AppDataService } from '../app-data.service';
 
 @Component({

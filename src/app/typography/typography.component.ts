@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ForgeDividerModule, ForgeToolbarModule } from '@tylertech/forge-angular';
 
-import { CardComponent } from 'src/app/shared/components';
+import { CardComponent } from '@app/shared/components';
 
 @Component({
   selector: 'app-typography',

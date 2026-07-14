@@ -12,9 +12,9 @@ import {
   ForgeTextFieldModule
 } from '@tylertech/forge-angular';
 
-import { Utils } from 'src/utils';
-import { AppCacheService } from 'src/app/app-cache.service';
-import { AutocompleteRangeComponent } from 'src/app/shared/components';
+import { Utils } from '@app/shared/utils';
+import { AppCacheService } from '@app/app-cache.service';
+import { AutocompleteRangeComponent } from '@app/shared/components';
 import { PeopleCacheService } from '../../people-cache.service';
 
 @Component({

@@ -17,7 +17,7 @@ import {
   ForgeToolbarModule
 } from '@tylertech/forge-angular';
 
-import { Utils } from 'src/utils';
+import { Utils } from '@app/shared/utils';
 import {
   TableUtils,
   BaseTableComponent,
@@ -25,10 +25,10 @@ import {
   FilterChipsComponent,
   RouterlinkButtonComponent,
   ITableColumnConfiguration
-} from 'src/app/shared/components';
-import { AppCacheService } from 'src/app/app-cache.service';
-import { AppDataService } from 'src/app/app-data.service';
-import { IPerson } from 'src/app/shared/interfaces';
+} from '@app/shared/components';
+import { AppCacheService } from '@app/app-cache.service';
+import { AppDataService } from '@app/app-data.service';
+import { IPerson } from '@app/shared/interfaces';
 import { PeopleCacheService } from '../people-cache.service';
 import { FilterComponent } from './filter/filter.component';
 import { TableMobileComponent } from './table-mobile/table-mobile.component';

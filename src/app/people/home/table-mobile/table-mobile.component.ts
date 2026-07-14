@@ -4,9 +4,9 @@ import { ITableRowClickEventData } from '@tylertech/forge';
 import { FormArray, ReactiveFormsModule } from '@angular/forms';
 import { ForgeButtonAreaModule, ForgeDividerModule, ForgeLabelValueModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
 
-import { FormControlInvalidDirective } from 'src/app/shared/directives';
+import { FormControlInvalidDirective } from '@app/shared/directives';
 import { TableMobileTemplateComponent } from './table-mobile-template.component';
-import { ITableColumnConfiguration } from 'src/app/shared/components/table/base-table.component';
+import { ITableColumnConfiguration } from '@app/shared/components/table/base-table.component';
 
 @Component({
   selector: 'app-table-mobile',

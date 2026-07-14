@@ -15,7 +15,7 @@ import { ForgeToolbarModule, ForgeButtonModule, ForgeTextFieldModule, ForgeLabel
 
 import { ExternalComponent } from './external/external.component';
 import { FormsModule } from '@angular/forms';
-import { Utils } from 'src/utils';
+import { Utils } from '@app/shared/utils';
 
 // https://angular.love/angular-20-whats-new#New%20Features%20of%20NgComponentOutlet
 

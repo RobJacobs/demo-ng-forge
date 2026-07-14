@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
 import { ForgeSelectModule } from '@tylertech/forge-angular';
-import { FormControlInvalidDirective } from 'src/app/shared/directives';
+import { FormControlInvalidDirective } from '@app/shared/directives';
 import { FormlyFieldPropsExtended } from '../formly.constants';
 
 @Component({

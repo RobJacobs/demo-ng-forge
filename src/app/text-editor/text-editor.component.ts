@@ -34,16 +34,10 @@ export class TextEditorComponent {
         [{ font: [] }, { size: [] }, { header: [1, 2, 3, 4, 5, 6, false] }],
         ['image']
       ]
-      // handlers: {
-      //   'link': (value) => {
-      //     console.log(value);
-      //   }
-      // }
     }
   };
 
   public onEditorCreated(quill: any) {
-    console.log(quill);
     this.elementRef.nativeElement.querySelectorAll('.ql-toolbar button').forEach((el: HTMLElement) => (el.tabIndex = -1));
     this.elementRef.nativeElement.querySelectorAll('.ql-toolbar [role="button"]').forEach((el: HTMLElement) => (el.tabIndex = -1));
   }

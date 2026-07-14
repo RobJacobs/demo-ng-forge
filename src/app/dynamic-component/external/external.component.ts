@@ -2,7 +2,7 @@ import { Component, input, model, output, ChangeDetectionStrategy } from '@angul
 import { FormsModule } from '@angular/forms';
 import { ForgeButtonModule, ForgeLabelValueModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
 
-import { Utils } from 'src/utils';
+import { Utils } from '@app/shared/utils';
 
 @Component({
   selector: 'app-external',

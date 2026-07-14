@@ -12,7 +12,7 @@ import {
 } from '@tylertech/forge-angular';
 import { finalize } from 'rxjs';
 
-import { Utils } from 'src/utils';
+import { Utils } from '@app/shared/utils';
 import { ReCaptchaService } from './re-captcha.service';
 
 @Component({
