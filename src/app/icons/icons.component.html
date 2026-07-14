@@ -12,12 +12,12 @@
 </forge-toolbar>
 
 <div class="body">
-  <div class="body__icons" role="list">
-    @for (icon of cache.iconOptions; track i; let i = $index) {
-      <div class="icon" role="listitem">
+  <div #bodyIconsRef class="body__icons" role="list">
+    <cdk-virtual-scroll-viewport [itemSize]="itemSize()">
+      <div *cdkVirtualFor="let icon of cache.iconOptions" class="icon" role="listitem">
         <forge-icon lazy [name]="icon.value"></forge-icon>
         <div class="forge-typography--label1">{{ icon.value }}</div>
       </div>
-    }
+    </cdk-virtual-scroll-viewport>
   </div>
 </div>

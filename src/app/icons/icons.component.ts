@@ -1,17 +1,27 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, viewChild, computed, AfterViewInit, ElementRef, OnDestroy, signal } from '@angular/core';
+import { CdkVirtualForOf, CdkVirtualScrollViewport, CdkFixedSizeVirtualScroll } from '@angular/cdk/scrolling';
 import { AutocompleteFilterCallback, IOption } from '@tylertech/forge';
-import { IconsCacheService } from './icons-cache.service';
 import { ForgeAutocompleteModule, ForgeIconModule, ForgeTextFieldModule, ForgeToolbarModule } from '@tylertech/forge-angular';
+import { IconsCacheService } from './icons-cache.service';
 
 @Component({
   selector: 'app-icons',
-  imports: [ForgeAutocompleteModule, ForgeIconModule, ForgeTextFieldModule, ForgeToolbarModule],
+  imports: [
+    ForgeAutocompleteModule,
+    ForgeIconModule,
+    ForgeTextFieldModule,
+    ForgeToolbarModule,
+    CdkVirtualScrollViewport,
+    CdkVirtualForOf,
+    CdkFixedSizeVirtualScroll
+  ],
   providers: [IconsCacheService],
   templateUrl: './icons.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./icons.component.scss']
 })
 export class IconsComponent {
+  public itemSize = signal(8);
   public cache = inject(IconsCacheService);
   public selectedIcon?: string;
 
