@@ -289,4 +289,12 @@ export class Utils {
 
     return result;
   }
+
+  public static objectEncode(value: any): string {
+    return encodeURIComponent(btoa(JSON.stringify(value)));
+  }
+
+  public static objectDecode(value: string): any {
+    return JSON.parse(atob(decodeURIComponent(value)));
+  }
 }

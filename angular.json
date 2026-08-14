@@ -61,6 +61,7 @@
               "aot": false,
               "optimization": false,
               "extractLicenses": false,
+              "sourceMap": true,
               "polyfills": [
                 "zone.js",
                 "zone.js/testing"
@@ -75,7 +76,16 @@
             "tsConfig": "./tsconfig.spec.json",
             "buildTarget": ":build:testing",
             "runner": "vitest",
-            "runnerConfig": "vitest.config.ts"
+            "runnerConfig": "vitest.config.ts",
+            "coverageInclude": [
+              "src/app/**/*.ts"
+            ],
+            "coverageExclude": [
+              "**/index.ts",
+              "**/*.constants.ts",
+              "**/*.interface.ts",
+              "**/*.models.ts"
+            ]
           }
         },
         "serve": {
@@ -127,6 +137,25 @@
             }
           },
           "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "runner": "vitest",
+            "runnerConfig": "vitest.config.ts",
+            "tsConfig": "projects/pets/tsconfig.spec.json",
+            "buildTarget": ":build:development",
+            "providersFile": "test-providers.ts",
+            "coverageInclude": [
+              "projects/pets/src/**/*.ts"
+            ],
+            "coverageExclude": [
+              "**/index.ts",
+              "**/*.constants.ts",
+              "**/*.interface.ts",
+              "**/*.models.ts"
+            ]
+          }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",

@@ -4,11 +4,15 @@
   "compilerOptions": {
     "outDir": "../../out-tsc/spec",
     "types": [
-      "vitest/globals"
+      "node",
+      "vitest/globals",
+      "vitest/browser",
     ]
   },
   "include": [
-    "**/*.spec.ts",
-    "**/*.d.ts"
+    "../../test-setup.ts",
+    "../../test-providers.ts",
+    "src/**/*.spec.ts",
+    "src/**/*.d.ts"
   ]
 }

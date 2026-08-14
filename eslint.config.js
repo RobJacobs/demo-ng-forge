@@ -30,7 +30,8 @@ module.exports = tseslint.config(
           prefix: ['app', 'lib'],
           style: 'kebab-case'
         }
-      ]
+      ],
+      '@angular-eslint/prefer-on-push-component-change-detection': ['off']
     }
   },
   {

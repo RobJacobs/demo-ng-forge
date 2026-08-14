@@ -18,9 +18,6 @@ export class AppComponent implements OnInit {
 
   public ngOnInit() {
     this.initLayoutWatch();
-
-    // const param = encodeURIComponent(btoa(JSON.stringify({ property: 'value' })));
-    // const decoded = JSON.parse(atob(decodeURIComponent(param)));
   }
 
   private initLayoutWatch() {
