@@ -28,7 +28,7 @@ export class DetailComponent {
   public person?: IPerson;
   public index = 0;
 
-  private noImageUrl = 'mock-data/no-image.png';
+  private noImageUrl = 'mock-data/images/no-image.png';
 
   constructor() {
     const id = this.route.snapshot.params['id'];

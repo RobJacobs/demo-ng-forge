@@ -47,7 +47,7 @@ export class ProfileComponent implements OnInit {
   private toastService = inject(ToastService);
   public cache = inject(ProfileService);
 
-  private noImageUrl = 'mock-data/no-image.png';
+  private noImageUrl = 'mock-data/images/no-image.png';
 
   public get personalFormGroup() {
     return this.cache.formGroup.controls.personalFormGroup;

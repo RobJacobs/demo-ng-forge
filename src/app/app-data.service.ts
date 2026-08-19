@@ -25,15 +25,17 @@ export class AppDataService {
       delay(1000),
       tap((result) =>
         result.forEach((p) => {
-          p.imageUrl = `mock-data/${Utils.formatNumber(p.id, '2.0-0')}-small.png`;
-          p.imageLargeUrl = `mock-data/${Utils.formatNumber(p.id, '2.0-0')}.png`;
+          p.imageUrl = `mock-data/images/${Utils.formatNumber(p.id, '2.0-0')}-small.png`;
+          p.imageLargeUrl = `mock-data/images/${Utils.formatNumber(p.id, '2.0-0')}.png`;
         })
       )
     );
   };
 
   public getProfile(): Observable<IProfile> {
-    return this.httpClient.get<IProfile>('mock-data/profile.json').pipe(tap((p) => (p.imageUrl = `mock-data/${Utils.formatNumber(p.id, '2.0-0')}-small.png`)));
+    return this.httpClient
+      .get<IProfile>('mock-data/profile.json')
+      .pipe(tap((p) => (p.imageUrl = `mock-data/images/${Utils.formatNumber(p.id, '2.0-0')}-small.png`)));
   }
 
   public getPeople(filter?: IFilterParameter): Observable<{ count: number; data: IPerson[] }> {
