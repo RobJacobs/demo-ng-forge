@@ -9,7 +9,10 @@
 ::ng-deep {
   formly {
 
-    &-field,
+    &-field {
+      display: block;
+    }
+
     &-form,
     &-group,
     &-template {

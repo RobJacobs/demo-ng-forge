@@ -1,15 +1,15 @@
-import { Component, inject, signal, viewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal, viewChild, ChangeDetectionStrategy, DestroyRef, OnInit } from '@angular/core';
 import { JsonPipe } from '@angular/common';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AbstractControl, FormGroup, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
 import { FormlyFormOptions, FormlyForm, provideFormlyCore, FormlyFieldConfig } from '@ngx-formly/core';
-import { CellAlign, TextFieldComponentDelegate } from '@tylertech/forge';
-import { ForgeToolbarModule } from '@tylertech/forge-angular';
-import { checkFieldExpressions, FORMLY_CLASSES, FORMLY_COMPONENT_TYPES, FORMLY_PROVIDER_CONFIG, FormlyFieldPropsExtended } from './lib/formly.constants';
+import { delay, finalize, lastValueFrom, Observable, of } from 'rxjs';
+import { isDefined } from '@tylertech/forge-core';
+import { ForgeToolbarModule, ForgeButtonModule } from '@tylertech/forge-angular';
+import { FORMLY_PROVIDER_CONFIG, FormlyFieldPropsExtended } from './lib/formly.constants';
 
-import { Utils } from '@app/shared/utils';
 import { AppDataService } from '@app/app-data.service';
-import { IPerson } from '@app/shared/interfaces';
-import { IFieldHelpConfig } from '@app/shared/components/field-help/field-help.constants';
+import { IFilterParameter, IFilterResponse } from '@app/shared/interfaces';
 import { FormlyDemoService } from './formly-demo.service';
 
 @Component({
@@ -23,9 +23,10 @@ import { FormlyDemoService } from './formly-demo.service';
     })
   ],
   changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [JsonPipe, ReactiveFormsModule, FormlyForm, ForgeToolbarModule]
+  imports: [JsonPipe, ReactiveFormsModule, FormlyForm, ForgeToolbarModule, ForgeButtonModule]
 })
-export class FormlyDemoComponent {
+export class FormlyDemoComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   private formlyForm = viewChild(FormlyForm);
   private appDataService = inject(AppDataService);
   public formlyDemoService = inject(FormlyDemoService);
@@ -62,416 +63,159 @@ export class FormlyDemoComponent {
     }
   });
 
-  private partnerFieldHelpConfig: IFieldHelpConfig = {
-    columnConfigurations: [
-      {
-        property: 'image',
-        width: 48,
-        align: CellAlign.Center,
-        template: (rowIndex: number, cellElement: HTMLElement, data: any) => {
-          const imgElement = document.createElement('img') as HTMLImageElement;
-          imgElement.src = `mock-data/${Utils.formatNumber(data.id, '2.0-0')}-small.png`;
-          imgElement.style.width = '48px';
-          imgElement.style.height = '48px';
-          imgElement.style.borderRadius = '50%';
-          imgElement.setAttribute('alt', '');
-          return imgElement;
+  public formDefinition = signal<FormlyFieldConfig<FormlyFieldPropsExtended>[] | null>(null);
+
+  public ngOnInit() {
+    this.formlyDemoService.config.set({
+      autocompleteFilter: this.autocompleteFilter,
+      validateFieldAsync: this.validateFieldAsync,
+      fieldHelpConfig: {
+        dataObservable: this.fieldHelpData,
+        transform: this.fieldHelpTransform
+      }
+    });
+    this.formlyDemoService.buttonClick.subscribe((field) => {
+      console.log(field);
+      let activeElement = document.activeElement as HTMLElement;
+      this.formGroup.disable();
+      this.formlyDemoService.isBusy.set(true);
+      // checkFieldExpressions(this.formlyForm(), this.formDefinition());
+      setTimeout(() => {
+        this.formGroup.enable();
+        this.formlyDemoService.isBusy.set(false);
+        // checkFieldExpressions(this.formlyForm(), this.formDefinition());
+        requestAnimationFrame(() => {
+          activeElement.focus();
+          activeElement = undefined;
+        });
+      }, 3000);
+    });
+    this.onFooterAction('form-def');
+  }
+
+  public onFooterAction(action: 'data' | 'form-def' | 'form-def-update' | 'disable') {
+    switch (action) {
+      case 'data': {
+        this.formlyDemoService.isBusy.set(true);
+        this.formlyDemoService
+          .getFormData()
+          .pipe(
+            takeUntilDestroyed(this.destroyRef),
+            finalize(() => this.formlyDemoService.isBusy.set(false))
+          )
+          .subscribe((response) => {
+            this.formGroup.patchValue(response);
+          });
+        break;
+      }
+      case 'form-def': {
+        this.formlyDemoService.isBusy.set(true);
+        this.formlyDemoService
+          .getFormDefinition()
+          .pipe(
+            takeUntilDestroyed(this.destroyRef),
+            finalize(() => this.formlyDemoService.isBusy.set(false))
+          )
+          .subscribe((response) => {
+            this.formDefinition.set([response]);
+          });
+        break;
+      }
+      case 'form-def-update': {
+        this.formlyDemoService.isBusy.set(true);
+        this.formlyDemoService
+          .getFormDefinitionUpdate()
+          .pipe(
+            takeUntilDestroyed(this.destroyRef),
+            finalize(() => this.formlyDemoService.isBusy.set(false))
+          )
+          .subscribe((response) => {
+            response.forEach((fieldDef) => {
+              this.formDefinition().forEach((field) => {
+                const fieldConfig = field.get(fieldDef.key);
+                if (fieldConfig) {
+                  FormlyDemoService.mergeFields(fieldConfig, fieldDef);
+                } else {
+                  // TODO insert fieldConfig
+                }
+              });
+            });
+
+            this.formDefinition.set(this.formDefinition());
+          });
+        break;
+      }
+      case 'disable': {
+        this.formlyDemoService.isBusy.set(!this.formlyDemoService.isBusy());
+        if (this.formGroup.disabled) {
+          this.formGroup.enable();
+        } else {
+          this.formGroup.disable();
         }
-      },
-      {
-        header: 'Id',
-        property: 'id',
-        sortable: true,
-        filter: true,
-        filterDelegate: () => {
-          const delegate = new TextFieldComponentDelegate();
-          delegate.inputElement.setAttribute('aria-label', 'Id');
-          return delegate;
+        break;
+      }
+    }
+  }
+
+  private autocompleteFilter = (key: string | number | (string | number)[]) => {
+    return (filterText: string, value: string) => {
+      switch (key) {
+        case 'occupation': {
+          if (isDefined(value)) {
+            return this.formlyDemoService.options.filter((o) => o.value === value);
+          } else {
+            return lastValueFrom(of(this.formlyDemoService.options.filter((o) => o.label.toLowerCase().includes(filterText.toLowerCase()))).pipe(delay(1000)));
+          }
         }
-      },
-      {
-        header: 'First',
-        property: 'firstName',
-        sortable: true,
-        filter: true,
-        filterDelegate: () => {
-          const delegate = new TextFieldComponentDelegate();
-          delegate.inputElement.setAttribute('aria-label', 'First Nmae');
-          return delegate;
-        }
-      },
-      {
-        header: 'Last',
-        property: 'lastName',
-        initialSort: true,
-        sortable: true,
-        filter: true,
-        filterDelegate: () => {
-          const delegate = new TextFieldComponentDelegate();
-          delegate.inputElement.setAttribute('aria-label', 'Last Nmae');
-          return delegate;
-        }
-      },
-      {
-        header: 'Gender',
-        property: 'gender',
-        sortable: true,
-        filter: true,
-        filterDelegate: () => {
-          const delegate = new TextFieldComponentDelegate();
-          delegate.inputElement.setAttribute('aria-label', 'Gender');
-          return delegate;
-        }
-      },
-      {
-        header: 'Occupation',
-        property: 'occupation',
-        sortable: true,
-        filter: true,
-        filterDelegate: () => {
-          const delegate = new TextFieldComponentDelegate();
-          delegate.inputElement.setAttribute('aria-label', 'Occupation');
-          return delegate;
+        default: {
+          return [];
         }
       }
-    ],
-    title: 'Browse people',
-    key: 'id',
-    dataObservable: (param) => this.appDataService.getPeople(param),
-    transform: (value: IPerson) => {
-      return `${value.id} - ${value.firstName} ${value.lastName}`;
-    }
-    // multiselect: true
-    // transform: (value: IPerson[]) => {
-    //   return value.map((p) => `${p.firstName} ${p.lastName}`).join(', ');
-    // }
+    };
   };
 
-  public isBusy = signal(false);
+  private fieldHelpData = (key: string | number | (string | number)[]) => {
+    return (params: IFilterParameter): Observable<IFilterResponse<any>> => {
+      switch (key) {
+        case 'partner': {
+          return this.appDataService.getPeople(params);
+        }
+        default: {
+          return of(null);
+        }
+      }
+    };
+  };
 
-  public formDefinition = signal<FormlyFieldConfig<FormlyFieldPropsExtended>[]>([
-    {
-      className: FORMLY_CLASSES.containerGrid,
-      props: {
-        attributes: {
-          style: 'grid-template-columns: 1fr 1fr;'
+  private fieldHelpTransform = (key: string | number | (string | number)[]) => {
+    return (value: any): any => {
+      switch (key) {
+        case 'partner':
+          return `${value.id} - ${value.firstName} ${value.lastName}`;
+        default:
+          return value;
+      }
+    };
+  };
+
+  private validateFieldAsync(control: AbstractControl, field: FormlyFieldConfig): Observable<ValidationErrors> {
+    switch (field.key) {
+      case 'firstName': {
+        if (control.value?.length === 1) {
+          return of({ duplicate: 'First name is duplicated.' }).pipe(delay(1000));
+        } else {
+          return of(null).pipe(delay(1000));
         }
-      },
-      fieldGroup: [
-        {
-          template: `<h3 class="forge-typography--subheading4">Group header</h3>`,
-          props: {
-            attributes: {
-              style: 'grid-column: 1 / -1;'
-            }
-          }
-        },
-        {
-          key: 'displayOnly',
-          fieldGroup: [
-            {
-              type: FORMLY_COMPONENT_TYPES.labelValue,
-              key: 'field01',
-              props: {
-                label: 'Field 01'
-              }
-            },
-            {
-              type: FORMLY_COMPONENT_TYPES.labelValue,
-              key: 'field02',
-              props: {
-                label: 'Field 02'
-              }
-            }
-          ]
-        },
-        {
-          type: FORMLY_COMPONENT_TYPES.textFieldInput,
-          key: 'firstName',
-          props: {
-            label: 'First name',
-            required: true
-          },
-          asyncValidators: {
-            validation: [this.formlyDemoService.validateFieldAsync]
-          },
-          expressions: {
-            'props.disabled': () => this.isBusy()
-          }
-        },
-        {
-          type: FORMLY_COMPONENT_TYPES.textFieldInput,
-          key: 'lastName',
-          props: {
-            label: 'Last name',
-            required: true
-          },
-          asyncValidators: {
-            validation: [this.formlyDemoService.validateFieldAsync]
-          },
-          expressions: {
-            'props.disabled': () => this.isBusy()
-          }
-        },
-        {
-          type: FORMLY_COMPONENT_TYPES.select,
-          key: 'gender',
-          props: {
-            label: 'Gender',
-            required: true,
-            options: [
-              { label: 'Male', value: 'm' },
-              { label: 'Female', value: 'f' },
-              { label: 'Unknown', value: 'u' }
-            ]
-          },
-          expressions: {
-            'props.disabled': () => this.isBusy()
-          }
-        },
-        {
-          type: FORMLY_COMPONENT_TYPES.autocomplete,
-          key: 'occupation',
-          props: {
-            label: 'Occupation',
-            required: true,
-            autocompleteFilter: this.formlyDemoService.autocompleteFilter
-          },
-          expressions: {
-            'props.disabled': () => this.isBusy()
-          }
-        },
-        {
-          type: FORMLY_COMPONENT_TYPES.datePicker,
-          key: 'dateOfBirth',
-          props: {
-            label: 'Date of birth',
-            required: true,
-            minDate: '06/01/1970',
-            maxDate: '07/31/2030'
-          },
-          expressions: {
-            'props.disabled': () => this.isBusy()
-          }
-        },
-        {
-          type: FORMLY_COMPONENT_TYPES.textFieldInputHelp,
-          key: 'partner',
-          props: {
-            label: 'Partner',
-            required: true,
-            fieldHelpConfig: this.partnerFieldHelpConfig
-          },
-          expressions: {
-            'props.disabled': () => this.isBusy()
-          }
-        },
-        {
-          type: FORMLY_COMPONENT_TYPES.checkbox,
-          key: 'citizen',
-          defaultValue: true,
-          props: {
-            label: 'Am I a citizen'
-          },
-          expressions: {
-            'props.disabled': () => this.isBusy()
-          }
-        },
-        {
-          type: FORMLY_COMPONENT_TYPES.switch,
-          key: 'deceased',
-          defaultValue: false,
-          props: {
-            label: 'Am I deceased'
-          },
-          expressions: {
-            'props.disabled': () => this.isBusy()
-          }
-        },
-        {
-          type: FORMLY_COMPONENT_TYPES.divider,
-          props: {
-            attributes: {
-              style: 'grid-column: 1 / -1;'
-            }
-          }
-        },
-        {
-          type: FORMLY_COMPONENT_TYPES.radio,
-          key: 'size',
-          defaultValue: 'sm',
-          props: {
-            label: 'Select a size',
-            orientation: 'vertical',
-            radioOptions: [
-              { label: 'Small', value: 'sm' },
-              { label: 'Medium', value: 'md' },
-              { label: 'Large', value: 'lg' }
-            ]
-          },
-          expressions: {
-            'props.disabled': () => this.isBusy()
-          }
-        },
-        {
-          type: FORMLY_COMPONENT_TYPES.textFieldTextarea,
-          key: 'comment',
-          props: {
-            label: 'Comment',
-            required: true,
-            rows: 4,
-            attributes: {
-              style: 'grid-column: 1 / -1;'
-            }
-          },
-          expressions: {
-            'props.disabled': () => this.isBusy()
-          }
-        },
-        {
-          type: FORMLY_COMPONENT_TYPES.tabBar,
-          props: {
-            attributes: {
-              style: 'grid-column: 1 / -1;'
-            }
-          },
-          fieldGroup: [
-            {
-              className: FORMLY_CLASSES.containerGrid,
-              props: {
-                label: 'Tab 01',
-                attributes: {
-                  style: 'grid-template-columns: 1fr 1fr; padding-block: 8px;'
-                }
-              },
-              expressions: {
-                'props.disabled': () => this.isBusy()
-              },
-              fieldGroup: [
-                {
-                  type: FORMLY_COMPONENT_TYPES.textFieldInput,
-                  key: 'tab01.stringMask',
-                  props: {
-                    label: 'String mask',
-                    required: true,
-                    mask: '000-00-0000',
-                    description: 'format: ###-##-####'
-                  },
-                  asyncValidators: {
-                    validation: [this.formlyDemoService.validateFieldAsync]
-                  },
-                  expressions: {
-                    'props.disabled': () => this.isBusy()
-                  }
-                },
-                {
-                  type: FORMLY_COMPONENT_TYPES.textFieldInput,
-                  key: 'tab01.numberMask',
-                  props: {
-                    label: 'Number mask',
-                    type: 'number',
-                    required: true,
-                    mask: '&&&,&&#.##'
-                  },
-                  expressions: {
-                    'props.disabled': () => this.isBusy()
-                  }
-                }
-              ]
-            },
-            {
-              className: FORMLY_CLASSES.containerGrid,
-              props: {
-                label: 'Tab  02',
-                attributes: {
-                  style: 'grid-template-columns: 1fr 1fr; padding-block: 8px;'
-                }
-              },
-              expressions: {
-                'props.disabled': () => this.isBusy()
-              },
-              fieldGroup: [
-                {
-                  type: FORMLY_COMPONENT_TYPES.labelValue,
-                  key: 'tab02.field01',
-                  props: {
-                    label: 'Tab 02 Field 01'
-                  }
-                },
-                {
-                  type: FORMLY_COMPONENT_TYPES.labelValue,
-                  key: 'tab02.field02',
-                  props: {
-                    label: 'Tab 02 Field 02'
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          type: FORMLY_COMPONENT_TYPES.button,
-          props: {
-            label: `Click me`,
-            buttonVariant: 'outlined',
-            theme: 'warning',
-            click: (field) => {
-              this.buttonClick(field);
-            },
-            attributes: {
-              style: 'align-self: center'
-            }
-          },
-          expressions: {
-            'props.disabled': () => this.isBusy()
-          }
-        },
-        {
-          type: FORMLY_COMPONENT_TYPES.iconButton,
-          props: {
-            label: 'Edit record',
-            iconName: 'edit',
-            iconButtonVariant: 'tonal',
-            click: (field) => {
-              this.buttonClick(field);
-            },
-            attributes: {
-              style: 'align-self: center'
-            }
-          },
-          expressions: {
-            'props.disabled': () => this.isBusy()
-          }
-        },
-        {
-          type: FORMLY_COMPONENT_TYPES.filePicker,
-          props: {
-            filePickerChange: (event) => {
-              console.log(event);
-            },
-            label: 'Add attachments',
-            multiple: true,
-            accept: '.jpg, .pdf, .txt'
-          },
-          expressions: {
-            'props.disabled': () => this.isBusy()
-          }
+      }
+      case 'stringMask': {
+        const pattern = /\d{3}-\d{2}-\d{4}/;
+        if (!pattern.test(control.value)) {
+          return of({ invalid: 'Invalid format' });
+        } else {
+          return of(null);
         }
-      ]
+      }
     }
-  ]);
-
-  private buttonClick(field: FormlyFieldConfig<FormlyFieldPropsExtended>) {
-    let activeElement = document.activeElement as HTMLElement;
-    this.isBusy.set(true);
-    checkFieldExpressions(this.formlyForm(), this.formDefinition());
-    setTimeout(() => {
-      this.isBusy.set(false);
-      checkFieldExpressions(this.formlyForm(), this.formDefinition());
-      requestAnimationFrame(() => {
-        activeElement.focus();
-        activeElement = undefined;
-      });
-    }, 3000);
+    return of(null).pipe(delay(1000));
   }
 }

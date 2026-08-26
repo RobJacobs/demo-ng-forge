@@ -1,0 +1,24 @@
+{
+  "displayOnly": {
+    "field01": "Field 01 value updated",
+    "field02": "Field 02 value updated"
+  },
+  "firstName": "first",
+  "lastName": "last",
+  "gender": "m",
+  "occupation": "02",
+  "dateOfBirth": "2026-08-12T04:00:00.000Z",
+  "partner": "partner",
+  "citizen": true,
+  "deceased": false,
+  "size": "sm",
+  "comment": "Comment",
+  "tab01": {
+    "stringMask": "000-11-2222",
+    "numberMask": 123
+  },
+  "tab02": {
+    "field01": "Tab 02 field 01 value",
+    "field02": "Tab 02 field 02 value"
+  }
+}

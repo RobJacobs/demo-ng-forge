@@ -1,0 +1,32 @@
+[
+  {
+    "key": "displayOnly.field01",
+    "className": "class-name--update"
+  },
+  {
+    "key": "firstName",
+    "props": {
+      "label": "First name updated"
+    }
+  },
+  {
+    "key": "lastName",
+    "props": {
+      "disabled": true
+    }
+  },
+  {
+    "key": "gender",
+    "props": {
+      "required": false
+    }
+  },
+  {
+    "key": "tab02.field01",
+    "props": {
+      "attributes": {
+        "style": "display: none;"
+      }
+    }
+  }
+]

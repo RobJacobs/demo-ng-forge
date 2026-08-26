@@ -1,16 +1,18 @@
-import { Injectable, signal } from '@angular/core';
-import { lastValueFrom, Observable, of, Subject } from 'rxjs';
-import { delay } from 'rxjs/operators';
-import { IFilterParameter, IFilterResponse } from '../shared/interfaces/filter.interface';
-import { AbstractControl, ValidationErrors } from '@angular/forms';
+import { inject, Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { FormlyFieldConfig } from '@ngx-formly/core';
-import { FORMLY_CLASSES, FORMLY_COMPONENT_TYPES, FormlyFieldPropsExtended } from './lib/formly.constants';
 import { isDefined } from '@tylertech/forge-core';
-import { AutocompleteFilterCallback, IOption } from '@tylertech/forge';
+import { TextFieldComponentDelegate } from '@tylertech/forge';
+
+import { FORMLY_COMPONENT_TYPES, FormlyFieldPropsExtended, IFormlyFieldDefinition, IFormlyFieldDefinitionConfig } from './lib/formly.constants';
 
 @Injectable()
 export class FormlyDemoService {
-  private options = [
+  private httpClient = inject(HttpClient);
+
+  public options = [
     { label: 'Option 01', value: '01' },
     { label: 'Option 02', value: '02' },
     { label: 'Option 03', value: '03' },
@@ -23,37 +25,89 @@ export class FormlyDemoService {
     { label: 'Option 10', value: '10' }
   ];
 
-  public autocompleteFilter: AutocompleteFilterCallback = (filterText: string, value: string) => {
-    if (isDefined(value)) {
-      return this.options.filter((o) => o.value === value);
-    } else {
-      // return new Promise<IOption[]>((resolve, reject) => {
-      //   setTimeout(() => {
-      //     resolve(this.options.filter((o) => o.label.toLowerCase().includes(filterText.toLowerCase())));
-      //   }, 1000);
-      // });
-      return lastValueFrom(of(this.options.filter((o) => o.label.toLowerCase().includes(filterText.toLowerCase()))).pipe(delay(1000)));
-    }
-  };
+  public isBusy = signal(false);
 
-  public validateFieldAsync(control: AbstractControl, field: FormlyFieldConfig): Observable<ValidationErrors> {
-    switch (field.key) {
-      case 'firstName': {
-        if (control.value?.length === 1) {
-          return of({ duplicate: 'First name is duplicated.' }).pipe(delay(1000));
-        } else {
-          return of(null).pipe(delay(1000));
+  public getFormDefinition(): Observable<FormlyFieldConfig<FormlyFieldPropsExtended>> {
+    return this.httpClient.get<IFormlyFieldDefinition>('mock-data/formly-definition.json').pipe(map((response) => this.formlyFieldDefinitionAdapter(response)));
+  }
+
+  public getFormDefinitionUpdate(): Observable<IFormlyFieldDefinition[]> {
+    return this.httpClient.get<IFormlyFieldDefinition[]>('mock-data/formly-definition-update.json');
+  }
+
+  public getFormData(): Observable<any> {
+    return this.httpClient.get<any[]>('mock-data/formly-data.json');
+  }
+
+  // TODO move to lib
+
+  public buttonClick = new Subject<FormlyFieldConfig<FormlyFieldPropsExtended>>();
+
+  public config = signal<IFormlyFieldDefinitionConfig | null>(null);
+
+  public static mergeFields(fieldConfig: any, fieldDefinition: any) {
+    Object.keys(fieldDefinition)
+      .filter((k) => k !== 'key')
+      .forEach((key) => {
+        if (!isDefined(fieldConfig[key])) {
+          fieldConfig[key] = {};
         }
+        switch (key) {
+          // TODO when to merge values vs overwrite
+          case 'className': {
+            fieldConfig[key] = `${fieldConfig[key]} ${fieldDefinition[key]}`;
+            break;
+          }
+          case 'attributes':
+          case 'props': {
+            this.mergeFields(fieldConfig[key], fieldDefinition[key]);
+            break;
+          }
+          default: {
+            fieldConfig[key] = fieldDefinition[key];
+          }
+        }
+      });
+  }
+
+  private formlyFieldDefinitionAdapter(fieldDefinition: IFormlyFieldDefinition): FormlyFieldConfig<FormlyFieldPropsExtended> {
+    const fieldConfig: FormlyFieldConfig<FormlyFieldPropsExtended> = { ...fieldDefinition };
+    if (this.config().validateFieldAsync) {
+      fieldConfig.asyncValidators = { validation: [this.config().validateFieldAsync] };
+    }
+    // TODO overrides props.disabled property
+    // fieldConfig.expressions = {
+    //   ...fieldConfig.expressions,
+    //   'props.disabled': (field) => {
+    //     return this.isBusy();
+    //   }
+    // };
+    switch (fieldConfig.type) {
+      case FORMLY_COMPONENT_TYPES.autocomplete: {
+        fieldConfig.props = { ...fieldConfig.props, autocompleteFilter: this.config().autocompleteFilter(fieldConfig.key) };
+        break;
       }
-      case 'stringMask': {
-        const pattern = /\d{3}-\d{2}-\d{4}/;
-        if (!pattern.test(control.value)) {
-          return of({ invalid: 'Invalid format' });
-        } else {
-          return of(null);
+      case FORMLY_COMPONENT_TYPES.button:
+      case FORMLY_COMPONENT_TYPES.iconButton: {
+        fieldConfig.props.click = (field) => this.buttonClick.next(field);
+        break;
+      }
+      case FORMLY_COMPONENT_TYPES.textFieldInputHelp: {
+        fieldConfig.props.fieldHelpConfig.dataObservable = this.config().fieldHelpConfig.dataObservable(fieldConfig.key);
+        if (isDefined(this.config().fieldHelpConfig.transform)) {
+          fieldConfig.props.fieldHelpConfig.transform = this.config().fieldHelpConfig.transform(fieldConfig.key);
         }
+        fieldConfig.props.fieldHelpConfig.columnConfigurations.forEach((col) => {
+          col.filterDelegate = new TextFieldComponentDelegate({ props: { ariaLabel: col.header } });
+        });
+        break;
       }
     }
-    return of(null).pipe(delay(1000));
+
+    if (fieldDefinition.fieldGroup?.length) {
+      fieldConfig.fieldGroup = fieldDefinition.fieldGroup.map((f) => this.formlyFieldDefinitionAdapter(f));
+    }
+
+    return fieldConfig;
   }
 }

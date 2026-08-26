@@ -16,7 +16,7 @@ import { FormlyFieldDirective } from '../formly-field.directive';
         </forge-tab>
       }
     </forge-tab-bar>
-    <formly-field #formlyField [field]="activeField()" [formlyField]="formlyField" [formlyAttributes]="activeField()"></formly-field>
+    <formly-field #formlyField [formlyField]="formlyField" [field]="activeField()" [formlyAttributes]="activeField()"></formly-field>
   `,
   styles: `
     :host {
@@ -24,7 +24,7 @@ import { FormlyFieldDirective } from '../formly-field.directive';
     }
   `,
   changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [FormlyModule, ForgeTabBarModule, ForgeTabModule, FormlyFieldDirective]
+  imports: [FormlyModule, FormlyFieldDirective, ForgeTabBarModule, ForgeTabModule]
 })
 export class FormlyTabBarTypeComponent extends FieldType<FieldTypeConfig<FormlyFieldPropsExtended>> implements OnInit {
   public activeTab = signal(0);

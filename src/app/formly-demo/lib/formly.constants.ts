@@ -1,5 +1,8 @@
-import { FormlyExtension, FormlyFieldConfig, FormlyFieldProps, FormlyForm, provideFormlyCore } from '@ngx-formly/core';
-import { AutocompleteFilterCallback, ButtonVariant, Density, IconButtonVariant, IFilePickerChangeEventData, Theme } from '@tylertech/forge';
+import { Type } from '@angular/core';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { FieldType, FormlyExtension, FormlyFieldConfig, FormlyFieldProps, FormlyForm, provideFormlyCore } from '@ngx-formly/core';
+import { AutocompleteFilterCallback, ButtonVariant, Density, IconButtonVariant, IFilePickerChangeEventData, IOption, Theme } from '@tylertech/forge';
 import {
   FormlyAutocompleteTypeComponent,
   FormlyButtonTypeComponent,
@@ -10,16 +13,18 @@ import {
   FormlyGroupTypeComponent,
   FormlyIconButtonTypeComponent,
   FormlyLabelValueTypeComponent,
+  FormlyPageStateTypeComponent,
   FormlyRadioTypeComponent,
   FormlySelectTypeComponent,
+  FormlyStepperTypeComponent,
   FormlySwtichTypeComponent,
   FormlyTabBarTypeComponent,
   FormlyTextFieldInputHelpTypeComponent,
   FormlyTextFieldInputTypeComponent,
   FOrmlyTextFieldTextareaTypeComponent
 } from './components';
-import {} from './components/formly-icon-button-type.component';
 import { IFieldHelpConfig } from '@app/shared/components/field-help/field-help.constants';
+import { IFilterParameter, IFilterResponse } from '@app/shared/interfaces';
 
 export const CLASS_PREFIX = 'formly--';
 
@@ -48,8 +53,10 @@ export const FORMLY_COMPONENT_TYPES = {
   filePicker: 'file-picker',
   iconButton: 'icon-button',
   labelValue: 'label-value',
+  pageState: 'page-state',
   radio: 'radio',
   select: 'select',
+  stepper: 'stepper',
   switch: 'switch',
   tabBar: 'tab-bar',
   textFieldInputHelp: 'text-field-input-help',
@@ -69,8 +76,10 @@ export const FORMLY_PROVIDER_CONFIG = {
     { name: FORMLY_COMPONENT_TYPES.filePicker, component: FormlyFilePickerTypeComponent },
     { name: FORMLY_COMPONENT_TYPES.iconButton, component: FormlyIconButtonTypeComponent },
     { name: FORMLY_COMPONENT_TYPES.labelValue, component: FormlyLabelValueTypeComponent },
+    { name: FORMLY_COMPONENT_TYPES.pageState, component: FormlyPageStateTypeComponent },
     { name: FORMLY_COMPONENT_TYPES.radio, component: FormlyRadioTypeComponent },
     { name: FORMLY_COMPONENT_TYPES.select, component: FormlySelectTypeComponent },
+    { name: FORMLY_COMPONENT_TYPES.stepper, component: FormlyStepperTypeComponent },
     { name: FORMLY_COMPONENT_TYPES.switch, component: FormlySwtichTypeComponent },
     { name: FORMLY_COMPONENT_TYPES.tabBar, component: FormlyTabBarTypeComponent },
     { name: FORMLY_COMPONENT_TYPES.textFieldInputHelp, component: FormlyTextFieldInputHelpTypeComponent },
@@ -97,6 +106,7 @@ export interface FormlyFieldPropsExtended extends FormlyFieldProps {
   multiple?: boolean;
   accept?: string;
   fieldHelpConfig?: IFieldHelpConfig;
+  src?: string;
 }
 
 export const checkFieldExpressions = (formlyForm: FormlyForm, fields: FormlyFieldConfig[]) => {
@@ -104,3 +114,121 @@ export const checkFieldExpressions = (formlyForm: FormlyForm, fields: FormlyFiel
     formlyForm.options.checkExpressions(field);
   });
 };
+
+export interface IFormlyFieldDefinition extends Pick<
+  FormlyFieldConfig<FormlyFieldPropsExtended>,
+  keyof {
+    key?: string | number | (string | number)[];
+    type?: string | Type<FieldType>;
+    className?: string;
+    defaultValue?: any;
+    template?: string;
+    props?: Pick<
+      FormlyFieldPropsExtended,
+      keyof {
+        type?: string;
+        label?: string;
+        placeholder?: string;
+        disabled?: boolean;
+        options?: IOption[];
+        rows?: number;
+        cols?: number;
+        description?: string;
+        hidden?: boolean;
+        max?: number;
+        min?: number;
+        minLength?: number;
+        maxLength?: number;
+        pattern?: string | RegExp;
+        required?: boolean;
+        tabindex?: number;
+        readonly?: boolean;
+        attributes?: Record<string, string | number>;
+        step?: number;
+        theme?: Theme;
+        // extended
+        radioOptions?: { label: string; value: any }[];
+        orientation?: 'horizontal' | 'vertical';
+        density?: Density;
+        dense?: boolean;
+        mask?: string;
+        minDate?: string | Date;
+        maxDate?: string | Date;
+        buttonVariant?: ButtonVariant;
+        iconName?: string;
+        iconButtonVariant?: IconButtonVariant;
+        dataType?: 'string' | 'number' | 'boolean' | 'date';
+        multiple?: boolean;
+        accept?: string;
+        src?: string;
+        // TODO
+        fieldHelpConfig?: IFieldHelpConfig;
+      }
+    >;
+    fieldGroup?: IFormlyFieldDefinition[];
+  }
+> {
+  key?: string | number | (string | number)[];
+  type?: string | Type<FieldType>;
+  className?: string;
+  defaultValue?: any;
+  template?: string;
+  props?: {
+    type?: string;
+    label?: string;
+    placeholder?: string;
+    disabled?: boolean;
+    options?: IOption[];
+    rows?: number;
+    cols?: number;
+    description?: string;
+    hidden?: boolean;
+    max?: number;
+    min?: number;
+    minLength?: number;
+    maxLength?: number;
+    pattern?: string | RegExp;
+    required?: boolean;
+    tabindex?: number;
+    readonly?: boolean;
+    attributes?: Record<string, string | number>;
+    step?: number;
+    theme?: Theme;
+    // extended
+    radioOptions?: { label: string; value: any }[];
+    orientation?: 'horizontal' | 'vertical';
+    density?: Density;
+    dense?: boolean;
+    mask?: string;
+    minDate?: string | Date;
+    maxDate?: string | Date;
+    buttonVariant?: ButtonVariant;
+    iconName?: string;
+    iconButtonVariant?: IconButtonVariant;
+    dataType?: 'string' | 'number' | 'boolean' | 'date';
+    multiple?: boolean;
+    accept?: string;
+    src?: string;
+    // TODO
+    fieldHelpConfig?: IFieldHelpConfig;
+  };
+  fieldGroup?: IFormlyFieldDefinition[];
+}
+
+export interface IFormlyFieldDefinitionConfig {
+  // focus?: FormlyAttributeEvent;
+  // blur?: FormlyAttributeEvent;
+  // keyup?: FormlyAttributeEvent;
+  // keydown?: FormlyAttributeEvent;
+  // click?: FormlyAttributeEvent;
+  // change?: FormlyAttributeEvent;
+  // keypress?: FormlyAttributeEvent;
+  // wheel?: FormlyAttributeEvent;
+  autocompleteFilter?: (key: string | number | (string | number)[]) => AutocompleteFilterCallback;
+  filePickerChange?: (key: string | number | (string | number)[]) => (event: CustomEvent<IFilePickerChangeEventData>) => void;
+  fieldHelpConfig?: {
+    dataObservable: (key: string | number | (string | number)[]) => (params: IFilterParameter) => Observable<IFilterResponse<any>>;
+    transform?: (value: any) => any;
+  };
+  validateFieldAsync?: (control: AbstractControl, field: FormlyFieldConfig) => Observable<ValidationErrors>;
+}

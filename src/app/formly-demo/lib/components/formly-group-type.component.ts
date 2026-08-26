@@ -8,7 +8,7 @@ import { FormlyFieldDirective } from '../formly-field.directive';
   selector: 'formly-group',
   template: `
     @for (f of field.fieldGroup; track i; let i = $index) {
-      <formly-field #formlyField [field]="f" [formlyField]="formlyField" [formlyAttributes]="f"></formly-field>
+      <formly-field #formlyField [formlyField]="formlyField" [field]="f" [formlyAttributes]="f"></formly-field>
     }
     <ng-content></ng-content>
   `,

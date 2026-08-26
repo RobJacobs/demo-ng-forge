@@ -10,5 +10,5 @@ import { ForgeTextFieldModule } from '@tylertech/forge-angular';
   styleUrls: ['./child.component.scss']
 })
 export class ChildComponent {
-  name = model<string>();
+  public name = model<string | undefined>();
 }

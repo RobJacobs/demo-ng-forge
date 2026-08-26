@@ -9,7 +9,7 @@ import { FormlyFieldPropsExtended } from '../formly.constants';
   template: `
     <forge-label-value [id]="id">
       <div slot="label">{{ field.props['label'] }}</div>
-      <div slot="value">{{ field.model[$any(field.key)] }}</div>
+      <div slot="value">{{ field.formControl.value }}</div>
     </forge-label-value>
   `,
   imports: [FormlyModule, ForgeLabelValueModule],

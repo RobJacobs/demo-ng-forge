@@ -1,0 +1,374 @@
+  {
+    "className": "formly--container-grid",
+    "props": {
+      "attributes": {
+        "style": "grid-template-columns: 1fr 1fr;"
+      }
+    },
+    "fieldGroup": [
+      {
+        "template": "<h3 class=\"forge-typography--subheading4\">Group header</h3>",
+        "props": {
+          "attributes": {
+            "style": "grid-column: 1 / -1;"
+          }
+        }
+      },
+      {
+        "key": "displayOnly",
+        "fieldGroup": [
+          {
+            "type": "label-value",
+            "className": "class-name--initial",
+            "key": "field01",
+            "props": {
+              "label": "Field 01"
+            }
+          },
+          {
+            "type": "label-value",
+            "key": "field02",
+            "props": {
+              "label": "Field 02"
+            }
+          }
+        ]
+      },
+      {
+        "type": "text-field-input",
+        "key": "firstName",
+        "props": {
+          "label": "First name",
+          "required": true
+        }
+      },
+      {
+        "type": "text-field-input",
+        "key": "lastName",
+        "props": {
+          "label": "Last name",
+          "required": true
+        }
+      },
+      {
+        "type": "select",
+        "key": "gender",
+        "props": {
+          "label": "Gender",
+          "required": true,
+          "options": [
+            {
+              "label": "Male",
+              "value": "m"
+            },
+            {
+              "label": "Female",
+              "value": "f"
+            },
+            {
+              "label": "Unknown",
+              "value": "u"
+            }
+          ]
+        }
+      },
+      {
+        "type": "autocomplete",
+        "key": "occupation",
+        "props": {
+          "label": "Occupation",
+          "required": true
+        }
+      },
+      {
+        "type": "date-picker",
+        "key": "dateOfBirth",
+        "props": {
+          "label": "Date of birth",
+          "required": true,
+          "minDate": "06/01/1970",
+          "maxDate": "07/31/2030"
+        }
+      },
+      {
+        "type": "text-field-input-help",
+        "key": "partner",
+        "props": {
+          "label": "Partner",
+          "required": true,
+          "fieldHelpConfig": {
+            "columnConfigurations": [
+              {
+                "header": "Id",
+                "property": "id",
+                "sortable": true,
+                "filter": true
+              },
+              {
+                "header": "First",
+                "property": "firstName",
+                "sortable": true,
+                "filter": true
+              },
+              {
+                "header": "Last",
+                "property": "lastName",
+                "initialSort": true,
+                "sortable": true,
+                "filter": true
+              },
+              {
+                "header": "Gender",
+                "property": "gender",
+                "sortable": true,
+                "filter": true
+              },
+              {
+                "header": "Occupation",
+                "property": "occupation",
+                "sortable": true,
+                "filter": true
+              }
+            ],
+            "title": "Browse people",
+            "key": "id"
+          }
+        }
+      },
+      {
+        "type": "checkbox",
+        "key": "citizen",
+        "defaultValue": true,
+        "props": {
+          "label": "Am I a citizen"
+        }
+      },
+      {
+        "type": "switch",
+        "key": "deceased",
+        "defaultValue": false,
+        "props": {
+          "label": "Am I deceased"
+        }
+      },
+      {
+        "type": "divider",
+        "props": {
+          "attributes": {
+            "style": "grid-column: 1 / -1;"
+          }
+        }
+      },
+      {
+        "type": "radio",
+        "key": "size",
+        "defaultValue": "sm",
+        "props": {
+          "label": "Select a size",
+          "orientation": "vertical",
+          "radioOptions": [
+            {
+              "label": "Small",
+              "value": "sm"
+            },
+            {
+              "label": "Medium",
+              "value": "md"
+            },
+            {
+              "label": "Large",
+              "value": "lg"
+            }
+          ]
+        }
+      },
+      {
+        "type": "text-field-textarea",
+        "key": "comment",
+        "props": {
+          "label": "Comment",
+          "required": true,
+          "rows": 4,
+          "attributes": {
+            "style": "grid-column: 1 / -1;"
+          }
+        }
+      },
+      {
+        "type": "tab-bar",
+        "props": {
+          "attributes": {
+            "style": "grid-column: 1 / -1;"
+          }
+        },
+        "fieldGroup": [
+          {
+            "className": "formly--container-grid",
+            "props": {
+              "label": "Tab 01",
+              "attributes": {
+                "style": "grid-template-columns: 1fr 1fr; padding-block: 8px;"
+              }
+            },
+            "fieldGroup": [
+              {
+                "type": "text-field-input",
+                "key": "tab01.stringMask",
+                "props": {
+                  "label": "String mask",
+                  "required": true,
+                  "mask": "000-00-0000",
+                  "description": "format: ###-##-####"
+                }
+              },
+              {
+                "type": "text-field-input",
+                "key": "tab01.numberMask",
+                "props": {
+                  "label": "Number mask",
+                  "type": "number",
+                  "required": true,
+                  "mask": "&&&,&&#.##"
+                }
+              }
+            ]
+          },
+          {
+            "className": "formly--container-grid",
+            "props": {
+              "label": "Tab  02",
+              "attributes": {
+                "style": "grid-template-columns: 1fr 1fr; padding-block: 8px;"
+              }
+            },
+            "fieldGroup": [
+              {
+                "type": "label-value",
+                "key": "tab02.field01",
+                "props": {
+                  "label": "Tab 02 Field 01"
+                }
+              },
+              {
+                "type": "label-value",
+                "key": "tab02.field02",
+                "props": {
+                  "label": "Tab 02 Field 02"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "stepper",
+        "props": {
+          "attributes": {
+            "style": "grid-column: 1 / -1;",
+            "layout-mode": "clustered"
+          }
+        },
+        "fieldGroup": [
+          {
+            "className": "formly--container-grid",
+            "props": {
+              "label": "Step 01",
+              "attributes": {
+                "style": "grid-template-columns: 1fr 1fr; padding-block: 8px;"
+              }
+            },
+            "fieldGroup": [
+              {
+                "type": "text-field-input",
+                "key": "step01.input01",
+                "props": {
+                  "label": "Input 01 01"
+                }
+              },
+              {
+                "type": "text-field-input",
+                "key": "step01.input02",
+                "props": {
+                  "label": "Input 01 02"
+                }
+              }
+            ]
+          },
+          {
+            "className": "formly--container-grid",
+            "props": {
+              "label": "Step 02",
+              "attributes": {
+                "style": "grid-template-columns: 1fr 1fr; padding-block: 8px;"
+              }
+            },
+            "fieldGroup": [
+              {
+                "type": "text-field-input",
+                "key": "step02.input01",
+                "props": {
+                  "label": "Input 02 01"
+                }
+              },
+              {
+                "type": "text-field-input",
+                "key": "step02.input02",
+                "props": {
+                  "label": "Input 02 02"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "button",
+        "props": {
+          "label": "Click me",
+          "buttonVariant": "outlined",
+          "theme": "warning",
+          "attributes": {
+            "style": "align-self: center"
+          }
+        }
+      },
+      {
+        "type": "icon-button",
+        "props": {
+          "label": "Edit record",
+          "iconName": "edit",
+          "iconButtonVariant": "tonal",
+          "attributes": {
+            "style": "align-self: center"
+          }
+        }
+      },
+      {
+        "type": "file-picker",
+        "props": {
+          "label": "Add attachments",
+          "multiple": true,
+          "accept": ".jpg, .pdf, .txt"
+        }
+      },
+      {
+        "type": "page-state",
+        "props": {
+          "label": "An error occured",
+          "description": "An unknown error occurred, plase contact support.",
+          "src": "https://cdn.forge.tylertech.com/v1/images/spot-hero/500-error-spot-hero.svg",
+          "attributes": {
+            "style": "grid-column: 1 / -1;"
+          }
+        },
+        "fieldGroup": [
+          {
+            "type": "button",
+            "props": {
+              "label": "Click me"
+            }
+          }
+        ]
+      }
+    ]
+  }

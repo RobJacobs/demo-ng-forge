@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ForgeTextFieldModule } from '@tylertech/forge-angular';
 
@@ -12,5 +12,5 @@ import { ChildComponent } from './child/child.component';
   styleUrls: ['./binding.component.scss']
 })
 export class BindingComponent {
-  public name = 'two way binding example';
+  public name = model<string | undefined>(undefined);
 }

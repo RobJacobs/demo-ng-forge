@@ -6,4 +6,9 @@
   <!-- <pre style="font-size: 12px"> {{ model() | json }} </pre> -->
 </div>
 
-<forge-toolbar class="footer" inverted> </forge-toolbar>
+<forge-toolbar class="footer" inverted>
+  <forge-button slot="end" (click)="onFooterAction('form-def')">Load form def</forge-button>
+  <forge-button slot="end" (click)="onFooterAction('form-def-update')" [disabled]="!formDefinition()">Update form def</forge-button>
+  <forge-button slot="end" (click)="onFooterAction('data')" [disabled]="!formDefinition()">Load data</forge-button>
+  <forge-button slot="end" (click)="onFooterAction('disable')" [disabled]="!formDefinition()">{{ formGroup.disabled ? 'Enable' : 'Disable' }}</forge-button>
+</forge-toolbar>
