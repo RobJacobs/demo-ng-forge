@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
 import { ForgeSwitchModule } from '@tylertech/forge-angular';
-import { FormlyFieldPropsExtended } from '../formly.constants';
+import { FormlyFieldPropsBase } from '../formly.constants';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
@@ -16,4 +16,4 @@ import { FormlyFieldPropsExtended } from '../formly.constants';
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ReactiveFormsModule, FormlyModule, ForgeSwitchModule]
 })
-export class FormlySwtichTypeComponent extends FieldType<FieldTypeConfig<FormlyFieldPropsExtended>> {}
+export class FormlySwtichTypeComponent extends FieldType<FieldTypeConfig<FormlyFieldPropsBase>> {}

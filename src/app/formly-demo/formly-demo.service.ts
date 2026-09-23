@@ -1,12 +1,8 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { FormlyFieldConfig } from '@ngx-formly/core';
-import { isDefined } from '@tylertech/forge-core';
-import { TextFieldComponentDelegate } from '@tylertech/forge';
+import { forkJoin, map, Observable, of } from 'rxjs';
 
-import { FORMLY_COMPONENT_TYPES, FormlyFieldPropsExtended, IFormlyFieldDefinition, IFormlyFieldDefinitionConfig } from './lib/formly.constants';
+import { IFormlyFieldDefinition, IFormMessage } from './lib/formly.constants';
 
 @Injectable()
 export class FormlyDemoService {
@@ -27,8 +23,8 @@ export class FormlyDemoService {
 
   public isBusy = signal(false);
 
-  public getFormDefinition(): Observable<FormlyFieldConfig<FormlyFieldPropsExtended>> {
-    return this.httpClient.get<IFormlyFieldDefinition>('mock-data/formly-definition.json').pipe(map((response) => this.formlyFieldDefinitionAdapter(response)));
+  public getFormDefinition(): Observable<IFormlyFieldDefinition[]> {
+    return this.httpClient.get<IFormlyFieldDefinition[]>('mock-data/formly-definition.json');
   }
 
   public getFormDefinitionUpdate(): Observable<IFormlyFieldDefinition[]> {
@@ -39,75 +35,37 @@ export class FormlyDemoService {
     return this.httpClient.get<any[]>('mock-data/formly-data.json');
   }
 
-  // TODO move to lib
-
-  public buttonClick = new Subject<FormlyFieldConfig<FormlyFieldPropsExtended>>();
-
-  public config = signal<IFormlyFieldDefinitionConfig | null>(null);
-
-  public static mergeFields(fieldConfig: any, fieldDefinition: any) {
-    Object.keys(fieldDefinition)
-      .filter((k) => k !== 'key')
-      .forEach((key) => {
-        if (!isDefined(fieldConfig[key])) {
-          fieldConfig[key] = {};
+  public postFormMessages(messages: IFormMessage[]): Observable<{ data?: any; fieldDefinitions?: IFormlyFieldDefinition[] }> {
+    if (messages.at(0).event === 'click') {
+      switch (messages.at(0).key) {
+        case 'form.refresh': {
+          return forkJoin([
+            this.httpClient.get<IFormlyFieldDefinition[]>('mock-data/formly-data.json', { headers: { authorization: '' } }),
+            this.httpClient.get<IFormlyFieldDefinition[]>('mock-data/formly-definition-update.json', { headers: { authorization: '' } })
+          ]).pipe(
+            map((response) => {
+              return {
+                data: response[0],
+                fieldDefinitions: response[1]
+              };
+            })
+          );
         }
-        switch (key) {
-          // TODO when to merge values vs overwrite
-          case 'className': {
-            fieldConfig[key] = `${fieldConfig[key]} ${fieldDefinition[key]}`;
-            break;
-          }
-          case 'attributes':
-          case 'props': {
-            this.mergeFields(fieldConfig[key], fieldDefinition[key]);
-            break;
-          }
-          default: {
-            fieldConfig[key] = fieldDefinition[key];
+        default: {
+          return of(null);
+        }
+      }
+    } else if (messages.at(0).event === 'change') {
+      switch (messages.at(0).key) {
+        case 'firstName': {
+          if (messages.at(0).value.length === 1) {
+            return of({ data: { validation: { length: 'First name must be longer than 1 character.' } } });
           }
         }
-      });
-  }
-
-  private formlyFieldDefinitionAdapter(fieldDefinition: IFormlyFieldDefinition): FormlyFieldConfig<FormlyFieldPropsExtended> {
-    const fieldConfig: FormlyFieldConfig<FormlyFieldPropsExtended> = { ...fieldDefinition };
-    if (this.config().validateFieldAsync) {
-      fieldConfig.asyncValidators = { validation: [this.config().validateFieldAsync] };
-    }
-    // TODO overrides props.disabled property
-    // fieldConfig.expressions = {
-    //   ...fieldConfig.expressions,
-    //   'props.disabled': (field) => {
-    //     return this.isBusy();
-    //   }
-    // };
-    switch (fieldConfig.type) {
-      case FORMLY_COMPONENT_TYPES.autocomplete: {
-        fieldConfig.props = { ...fieldConfig.props, autocompleteFilter: this.config().autocompleteFilter(fieldConfig.key) };
-        break;
       }
-      case FORMLY_COMPONENT_TYPES.button:
-      case FORMLY_COMPONENT_TYPES.iconButton: {
-        fieldConfig.props.click = (field) => this.buttonClick.next(field);
-        break;
-      }
-      case FORMLY_COMPONENT_TYPES.textFieldInputHelp: {
-        fieldConfig.props.fieldHelpConfig.dataObservable = this.config().fieldHelpConfig.dataObservable(fieldConfig.key);
-        if (isDefined(this.config().fieldHelpConfig.transform)) {
-          fieldConfig.props.fieldHelpConfig.transform = this.config().fieldHelpConfig.transform(fieldConfig.key);
-        }
-        fieldConfig.props.fieldHelpConfig.columnConfigurations.forEach((col) => {
-          col.filterDelegate = new TextFieldComponentDelegate({ props: { ariaLabel: col.header } });
-        });
-        break;
-      }
+      return of(null);
+    } else {
+      return of(null);
     }
-
-    if (fieldDefinition.fieldGroup?.length) {
-      fieldConfig.fieldGroup = fieldDefinition.fieldGroup.map((f) => this.formlyFieldDefinitionAdapter(f));
-    }
-
-    return fieldConfig;
   }
 }

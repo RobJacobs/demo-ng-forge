@@ -1,7 +1,8 @@
 @use 'src/global';
+@use 'sass:meta';
 
 ::ng-deep {
-  @import 'quill/dist/quill.snow';
+  @include meta.load-css('quill/dist/quill.snow');
 
   quill-editor {
     width: 100%;

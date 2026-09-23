@@ -3,7 +3,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
 import { ForgeTextFieldModule } from '@tylertech/forge-angular';
 import { FormControlInvalidDirective } from '@app/shared/directives';
-import { FormlyFieldPropsExtended } from '../formly.constants';
+import { FormlyFieldPropsBase } from '../formly.constants';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
@@ -27,4 +27,4 @@ import { FormlyFieldPropsExtended } from '../formly.constants';
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ReactiveFormsModule, FormlyModule, ForgeTextFieldModule, FormControlInvalidDirective]
 })
-export class FOrmlyTextFieldTextareaTypeComponent extends FieldType<FieldTypeConfig<FormlyFieldPropsExtended>> {}
+export class FOrmlyTextFieldTextareaTypeComponent extends FieldType<FieldTypeConfig<FormlyFieldPropsBase>> {}

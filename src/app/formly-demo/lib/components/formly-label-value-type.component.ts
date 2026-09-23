@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FieldGroupTypeConfig, FieldType, FormlyModule } from '@ngx-formly/core';
 import { ForgeLabelValueModule } from '@tylertech/forge-angular';
-import { FormlyFieldPropsExtended } from '../formly.constants';
+import { FormlyFieldPropsBase } from '../formly.constants';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
@@ -20,4 +20,4 @@ import { FormlyFieldPropsExtended } from '../formly.constants';
     }
   `
 })
-export class FormlyLabelValueTypeComponent extends FieldType<FieldGroupTypeConfig<FormlyFieldPropsExtended>> {}
+export class FormlyLabelValueTypeComponent extends FieldType<FieldGroupTypeConfig<FormlyFieldPropsBase>> {}

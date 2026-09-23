@@ -3,7 +3,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
 import { ForgeDatePickerModule, ForgeTextFieldModule } from '@tylertech/forge-angular';
 import { FormControlInvalidDirective } from '@app/shared/directives';
-import { FormlyFieldPropsExtended } from '../formly.constants';
+import { FormlyFieldPropsBase } from '../formly.constants';
+
+export interface FormlyFieldPropsDatePicker extends FormlyFieldPropsBase {
+  maxDate?: string | Date;
+  minDate?: string | Date;
+}
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
@@ -29,4 +34,4 @@ import { FormlyFieldPropsExtended } from '../formly.constants';
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ReactiveFormsModule, FormlyModule, ForgeDatePickerModule, ForgeTextFieldModule, FormControlInvalidDirective]
 })
-export class FormlyDatePickerTypeComponent extends FieldType<FieldTypeConfig<FormlyFieldPropsExtended>> {}
+export class FormlyDatePickerTypeComponent extends FieldType<FieldTypeConfig<FormlyFieldPropsDatePicker>> {}

@@ -2,7 +2,11 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
 import { ForgeLabelModule, ForgeRadioGroupModule, ForgeRadioModule } from '@tylertech/forge-angular';
-import { FormlyFieldPropsExtended } from '../formly.constants';
+import { FormlyFieldPropsBase } from '../formly.constants';
+
+export interface FormlyFieldPropsRadio extends FormlyFieldPropsBase {
+  orientation?: 'horizontal' | 'vertical';
+}
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
@@ -16,7 +20,7 @@ import { FormlyFieldPropsExtended } from '../formly.constants';
       @if (props.label) {
         <forge-label legend>{{ props.label }}</forge-label>
       }
-      @for (option of props.radioOptions; track i; let i = $index) {
+      @for (option of $any(props.options); track i; let i = $index) {
         <forge-radio [id]="'radio--' + i + '-' + id" [attr.name]="'radio-group--' + id" [value]="option.value" [formControl]="formControl">
           {{ option.label }}
         </forge-radio>
@@ -38,4 +42,4 @@ import { FormlyFieldPropsExtended } from '../formly.constants';
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ReactiveFormsModule, FormlyModule, ForgeLabelModule, ForgeRadioGroupModule, ForgeRadioModule]
 })
-export class FormlyRadioTypeComponent extends FieldType<FieldTypeConfig<FormlyFieldPropsExtended>> {}
+export class FormlyRadioTypeComponent extends FieldType<FieldTypeConfig<FormlyFieldPropsRadio>> {}

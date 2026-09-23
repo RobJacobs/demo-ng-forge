@@ -6,7 +6,11 @@ import { ForgeTextFieldModule } from '@tylertech/forge-angular';
 import { IMaskDirective } from 'angular-imask';
 import * as IMask from 'imask';
 import { FormControlInvalidDirective } from '@app/shared/directives';
-import { FormlyFieldPropsExtended } from '../formly.constants';
+import { FormlyFieldPropsBase } from '../formly.constants';
+
+export interface FormlyFieldPropsTextFieldInput extends FormlyFieldPropsBase {
+  mask?: string;
+}
 
 // string mask: (0) any digit, (a) any letter, (*) any char
 // number mask: (#) required digit, (&) optional digit, (-) sign, (.) decimal
@@ -40,7 +44,7 @@ import { FormlyFieldPropsExtended } from '../formly.constants';
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ReactiveFormsModule, FormlyModule, ForgeTextFieldModule, IMaskDirective, FormControlInvalidDirective]
 })
-export class FormlyTextFieldInputTypeComponent extends FieldType<FieldTypeConfig<FormlyFieldPropsExtended>> implements OnInit {
+export class FormlyTextFieldInputTypeComponent extends FieldType<FieldTypeConfig<FormlyFieldPropsTextFieldInput>> implements OnInit {
   public mask = signal<IMask.FactoryArg | undefined>(undefined);
   public unmask = signal<'typed' | boolean>(false);
   public ngOnInit() {

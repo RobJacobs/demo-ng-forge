@@ -1,14 +1,24 @@
 import { Type } from '@angular/core';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { FieldType, FormlyExtension, FormlyFieldConfig, FormlyFieldProps, FormlyForm, provideFormlyCore } from '@ngx-formly/core';
-import { AutocompleteFilterCallback, ButtonVariant, Density, IconButtonVariant, IFilePickerChangeEventData, IOption, Theme } from '@tylertech/forge';
+import { FieldType, FormlyExtension, FormlyFieldConfig, FormlyFieldProps, FormlyForm } from '@ngx-formly/core';
+import { AutocompleteFilterCallback, ButtonVariant, Density, IconButtonVariant, IOption, Theme } from '@tylertech/forge';
 import {
   FormlyAutocompleteTypeComponent,
   FormlyButtonTypeComponent,
   FormlyCheckboxTypeComponent,
   FormlyDatePickerTypeComponent,
   FormlyDividerTypeComponent,
+  FormlyFieldPropsAutocomplete,
+  FormlyFieldPropsButton,
+  FormlyFieldPropsDatePicker,
+  FormlyFieldPropsDivider,
+  FormlyFieldPropsFilePicker,
+  FormlyFieldPropsIconButton,
+  FormlyFieldPropsPageState,
+  FormlyFieldPropsRadio,
+  FormlyFieldPropsTextFieldInput,
+  FormlyFieldPropsTextFieldInputHelp,
   FormlyFilePickerTypeComponent,
   FormlyGroupTypeComponent,
   FormlyIconButtonTypeComponent,
@@ -23,7 +33,7 @@ import {
   FormlyTextFieldInputTypeComponent,
   FOrmlyTextFieldTextareaTypeComponent
 } from './components';
-import { IFieldHelpConfig } from '@app/shared/components/field-help/field-help.constants';
+import { IFieldHelpConfig } from '@app/shared/components/field-help';
 import { IFilterParameter, IFilterResponse } from '@app/shared/interfaces';
 
 export const CLASS_PREFIX = 'formly--';
@@ -88,26 +98,27 @@ export const FORMLY_PROVIDER_CONFIG = {
   ]
 };
 
-export interface FormlyFieldPropsExtended extends FormlyFieldProps {
-  autocompleteFilter?: AutocompleteFilterCallback;
-  filePickerChange?: (event: CustomEvent<IFilePickerChangeEventData>) => void;
+export type FormlyAttributeEvent = (field: FormlyFieldConfig, event?: any) => void;
+
+export interface FormlyFieldPropsBase extends FormlyFieldProps {
   theme?: Theme;
-  radioOptions?: { label: string; value: any }[];
-  orientation?: 'horizontal' | 'vertical';
   density?: Density;
-  dense?: boolean;
-  mask?: string;
-  minDate?: string | Date;
-  maxDate?: string | Date;
-  buttonVariant?: ButtonVariant;
-  iconName?: string;
-  iconButtonVariant?: IconButtonVariant;
   dataType?: 'string' | 'number' | 'boolean' | 'date';
-  multiple?: boolean;
-  accept?: string;
-  fieldHelpConfig?: IFieldHelpConfig;
-  src?: string;
+  options?: IOption[] | Observable<IOption[]>;
 }
+
+export interface FormlyFieldPropsMerged
+  extends
+    FormlyFieldPropsAutocomplete,
+    FormlyFieldPropsButton,
+    FormlyFieldPropsDatePicker,
+    FormlyFieldPropsDivider,
+    FormlyFieldPropsFilePicker,
+    FormlyFieldPropsIconButton,
+    FormlyFieldPropsPageState,
+    FormlyFieldPropsRadio,
+    FormlyFieldPropsTextFieldInputHelp,
+    FormlyFieldPropsTextFieldInput {}
 
 export const checkFieldExpressions = (formlyForm: FormlyForm, fields: FormlyFieldConfig[]) => {
   fields.forEach((field) => {
@@ -116,7 +127,7 @@ export const checkFieldExpressions = (formlyForm: FormlyForm, fields: FormlyFiel
 };
 
 export interface IFormlyFieldDefinition extends Pick<
-  FormlyFieldConfig<FormlyFieldPropsExtended>,
+  FormlyFieldConfig<FormlyFieldPropsMerged>,
   keyof {
     key?: string | number | (string | number)[];
     type?: string | Type<FieldType>;
@@ -124,7 +135,7 @@ export interface IFormlyFieldDefinition extends Pick<
     defaultValue?: any;
     template?: string;
     props?: Pick<
-      FormlyFieldPropsExtended,
+      FormlyFieldPropsMerged,
       keyof {
         type?: string;
         label?: string;
@@ -147,7 +158,6 @@ export interface IFormlyFieldDefinition extends Pick<
         step?: number;
         theme?: Theme;
         // extended
-        radioOptions?: { label: string; value: any }[];
         orientation?: 'horizontal' | 'vertical';
         density?: Density;
         dense?: boolean;
@@ -161,7 +171,6 @@ export interface IFormlyFieldDefinition extends Pick<
         multiple?: boolean;
         accept?: string;
         src?: string;
-        // TODO
         fieldHelpConfig?: IFieldHelpConfig;
       }
     >;
@@ -209,26 +218,22 @@ export interface IFormlyFieldDefinition extends Pick<
     multiple?: boolean;
     accept?: string;
     src?: string;
-    // TODO
     fieldHelpConfig?: IFieldHelpConfig;
   };
   fieldGroup?: IFormlyFieldDefinition[];
 }
 
 export interface IFormlyFieldDefinitionConfig {
-  // focus?: FormlyAttributeEvent;
-  // blur?: FormlyAttributeEvent;
-  // keyup?: FormlyAttributeEvent;
-  // keydown?: FormlyAttributeEvent;
-  // click?: FormlyAttributeEvent;
-  // change?: FormlyAttributeEvent;
-  // keypress?: FormlyAttributeEvent;
-  // wheel?: FormlyAttributeEvent;
   autocompleteFilter?: (key: string | number | (string | number)[]) => AutocompleteFilterCallback;
-  filePickerChange?: (key: string | number | (string | number)[]) => (event: CustomEvent<IFilePickerChangeEventData>) => void;
   fieldHelpConfig?: {
     dataObservable: (key: string | number | (string | number)[]) => (params: IFilterParameter) => Observable<IFilterResponse<any>>;
-    transform?: (value: any) => any;
+    transform?: (key: string | number | (string | number)[]) => (value: any) => any;
   };
-  validateFieldAsync?: (control: AbstractControl, field: FormlyFieldConfig) => Observable<ValidationErrors>;
+  validateFieldAsync?: () => (control: AbstractControl, field: FormlyFieldConfig) => Observable<ValidationErrors>;
+}
+
+export interface IFormMessage {
+  key: string | number | (string | number)[];
+  event: 'click' | 'blur' | 'focus' | 'change';
+  value: any;
 }

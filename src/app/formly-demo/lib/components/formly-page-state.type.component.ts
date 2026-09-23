@@ -2,8 +2,12 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FieldGroupTypeConfig, FieldType, FormlyModule } from '@ngx-formly/core';
 import { ForgePageStateModule } from '@tylertech/forge-angular';
 
-import { FormlyFieldPropsExtended } from '../formly.constants';
+import { FormlyFieldPropsBase } from '../formly.constants';
 import { FormlyFieldDirective } from '../formly-field.directive';
+
+export interface FormlyFieldPropsPageState extends FormlyFieldPropsBase {
+  src?: string;
+}
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
@@ -34,4 +38,4 @@ import { FormlyFieldDirective } from '../formly-field.directive';
     }
   `
 })
-export class FormlyPageStateTypeComponent extends FieldType<FieldGroupTypeConfig<FormlyFieldPropsExtended>> {}
+export class FormlyPageStateTypeComponent extends FieldType<FieldGroupTypeConfig<FormlyFieldPropsPageState>> {}

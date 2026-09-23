@@ -1,6 +1,7 @@
 import { Component, DestroyRef, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { lastValueFrom, map } from 'rxjs';
 import { isDefined } from '@tylertech/forge-core';
 import { AutocompleteFilterCallback, CellAlign, IOption, TextFieldComponentDelegate } from '@tylertech/forge';
 import {
@@ -22,12 +23,10 @@ import {
 import { AppDataService } from '@app/app-data.service';
 import { AutoFocusDirective, defaultErrorMessages, FieldErrorMessages, FormControlInvalidDirective, InputCasingDirective } from '@app/shared/directives';
 import { DateTimeComponent } from '@app/shared/components';
-import { ProfileService } from '../profile.service';
-import { FieldHelpButtonComponent } from '@app/shared/components/field-help/field-help-button/field-help-button.component';
-import { IFieldHelpConfig } from '@app/shared/components/field-help/field-help.constants';
+import { FieldHelpButtonComponent, IFieldHelpConfig } from '@app/shared/components/field-help';
 import { Utils } from '@app/shared/utils';
 import { IPerson } from '@app/shared/interfaces';
-import { lastValueFrom, map, of } from 'rxjs';
+import { ProfileService } from '../profile.service';
 
 @Component({
   selector: 'app-profile-personal',

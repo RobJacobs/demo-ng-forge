@@ -3,20 +3,24 @@ import { JsonPipe } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AbstractControl, FormGroup, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
 import { FormlyFormOptions, FormlyForm, provideFormlyCore, FormlyFieldConfig } from '@ngx-formly/core';
-import { delay, finalize, lastValueFrom, Observable, of } from 'rxjs';
+import { delay, finalize, lastValueFrom, map, Observable, of } from 'rxjs';
 import { isDefined } from '@tylertech/forge-core';
 import { ForgeToolbarModule, ForgeButtonModule } from '@tylertech/forge-angular';
-import { FORMLY_PROVIDER_CONFIG, FormlyFieldPropsExtended } from './lib/formly.constants';
+import { FORMLY_PROVIDER_CONFIG, FormlyFieldPropsMerged } from './lib/formly.constants';
 
 import { AppDataService } from '@app/app-data.service';
 import { IFilterParameter, IFilterResponse } from '@app/shared/interfaces';
 import { FormlyDemoService } from './formly-demo.service';
+import { IFilePickerChangeEventData } from '@tylertech/forge';
+import { FormlyFieldPropsButton, FormlyFieldPropsFilePicker } from './lib/components';
+import { FormlyService } from './lib/formly.service';
 
 @Component({
   selector: 'app-formly-demo',
   templateUrl: './formly-demo.component.html',
   styleUrls: ['./formly-demo.component.scss'],
   providers: [
+    FormlyService,
     FormlyDemoService,
     provideFormlyCore({
       ...FORMLY_PROVIDER_CONFIG
@@ -29,6 +33,7 @@ export class FormlyDemoComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private formlyForm = viewChild(FormlyForm);
   private appDataService = inject(AppDataService);
+  private formlyService = inject(FormlyService);
   public formlyDemoService = inject(FormlyDemoService);
 
   public formGroup = new FormGroup({});
@@ -48,25 +53,12 @@ export class FormlyDemoComponent implements OnInit {
     //   return field;
     // }
   };
-  public model = signal({
-    displayOnly: {
-      field01: 'Field 01 value',
-      field02: 'Field 02 value'
-    },
-    tab01: {
-      field01: 'Tab 01 field 01 value',
-      field02: 'Tab 01 field 02 value'
-    },
-    tab02: {
-      field01: 'Tab 02 field 01 value',
-      field02: 'Tab 02 field 02 value'
-    }
-  });
+  public model = signal({});
 
-  public formDefinition = signal<FormlyFieldConfig<FormlyFieldPropsExtended>[] | null>(null);
+  public formDefinition = signal<FormlyFieldConfig<FormlyFieldPropsMerged>[] | null>(null);
 
   public ngOnInit() {
-    this.formlyDemoService.config.set({
+    this.formlyService.config.set({
       autocompleteFilter: this.autocompleteFilter,
       validateFieldAsync: this.validateFieldAsync,
       fieldHelpConfig: {
@@ -74,22 +66,8 @@ export class FormlyDemoComponent implements OnInit {
         transform: this.fieldHelpTransform
       }
     });
-    this.formlyDemoService.buttonClick.subscribe((field) => {
-      console.log(field);
-      let activeElement = document.activeElement as HTMLElement;
-      this.formGroup.disable();
-      this.formlyDemoService.isBusy.set(true);
-      // checkFieldExpressions(this.formlyForm(), this.formDefinition());
-      setTimeout(() => {
-        this.formGroup.enable();
-        this.formlyDemoService.isBusy.set(false);
-        // checkFieldExpressions(this.formlyForm(), this.formDefinition());
-        requestAnimationFrame(() => {
-          activeElement.focus();
-          activeElement = undefined;
-        });
-      }, 3000);
-    });
+    this.formlyService.buttonClick.subscribe((response) => this.onButtonClick(response.field, response.event));
+    this.formlyService.filePickerChange.subscribe((response) => this.onFilePickerChange(response.field, response.event));
     this.onFooterAction('form-def');
   }
 
@@ -117,7 +95,7 @@ export class FormlyDemoComponent implements OnInit {
             finalize(() => this.formlyDemoService.isBusy.set(false))
           )
           .subscribe((response) => {
-            this.formDefinition.set([response]);
+            this.formDefinition.set(response.map((f) => this.formlyService.formlyFieldDefinitionAdapter(f)));
           });
         break;
       }
@@ -130,18 +108,10 @@ export class FormlyDemoComponent implements OnInit {
             finalize(() => this.formlyDemoService.isBusy.set(false))
           )
           .subscribe((response) => {
-            response.forEach((fieldDef) => {
-              this.formDefinition().forEach((field) => {
-                const fieldConfig = field.get(fieldDef.key);
-                if (fieldConfig) {
-                  FormlyDemoService.mergeFields(fieldConfig, fieldDef);
-                } else {
-                  // TODO insert fieldConfig
-                }
-              });
-            });
-
-            this.formDefinition.set(this.formDefinition());
+            if (response?.length) {
+              this.formlyService.mergeFieldDefinitions(this.formDefinition(), response);
+              this.formDefinition.set(this.formDefinition());
+            }
           });
         break;
       }
@@ -174,6 +144,16 @@ export class FormlyDemoComponent implements OnInit {
     };
   };
 
+  private onButtonClick(field: FormlyFieldConfig<FormlyFieldPropsButton>, event: MouseEvent) {
+    console.log(field);
+    console.log(event);
+  }
+
+  private onFilePickerChange(field: FormlyFieldConfig<FormlyFieldPropsFilePicker>, event: CustomEvent<IFilePickerChangeEventData>) {
+    console.log(field);
+    console.log(event);
+  }
+
   private fieldHelpData = (key: string | number | (string | number)[]) => {
     return (params: IFilterParameter): Observable<IFilterResponse<any>> => {
       switch (key) {
@@ -198,24 +178,15 @@ export class FormlyDemoComponent implements OnInit {
     };
   };
 
-  private validateFieldAsync(control: AbstractControl, field: FormlyFieldConfig): Observable<ValidationErrors> {
-    switch (field.key) {
-      case 'firstName': {
-        if (control.value?.length === 1) {
-          return of({ duplicate: 'First name is duplicated.' }).pipe(delay(1000));
-        } else {
-          return of(null).pipe(delay(1000));
-        }
+  private validateFieldAsync = () => {
+    return (control: AbstractControl, field: FormlyFieldConfig): Observable<ValidationErrors> => {
+      if (control.dirty || control.touched) {
+        return this.formlyDemoService.postFormMessages([{ key: field.key, event: 'change', value: control.value }]).pipe(
+          takeUntilDestroyed(this.destroyRef),
+          map((response) => response?.data?.validation)
+        );
       }
-      case 'stringMask': {
-        const pattern = /\d{3}-\d{2}-\d{4}/;
-        if (!pattern.test(control.value)) {
-          return of({ invalid: 'Invalid format' });
-        } else {
-          return of(null);
-        }
-      }
-    }
-    return of(null).pipe(delay(1000));
-  }
+      return of(null);
+    };
+  };
 }

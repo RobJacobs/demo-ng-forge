@@ -1,7 +1,14 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
+import { ButtonVariant } from '@tylertech/forge';
 import { ForgeButtonModule, ForgeIconModule } from '@tylertech/forge-angular';
-import { FormlyFieldPropsExtended } from '../formly.constants';
+import { FormlyFieldPropsBase } from '../formly.constants';
+
+export interface FormlyFieldPropsButton extends FormlyFieldPropsBase {
+  buttonVariant?: ButtonVariant;
+  dense?: boolean;
+  iconName?: string;
+}
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
@@ -22,4 +29,4 @@ import { FormlyFieldPropsExtended } from '../formly.constants';
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormlyModule, ForgeButtonModule, ForgeIconModule]
 })
-export class FormlyButtonTypeComponent extends FieldType<FieldTypeConfig<FormlyFieldPropsExtended>> {}
+export class FormlyButtonTypeComponent extends FieldType<FieldTypeConfig<FormlyFieldPropsButton>> {}

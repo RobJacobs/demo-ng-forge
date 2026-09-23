@@ -2,9 +2,13 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
 import { ForgeTextFieldModule } from '@tylertech/forge-angular';
-import { FieldHelpButtonComponent } from '@app/shared/components/field-help/field-help-button/field-help-button.component';
+import { FieldHelpButtonComponent, IFieldHelpConfig } from '@app/shared/components/field-help';
 import { FormControlInvalidDirective } from '@app/shared/directives';
-import { FormlyFieldPropsExtended } from '../formly.constants';
+import { FormlyFieldPropsBase } from '../formly.constants';
+
+export interface FormlyFieldPropsTextFieldInputHelp extends FormlyFieldPropsBase {
+  fieldHelpConfig?: IFieldHelpConfig;
+}
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
@@ -29,4 +33,4 @@ import { FormlyFieldPropsExtended } from '../formly.constants';
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ReactiveFormsModule, FormlyModule, ForgeTextFieldModule, FormControlInvalidDirective, FieldHelpButtonComponent]
 })
-export class FormlyTextFieldInputHelpTypeComponent extends FieldType<FieldTypeConfig<FormlyFieldPropsExtended>> {}
+export class FormlyTextFieldInputHelpTypeComponent extends FieldType<FieldTypeConfig<FormlyFieldPropsTextFieldInputHelp>> {}

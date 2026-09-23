@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, signal, OnInit } from '@angular/core';
 import { FieldGroupTypeConfig, FieldType, FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
 import { ForgeStepModule, ForgeStepperModule } from '@tylertech/forge-angular';
-import { FormlyFieldPropsExtended } from '../formly.constants';
+import { FormlyFieldPropsBase } from '../formly.constants';
 import { FormlyFieldDirective } from '../formly-field.directive';
 
 @Component({
@@ -25,9 +25,9 @@ import { FormlyFieldDirective } from '../formly-field.directive';
     }
   `
 })
-export class FormlyStepperTypeComponent extends FieldType<FieldGroupTypeConfig<FormlyFieldPropsExtended>> implements OnInit {
+export class FormlyStepperTypeComponent extends FieldType<FieldGroupTypeConfig<FormlyFieldPropsBase>> implements OnInit {
   public selectedIndex = signal(0);
-  public activeField = signal<FormlyFieldConfig<FormlyFieldPropsExtended> | undefined>(undefined);
+  public activeField = signal<FormlyFieldConfig<FormlyFieldPropsBase> | undefined>(undefined);
 
   public ngOnInit() {
     this.activeField.set(this.field.fieldGroup[0]);

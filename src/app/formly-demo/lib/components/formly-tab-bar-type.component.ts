@@ -2,7 +2,7 @@ import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/cor
 import { FieldType, FieldTypeConfig, FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
 import { ITabBarChangeEventData } from '@tylertech/forge';
 import { ForgeTabBarModule, ForgeTabModule } from '@tylertech/forge-angular';
-import { FormlyFieldPropsExtended } from '../formly.constants';
+import { FormlyFieldPropsBase } from '../formly.constants';
 import { FormlyFieldDirective } from '../formly-field.directive';
 
 @Component({
@@ -26,9 +26,9 @@ import { FormlyFieldDirective } from '../formly-field.directive';
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormlyModule, FormlyFieldDirective, ForgeTabBarModule, ForgeTabModule]
 })
-export class FormlyTabBarTypeComponent extends FieldType<FieldTypeConfig<FormlyFieldPropsExtended>> implements OnInit {
+export class FormlyTabBarTypeComponent extends FieldType<FieldTypeConfig<FormlyFieldPropsBase>> implements OnInit {
   public activeTab = signal(0);
-  public activeField = signal<FormlyFieldConfig<FormlyFieldPropsExtended> | undefined>(undefined);
+  public activeField = signal<FormlyFieldConfig<FormlyFieldPropsBase> | undefined>(undefined);
 
   public ngOnInit() {
     this.activeField.set(this.field.fieldGroup[0]);
