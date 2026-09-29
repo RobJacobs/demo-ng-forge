@@ -21,10 +21,10 @@ export interface FormlyFieldPropsTextFieldInput extends FormlyFieldPropsBase {
   template: `
     <forge-text-field [required]="props.required" [appFormControlInvalid]="formControl">
       @if (props.label) {
-        <label slot="label" [attr.for]="id">{{ props.label }}</label>
+        <label slot="label" [attr.for]="'--' + id">{{ props.label }}</label>
       }
       <input
-        [id]="id"
+        [id]="'--' + id"
         type="text"
         [imask]="mask()"
         [unmask]="unmask()"

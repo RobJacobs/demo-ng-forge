@@ -17,9 +17,9 @@ export interface FormlyFieldPropsDatePicker extends FormlyFieldPropsBase {
     <forge-date-picker [formControl]="formControl" [max]="props.maxDate" [min]="props.minDate">
       <forge-text-field [required]="props.required" [appFormControlInvalid]="formControl">
         @if (props.label) {
-          <label slot="label" [attr.for]="id">{{ props.label }}</label>
+          <label slot="label" [attr.for]="'--' + id">{{ props.label }}</label>
         }
-        <input [id]="id" type="text" />
+        <input [id]="'--' + id" type="text" />
         @if (props.description) {
           <span slot="support-text">{{ props.description }}</span>
         }

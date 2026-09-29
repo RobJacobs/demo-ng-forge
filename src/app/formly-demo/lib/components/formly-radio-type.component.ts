@@ -21,7 +21,7 @@ export interface FormlyFieldPropsRadio extends FormlyFieldPropsBase {
         <forge-label legend>{{ props.label }}</forge-label>
       }
       @for (option of $any(props.options); track i; let i = $index) {
-        <forge-radio [id]="'radio--' + i + '-' + id" [attr.name]="'radio-group--' + id" [value]="option.value" [formControl]="formControl">
+        <forge-radio [id]="'--radio--' + i + '-' + id" [attr.name]="'radio-group--' + id" [value]="option.value" [formControl]="formControl">
           {{ option.label }}
         </forge-radio>
       }

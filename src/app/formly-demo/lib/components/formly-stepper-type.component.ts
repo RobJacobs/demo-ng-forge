@@ -8,7 +8,7 @@ import { FormlyFieldDirective } from '../formly-field.directive';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'formly-stepper-type',
   template: `
-    <forge-stepper [id]="id" [selectedIndex]="selectedIndex()" (forge-step-select)="onStepSelect($event)" layout-align="left" layout-mode="clustered">
+    <forge-stepper [id]="'--' + id" [selectedIndex]="selectedIndex()" (forge-step-select)="onStepSelect($event)" layout-align="left" layout-mode="clustered">
       @for (f of field.fieldGroup; track i; let i = $index) {
         <forge-step [disabled]="f.props.disabled">
           {{ f.props?.label }}

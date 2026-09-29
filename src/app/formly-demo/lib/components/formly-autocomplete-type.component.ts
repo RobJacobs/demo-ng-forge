@@ -19,9 +19,9 @@ export interface FormlyFieldPropsAutocomplete extends FormlyFieldPropsBase {
     <forge-autocomplete [filter]="props.autocompleteFilter" [multiple]="props.multiple" [formControl]="formControl">
       <forge-text-field [required]="props.required" [appFormControlInvalid]="formControl">
         @if (props.label) {
-          <label slot="label" [attr.for]="id">{{ props.label }}</label>
+          <label slot="label" [attr.for]="'--' + id">{{ props.label }}</label>
         }
-        <input #input [id]="id" type="text" />
+        <input #input [id]="'--' + id" type="text" />
         <forge-icon slot="end" class="forge-dropdown-icon" name="arrow_drop_down"></forge-icon>
         @if (props.description) {
           <span slot="support-text">{{ props.description }}</span>

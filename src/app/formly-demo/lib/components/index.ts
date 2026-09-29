@@ -7,6 +7,7 @@ export * from './formly-group-type.component';
 export * from './formly-file-picker-type.component';
 export * from './formly-icon-button-type.component';
 export * from './formly-label-value-type.component';
+export * from './formly-list-type.component';
 export * from './formly-page-state.type.component';
 export * from './formly-radio-type.component';
 export * from './formly-select-type.component';

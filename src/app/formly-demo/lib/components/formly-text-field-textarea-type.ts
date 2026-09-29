@@ -11,9 +11,9 @@ import { FormlyFieldPropsBase } from '../formly.constants';
   template: `
     <forge-text-field [required]="props.required" [appFormControlInvalid]="formControl">
       @if (props.label) {
-        <label slot="label" [attr.for]="id">{{ props.label }}</label>
+        <label slot="label" [attr.for]="'--' + id">{{ props.label }}</label>
       }
-      <textarea [id]="id" [cols]="props.cols" [rows]="props.rows" [formControl]="formControl"></textarea>
+      <textarea [id]="'--' + id" [cols]="props.cols" [rows]="props.rows" [formControl]="formControl"></textarea>
       @if (props.description) {
         <span slot="support-text">{{ props.description }}</span>
       }

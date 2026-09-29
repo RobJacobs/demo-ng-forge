@@ -20,5 +20,15 @@
   "tab02": {
     "field01": "Tab 02 field 01 value",
     "field02": "Tab 02 field 02 value"
-  }
+  },
+  "pets": [
+    {
+      "name": "Name 01",
+      "type": "Type 01"
+    },
+    {
+      "name": "Name 02",
+      "type": "Type 02"
+    }
+  ]
 }

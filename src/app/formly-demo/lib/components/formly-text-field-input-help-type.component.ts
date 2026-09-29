@@ -16,9 +16,9 @@ export interface FormlyFieldPropsTextFieldInputHelp extends FormlyFieldPropsBase
   template: `
     <forge-text-field [required]="props.required" [appFormControlInvalid]="formControl">
       @if (props.label) {
-        <label slot="label" [attr.for]="id">{{ props.label }}</label>
+        <label slot="label" [attr.for]="'--' + id">{{ props.label }}</label>
       }
-      <input [id]="id" type="text" [formControl]="formControl" />
+      <input [id]="'--' + id" type="text" [formControl]="formControl" />
       @if (props.description) {
         <span slot="support-text">{{ props.description }}</span>
       }

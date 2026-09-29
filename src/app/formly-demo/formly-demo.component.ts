@@ -75,6 +75,7 @@ export class FormlyDemoComponent implements OnInit {
     switch (action) {
       case 'data': {
         this.formlyDemoService.isBusy.set(true);
+        this.model.set({});
         this.formlyDemoService
           .getFormData()
           .pipe(
@@ -82,7 +83,7 @@ export class FormlyDemoComponent implements OnInit {
             finalize(() => this.formlyDemoService.isBusy.set(false))
           )
           .subscribe((response) => {
-            this.formGroup.patchValue(response);
+            this.model.set(response);
           });
         break;
       }

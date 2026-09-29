@@ -13,7 +13,7 @@ export interface FormlyFieldPropsPageState extends FormlyFieldPropsBase {
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'formly-page-state-type',
   template: `
-    <forge-page-state [id]="id">
+    <forge-page-state [id]="'--' + id">
       <img [src]="field.props.src" slot="graphic" alt="" />
       @if (field.props.label?.length) {
         <div slot="title">{{ field.props.label }}</div>

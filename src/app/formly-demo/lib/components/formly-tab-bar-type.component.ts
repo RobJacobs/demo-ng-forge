@@ -9,7 +9,7 @@ import { FormlyFieldDirective } from '../formly-field.directive';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'formly-tab-bar-type',
   template: `
-    <forge-tab-bar [id]="id" [activeTab]="activeTab()" (forge-tab-bar-change)="onTabBarChange($event)" clustered>
+    <forge-tab-bar [id]="'--' + id" [activeTab]="activeTab()" (forge-tab-bar-change)="onTabBarChange($event)" clustered>
       @for (f of field.fieldGroup; track i; let i = $index) {
         <forge-tab [disabled]="f.props.disabled">
           {{ f.props?.label }}

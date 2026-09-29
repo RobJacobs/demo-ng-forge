@@ -10,7 +10,7 @@ import { FormlyFieldPropsBase } from '../formly.constants';
   selector: 'formly-select-type',
   template: `
     <forge-select
-      [id]="id"
+      [id]="'--' + id"
       [label]="props.label"
       [options]="$any(props.options)"
       [formControl]="formControl"

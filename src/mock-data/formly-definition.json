@@ -368,6 +368,47 @@
           }
         },
         {
+          "type": "list",
+          "key": "pets",
+          "props": {
+            "attributes": {
+              "style": "grid-column: 1 / -1;"
+            }
+          },
+          "fieldArray": {
+            "className": "formly--container-grid",
+            "props": {
+              "attributes": {
+                "style": "grid-template-columns: 1fr 1fr; padding-block: 8px;"
+              }
+            },
+            "fieldGroup": [
+              {
+                "type": "text-field-input",
+                "key": "name",
+                "props": {
+                  "label": "Name"
+                }
+              },
+              {
+                "type": "text-field-input",
+                "key": "type",
+                "props": {
+                  "label": "Type"
+                }
+              },
+              {
+                "type": "divider",
+                "props": {
+                  "attributes": {
+                    "style": "grid-column: 1 / -1;"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "page-state",
           "props": {
             "label": "An error occured",
