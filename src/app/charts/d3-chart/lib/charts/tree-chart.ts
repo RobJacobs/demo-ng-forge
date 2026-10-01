@@ -241,7 +241,7 @@ export class TreeChartService {
       }
 
       if (config.selectedCallback) {
-        enterNodes.on('click', (e, d) => (config.selectedCallback as any)(d.data, this.getParentIds(d), e.target.parentElement as SVGElement));
+        enterNodes.on('click', (e, d) => (config.selectedCallback as any)(d.data, this.getParentIds(d), (e.target as any).parentElement as SVGElement));
       }
 
       if (config.hoverCallback) {

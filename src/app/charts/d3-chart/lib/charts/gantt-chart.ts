@@ -62,7 +62,7 @@ export class GanttChartService {
       };
 
       let xAxisTicks = timeMonth;
-      let xAxisTickFormat = '';
+      let xAxisTickFormat: string;
       let categoryTimeSpan = 0;
       switch (config.categoryTimeSpan) {
         case 'year':
@@ -148,7 +148,7 @@ export class GanttChartService {
         });
 
       if (config.selectedCallback) {
-        enterNodes.on('click', (e, d) => (config.selectedCallback as any)(d as any, e.target.parentElement as SVGElement));
+        enterNodes.on('click', (e, d) => (config.selectedCallback as any)(d as any, (e.target as any).parentElement as SVGElement));
       }
 
       const meterGradient = enterNodes

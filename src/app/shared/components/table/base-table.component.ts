@@ -64,7 +64,7 @@ export abstract class BaseTableComponent {
   }
 
   public onTableSort(event: CustomEvent<ITableSortEventData | ITableSortMultipleEventData>) {
-    let sort = {} as ITableSortEventData;
+    let sort: ITableSortEventData;
     if (isArray(event.detail)) {
       sort = (event.detail as ITableSortMultipleEventData)[0];
     } else {

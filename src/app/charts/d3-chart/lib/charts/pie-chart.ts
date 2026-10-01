@@ -78,7 +78,7 @@ export class PieChartService {
       enterNodes.append('path');
 
       if (config.selectedCallback) {
-        enterNodes.on('click', (e, d) => (config.selectedCallback as any)(d.data as any, e.target.parentElement as SVGElement));
+        enterNodes.on('click', (e, d) => (config.selectedCallback as any)(d.data as any, (e.target as any).parentElement as SVGElement));
       }
 
       if (config.hoverCallback) {
@@ -120,7 +120,7 @@ export class PieChartService {
                   meterTextNode.append('tspan').attr('x', 0).attr('y', 0).attr('dy', '1.25em').classed(CHART_CONSTANTS.classes.CHART_TEXT_LABEL, true);
                 }
 
-                let centerValue = '';
+                let centerValue: string;
                 if (config.centerValue) {
                   centerValue = config.centerValue;
                 } else {

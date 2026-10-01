@@ -29,7 +29,7 @@ export class ExamplesService {
     // if there is no value or filter text query top - sort, take
     return new Observable((o) => {
       setTimeout(() => {
-        let records = [];
+        let records;
         if (filterText?.length) {
           records = this.mockData.filter((d) => d.description.toLocaleLowerCase().includes(filterText.toLocaleLowerCase())).slice(0, take);
         } else if (value) {
@@ -50,7 +50,7 @@ export class ExamplesService {
     // if there are no values or filter text query top - sort, take
     return new Observable((o) => {
       setTimeout(() => {
-        let records = [];
+        let records;
         if (filterText?.length) {
           records = this.mockData.filter((d) => d.description.toLocaleLowerCase().includes(filterText.toLocaleLowerCase())).slice(0, take);
         } else {

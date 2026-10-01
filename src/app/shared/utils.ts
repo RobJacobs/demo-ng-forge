@@ -235,25 +235,17 @@ export class Utils {
     return Math.random().toString(36).substring(2);
   }
 
-  public static parseQueryStringParameters(): any {
+  public static parseQueryStringParameters(): Record<string, string> {
+    const urlParams = new URLSearchParams(window.location.search);
     const params = {};
-    const queryIndex = window.location.href.indexOf('?');
-    if (queryIndex !== -1) {
-      const httpParams = new HttpParams({
-        fromString: window.location.href.substring(queryIndex)
-      });
-      httpParams.keys().forEach((k) => {
-        const value = httpParams.getAll(k) as string[];
-        if (value.length) {
-          Object.defineProperty(params, k.toLowerCase(), {
-            value: value.length === 1 ? value[0] : value,
-            enumerable: true,
-            writable: true
-          });
-        }
+    for (const key of urlParams.keys()) {
+      const value = urlParams.getAll(key);
+      Object.defineProperty(params, key.toLowerCase(), {
+        value: value.length === 1 ? value[0] : value,
+        enumerable: true,
+        writable: true
       });
     }
-
     return params;
   }
 

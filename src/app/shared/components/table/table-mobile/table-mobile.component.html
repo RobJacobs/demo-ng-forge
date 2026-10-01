@@ -25,7 +25,8 @@
   } @else {
     <ng-container *ngTemplateOutlet="columnCellsTemplate; context: { row: row, rowIndex }"></ng-container>
   }
-  @if (row.getVisibleCells().filter(cell => cell.id == columnIds.expander && cell.enableMobile !== false )) {
+  // eslint-disable-next-line @angular-eslint/template/eqeqeq
+  @if (row.getVisibleCells().filter((cell) => cell.id == columnIds.expander && cell.enableMobile !== false)) {
     <forge-button class="row-expander" variant="tonal" (click)="onRowExpand($event, row)">
       <forge-open-icon slot="start" [open]="row.getIsExpanded()" aria-hidden="true"></forge-open-icon>
       {{ row.getIsExpanded() ? 'View less' : 'View more' }}

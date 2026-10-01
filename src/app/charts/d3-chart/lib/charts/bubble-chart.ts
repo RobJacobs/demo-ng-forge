@@ -56,7 +56,7 @@ export class BubbleChartService {
         .style('text-anchor', 'middle');
 
       if (config.selectedCallback) {
-        enterNodes.on('click', (e, d) => (config.selectedCallback as any)(d.data as any, e.target.parentElement as SVGElement));
+        enterNodes.on('click', (e, d) => (config.selectedCallback as any)(d.data as any, (e.target as any).parentElement as SVGElement));
       }
 
       if (config.hoverCallback) {
