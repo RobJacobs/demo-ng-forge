@@ -1,5 +1,7 @@
-import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, DestroyRef, OnInit, signal, ChangeDetectionStrategy, viewChild, ElementRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
+import { filter, fromEvent } from 'rxjs';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
 import { isDefined } from '@tylertech/forge-core';
 import { ForgeTextFieldModule } from '@tylertech/forge-angular';
@@ -17,13 +19,14 @@ export interface FormlyFieldPropsTextFieldInput extends FormlyFieldPropsBase {
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'formly-text-field-input-type',
+  selector: 'formly-text-field-input',
   template: `
-    <forge-text-field [required]="props.required" [appFormControlInvalid]="formControl">
+    <forge-text-field [formlyAttributes]="field" [required]="props.required" [appFormControlInvalid]="formControl">
       @if (props.label) {
         <label slot="label" [attr.for]="'--' + id">{{ props.label }}</label>
       }
       <input
+        #inputElement
         [id]="'--' + id"
         type="text"
         [imask]="mask()"
@@ -45,11 +48,13 @@ export interface FormlyFieldPropsTextFieldInput extends FormlyFieldPropsBase {
   imports: [ReactiveFormsModule, FormlyModule, ForgeTextFieldModule, IMaskDirective, FormControlInvalidDirective]
 })
 export class FormlyTextFieldInputTypeComponent extends FieldType<FieldTypeConfig<FormlyFieldPropsTextFieldInput>> implements OnInit {
+  private destroyRef = inject(DestroyRef);
+  private elementRef = inject(ElementRef);
   public mask = signal<IMask.FactoryArg | undefined>(undefined);
   public unmask = signal<'typed' | boolean>(false);
   public ngOnInit() {
-    if (this.props.mask) {
-      switch (this.props.type) {
+    if (this.props?.mask) {
+      switch (this.props?.type) {
         case 'number':
           this.mask.set(this.buildNumberMask(this.props.mask));
           break;
@@ -58,6 +63,22 @@ export class FormlyTextFieldInputTypeComponent extends FieldType<FieldTypeConfig
           break;
       }
     }
+    fromEvent(this.elementRef.nativeElement, 'blur', { capture: true })
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        filter((event) => isDefined(this.props?.blur) && !this.elementRef.nativeElement.contains((event as any).relatedTarget))
+      )
+      .subscribe((event) => {
+        this.props.blur(this.field, event);
+      });
+    fromEvent(this.elementRef.nativeElement, 'focus', { capture: true })
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        filter((event) => isDefined(this.props?.focus) && !this.elementRef.nativeElement.contains((event as any).relatedTarget))
+      )
+      .subscribe((event) => {
+        this.props.focus(this.field, event);
+      });
   }
 
   private buildStringMask(format?: string): IMask.MaskedPattern | IMask.MaskedRegExp {

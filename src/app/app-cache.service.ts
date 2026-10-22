@@ -14,6 +14,7 @@ export interface IAppCacheService {
   providedIn: 'root'
 })
 export class AppCacheService implements IAppCacheService {
+  public queryStringParams: Record<string, string> = {};
   public mode = signal<'current' | 'legacy'>('current');
   public isBusy = signal<boolean>(false);
   public storageKey = 'demo-ng-forge--app';

@@ -1,0 +1,38 @@
+{
+  "form": [
+    {
+      "op": "update",
+      "path": "displayOnly.field01.props.label",
+      "value": "field01 label updated"
+    },
+    {
+      "op": "update",
+      "path": "displayOnly.field01.props.attributes.style",
+      "value": "color: red;"
+    },
+    {
+      "op": "update",
+      "path": "firstName.props.attributes.style",
+      "value": "color: red;"
+    },
+    {
+      "op": "update",
+      "path": "firstName.props.attributes.invalid",
+      "value": ""
+    },
+    {
+      "op": "update",
+      "path": "pets[0].type.props.disabled",
+      "value": true
+    }
+  ],
+  "validation": [
+    {
+      "op": "update",
+      "path": "firstName",
+      "value": {
+        "length": "First name is too long"
+      }
+    }
+  ]
+}

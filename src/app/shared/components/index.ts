@@ -1,6 +1,4 @@
 export * from './autocomplete-range/autocomplete-range.component';
-export * from './busy-indicator/busy-indicator.component';
-export * from './busy-indicator/busy-indicator.service';
 export * from './card/card.component';
 export * from './confirm-dialog/confirm-dialog.component';
 export * from './dashboard-template/dashboard-template.component';

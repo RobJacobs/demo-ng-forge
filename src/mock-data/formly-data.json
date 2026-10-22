@@ -1,7 +1,7 @@
 {
   "displayOnly": {
-    "field01": "Field 01 value updated",
-    "field02": "Field 02 value updated"
+    "field01": "Field 01 value",
+    "field02": "Field 02 value"
   },
   "firstName": "first",
   "lastName": "last",

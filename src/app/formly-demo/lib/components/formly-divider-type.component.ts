@@ -9,10 +9,10 @@ export interface FormlyFieldPropsDivider extends FormlyFieldPropsBase {
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'formly-divider-type',
-  template: ` <forge-divider [vertical]="props.orientation === 'vertical'"></forge-divider> `,
+  selector: 'formly-divider',
+  template: ` <forge-divider [formlyAttributes]="field" [vertical]="props.orientation === 'vertical'"></forge-divider> `,
   styles: `
-    :hhost {
+    :host {
       display: contents;
     }
   `,

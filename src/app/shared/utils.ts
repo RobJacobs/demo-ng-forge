@@ -221,7 +221,9 @@ export class Utils {
           return match.toLocaleUpperCase(navigator.language);
         });
       case 'sentence':
-        return value.replace(/^\w/, (c) => c.toLocaleUpperCase(navigator.language)).toLocaleLowerCase(navigator.language);
+        return value.replace(/(^\w{1}|\.\s*\w{1})/g, (match) => {
+          return match.toLocaleUpperCase(navigator.language);
+        });
       case 'lower':
         return value.toLocaleLowerCase(navigator.language);
       case 'upper':

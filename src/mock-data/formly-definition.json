@@ -28,6 +28,7 @@
               "type": "label-value",
               "className": "class-name--initial",
               "key": "field01",
+              "defaultValue": "Field 01 default value",
               "props": {
                 "label": "Field 01"
               }
@@ -35,6 +36,7 @@
             {
               "type": "label-value",
               "key": "field02",
+              "defaultValue": "Field 02 default value",
               "props": {
                 "label": "Field 02"
               }
@@ -54,7 +56,13 @@
           "key": "firstName",
           "props": {
             "label": "First name",
-            "required": true
+            "required": true,
+            "events": [
+              "blur",
+              "change",
+              "focus",
+              "validate"
+            ]
           }
         },
         {
@@ -62,7 +70,13 @@
           "key": "lastName",
           "props": {
             "label": "Last name",
-            "required": true
+            "required": true,
+            "events": [
+              "blur",
+              "change",
+              "focus",
+              "validate"
+            ]
           }
         },
         {
@@ -84,6 +98,12 @@
                 "label": "Unknown",
                 "value": "u"
               }
+            ],
+            "events": [
+              "blur",
+              "change",
+              "focus",
+              "validate"
             ]
           }
         },
@@ -92,7 +112,13 @@
           "key": "occupation",
           "props": {
             "label": "Occupation",
-            "required": true
+            "required": true,
+            "events": [
+              "blur",
+              "change",
+              "focus",
+              "validate"
+            ]
           }
         },
         {
@@ -102,7 +128,12 @@
             "label": "Date of birth",
             "required": true,
             "minDate": "06/01/1970",
-            "maxDate": "07/31/2030"
+            "maxDate": "07/31/2030",
+            "events": [
+              "blur",
+              "change",
+              "focus"
+            ]
           }
         },
         {
@@ -147,7 +178,13 @@
               ],
               "title": "Browse people",
               "key": "id"
-            }
+            },
+            "events": [
+              "blur",
+              "change",
+              "focus",
+              "validate"
+            ]
           }
         },
         {
@@ -155,7 +192,13 @@
           "key": "citizen",
           "defaultValue": true,
           "props": {
-            "label": "Am I a citizen"
+            "label": "Am I a citizen",
+            "events": [
+              "blur",
+              "change",
+              "focus",
+              "validate"
+            ]
           }
         },
         {
@@ -163,7 +206,13 @@
           "key": "deceased",
           "defaultValue": false,
           "props": {
-            "label": "Am I deceased"
+            "label": "Am I deceased",
+            "events": [
+              "blur",
+              "change",
+              "focus",
+              "validate"
+            ]
           }
         },
         {
@@ -181,7 +230,7 @@
           "props": {
             "label": "Select a size",
             "orientation": "vertical",
-            "radioOptions": [
+            "options": [
               {
                 "label": "Small",
                 "value": "sm"
@@ -194,6 +243,12 @@
                 "label": "Large",
                 "value": "lg"
               }
+            ],
+            "events": [
+              "blur",
+              "change",
+              "focus",
+              "validate"
             ]
           }
         },
@@ -206,18 +261,30 @@
             "rows": 4,
             "attributes": {
               "style": "grid-column: 1 / -1;"
-            }
+            },
+            "events": [
+              "blur",
+              "change",
+              "focus",
+              "validate"
+            ]
           }
         },
         {
           "type": "tab-bar",
+          "key": "tab-bar",
           "props": {
             "attributes": {
               "style": "grid-column: 1 / -1;"
-            }
+            },
+            "events": [
+              "blur",
+              "focus"
+            ]
           },
           "fieldGroup": [
             {
+              "key": "tab01",
               "className": "formly--container-grid",
               "props": {
                 "label": "Tab 01",
@@ -228,27 +295,40 @@
               "fieldGroup": [
                 {
                   "type": "text-field-input",
-                  "key": "tab01.stringMask",
+                  "key": "stringMask",
                   "props": {
                     "label": "String mask",
                     "required": true,
                     "mask": "000-00-0000",
-                    "description": "format: ###-##-####"
+                    "description": "format: ###-##-####",
+                    "events": [
+                      "blur",
+                      "change",
+                      "focus",
+                      "validate"
+                    ]
                   }
                 },
                 {
                   "type": "text-field-input",
-                  "key": "tab01.numberMask",
+                  "key": "numberMask",
                   "props": {
                     "label": "Number mask",
                     "type": "number",
                     "required": true,
-                    "mask": "&&&,&&#.##"
+                    "mask": "&&&,&&#.##",
+                    "events": [
+                      "blur",
+                      "change",
+                      "focus",
+                      "validate"
+                    ]
                   }
                 }
               ]
             },
             {
+              "key": "tab02",
               "className": "formly--container-grid",
               "props": {
                 "label": "Tab  02",
@@ -259,14 +339,14 @@
               "fieldGroup": [
                 {
                   "type": "label-value",
-                  "key": "tab02.field01",
+                  "key": "field01",
                   "props": {
                     "label": "Tab 02 Field 01"
                   }
                 },
                 {
                   "type": "label-value",
-                  "key": "tab02.field02",
+                  "key": "field02",
                   "props": {
                     "label": "Tab 02 Field 02"
                   }
@@ -277,11 +357,16 @@
         },
         {
           "type": "stepper",
+          "key": "stepper",
           "props": {
             "attributes": {
               "style": "grid-column: 1 / -1;",
               "layout-mode": "clustered"
-            }
+            },
+            "events": [
+              "blur",
+              "focus"
+            ]
           },
           "fieldGroup": [
             {
@@ -387,7 +472,13 @@
                 "type": "text-field-input",
                 "key": "name",
                 "props": {
-                  "label": "Name"
+                  "label": "Name",
+                  "events": [
+                    "blur",
+                    "change",
+                    "focus",
+                    "validate"
+                  ]
                 }
               },
               {

@@ -1,9 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FieldGroupTypeConfig, FieldType, FormlyModule } from '@ngx-formly/core';
 import { ForgePageStateModule } from '@tylertech/forge-angular';
-
 import { FormlyFieldPropsBase } from '../formly.constants';
-import { FormlyFieldDirective } from '../formly-field.directive';
 
 export interface FormlyFieldPropsPageState extends FormlyFieldPropsBase {
   src?: string;
@@ -11,9 +9,9 @@ export interface FormlyFieldPropsPageState extends FormlyFieldPropsBase {
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'formly-page-state-type',
+  selector: 'formly-page-state',
   template: `
-    <forge-page-state [id]="'--' + id">
+    <forge-page-state [formlyAttributes]="field" [id]="'--' + id">
       <img [src]="field.props.src" slot="graphic" alt="" />
       @if (field.props.label?.length) {
         <div slot="title">{{ field.props.label }}</div>
@@ -23,14 +21,18 @@ export interface FormlyFieldPropsPageState extends FormlyFieldPropsBase {
       }
       @if (field.fieldGroup?.length) {
         <div slot="action">
-          @for (f of field.fieldGroup; track i; let i = $index) {
-            <formly-field #formlyField [formlyField]="formlyField" [field]="f" [formlyAttributes]="f"></formly-field>
+          @for (field of field.fieldGroup; track i; let i = $index) {
+            @if (field.fieldGroup?.length) {
+              <formly-field [field]="field" [formlyAttributes]="field"></formly-field>
+            } @else {
+              <formly-field [field]="field"></formly-field>
+            }
           }
         </div>
       }
     </forge-page-state>
   `,
-  imports: [FormlyModule, FormlyFieldDirective, ForgePageStateModule],
+  imports: [FormlyModule, ForgePageStateModule],
   changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     :host {

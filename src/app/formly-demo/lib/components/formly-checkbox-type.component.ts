@@ -6,9 +6,9 @@ import { FormlyFieldPropsBase } from '../formly.constants';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'formly-checkbox-type',
+  selector: 'formly-checkbox',
   template: `
-    <forge-checkbox [id]="'--' + id" [formControl]="formControl">
+    <forge-checkbox [formlyAttributes]="field" [id]="'--' + id" [formControl]="formControl">
       {{ props.label }}
     </forge-checkbox>
   `,

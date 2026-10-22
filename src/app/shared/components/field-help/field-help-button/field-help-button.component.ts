@@ -1,8 +1,8 @@
-import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, input, ChangeDetectionStrategy, output } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { isArray, isDefined } from '@tylertech/forge-core';
 import { IconRegistry } from '@tylertech/forge';
-import { DialogService, ForgeIconButtonModule, ForgeIconModule, ForgeTooltipModule } from '@tylertech/forge-angular';
+import { DialogRef, DialogService, ForgeIconButtonModule, ForgeIconModule, ForgeTooltipModule } from '@tylertech/forge-angular';
 import { tylIconMoreHoriz } from '@tylertech/tyler-icons';
 import { IFieldHelpConfig } from '../field-help.constants';
 import { FieldHelpDialogComponent } from '../field-help-dialog/field-help-dialog.component';
@@ -16,21 +16,28 @@ import { FieldHelpDialogComponent } from '../field-help-dialog/field-help-dialog
 })
 export class FieldHelpButtonComponent {
   private dialogService = inject(DialogService);
+  private dialogRef: DialogRef<FieldHelpDialogComponent>;
   public control = input.required<AbstractControl>();
   public config = input.required<IFieldHelpConfig>();
+  public optionSelected = output();
 
   public constructor() {
     IconRegistry.define([tylIconMoreHoriz]);
   }
 
-  public onClick() {
-    this.dialogService.open(FieldHelpDialogComponent, { data: this.config() }).afterClosed.subscribe((result) => {
+  public onClick(event: MouseEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.dialogRef = this.dialogService.open(FieldHelpDialogComponent, { data: this.config() });
+    this.dialogRef.afterClosed.subscribe((result) => {
       if (isDefined(result)) {
         this.control().setValue(
           this.config().transform ? this.config().transform(result) : isArray(result) ? result.map((r) => r[this.config().key]) : result[this.config().key]
         );
+        this.optionSelected.emit(this.control().value);
         this.control().markAsDirty();
       }
+      this.dialogRef = undefined;
     });
   }
 }

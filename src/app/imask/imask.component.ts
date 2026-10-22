@@ -29,6 +29,7 @@ export class ImaskComponent {
   public mask?: IMask.FactoryArg;
   public maskOptions: IOption[] = [
     { value: 'string', label: 'String' },
+    { value: 'uppercase', label: 'Uppercase' },
     { value: 'number', label: 'Number' },
     { value: 'number-search', label: 'Number search' },
     { value: 'date', label: 'Date' },
@@ -52,6 +53,9 @@ export class ImaskComponent {
       switch (this.formGroup.value.maskType) {
         case 'string':
           this.mask = this.buildStringMask(this.formGroup.value.format as string);
+          break;
+        case 'uppercase':
+          this.mask = this.buildUpperCaseMask();
           break;
         case 'number':
           if (this.formGroup.value?.format?.length) {
@@ -92,6 +96,13 @@ export class ImaskComponent {
       mask,
       lazy: false,
       placeholderChar: ' '
+    });
+  }
+
+  private buildUpperCaseMask(): IMask.MaskedRegExp {
+    return new IMask.MaskedRegExp({
+      mask: /./,
+      prepareChar: (char) => char.toUpperCase()
     });
   }
 

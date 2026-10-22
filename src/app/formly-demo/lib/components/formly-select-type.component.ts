@@ -7,9 +7,10 @@ import { FormlyFieldPropsBase } from '../formly.constants';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'formly-select-type',
+  selector: 'formly-select',
   template: `
     <forge-select
+      [formlyAttributes]="field"
       [id]="'--' + id"
       [label]="props.label"
       [options]="$any(props.options)"
