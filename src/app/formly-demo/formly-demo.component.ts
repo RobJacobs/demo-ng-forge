@@ -3,16 +3,15 @@ import { JsonPipe } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AbstractControl, FormGroup, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
 import { FormlyFormOptions, FormlyForm, provideFormlyCore, FormlyFieldConfig } from '@ngx-formly/core';
-import { delay, finalize, lastValueFrom, map, Observable, of } from 'rxjs';
+import { delay, finalize, lastValueFrom, Observable, of, Subject } from 'rxjs';
 import { isDefined } from '@tylertech/forge-core';
-import { ForgeToolbarModule, ForgeButtonModule } from '@tylertech/forge-angular';
-import { FORMLY_PROVIDER_CONFIG, FormlyFieldPropsMerged } from './lib/formly.constants';
+import { IFilePickerChangeEventData } from '@tylertech/forge';
+import { ForgeToolbarModule, ForgeButtonModule, BusyIndicatorService } from '@tylertech/forge-angular';
+import { fieldEvents, FORMLY_PROVIDER_CONFIG, FormlyFieldPropsMerged, IFormlyFieldDefinitionConfig, IFormMessage } from './lib/formly.constants';
 
 import { AppDataService } from '@app/app-data.service';
 import { IFilterParameter, IFilterResponse } from '@app/shared/interfaces';
 import { FormlyDemoService } from './formly-demo.service';
-import { IFilePickerChangeEventData } from '@tylertech/forge';
-import { FormlyFieldPropsButton, FormlyFieldPropsFilePicker } from './lib/components';
 import { FormlyService } from './lib/formly.service';
 
 @Component({
@@ -32,9 +31,11 @@ import { FormlyService } from './lib/formly.service';
 export class FormlyDemoComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private formlyForm = viewChild(FormlyForm);
+
   private appDataService = inject(AppDataService);
-  private formlyService = inject(FormlyService);
+  private busyIndicatorService = inject(BusyIndicatorService);
   public formlyDemoService = inject(FormlyDemoService);
+  private formEventsSubject = new Subject<IFormMessage>();
 
   public formGroup = new FormGroup({});
   public formOptions: FormlyFormOptions = {
@@ -54,33 +55,36 @@ export class FormlyDemoComponent implements OnInit {
     // }
   };
   public model = signal({});
+  public formDefinition: FormlyFieldConfig<FormlyFieldPropsMerged>[] | null;
 
-  public formDefinition = signal<FormlyFieldConfig<FormlyFieldPropsMerged>[] | null>(null);
+  public formlyFieldDefinitions: any[];
 
   public ngOnInit() {
-    this.formlyService.config.set({
-      autocompleteFilter: this.autocompleteFilter,
-      validateFieldAsync: this.validateFieldAsync,
-      fieldHelpConfig: {
-        dataObservable: this.fieldHelpData,
-        transform: this.fieldHelpTransform
-      }
-    });
-    this.formlyService.buttonClick.subscribe((response) => this.onButtonClick(response.field, response.event));
-    this.formlyService.filePickerChange.subscribe((response) => this.onFilePickerChange(response.field, response.event));
     this.onFooterAction('form-def');
+    this.onFooterAction('data');
+    FormlyService.formMessageBuffer(this.formEventsSubject)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((response) => {
+        if (response?.length) {
+          this.formEventsBufferHandler(response);
+        }
+      });
   }
 
-  public onFooterAction(action: 'data' | 'form-def' | 'form-def-update' | 'disable') {
+  public onFooterAction(action: 'data' | 'form-def' | 'update' | 'disable') {
     switch (action) {
       case 'data': {
         this.formlyDemoService.isBusy.set(true);
-        this.model.set({});
+        const busyRef = this.busyIndicatorService.open({ message: 'Fetching data...', variant: 'spinner' });
+        this.model.set(null);
         this.formlyDemoService
           .getFormData()
           .pipe(
             takeUntilDestroyed(this.destroyRef),
-            finalize(() => this.formlyDemoService.isBusy.set(false))
+            finalize(() => {
+              this.formlyDemoService.isBusy.set(false);
+              busyRef.hide();
+            })
           )
           .subscribe((response) => {
             this.model.set(response);
@@ -89,29 +93,44 @@ export class FormlyDemoComponent implements OnInit {
       }
       case 'form-def': {
         this.formlyDemoService.isBusy.set(true);
+        const busyRef = this.busyIndicatorService.open({ message: 'Fetching form...', variant: 'spinner' });
         this.formlyDemoService
           .getFormDefinition()
           .pipe(
             takeUntilDestroyed(this.destroyRef),
-            finalize(() => this.formlyDemoService.isBusy.set(false))
+            finalize(() => {
+              this.formlyDemoService.isBusy.set(false);
+              busyRef.hide();
+            })
           )
           .subscribe((response) => {
-            this.formDefinition.set(response.map((f) => this.formlyService.formlyFieldDefinitionAdapter(f)));
+            this.formlyFieldDefinitions = response;
+            this.formDefinition = response.map((fd) => FormlyService.formlyFieldDefinitionAdapter(fd, this.fieldDefinitionConfig));
           });
         break;
       }
-      case 'form-def-update': {
+      case 'update': {
         this.formlyDemoService.isBusy.set(true);
+        const busyRef = this.busyIndicatorService.open({ message: 'Fetching form update...', variant: 'spinner' });
         this.formlyDemoService
-          .getFormDefinitionUpdate()
+          .getFormUpdate()
           .pipe(
             takeUntilDestroyed(this.destroyRef),
-            finalize(() => this.formlyDemoService.isBusy.set(false))
+            finalize(() => {
+              this.formlyDemoService.isBusy.set(false);
+              busyRef.hide();
+            })
           )
           .subscribe((response) => {
-            if (response?.length) {
-              this.formlyService.mergeFieldDefinitions(this.formDefinition(), response);
-              this.formDefinition.set(this.formDefinition());
+            if (response?.data) {
+              this.model.set(FormlyService.mergeModels(this.model(), response.data));
+            }
+            if (response.form) {
+              FormlyService.mergeFields(this.formDefinition, response.form, this.fieldDefinitionConfig);
+            }
+            this.formOptions.build();
+            if (response?.validation?.length) {
+              FormlyService.setFieldValidation(this.formDefinition, response.validation);
             }
           });
         break;
@@ -128,9 +147,9 @@ export class FormlyDemoComponent implements OnInit {
     }
   }
 
-  private autocompleteFilter = (key: string | number | (string | number)[]) => {
+  private autocompleteFilter = (field: FormlyFieldConfig) => {
     return (filterText: string, value: string) => {
-      switch (key) {
+      switch (field.key) {
         case 'occupation': {
           if (isDefined(value)) {
             return this.formlyDemoService.options.filter((o) => o.value === value);
@@ -145,19 +164,21 @@ export class FormlyDemoComponent implements OnInit {
     };
   };
 
-  private onButtonClick(field: FormlyFieldConfig<FormlyFieldPropsButton>, event: MouseEvent) {
-    console.log(field);
-    console.log(event);
-  }
+  private onBlur = (field: FormlyFieldConfig) => {
+    this.formEventsSubject.next({ event: fieldEvents.blur, path: FormlyService.getPropertyPath(field), value: { ...this.model() } });
+  };
 
-  private onFilePickerChange(field: FormlyFieldConfig<FormlyFieldPropsFilePicker>, event: CustomEvent<IFilePickerChangeEventData>) {
-    console.log(field);
-    console.log(event);
-  }
+  private onClick = (field: FormlyFieldConfig) => {
+    this.formEventsSubject.next({ event: fieldEvents.click, path: FormlyService.getPropertyPath(field), value: { ...this.model() } });
+  };
 
-  private fieldHelpData = (key: string | number | (string | number)[]) => {
+  private onChange = (field: FormlyFieldConfig) => {
+    this.formEventsSubject.next({ event: fieldEvents.change, path: FormlyService.getPropertyPath(field), value: { ...this.model() } });
+  };
+
+  private fieldHelpData = (field: FormlyFieldConfig) => {
     return (params: IFilterParameter): Observable<IFilterResponse<any>> => {
-      switch (key) {
+      switch (field.key) {
         case 'partner': {
           return this.appDataService.getPeople(params);
         }
@@ -168,9 +189,9 @@ export class FormlyDemoComponent implements OnInit {
     };
   };
 
-  private fieldHelpTransform = (key: string | number | (string | number)[]) => {
+  private fieldHelpTransform = (field: FormlyFieldConfig) => {
     return (value: any): any => {
-      switch (key) {
+      switch (field.key) {
         case 'partner':
           return `${value.id} - ${value.firstName} ${value.lastName}`;
         default:
@@ -179,15 +200,55 @@ export class FormlyDemoComponent implements OnInit {
     };
   };
 
+  private onFilePickerChange = (field: FormlyFieldConfig, event: CustomEvent<IFilePickerChangeEventData>) => {
+    console.log(field);
+    console.log(event);
+    // this.formMessageSubject.next({ event: fieldEvents.change, key: field.key, value: event });
+  };
+
+  private onFocus = (field: FormlyFieldConfig) => {
+    this.formEventsSubject.next({ event: fieldEvents.focus, path: FormlyService.getPropertyPath(field), value: { ...this.model() } });
+  };
+
   private validateFieldAsync = () => {
     return (control: AbstractControl, field: FormlyFieldConfig): Observable<ValidationErrors> => {
       if (control.dirty || control.touched) {
-        return this.formlyDemoService.postFormMessages([{ key: field.key, event: 'change', value: control.value }]).pipe(
-          takeUntilDestroyed(this.destroyRef),
-          map((response) => response?.data?.validation)
-        );
+        this.formEventsSubject.next({ path: FormlyService.getPropertyPath(field), event: fieldEvents.validate, value: control.value });
       }
-      return of(null);
+      return of(control.errors);
     };
   };
+
+  private fieldDefinitionConfig: IFormlyFieldDefinitionConfig = {
+    autocompleteFilter: this.autocompleteFilter,
+    blur: this.onBlur,
+    click: this.onClick,
+    change: this.onChange,
+    fieldHelpConfig: {
+      dataObservable: this.fieldHelpData,
+      transform: this.fieldHelpTransform
+    },
+    focus: this.onFocus,
+    filePickerChange: this.onFilePickerChange,
+    validateFieldAsync: this.validateFieldAsync
+  };
+
+  private formEventsBufferHandler(messages: IFormMessage[]) {
+    console.log(messages);
+    this.formlyDemoService
+      .postFormMessages(messages)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((response) => {
+        if (response?.data?.length) {
+          this.model.set(FormlyService.mergeModels(this.model(), response.data));
+        }
+        if (response?.form?.length) {
+          FormlyService.mergeFields(this.formDefinition, response.form, this.fieldDefinitionConfig);
+        }
+        this.formOptions.build();
+        if (response?.validation?.length) {
+          FormlyService.setFieldValidation(this.formDefinition, response.validation);
+        }
+      });
+  }
 }

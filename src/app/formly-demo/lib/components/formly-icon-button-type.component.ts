@@ -1,8 +1,8 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FieldType, FieldTypeConfig, FormlyModule } from '@ngx-formly/core';
+import { IconButtonVariant } from '@tylertech/forge';
 import { ForgeIconButtonModule, ForgeIconModule, ForgeTooltipModule } from '@tylertech/forge-angular';
 import { FormlyFieldPropsBase } from '../formly.constants';
-import { IconButtonVariant } from '@tylertech/forge';
 
 export interface FormlyFieldPropsIconButton extends FormlyFieldPropsBase {
   iconButtonVariant?: IconButtonVariant;
@@ -11,14 +11,16 @@ export interface FormlyFieldPropsIconButton extends FormlyFieldPropsBase {
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'formly-icon-button-type',
+  selector: 'formly-icon-button',
   template: `
     <forge-icon-button
+      [formlyAttributes]="field"
       [disabled]="props.disabled"
       [variant]="props.iconButtonVariant"
       [theme]="props.theme"
       [density]="props.density"
       [attr.aria-label]="props.label"
+      external
     >
       <forge-icon [name]="props.iconName" aria-hidden="true"></forge-icon>
     </forge-icon-button>

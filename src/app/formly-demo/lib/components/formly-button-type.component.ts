@@ -12,9 +12,9 @@ export interface FormlyFieldPropsButton extends FormlyFieldPropsBase {
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'formly-button-type',
+  selector: 'formly-button',
   template: `
-    <forge-button [dense]="props.dense" [disabled]="props.disabled" [variant]="props.buttonVariant" [theme]="props.theme">
+    <forge-button [formlyAttributes]="field" [dense]="props.dense" [disabled]="props.disabled" [variant]="props.buttonVariant" [theme]="props.theme">
       @if (props.iconName) {
         <forge-icon slot="start" [name]="props.iconName"></forge-icon>
       }

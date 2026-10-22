@@ -6,8 +6,8 @@ import { FormlyFieldPropsBase } from '../formly.constants';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'formly-switch-type',
-  template: ` <forge-switch [id]="'--' + id" [formControl]="formControl">{{ props.label }}</forge-switch> `,
+  selector: 'formly-switch',
+  template: ` <forge-switch [formlyAttributes]="field" [id]="'--' + id" [formControl]="formControl">{{ props.label }}</forge-switch> `,
   styles: `
     :host {
       display: contents;

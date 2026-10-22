@@ -5,9 +5,9 @@ import { FormlyFieldPropsBase } from '../formly.constants';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'formly-label-value-type',
+  selector: 'formly-label-value',
   template: `
-    <forge-label-value [id]="'--' + id">
+    <forge-label-value [formlyAttributes]="field" [id]="'--' + id">
       <div slot="label">{{ field.props['label'] }}</div>
       <div slot="value">{{ field.formControl.value }}</div>
     </forge-label-value>

@@ -29,7 +29,7 @@
     "@angular/forms": "^22.2.0",
     "@angular/platform-browser": "^22.2.0",
     "@angular/router": "^22.2.0",
-    "@ngx-formly/core": "^8.0.0",
+    "@ngx-formly/core": "^11.0.0",
     "@tanstack/angular-table": "^8.21.4",
     "@tylertech/angular-core": "^8.1.0",
     "@tylertech/forge": "^3.20.0",

@@ -1,24 +1,22 @@
-import { ApplicationConfig, provideAppInitializer } from '@angular/core';
+import { ApplicationConfig, inject, provideAppInitializer } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient, withInterceptors, withXhr } from '@angular/common/http';
 
 import { routes } from './app.routes';
 import { busyInterceptor } from '@app/shared/interceptors/busy.interceptor';
+import { AppCacheService } from './app-cache.service';
 
-export function initializeAppFactory(): () => Promise<void> {
-  return () => {
-    return new Promise<void>((resolve) => {
-      window.setTimeout(() => {
-        resolve();
-      }, 1000);
-    });
-  };
-}
+const appInitializer = (appCacheService: AppCacheService) => {
+  new Promise<void>((resolve) => {
+    // TODO any pre-boot work
+    resolve();
+  });
+};
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideHttpClient(withXhr(), withInterceptors([busyInterceptor])),
     provideRouter(routes, withComponentInputBinding()),
-    provideAppInitializer(initializeAppFactory())
+    provideAppInitializer(() => appInitializer(inject(AppCacheService)))
   ]
 };

@@ -2,7 +2,7 @@ import { Type } from '@angular/core';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { FieldType, FormlyExtension, FormlyFieldConfig, FormlyFieldProps, FormlyForm } from '@ngx-formly/core';
-import { AutocompleteFilterCallback, ButtonVariant, Density, IconButtonVariant, IOption, Theme } from '@tylertech/forge';
+import { AutocompleteFilterCallback, ButtonVariant, Density, IconButtonVariant, IFilePickerChangeEventData, IOption, Theme } from '@tylertech/forge';
 import {
   FormlyAutocompleteTypeComponent,
   FormlyButtonTypeComponent,
@@ -62,6 +62,7 @@ export const FORMLY_COMPONENT_TYPES = {
   datePicker: 'date-picker',
   divider: 'divider',
   filePicker: 'file-picker',
+  group: 'formly-group',
   iconButton: 'icon-button',
   list: 'list',
   labelValue: 'label-value',
@@ -71,6 +72,7 @@ export const FORMLY_COMPONENT_TYPES = {
   stepper: 'stepper',
   switch: 'switch',
   tabBar: 'tab-bar',
+  template: 'formly-template',
   textFieldInputHelp: 'text-field-input-help',
   textFieldInput: 'text-field-input',
   textFieldTextarea: 'text-field-textarea'
@@ -79,7 +81,7 @@ export const FORMLY_COMPONENT_TYPES = {
 export const FORMLY_PROVIDER_CONFIG = {
   extensions: [{ name: 'formly-field-extension', extension: FORMLY_EXTENSION }],
   types: [
-    { name: 'formly-group', component: FormlyGroupTypeComponent },
+    { name: FORMLY_COMPONENT_TYPES.group, component: FormlyGroupTypeComponent },
     { name: FORMLY_COMPONENT_TYPES.autocomplete, component: FormlyAutocompleteTypeComponent },
     { name: FORMLY_COMPONENT_TYPES.button, component: FormlyButtonTypeComponent },
     { name: FORMLY_COMPONENT_TYPES.checkbox, component: FormlyCheckboxTypeComponent },
@@ -101,12 +103,26 @@ export const FORMLY_PROVIDER_CONFIG = {
   ]
 };
 
-export type FormlyAttributeEvent = (field: FormlyFieldConfig, event?: any) => void;
+export enum fieldDataType {
+  boolean = 'boolean',
+  date = 'date',
+  number = 'number',
+  string = 'string'
+}
+
+export enum fieldEvents {
+  blur = 'blur',
+  change = 'change',
+  click = 'click',
+  focus = 'focus',
+  validate = 'validate'
+}
 
 export interface FormlyFieldPropsBase extends FormlyFieldProps {
   theme?: Theme;
   density?: Density;
-  dataType?: 'string' | 'number' | 'boolean' | 'date';
+  dataType?: fieldDataType;
+  events?: fieldEvents[];
   options?: IOption[] | Observable<IOption[]>;
 }
 
@@ -159,10 +175,12 @@ export interface IFormlyFieldDefinition extends Pick<
         readonly?: boolean;
         attributes?: Record<string, string | number>;
         step?: number;
-        theme?: Theme;
         // extended
-        orientation?: 'horizontal' | 'vertical';
+        theme?: Theme;
         density?: Density;
+        dataType?: fieldDataType;
+        events?: fieldEvents[];
+        orientation?: 'horizontal' | 'vertical';
         dense?: boolean;
         mask?: string;
         minDate?: string | Date;
@@ -170,7 +188,6 @@ export interface IFormlyFieldDefinition extends Pick<
         buttonVariant?: ButtonVariant;
         iconName?: string;
         iconButtonVariant?: IconButtonVariant;
-        dataType?: 'string' | 'number' | 'boolean' | 'date';
         multiple?: boolean;
         accept?: string;
         src?: string;
@@ -178,6 +195,7 @@ export interface IFormlyFieldDefinition extends Pick<
       }
     >;
     fieldGroup?: IFormlyFieldDefinition[];
+    fieldArray?: FormlyFieldConfig;
   }
 > {
   key?: string | number | (string | number)[];
@@ -205,11 +223,12 @@ export interface IFormlyFieldDefinition extends Pick<
     readonly?: boolean;
     attributes?: Record<string, string | number>;
     step?: number;
-    theme?: Theme;
     // extended
-    radioOptions?: { label: string; value: any }[];
-    orientation?: 'horizontal' | 'vertical';
+    theme?: Theme;
     density?: Density;
+    dataType?: fieldDataType;
+    events?: fieldEvents[];
+    orientation?: 'horizontal' | 'vertical';
     dense?: boolean;
     mask?: string;
     minDate?: string | Date;
@@ -217,26 +236,39 @@ export interface IFormlyFieldDefinition extends Pick<
     buttonVariant?: ButtonVariant;
     iconName?: string;
     iconButtonVariant?: IconButtonVariant;
-    dataType?: 'string' | 'number' | 'boolean' | 'date';
     multiple?: boolean;
     accept?: string;
     src?: string;
+    // radioOptions?: { label: string; value: any }[];
     fieldHelpConfig?: IFieldHelpConfig;
   };
   fieldGroup?: IFormlyFieldDefinition[];
+  fieldArray?: FormlyFieldConfig;
 }
 
 export interface IFormlyFieldDefinitionConfig {
-  autocompleteFilter?: (key: string | number | (string | number)[]) => AutocompleteFilterCallback;
+  autocompleteFilter?: (field: FormlyFieldConfig) => AutocompleteFilterCallback;
+  blur?: (field: FormlyFieldConfig) => void;
+  click?: (field: FormlyFieldConfig) => void;
+  change?: (field: FormlyFieldConfig) => void;
   fieldHelpConfig?: {
-    dataObservable: (key: string | number | (string | number)[]) => (params: IFilterParameter) => Observable<IFilterResponse<any>>;
-    transform?: (key: string | number | (string | number)[]) => (value: any) => any;
+    dataObservable: (field: FormlyFieldConfig) => (param: IFilterParameter) => Observable<IFilterResponse<any>>;
+    transform?: (field: FormlyFieldConfig) => (value: any) => any;
   };
+  filePickerChange?: (field: FormlyFieldConfig, event: CustomEvent<IFilePickerChangeEventData>) => void;
+  focus?: (field: FormlyFieldConfig) => void;
   validateFieldAsync?: () => (control: AbstractControl, field: FormlyFieldConfig) => Observable<ValidationErrors>;
 }
 
 export interface IFormMessage {
-  key: string | number | (string | number)[];
-  event: 'click' | 'blur' | 'focus' | 'change';
+  // key: string | number | (string | number)[];
+  event: fieldEvents;
+  path: string;
+  value: any;
+}
+
+export interface IPatchOperation {
+  op: 'add' | 'update' | 'delete';
+  path: string;
   value: any;
 }

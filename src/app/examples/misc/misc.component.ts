@@ -17,7 +17,7 @@ import { fileTypeFromStream } from 'file-type';
 
 import { Utils } from '@app/shared/utils';
 import { AppDataService } from '@app/app-data.service';
-import { BusyIndicatorService, CardComponent } from '@app/shared/components';
+import { CardComponent } from '@app/shared/components';
 import { ArrayFindPipe } from '@app/shared/pipes';
 import { AppWebSocketService } from '@app/app-web-socket.service';
 import { AppCacheService } from '@app/app-cache.service';
@@ -48,7 +48,6 @@ export class MiscComponent implements OnInit, OnDestroy {
   private appCacheService = inject(AppCacheService);
   private appDataService = inject(AppDataService);
   private appWebSocketService = inject(AppWebSocketService);
-  private busyIndicatorService = inject(BusyIndicatorService);
   private toastService = inject(ToastService);
   private propertyPathsData = {
     firstName: 'First',
@@ -158,18 +157,6 @@ export class MiscComponent implements OnInit, OnDestroy {
           });
         }
       });
-  }
-
-  public onShowBusy() {
-    const config = {
-      message: 'Processing request...',
-      progress: 'circular' as const,
-      title: 'Processing title'
-    };
-    this.busyIndicatorService.show(config);
-    window.setTimeout(() => {
-      this.busyIndicatorService.hide();
-    }, 5000);
   }
 
   public onValidate() {
